@@ -1,0 +1,73 @@
+$headerHeight: 40px;
+
+#frame {
+	$sidebarColumns: 4;
+	$sidebarPadding: 10px;
+
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: $headerHeight;
+	bottom: 0;
+
+	.row,
+	.sidebar,
+	.canvas {
+		&,
+		.inner {
+			height: 100%;
+		}
+	}
+
+	.sidebar {
+		position: relative;
+		@include span($sidebarColumns);
+		@include nested($sidebarColumns) {
+			#components {
+				.component {
+					margin-top: 25px;
+
+					.thumbnail {
+						@include span(1 after);
+						text-align: center;
+					}
+
+					.text {
+						@include span(3 last after);
+						margin-top: 13px;
+
+						.name,
+						.tags {
+							display: block;
+						}
+
+						.name {
+							font-size: 15px;
+							font-weight: 500;
+							color: #4d7cb8;
+						}
+
+						.tags {
+							margin-top: 2px;
+							font-size: 9px;
+							color: #b6c1ce;
+						}
+					}
+				}
+			}
+		}
+
+		&:after {
+			content: '';
+			position: absolute;
+			right: 0;
+			top: 20px;
+			bottom: 20px;
+			border-right: 1px solid #dfdfdf;
+		}
+	}
+
+	.canvas {
+		@include span(16 - $sidebarColumns);
+	}
+}

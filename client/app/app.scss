@@ -1,29 +1,30 @@
 
-$fa-font-path: "/bower_components/font-awesome/fonts";
+@import "compass/reset";
+@import "compass/css3";
 
+$fa-font-path: "/bower_components/font-awesome/fonts";
 @import 'font-awesome/scss/font-awesome';
 
 /**
  * App-wide Styles
  */
 
-.browsehappy {
-    margin: 0.2em 0;
-    background: #ccc;
-    color: #000;
-    padding: 0.2em 0;
+$headerBackground: #606974;
+
+body {
+	font-family: 'Theinhardt';
 }
 
-/* Responsive: Portrait tablets and up */
-@media screen and (min-width: 768px) {
-    .container {
-        max-width: 730px;
-    }
+#header {
+	height: 40px;
+	background: $headerBackground;
 }
 
 // Component styles are injected through grunt
 // injector
+@import '_grids.scss';
 @import 'account/login/login.scss';
 @import 'admin/admin.scss';
+@import 'frame/frame.scss';
 @import 'main/main.scss';
 // endinjector
