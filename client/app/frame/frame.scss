@@ -9,8 +9,8 @@ $headerHeight: 40px;
 	right: 0;
 	top: $headerHeight;
 	bottom: 0;
+	@include display-flex;
 
-	.row,
 	.sidebar,
 	.canvas {
 		&,
@@ -21,8 +21,17 @@ $headerHeight: 40px;
 
 	.sidebar {
 		position: relative;
-		@include span($sidebarColumns);
-		@include nested($sidebarColumns) {
+		width: 300px;
+		padding: 40px 20px;
+		@include box-sizing(border-box);
+		@include nested(4) {
+			#quickAdd {
+				input {
+					@include span(full);
+					padding: 5px 10px;
+				}
+			}
+
 			#components {
 				.component {
 					margin-top: 25px;
@@ -68,6 +77,6 @@ $headerHeight: 40px;
 	}
 
 	.canvas {
-		@include span(16 - $sidebarColumns);
+		@include flex(1);
 	}
 }
