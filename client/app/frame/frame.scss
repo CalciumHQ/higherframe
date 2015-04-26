@@ -12,7 +12,7 @@ $headerHeight: 40px;
 	@include display-flex;
 
 	.sidebar,
-	.canvas {
+	#canvas {
 		&,
 		.inner {
 			height: 100%;
@@ -76,7 +76,7 @@ $headerHeight: 40px;
 		}
 	}
 
-	.canvas {
+	#canvas {
 		@include flex(1);
 	}
 }
