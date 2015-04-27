@@ -2,8 +2,9 @@
 
 angular
   .module('siteApp')
-  .controller('FrameCtrl', function ($scope) {
+  .controller('FrameCtrl', function ($scope, $filter) {
 
+    $scope.quickAdd = '';
     $scope.components = [
       {
         name: 'Rectangle',
@@ -46,38 +47,6 @@ angular
           path.strokeColor = '#888';
           path.fillColor = 'white';
         }
-      },
-      {
-        name: 'iPhone',
-        tags: [
-          'container',
-          'apple',
-          'screen'
-        ],
-        draw: function (paper) {
-
-        }
-      },
-      {
-        name: 'iMac',
-        tags: [
-          'container',
-          'apple',
-          'screen'
-        ],
-        draw: function (paper) {
-
-        }
-      },
-      {
-        name: 'Generic monitor',
-        tags: [
-          'container',
-          'screen'
-        ],
-        draw: function (paper) {
-
-        }
       }
     ];
 
@@ -87,7 +56,28 @@ angular
 
     $scope.onComponentClick = function (component) {
 
-      component.draw(paper);
+      component.draw();
+    };
+
+    $scope.onQuickAddKeyDown = function (event) {
+
+      if (!$scope.quickAdd) {
+
+        return;
+      }
+
+      if (event.keyCode == 13 || event.keyCode == 9) {
+
+        var component = $filter('filter')($scope.components, $scope.quickAdd)[0];
+
+        if (component) {
+
+          component.draw();
+          $scope.quickAdd = '';
+        }
+
+        event.preventDefault();
+      }
     };
     
   });

@@ -1,7 +1,7 @@
 #frame
 	.sidebar
 		#quickAdd.row
-			input(ng-model="quickAdd", type="text", placeholder="Quick add (+)")
+			input(ng-model="quickAdd", type="text", placeholder="Quick add (+)", ng-keydown="onQuickAddKeyDown($event)")
 
 		#components
 			.component.row(ng-repeat="component in components | filter:quickAdd", ng-click="onComponentClick(component)")

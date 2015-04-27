@@ -63,6 +63,7 @@ angular
 					function mouseDown(event) {
 
 						project.activeLayer.selected = false;
+						selectedItem = null;
 						
 						var hitResult = project.hitTest(event.point, hitOptions);
 
@@ -75,13 +76,10 @@ angular
 
 					function keyDown(event) {
 
-						if (event.key == 'backspace') {
-
-							if (selectedItem) {
-
-								selectedItem.remove();
-							}
-							
+						if (event.key == 'backspace' && selectedItem) {
+								
+							selectedItem.remove();
+							selectedItem = null;
 							event.event.preventDefault();
 						}
 					};
