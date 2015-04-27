@@ -4,7 +4,7 @@
 			input(ng-model="quickAdd", type="text", placeholder="Quick add (+)")
 
 		#components
-			.component.row(ng-repeat="component in components | filter:quickAdd")
+			.component.row(ng-repeat="component in components | filter:quickAdd", ng-click="onComponentClick(component)")
 				.thumbnail
 					img(src="/assets/images/sample-component-tn@2x.png", width="25", height="51")
 
@@ -12,4 +12,4 @@
 					span.name {{ component.name }}
 					span.tags {{ component.tags.join(', ') }}
 
-	canvas#canvas(wireframe, resize)
+	canvas#canvas(wireframe, data="wireframe", resize)

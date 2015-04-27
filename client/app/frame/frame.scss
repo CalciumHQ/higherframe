@@ -35,6 +35,7 @@ $headerHeight: 40px;
 			#components {
 				.component {
 					margin-top: 25px;
+					cursor: pointer;
 
 					.thumbnail {
 						@include span(1 after);

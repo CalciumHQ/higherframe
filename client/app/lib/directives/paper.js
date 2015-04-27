@@ -5,65 +5,110 @@ angular
 	
 			return {
 				restrict: 'A',
+				scope: {
+					data: '='
+				},
 				link: function postLink(scope, element, attrs) {
 	
 					var path;
 					var drag = false;
 
-					function getOffset(evt) {
+					var colors = {
+						normal: '#888',
+						hover: '#333'
+					};
 
-					  var el = evt.target,
-					      x = 0,
-					      y = 0;
+					var hoveredItem;
+					var selectedItem;
 
-					  while (el && !isNaN(el.offsetLeft) && !isNaN(el.offsetTop)) {
-					    x += el.offsetLeft - el.scrollLeft;
-					    y += el.offsetTop - el.scrollTop;
-					    el = el.offsetParent;
-					  }
-
-					  x = evt.clientX - x;
-					  y = evt.clientY - y;
-
-					  return { x: x, y: y };
+					var hitOptions = {
+						segments: true,
+						stroke: true,
+						fill: true,
+						tolerance: 5
 					};
 	
+					/**
+					 * Event handlers
+					 */
+
 					function mouseUp(event) {
 	
-						// Clear Mouse Drag Flag
-						drag = false;
-					}
+					};
+
+					function mouseMove(event) {
+
+						if (hoveredItem) {
+
+							hoveredItem.strokeColor = colors.normal;
+						}
+
+						var hitResult = project.hitTest(event.point, hitOptions);
+
+						if (hitResult) {
+
+							hitResult.item.strokeColor = colors.hover;
+							hoveredItem = hitResult.item;
+						}
+					};
 	
 					function mouseDrag(event) {
-	
-						if (drag) {
-	
-							var offset = getOffset(event);
-							path.add(new paper.Point(offset.x, offset.y));
-							path.smooth();
+
+						if (selectedItem) {
+
+							selectedItem.position = selectedItem.position.add(event.delta);
 						}
-					}
+					};
 	
 					function mouseDown(event) {
+
+						project.activeLayer.selected = false;
+						
+						var hitResult = project.hitTest(event.point, hitOptions);
+
+						if (hitResult) {
+
+							hitResult.item.selected = true;
+							selectedItem = hitResult.item;
+						}
+					};
+
+					function keyDown(event) {
+
+						if (event.key == 'backspace') {
+
+							if (selectedItem) {
+
+								selectedItem.remove();
+							}
+							
+							event.event.preventDefault();
+						}
+					};
 	
-						// Set flag to detect mouse drag
-						drag = true;
-						path = new paper.Path();
-						path.strokeColor = 'black';
-						var offset = getOffset(event);
-						path.add(new paper.Point(offset.x, offset.y));
-					}
-	
+
+					/**
+					 * View methods
+					 */
+
+
+					/**
+					 * Init
+					 */
+
 					function initPaper() {
 						
 						paper.install($window);
 						paper.setup(element[0]);
-					}
-	
-					element
-						.on('mousedown', mouseDown)
-						.on('mouseup', mouseUp)
-						.on('mousemove', mouseDrag);
+						paper.view.onFrame = function () {};
+
+						var tool = new Tool();
+						tool.onMouseDown = mouseDown;
+						tool.onMouseUp = mouseUp;
+						tool.onMouseMove = mouseMove;
+						tool.onMouseDrag = mouseDrag;
+						tool.onKeyDown = keyDown;
+					};
 	
 					initPaper();
 				}
