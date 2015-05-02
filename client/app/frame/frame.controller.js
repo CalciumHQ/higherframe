@@ -61,6 +61,72 @@ angular
       'basic'
     ];
     Triangle.prototype.path = null;
+    
+    // iPhone component
+    function Iphone(options) {
+
+      var WIDTH = 232;
+      var HEIGHT = 464;
+      
+      var topLeft = new paper.Point(options.center.x - WIDTH/2, options.center.y - HEIGHT/2);
+      var bottomRight = new paper.Point(options.center.x + WIDTH/2, options.center.y + HEIGHT/2);
+      var bounds = new paper.Rectangle(topLeft, bottomRight);
+      
+      // Draw the outer frame
+      var outer = new paper.Path.Rectangle(bounds, 20);
+      outer.strokeColor = '#888';
+      outer.fillColor = 'white';
+      
+      // Draw the screen
+      var screenRectangle = new paper.Rectangle(
+        new paper.Point(bounds.left + 6, bounds.top + 48),
+        new paper.Point(bounds.right - 6, bounds.bottom - 70)
+      );
+      var screen = new paper.Path.Rectangle(screenRectangle, 2);
+      screen.strokeColor = '#888';
+      
+      // Draw the button
+      var buttonCenter = new paper.Point(options.center.x, bounds.bottom - 35);
+      var button = new paper.Path.Circle(buttonCenter, 24);
+      button.strokeColor = '#888';
+      
+      // Draw the speaker
+      var speakerRectangle = new paper.Rectangle(
+        new paper.Point(options.center.x - 23, bounds.top + 27),
+        new paper.Point(options.center.x + 23, bounds.top + 33)
+      );
+      var speaker = new paper.Path.Rectangle(speakerRectangle, 3);
+      speaker.strokeColor = '#888';
+      
+      // Draw the camera
+      var cameraCenter = new paper.Point(options.center.x, bounds.top + 18);
+      var camera = new paper.Path.Circle(cameraCenter, 4);
+      camera.strokeColor = '#888';
+      
+      
+      // Group the parts and flatten into a symbol
+      var group = new paper.Group([
+        outer,
+        screen,
+        button,
+        camera,
+        speaker
+      ]);
+      
+      var symbol = new paper.Symbol(group);
+      
+      // Create an instance of the symbol
+      var phone = symbol.place(options.center);
+      this.path = phone;
+    };
+
+    Iphone.prototype.name = 'iPhone';
+    Iphone.prototype.tags = [
+      'container',
+      'apple',
+      'phone'
+    ];
+    Iphone.prototype.path = null;
 
 
     /*
@@ -95,6 +161,12 @@ angular
         name: Triangle.prototype.name,
         tags: Triangle.prototype.tags,
         constructor: Triangle
+      });
+      
+      $scope.components.push({
+        name: Iphone.prototype.name,
+        tags: Iphone.prototype.tags,
+        constructor: Iphone
       });
     };
 
