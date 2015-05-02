@@ -9,15 +9,8 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
  * App-wide Styles
  */
 
-$headerBackground: #606974;
-
 body {
 	font-family: 'Theinhardt';
-}
-
-#header {
-	height: 40px;
-	background: $headerBackground;
 }
 
 // Component styles are injected through grunt
@@ -27,4 +20,5 @@ body {
 @import 'admin/admin.scss';
 @import 'frame/frame.scss';
 @import 'main/main.scss';
+@import 'navbar/navbar.scss';
 // endinjector

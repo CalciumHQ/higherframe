@@ -20,6 +20,7 @@ angular
 
 					var hoveredItem;
 					var selectedItem;
+					var selectedSegment;
 
 					var hitOptions = {
 						segments: true,
@@ -34,6 +35,7 @@ angular
 
 					function mouseUp(event) {
 	
+						selectedSegment = null;
 					};
 
 					function mouseMove(event) {
@@ -54,7 +56,18 @@ angular
 	
 					function mouseDrag(event) {
 
-						if (selectedItem) {
+						if (selectedSegment) {
+
+							var scaleX = 1 + event.delta.x / selectedItem.bounds.width;
+							var scaleY = 
+								event.modifiers.shift ? 
+								scaleX : 
+								1 + event.delta.y / selectedItem.bounds.height;
+								
+							selectedItem.scale(scaleX, scaleY);
+						}
+
+						else if (selectedItem) {
 
 							selectedItem.position = selectedItem.position.add(event.delta);
 						}
@@ -69,8 +82,19 @@ angular
 
 						if (hitResult) {
 
-							hitResult.item.selected = true;
-							selectedItem = hitResult.item;
+							if (hitResult.type == 'segment') {
+
+								selectedSegment = hitResult.segment;
+
+								hitResult.item.selected = true;
+								selectedItem = hitResult.item;
+							}
+
+							else if (hitResult.type == 'fill' || hitResult.type == 'stroke') {
+
+								hitResult.item.selected = true;
+								selectedItem = hitResult.item;
+							}
 						}
 					};
 
