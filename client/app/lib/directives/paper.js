@@ -21,6 +21,8 @@ angular
 					var hoveredItem;
 					var selectedItem;
 					var selectedSegment;
+					
+					var lastMousePosition;
 
 					var hitOptions = {
 						segments: true,
@@ -55,9 +57,16 @@ angular
 					};
 	
 					function mouseDrag(event) {
-
+						
+						// If dragging a segment	
 						if (selectedSegment) {
 
+							// Check if component definition allows resizing
+							if (!selectedItem.component.resizable) {
+								
+								return;
+							}
+						
 							var scaleX = 1 + event.delta.x / selectedItem.bounds.width;
 							var scaleY = 
 								event.modifiers.shift ? 
@@ -67,9 +76,32 @@ angular
 							selectedItem.scale(scaleX, scaleY);
 						}
 
+						// If dragging an item
 						else if (selectedItem) {
 
 							selectedItem.position = selectedItem.position.add(event.delta);
+						}
+						
+						// If dragging on the canvas
+						else {
+							
+							// Pan when space bar is held
+							if (event.modifiers.space) {
+							
+								// Can't use event.delta since the canvas moves
+								// and odd behaviour occurs. Use browser events
+								// instead
+								var position = new paper.Point(
+									event.event.screenX,
+									event.event.screenY
+								);
+								
+								var delta = position.subtract(lastMousePosition);
+								lastMousePosition = position;
+								
+								// Move the canvas
+								changeCenter(delta.x, delta.y);
+							}
 						}
 					};
 	
@@ -78,24 +110,47 @@ angular
 						project.activeLayer.selected = false;
 						selectedItem = null;
 						
+						lastMousePosition = new paper.Point(
+							event.event.screenX,
+							event.event.screenY
+						);
+						
 						var hitResult = project.hitTest(event.point, hitOptions);
 
 						if (hitResult) {
+							
+							var item = hitResult.item;
+							
+							// Find the top-level group
+							while (item.parent && item.parent.className == 'Group'
+							) {
+							
+								item = item.parent;
+							}
 
 							if (hitResult.type == 'segment') {
 
 								selectedSegment = hitResult.segment;
 
-								hitResult.item.selected = true;
-								selectedItem = hitResult.item;
+								item.selected = true;
+								selectedItem = item;
 							}
 
 							else if (hitResult.type == 'fill' || hitResult.type == 'stroke') {
 
-								hitResult.item.selected = true;
-								selectedItem = hitResult.item;
+								item.selected = true;
+								selectedItem = item;
 							}
 						}
+					};
+					
+					function mouseWheel(event) {
+					
+						event.preventDefault();
+						
+						var mousePosition = new paper.Point(event.offsetX, event.offsetY);
+						var viewPosition = paper.view.viewToProject(mousePosition);
+						changeZoom(event.deltaY, viewPosition);
 					};
 
 					function keyDown(event) {
@@ -113,7 +168,44 @@ angular
 					 * View methods
 					 */
 
+					function changeCenter(deltaX, deltaY) {
+					
+						paper.view.center = paper.view.center.add(new paper.Point(
+							-deltaX / paper.view.zoom, 
+							-deltaY / paper.view.zoom
+						));
+					};
 
+					function changeZoom(delta, target) {
+						
+						var factor = 1.02;
+						var center = paper.view.center;
+						var oldZoom = paper.view.zoom;
+						var newZoom;
+								
+						if (!target) {
+							
+							target = center;	
+						}
+						
+						if (delta < 0) {
+						
+							newZoom = oldZoom * factor;
+						}
+						
+						if (delta > 0) {
+						
+							newZoom = oldZoom / factor;	
+						}
+						
+						var beta = oldZoom / newZoom;
+						var pc = target.subtract(center);
+						var a = target.subtract(pc.multiply(beta)).subtract(center);
+						
+						paper.view.zoom = newZoom;
+						paper.view.center = paper.view.center.add(a);
+					};
+					
 					/**
 					 * Init
 					 */
@@ -130,6 +222,8 @@ angular
 						tool.onMouseMove = mouseMove;
 						tool.onMouseDrag = mouseDrag;
 						tool.onKeyDown = keyDown;
+						
+						$(element).mousewheel(mouseWheel);
 					};
 	
 					initPaper();
