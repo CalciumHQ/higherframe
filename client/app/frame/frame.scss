@@ -10,6 +10,7 @@ $headerHeight: 40px;
 	top: $headerHeight;
 	bottom: 0;
 	@include display-flex;
+	-webkit-font-smoothing: antialiased;
 
 	.sidebar,
 	#canvas {
@@ -22,7 +23,7 @@ $headerHeight: 40px;
 	.sidebar {
 		position: relative;
 		width: 300px;
-		padding: 40px 20px;
+		padding: 25px 16px;
 		@include box-sizing(border-box);
 		@include nested(4) {
 			#quickAdd {
@@ -34,17 +35,32 @@ $headerHeight: 40px;
 
 			#components {
 				.component {
-					margin-top: 25px;
+					margin-top: $chromeMarginSmall;
+					padding: $chromePaddingSmall;
+					background: white;
+					border: 1px solid $chromeBorderLight;
+					border-radius: $chromeBorderRadiusMedium;
 					cursor: pointer;
+					
+					&:hover {
+						border-color: $chromeBorderMedium;
+					}
+					
+					&:active {
+						border-color: $chromeBorderDark;
+					}
 
 					.thumbnail {
 						@include span(1 after);
-						text-align: center;
+						height: 50px;
+						background-size: contain;
+						background-position: center;
+						background-repeat: no-repeat;
 					}
 
 					.text {
 						@include span(3 last after);
-						margin-top: 13px;
+						margin-top: 14px;
 
 						.name,
 						.tags {
@@ -54,26 +70,19 @@ $headerHeight: 40px;
 						.name {
 							font-size: 15px;
 							font-weight: 500;
+							letter-spacing: 0.01em; 
 							color: #4d7cb8;
 						}
 
 						.tags {
 							margin-top: 2px;
 							font-size: 9px;
+							letter-spacing: 0.01em;
 							color: #b6c1ce;
 						}
 					}
 				}
 			}
-		}
-
-		&:after {
-			content: '';
-			position: absolute;
-			right: 0;
-			top: 20px;
-			bottom: 20px;
-			border-right: 1px solid #dfdfdf;
 		}
 	}
 

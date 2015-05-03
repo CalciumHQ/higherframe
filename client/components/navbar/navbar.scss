@@ -1,0 +1,37 @@
+$navbarBackground:#2c2c2c;
+
+#navbar {
+	height: 40px;
+	line-height: 40px;
+	background: $chromeBackgroundMedium;
+	
+	.navbar-toggle {
+		display: none;
+	}
+	
+	.row {
+		@include display-flex;
+	}
+	
+	#navbarSupp {
+		@include flex(1);
+	}
+	
+	#navbarNavigation {
+		#primaryNavigation,
+		#identityNavigation {
+			display: inline-block;
+		}
+		
+		#identityNavigation {
+			
+		}
+	}
+	
+	.nav {
+		li {
+			display: inline-block;
+			margin-left: 20px;
+		}
+	}
+}

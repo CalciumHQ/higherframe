@@ -58,8 +58,26 @@ angular
 	
 					function mouseDrag(event) {
 						
-						// If dragging a segment	
-						if (selectedSegment) {
+						// Pan when space bar is held
+						if (event.modifiers.space) {
+						
+							// Can't use event.delta since the canvas moves
+							// and odd behaviour occurs. Use browser events
+							// instead
+							var position = new paper.Point(
+								event.event.screenX,
+								event.event.screenY
+							);
+							
+							var delta = position.subtract(lastMousePosition);
+							lastMousePosition = position;
+							
+							// Move the canvas
+							changeCenter(delta.x, delta.y);
+						}
+						
+						// Else if dragging a segment	
+						else if (selectedSegment) {
 
 							// Check if component definition allows resizing
 							if (!selectedItem.component.resizable) {
@@ -80,28 +98,6 @@ angular
 						else if (selectedItem) {
 
 							selectedItem.position = selectedItem.position.add(event.delta);
-						}
-						
-						// If dragging on the canvas
-						else {
-							
-							// Pan when space bar is held
-							if (event.modifiers.space) {
-							
-								// Can't use event.delta since the canvas moves
-								// and odd behaviour occurs. Use browser events
-								// instead
-								var position = new paper.Point(
-									event.event.screenX,
-									event.event.screenY
-								);
-								
-								var delta = position.subtract(lastMousePosition);
-								lastMousePosition = position;
-								
-								// Move the canvas
-								changeCenter(delta.x, delta.y);
-							}
 						}
 					};
 	
@@ -178,7 +174,7 @@ angular
 
 					function changeZoom(delta, target) {
 						
-						var factor = 1.02;
+						var factor = 1.04;
 						var center = paper.view.center;
 						var oldZoom = paper.view.zoom;
 						var newZoom;
@@ -188,12 +184,17 @@ angular
 							target = center;	
 						}
 						
-						if (delta < 0) {
+						if (delta == 0) {
+							
+							return;
+						}
+						
+						else if (delta < 0) {
 						
 							newZoom = oldZoom * factor;
 						}
 						
-						if (delta > 0) {
+						else if (delta > 0) {
 						
 							newZoom = oldZoom / factor;	
 						}

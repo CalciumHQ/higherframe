@@ -5,8 +5,7 @@
 
 		#components
 			.component.row(ng-repeat="component in components | filter:quickAdd", ng-click="onComponentClick(component)")
-				.thumbnail
-					img(src="/assets/images/sample-component-tn@2x.png", width="25", height="51")
+				.thumbnail(ng-style="{ 'background-image': 'url(' + component.thumbnail + ')' }")
 
 				.text
 					span.name {{ component.name }}

@@ -16,9 +16,11 @@ body {
 // Component styles are injected through grunt
 // injector
 @import '_grids.scss';
+@import '_variables.scss';
 @import 'account/login/login.scss';
 @import 'admin/admin.scss';
 @import 'frame/frame.scss';
+@import 'layout/sidebar/sidebar.scss';
 @import 'main/main.scss';
 @import 'navbar/navbar.scss';
 // endinjector
