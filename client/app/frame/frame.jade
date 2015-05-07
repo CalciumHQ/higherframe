@@ -1,6 +1,6 @@
 #frame
 	.sidebar
-		#quickAdd.row
+		#quickAdd.row(ng-hide="true")
 			input(ng-model="quickAdd", type="text", placeholder="Quick add (+)", ng-keydown="onQuickAddKeyDown($event)")
 
 		#components

@@ -1,8 +1,10 @@
+$navbarHeight: 40px;
 $navbarBackground:#2c2c2c;
 
 #navbar {
-	height: 40px;
-	line-height: 40px;
+	position: relative;
+	height: $navbarHeight;
+	line-height: $navbarHeight;
 	background: $chromeBackgroundMedium;
 	
 	.navbar-toggle {
@@ -11,6 +13,29 @@ $navbarBackground:#2c2c2c;
 	
 	.row {
 		@include display-flex;
+	}
+	
+	#navbarLogo {
+		$logoWidth: 132px;
+		$logoHeight: 23px;
+		
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		width: $logoWidth;
+		padding-top: $logoHeight;
+		height: 0;
+		margin-left: -$logoWidth/2;
+		margin-top: -$logoHeight/2;
+		background: url('/assets/images/logo@2x.png') no-repeat;
+		background-size: contain;
+		overflow: hidden;
+		opacity: 0.9;
+		@include transition(opacity 0.2s);
+		
+		&:hover {
+			opacity: 1;
+		}
 	}
 	
 	#navbarSupp {
@@ -24,7 +49,21 @@ $navbarBackground:#2c2c2c;
 		}
 		
 		#identityNavigation {
-			
+			#identity {
+				white-space: nowrap;
+				
+				.image {
+					float: left;
+					width: 30px;
+					height: 30px;
+					margin-right: 10px;
+					border-radius: 15px;
+				}
+				
+				.text {
+					
+				}
+			}
 		}
 	}
 	

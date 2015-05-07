@@ -151,12 +151,152 @@ angular
 
 					function keyDown(event) {
 
-						if (event.key == 'backspace' && selectedItem) {
+						switch (event.key) {
+							case 'backspace':
+							
+								if (selectedItem) {
+									
+									selectedItem.remove();
+									selectedItem = null;
+									event.event.preventDefault();
+								}
+									
+								break;
+							
+							// Move forward on the ']' key
+							case ']':
+							
+								if (selectedItem) {
+									
+									moveForward(selectedItem);
+								}
 								
-							selectedItem.remove();
-							selectedItem = null;
-							event.event.preventDefault();
+								break;
+								
+							// Move to front on the 'shift+]' key
+							case '}':
+							
+								if (selectedItem) {
+									
+									moveToFront(selectedItem);
+								}
+								
+								break;
+								
+							// Move backward on the '[' key
+							case '[':
+							
+								if (selectedItem) {
+									
+									moveBackward(selectedItem);
+								}
+								
+								break;
+								
+							// Move to back on the 'shift+[' key
+							case '{':
+							
+								if (selectedItem) {
+									
+									moveToBack(selectedItem);	
+								}
+								
+								break;
 						}
+							
+					};
+					
+					
+					/**
+					 * Data methods
+					 */
+					 
+					function moveForward(item) {
+						
+						if (!item) {
+							
+							return;
+						}
+						
+						var siblings = item.parent.children;
+						var index = siblings.indexOf(item);
+						
+						// Return if at top of stack
+						if (!siblings[index+1]) {
+							
+							return;
+						}
+						
+						// Switch with next element on stack
+						siblings[index] = siblings[index+1];
+						siblings[index+1] = item;
+						
+						// Redraw
+						paper.view.draw();
+					};
+					
+					function moveToFront(item) {
+						
+						if (!item) {
+							
+							return;
+						}
+						
+						var siblings = item.parent.children;
+						var index = siblings.indexOf(item);
+						
+						// Remove from stack
+						siblings.splice(index, 1);
+						
+						// Push element onto end of stack
+						siblings.push(item);
+						
+						// Redraw
+						paper.view.draw();
+					};
+					
+					function moveBackward(item) {
+						
+						if (!item) {
+							
+							return;
+						}
+						
+						var siblings = item.parent.children;
+						var index = siblings.indexOf(item);
+						
+						// Return if at bottom of stack
+						if (!siblings[index-1]) {
+							
+							return;
+						}
+						
+						// Switch with previous element on stack
+						siblings[index] = siblings[index-1];
+						siblings[index-1] = item;
+						
+						// Redraw
+						paper.view.draw();
+					};
+					
+					function moveToBack(item) {
+						
+						if (!item) {
+							
+							return;
+						}
+						
+						var siblings = item.parent.children;
+						var index = siblings.indexOf(item);
+						
+						// Remove from stack
+						siblings.splice(index, 1);
+						
+						// Push element onto start of stack 
+						siblings.unshift(item);
+						
+						// Redraw
+						paper.view.draw();
 					};
 	
 
