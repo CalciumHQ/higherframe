@@ -163,6 +163,50 @@ angular
 									
 								break;
 							
+							// Nudge left on the left key
+							case 'left':
+								
+								var amount = event.modifiers.shift ? -10 : -1;
+								if (selectedItem) {
+								
+									nudge(selectedItem, amount, 0);	
+								}
+								
+								break;
+								
+							// Nudge right on the right key
+							case 'right':
+								
+								var amount = event.modifiers.shift ? 10 : 1;
+								if (selectedItem) {
+								
+									nudge(selectedItem, amount, 0);
+								}
+								
+								break;
+								
+							// Nudge up on the up key
+							case 'up':
+								
+								var amount = event.modifiers.shift ? -10 : -1;
+								if (selectedItem) {
+								
+									nudge(selectedItem, 0, amount);	
+								}
+								
+								break;
+								
+							// Nudge down on the down key
+							case 'down':
+								
+								var amount = event.modifiers.shift ? 10 : 1;
+								if (selectedItem) {
+								
+									nudge(selectedItem, 0, amount);
+								}
+								
+								break;
+							
 							// Move forward on the ']' key
 							case ']':
 							
@@ -210,6 +254,12 @@ angular
 					/**
 					 * Data methods
 					 */
+					 
+					function nudge(item, x, y) {
+					
+						var delta = new paper.Point(x, y);
+						item.position = item.position.add(delta);	
+					};
 					 
 					function moveForward(item) {
 						
