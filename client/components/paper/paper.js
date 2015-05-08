@@ -19,7 +19,7 @@ angular
 					};
 
 					var hoveredItem;
-					var selectedItem;
+					var selectedItems = [];
 					var selectedSegment;
 					
 					var lastMousePosition;
@@ -37,7 +37,7 @@ angular
 
 					function mouseUp(event) {
 	
-						selectedSegment = null;
+						selectedSegments = [];
 					};
 
 					function mouseMove(event) {
@@ -77,7 +77,9 @@ angular
 						}
 						
 						// Else if dragging a segment	
-						else if (selectedSegment) {
+						else if (selectedSegment && (selectedItems.length == 1)) {
+							
+							var selectedItem = selectedItems[0];
 
 							// Check if component definition allows resizing
 							if (!selectedItem.component.resizable) {
@@ -95,25 +97,33 @@ angular
 						}
 
 						// If dragging an item
-						else if (selectedItem) {
+						else if (selectedItems.length) {
 
-							selectedItem.position = selectedItem.position.add(event.delta);
+							angular.forEach(selectedItems, function(item) {
+							
+								item.position = item.position.add(event.delta);	
+							});
 						}
 					};
 	
 					function mouseDown(event) {
-
-						project.activeLayer.selected = false;
-						selectedItem = null;
 						
 						lastMousePosition = new paper.Point(
 							event.event.screenX,
 							event.event.screenY
 						);
 						
+						// Add the new selection
 						var hitResult = project.hitTest(event.point, hitOptions);
+						
+						// If no hit target clear the last selection
+						if (!hitResult) {
+						
+							clearSelection();
+						}
 
-						if (hitResult) {
+						// Add the new selection
+						else {
 							
 							var item = hitResult.item;
 							
@@ -123,19 +133,24 @@ angular
 							
 								item = item.parent;
 							}
+							
+							// First clear the last selection unless the shift key
+							// is held down, or the hit target is selected 
+							if (!event.modifiers.shift && selectedItems.indexOf(item) === -1) {
+							
+								clearSelection();	
+							}
 
+							// Select the hit target
 							if (hitResult.type == 'segment') {
 
 								selectedSegment = hitResult.segment;
-
-								item.selected = true;
-								selectedItem = item;
+								selectItems(item);
 							}
 
 							else if (hitResult.type == 'fill' || hitResult.type == 'stroke') {
 
-								item.selected = true;
-								selectedItem = item;
+								selectItems(item);
 							}
 						}
 					};
@@ -154,10 +169,9 @@ angular
 						switch (event.key) {
 							case 'backspace':
 							
-								if (selectedItem) {
+								if (selectedItems.length) {
 									
-									selectedItem.remove();
-									selectedItem = null;
+									removeItems(selectedItems);
 									event.event.preventDefault();
 								}
 									
@@ -167,9 +181,9 @@ angular
 							case 'left':
 								
 								var amount = event.modifiers.shift ? -10 : -1;
-								if (selectedItem) {
+								if (selectedItems.length) {
 								
-									nudge(selectedItem, amount, 0);	
+									nudge(selectedItems, amount, 0);	
 								}
 								
 								break;
@@ -178,9 +192,9 @@ angular
 							case 'right':
 								
 								var amount = event.modifiers.shift ? 10 : 1;
-								if (selectedItem) {
+								if (selectedItems.length) {
 								
-									nudge(selectedItem, amount, 0);
+									nudge(selectedItems, amount, 0);
 								}
 								
 								break;
@@ -189,9 +203,9 @@ angular
 							case 'up':
 								
 								var amount = event.modifiers.shift ? -10 : -1;
-								if (selectedItem) {
+								if (selectedItems.length) {
 								
-									nudge(selectedItem, 0, amount);	
+									nudge(selectedItems, 0, amount);	
 								}
 								
 								break;
@@ -200,9 +214,9 @@ angular
 							case 'down':
 								
 								var amount = event.modifiers.shift ? 10 : 1;
-								if (selectedItem) {
+								if (selectedItems) {
 								
-									nudge(selectedItem, 0, amount);
+									nudge(selectedItems, 0, amount);
 								}
 								
 								break;
@@ -210,9 +224,9 @@ angular
 							// Move forward on the ']' key
 							case ']':
 							
-								if (selectedItem) {
+								if (selectedItems) {
 									
-									moveForward(selectedItem);
+									moveForward(selectedItems);
 								}
 								
 								break;
@@ -220,9 +234,9 @@ angular
 							// Move to front on the 'shift+]' key
 							case '}':
 							
-								if (selectedItem) {
+								if (selectedItems) {
 									
-									moveToFront(selectedItem);
+									moveToFront(selectedItems);
 								}
 								
 								break;
@@ -230,9 +244,9 @@ angular
 							// Move backward on the '[' key
 							case '[':
 							
-								if (selectedItem) {
+								if (selectedItems) {
 									
-									moveBackward(selectedItem);
+									moveBackward(selectedItems);
 								}
 								
 								break;
@@ -240,9 +254,9 @@ angular
 							// Move to back on the 'shift+[' key
 							case '{':
 							
-								if (selectedItem) {
+								if (selectedItems) {
 									
-									moveToBack(selectedItem);	
+									moveToBack(selectedItems);	
 								}
 								
 								break;
@@ -255,98 +269,163 @@ angular
 					 * Data methods
 					 */
 					 
-					function nudge(item, x, y) {
+					function clearSelection() {
+						
+						project.activeLayer.selected = false;
+						selectedItems = [];
+					};
 					
-						var delta = new paper.Point(x, y);
-						item.position = item.position.add(delta);	
+					function selectItems(items) {
+						
+						if (!angular.isArray(items)) {
+							
+							items = [items];
+						}
+					
+						angular.forEach(items, function (item) {
+							
+							if (selectedItems.indexOf(item) === -1) {
+								
+								item.selected = true;
+								selectedItems.push(item);
+							}
+						});
+					};
+					
+					function removeItems(items) {
+						
+						if (!angular.isArray(items)) {
+							
+							items = [items];
+						}
+						
+						while(items.length) {
+						
+							var item = items[items.length-1];
+								
+							item.remove();
+							
+							var index = selectedItems.indexOf(item);
+							
+							if (index !== -1) {
+								
+								selectedItems.splice(index, 1);
+							}
+						}
 					};
 					 
-					function moveForward(item) {
+					function nudge(items, x, y) {
 						
-						if (!item) {
+						if (!angular.isArray(items)) {
 							
-							return;
+							items = [items];
 						}
-						
-						var siblings = item.parent.children;
-						var index = siblings.indexOf(item);
-						
-						// Return if at top of stack
-						if (!siblings[index+1]) {
+					
+						angular.forEach(items, function (item) {
 							
-							return;
+							var delta = new paper.Point(x, y);
+							item.position = item.position.add(delta);
+						});
+					};
+					 
+					function moveForward(items) {
+						
+						if (!angular.isArray(items)) {
+							
+							items = [items];
 						}
-						
-						// Switch with next element on stack
-						siblings[index] = siblings[index+1];
-						siblings[index+1] = item;
-						
-						// Redraw
-						paper.view.draw();
+					
+						angular.forEach(items, function (item) {
+	
+							var siblings = item.parent.children;
+							var index = siblings.indexOf(item);
+							
+							// Return if at top of stack
+							if (!siblings[index+1]) {
+								
+								return;
+							}
+							
+							// Switch with next element on stack
+							siblings[index] = siblings[index+1];
+							siblings[index+1] = item;
+							
+							// Redraw
+							paper.view.draw();
+						});
 					};
 					
-					function moveToFront(item) {
+					function moveToFront(items) {
 						
-						if (!item) {
+						if (!angular.isArray(items)) {
 							
-							return;
+							items = [items];
 						}
-						
-						var siblings = item.parent.children;
-						var index = siblings.indexOf(item);
-						
-						// Remove from stack
-						siblings.splice(index, 1);
-						
-						// Push element onto end of stack
-						siblings.push(item);
-						
-						// Redraw
-						paper.view.draw();
+					
+						angular.forEach(items, function (item) {
+	
+							var siblings = item.parent.children;
+							var index = siblings.indexOf(item);
+							
+							// Remove from stack
+							siblings.splice(index, 1);
+							
+							// Push element onto end of stack
+							siblings.push(item);
+							
+							// Redraw
+							paper.view.draw();
+						});
 					};
 					
-					function moveBackward(item) {
+					function moveBackward(items) {
 						
-						if (!item) {
+						if (!angular.isArray(items)) {
 							
-							return;
+							items = [items];
 						}
-						
-						var siblings = item.parent.children;
-						var index = siblings.indexOf(item);
-						
-						// Return if at bottom of stack
-						if (!siblings[index-1]) {
+					
+						angular.forEach(items, function (item) {
+	
+							var siblings = item.parent.children;
+							var index = siblings.indexOf(item);
 							
-							return;
-						}
-						
-						// Switch with previous element on stack
-						siblings[index] = siblings[index-1];
-						siblings[index-1] = item;
-						
-						// Redraw
-						paper.view.draw();
+							// Return if at bottom of stack
+							if (!siblings[index-1]) {
+								
+								return;
+							}
+							
+							// Switch with previous element on stack
+							siblings[index] = siblings[index-1];
+							siblings[index-1] = item;
+							
+							// Redraw
+							paper.view.draw();
+						});
 					};
 					
-					function moveToBack(item) {
+					function moveToBack(items) {
 						
-						if (!item) {
+						if (!angular.isArray(items)) {
 							
-							return;
+							items = [items];
 						}
-						
-						var siblings = item.parent.children;
-						var index = siblings.indexOf(item);
-						
-						// Remove from stack
-						siblings.splice(index, 1);
-						
-						// Push element onto start of stack 
-						siblings.unshift(item);
-						
-						// Redraw
-						paper.view.draw();
+					
+						angular.forEach(items, function (item) {
+	
+							var siblings = item.parent.children;
+							var index = siblings.indexOf(item);
+							
+							// Remove from stack
+							siblings.splice(index, 1);
+							
+							// Push element onto start of stack 
+							siblings.unshift(item);
+							
+							// Redraw
+							paper.view.draw();
+						});
 					};
 	
 
