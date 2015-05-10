@@ -10,8 +10,9 @@ angular
 				},
 				link: function postLink(scope, element, attrs) {
 	
-					var path;
-					var drag = false;
+					var isDragSelecting = false;
+					var dragSelectionRectangle;
+					var dragSelectionOverlay;
 
 					var colors = {
 						normal: '#888',
@@ -31,13 +32,17 @@ angular
 						tolerance: 5
 					};
 	
+	
 					/**
 					 * Event handlers
 					 */
 
 					function mouseUp(event) {
 	
-						selectedSegments = [];
+						// End drag selection
+						endDragSelection();
+						
+						selectedSegment = null;
 					};
 
 					function mouseMove(event) {
@@ -104,6 +109,12 @@ angular
 								item.position = item.position.add(event.delta);	
 							});
 						}
+						
+						// If drag selecting
+						else if (isDragSelecting) {
+
+							updateDragSelection(event.downPoint, event.point);
+						}
 					};
 	
 					function mouseDown(event) {
@@ -120,6 +131,9 @@ angular
 						if (!hitResult) {
 						
 							clearSelection();
+							
+							// Start drag selection
+							startDragSelection(event.downPoint);
 						}
 
 						// Add the new selection
@@ -448,6 +462,51 @@ angular
 						
 						paper.view.zoom = newZoom;
 						paper.view.center = paper.view.center.add(a);
+					};
+					
+					function startDragSelection(from) {
+					
+						isDragSelecting = true;
+						dragSelectionRectangle = new paper.Rectangle(from, from);
+						dragSelectionOverlay = new paper.Path.Rectangle(dragSelectionRectangle);
+					};
+					
+					function endDragSelection() {
+						
+						// Select the items in the rectangle
+						angular.forEach(project.activeLayer.children, function (item) {
+							
+							if (item.isInside(dragSelectionRectangle) && 
+								selectedItems.indexOf(item) === -1
+							) {
+								
+								selectedItems.push(item);
+								item.selected = true;
+							}
+						});
+						
+						// Clean up after selection
+						isDragSelecting = false;
+						dragSelectionRectangle = null;
+						dragSelectionOverlay.remove();
+						dragSelectionOverlay = null;
+					};
+					
+					function updateDragSelection(from, to) {
+							
+						dragSelectionRectangle = new paper.Rectangle(from, to);
+						
+						// Update the overlay indicating the drag region
+						if (dragSelectionOverlay) {
+						
+							dragSelectionOverlay.remove();	
+						}
+						
+						dragSelectionOverlay = new paper.Path.Rectangle(dragSelectionRectangle);
+						dragSelectionOverlay.fillColor = '#4d7cb8';
+						dragSelectionOverlay.strokeColor = '#0047a1';
+						dragSelectionOverlay.strokeWidth = 2;
+						dragSelectionOverlay.opacity = 0.3;
 					};
 					
 					/**
