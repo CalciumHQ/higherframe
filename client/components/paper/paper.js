@@ -302,7 +302,7 @@ angular
 						while(items.length) {
 						
 							var item = items[items.length-1];
-								
+							
 							item.remove();
 							
 							var index = selectedItems.indexOf(item);
@@ -347,11 +347,8 @@ angular
 							}
 							
 							// Switch with next element on stack
-							siblings[index] = siblings[index+1];
-							siblings[index+1] = item;
-							
-							// Redraw
-							paper.view.draw();
+							item.remove();
+							item.insertAbove(siblings[index]);
 						});
 					};
 					
@@ -364,17 +361,7 @@ angular
 					
 						angular.forEach(items, function (item) {
 	
-							var siblings = item.parent.children;
-							var index = siblings.indexOf(item);
-							
-							// Remove from stack
-							siblings.splice(index, 1);
-							
-							// Push element onto end of stack
-							siblings.push(item);
-							
-							// Redraw
-							paper.view.draw();
+							item.sendToFront();
 						});
 					};
 					
@@ -397,11 +384,8 @@ angular
 							}
 							
 							// Switch with previous element on stack
-							siblings[index] = siblings[index-1];
-							siblings[index-1] = item;
-							
-							// Redraw
-							paper.view.draw();
+							item.remove();
+							item.insertBelow(siblings[index-1]);
 						});
 					};
 					
@@ -414,17 +398,7 @@ angular
 					
 						angular.forEach(items, function (item) {
 	
-							var siblings = item.parent.children;
-							var index = siblings.indexOf(item);
-							
-							// Remove from stack
-							siblings.splice(index, 1);
-							
-							// Push element onto start of stack 
-							siblings.unshift(item);
-							
-							// Redraw
-							paper.view.draw();
+							item.sendToBack();
 						});
 					};
 	
