@@ -137,6 +137,121 @@ angular
 		    }	
 		};
 		
+		// iPhone titlebar component
+		components.iphoneTitlebar = {
+			id: 'iphoneTitlebar',
+			name: 'iPhone titlebar',
+			tags: [
+		      'apple',
+		      'phone'
+		    ],
+			thumbnail: '/assets/images/components/iphone-thumbnail@2x.png',
+			resizable: false,
+			new: function (options) {
+		
+		      var WIDTH = 219;
+		      var HEIGHT = 14;
+		      
+		      var topLeft = new paper.Point(options.center.x - WIDTH/2, options.center.y - HEIGHT/2);
+		      var bottomRight = new paper.Point(options.center.x + WIDTH/2, options.center.y + HEIGHT/2);
+		      var bounds = new paper.Rectangle(topLeft, bottomRight);
+		      
+		      // Draw the bar
+		      var bar = new paper.Path.Rectangle(bounds);
+		      bar.strokeWidth = 0;
+			  bar.fillColor = '#DDDDDD';
+			  
+			  // Draw the mobile area
+			  var c1 = paper.Path.Circle(new paper.Point(topLeft.x + 6, topLeft.y + HEIGHT/2), 2);
+			  c1.strokeWidth = 0;
+			  c1.fillColor = '#AAAAAA';
+			  
+			  var c2 = paper.Path.Circle(new paper.Point(topLeft.x + 11, topLeft.y + HEIGHT/2), 2);
+			  c2.strokeWidth = 0;
+			  c2.fillColor = '#AAAAAA';
+			  
+			  var c3 = paper.Path.Circle(new paper.Point(topLeft.x + 16, topLeft.y + HEIGHT/2), 2);
+			  c3.strokeWidth = 0;
+			  c3.fillColor = '#AAAAAA';
+			  
+			  var c4 = paper.Path.Circle(new paper.Point(topLeft.x + 21, topLeft.y + HEIGHT/2), 2);
+			  c4.strokeWidth = 0;
+			  c4.fillColor = '#AAAAAA';
+			  
+			  var c5 = paper.Path.Circle(new paper.Point(topLeft.x + 26, topLeft.y + HEIGHT/2), 2);
+			  c5.strokeWidth = 0;
+			  c5.fillColor = '#AAAAAA';
+			  
+			  var carrier = new paper.PointText({
+				  point: new paper.Point(topLeft.x + 32, topLeft.y + HEIGHT/2 + 3),
+				  content: 'Carrier',
+				  fillColor: '#AAAAAA',
+				  fontSize: 9
+			  });
+			   
+			  var mobile = new paper.Group([
+				  c1,
+				  c2,
+				  c3,
+				  c4,
+				  c5,
+				  carrier
+			  ]);
+			  
+			  // Draw the indicators
+			  var batteryOuterRect = new paper.Rectangle(
+				  new paper.Point(bottomRight.x - 20, bottomRight.y - 4),
+				  new paper.Point(bottomRight.x - 5, bottomRight.y - HEIGHT + 4)
+			  );
+			  
+			  var batteryOuter = new paper.Path.Rectangle(batteryOuterRect);
+			  batteryOuter.strokeWidth = 1;
+			  batteryOuter.strokeColor = '#AAAAAA';
+			  
+			  var batteryInnerRect = new paper.Rectangle(
+				  new paper.Point(bottomRight.x - 19, bottomRight.y - 5),
+				  new paper.Point(bottomRight.x - 6, bottomRight.y - HEIGHT + 5)
+			  );
+			  
+			  var batteryInner = new paper.Path.Rectangle(batteryInnerRect);
+			  batteryInner.strokeWidth = 0;
+			  batteryInner.fillColor = '#AAAAAA'; 
+			  
+			  var batteryKnobRect = new paper.Rectangle(
+				new paper.Point(bottomRight.x - 5, bottomRight.y - 8),
+				new paper.Point(bottomRight.x - 3, bottomRight.y - HEIGHT + 8)  
+			  );
+			  
+			  var batteryKnob = new paper.Path.Rectangle(batteryKnobRect);
+			  batteryKnob.strokeWidth = 0;
+			  batteryKnob.fillColor = '#AAAAAA';
+			  
+			  var indicators = new paper.Group([
+				  batteryOuter,
+				  batteryInner,
+				  batteryKnob
+			  ]);
+			  
+			  var time = new paper.PointText({
+				  point: new paper.Point(topLeft.x + WIDTH/2 - 9, topLeft.y + HEIGHT/2 + 3),
+				  content: '7:54',
+				  fillColor: '#AAAAAA',
+				  fontSize: 9,
+				  fontWeight: 'bold'
+			  });
+		      
+		      // Group the parts and flatten into a symbol
+		      var group = new paper.Group([
+		        bar,
+				mobile,
+				indicators,
+				time
+		      ]);
+		      
+		      return group;
+		    }	
+		};
+		
 		
 		/*
 		 * Component factory

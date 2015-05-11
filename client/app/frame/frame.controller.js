@@ -24,6 +24,7 @@ angular
       $scope.components.push(ComponentFactory.components.circle);
       $scope.components.push(ComponentFactory.components.triangle);
       $scope.components.push(ComponentFactory.components.iphone);
+      $scope.components.push(ComponentFactory.components.iphoneTitlebar);
     };
 
 
