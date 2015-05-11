@@ -375,7 +375,7 @@ angular
 					
 						angular.forEach(items, function (item) {
 	
-							item.sendToFront();
+							item.bringToFront();
 						});
 					};
 					
@@ -488,8 +488,12 @@ angular
 						// Clean up after selection
 						isDragSelecting = false;
 						dragSelectionRectangle = null;
-						dragSelectionOverlay.remove();
-						dragSelectionOverlay = null;
+						
+						if (dragSelectionOverlay) {
+						
+							dragSelectionOverlay.remove();
+							dragSelectionOverlay = null;	
+						}
 					};
 					
 					function updateDragSelection(from, to) {

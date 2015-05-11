@@ -233,8 +233,8 @@ angular
 			  ]);
 			  
 			  var time = new paper.PointText({
-				  point: new paper.Point(topLeft.x + WIDTH/2 - 9, topLeft.y + HEIGHT/2 + 3),
-				  content: '7:54',
+				  point: new paper.Point(topLeft.x + WIDTH/2 - 16, topLeft.y + HEIGHT/2 + 3),
+				  content: '7:54 am',
 				  fillColor: '#AAAAAA',
 				  fontSize: 9,
 				  fontWeight: 'bold'
