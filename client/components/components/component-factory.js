@@ -254,37 +254,53 @@ angular
 		
 		
 		/*
+		 * Methods
+		 */
+		 
+		var _create = function (id, options) {
+			
+			if (!options) {
+				
+				options = {};
+			}
+			
+			var component = _get(id);
+			
+			// Create an instance
+			if (!options.center) {
+				
+				throw 'ComponentFactory requires a center option for component name "' + name + '".';
+			}
+			
+			var instance = component.new(options);
+			
+			// Attach metadata and return
+			instance.component = component;
+			return instance;
+		};
+		
+		var _get = function (id) {
+			
+			// Attempt to find a component definition with 
+			// this id
+			var component = components[id];
+			
+			if (!component) {
+				
+				throw 'No component with id "' + id + '".';
+			}
+			
+			return component;	
+		};
+	
+		
+		/*
 		 * Component factory
 		 */
+		 
 		return {
-			create: function (name, options) {
-				
-				if (!options) {
-					
-					options = {};
-				}
-				
-				// Attempt to find a component definition with 
-				// this name
-				var component = components[name];
-				
-				if (!component) {
-					
-					throw 'No component with name "' + name + '".';
-				}
-				
-				// Create an instance
-				if (!options.center) {
-					
-					throw 'ComponentFactory requires a center option for component name "' + name + '".';
-				}
-				
-				var instance = component.new(options);
-				
-				// Attach metadata and return
-				instance.component = component;
-				return instance;
-			},
+			create: _create,
+			get: _get,
 			components: components
 		};
 	}]);

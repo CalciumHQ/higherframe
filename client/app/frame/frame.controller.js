@@ -7,6 +7,7 @@ angular
     /*
      * Controller variables
      */
+     
     $scope.quickAdd = '';
     $scope.components = [];
 
@@ -18,6 +19,7 @@ angular
     /*
      * Initialization
      */
+     
     var registerComponents = function () {
 
       $scope.components.push(ComponentFactory.components.rectangle);
@@ -31,8 +33,16 @@ angular
     /* 
      * Serialization
      */
-    var deserialize = function () {
+     
+    var deserialize = function (document) {
 
+      setTimeout(function () {
+        
+        angular.forEach(document.components, function (component) {
+          
+          addComponent(ComponentFactory.get(component.componentId), component.properties);
+        });
+      }, 200);
     };
 
     var serialize = function () {
@@ -43,21 +53,40 @@ angular
     /*
      * View methods
      */
-    var addComponent = function (component) {
+     
+    var addComponent = function (component, options) {
 
-      var options = {
+      var defaults = {
         center: new paper.Point(400, 400),
         radius: 100
       };
       
+      options = angular.extend(defaults, options);
+      
       var instance = ComponentFactory.create(component.id, options);
       $scope.wireframe.components.push(instance);
     };
+    
+    
+    /*
+     * Wireframe notifications
+     */
+     
+    $scope.$on('componentAdded', function () {
+    
+      console.log('componentAdded');
+    });
+    
+    $scope.$on('componentsMoved', function (e, components) {
+    
+      console.log('componentMoved', e, components);
+    });
 
 
     /*
      * Event handlers
      */
+     
     $scope.onComponentClick = function (component) {
 
       addComponent(component);
@@ -87,5 +116,19 @@ angular
     (function init() {
     
       registerComponents();
+      
+      // Deserialize the document
+      var document = {
+        components: [
+          {
+            componentId: 'circle',
+            properties: {
+              center: new paper.Point(200, 400)
+            }
+          }
+        ]  
+      };
+      
+      deserialize(document);
     })();
   });

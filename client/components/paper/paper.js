@@ -8,7 +8,7 @@ angular
 				scope: {
 					data: '='
 				},
-				link: function postLink(scope, element, attrs) {
+				link: function postLink($scope, element, attrs) {
 	
 					var isDragSelecting = false;
 					var dragSelectionRectangle;
@@ -340,6 +340,8 @@ angular
 							var delta = new paper.Point(x, y);
 							item.position = item.position.add(delta);
 						});
+						
+						$scope.$emit('componentsMoved', items);
 					};
 					 
 					function moveForward(items) {
