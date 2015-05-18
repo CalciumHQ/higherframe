@@ -44,7 +44,7 @@ angular
 			resizable: true,
 			new: function (options) {
 				
-				var path = new paper.Path.Circle(options.center, options.radius);
+				var path = new paper.Path.Circle(options.position, options.radius);
 				path.strokeColor = '#888';
 				path.fillColor = 'white';
 				
@@ -64,8 +64,8 @@ angular
 			resizable: true,
 			new: function (options) {
 		
-		      var center = new paper.Point(100, 200);
-		      var path = new paper.Path.RegularPolygon(center, 3, 50);
+		      var position = new paper.Point(100, 200);
+		      var path = new paper.Path.RegularPolygon(position, 3, 50);
 		      path.strokeColor = '#888';
 		      path.fillColor = 'white';
 		
@@ -89,8 +89,8 @@ angular
 		      var WIDTH = 232;
 		      var HEIGHT = 464;
 		      
-		      var topLeft = new paper.Point(options.center.x - WIDTH/2, options.center.y - HEIGHT/2);
-		      var bottomRight = new paper.Point(options.center.x + WIDTH/2, options.center.y + HEIGHT/2);
+		      var topLeft = new paper.Point(options.position.x - WIDTH/2, options.position.y - HEIGHT/2);
+		      var bottomRight = new paper.Point(options.position.x + WIDTH/2, options.position.y + HEIGHT/2);
 		      var bounds = new paper.Rectangle(topLeft, bottomRight);
 		      
 		      // Draw the outer frame
@@ -107,21 +107,21 @@ angular
 		      screen.strokeColor = '#888';
 		      
 		      // Draw the button
-		      var buttonCenter = new paper.Point(options.center.x, bounds.bottom - 35);
-		      var button = new paper.Path.Circle(buttonCenter, 24);
+		      var buttonposition = new paper.Point(options.position.x, bounds.bottom - 35);
+		      var button = new paper.Path.Circle(buttonposition, 24);
 		      button.strokeColor = '#888';
 		      
 		      // Draw the speaker
 		      var speakerRectangle = new paper.Rectangle(
-		        new paper.Point(options.center.x - 23, bounds.top + 27),
-		        new paper.Point(options.center.x + 23, bounds.top + 33)
+		        new paper.Point(options.position.x - 23, bounds.top + 27),
+		        new paper.Point(options.position.x + 23, bounds.top + 33)
 		      );
 		      var speaker = new paper.Path.Rectangle(speakerRectangle, 3);
 		      speaker.strokeColor = '#888';
 		      
 		      // Draw the camera
-		      var cameraCenter = new paper.Point(options.center.x, bounds.top + 18);
-		      var camera = new paper.Path.Circle(cameraCenter, 4);
+		      var cameraposition = new paper.Point(options.position.x, bounds.top + 18);
+		      var camera = new paper.Path.Circle(cameraposition, 4);
 		      camera.strokeColor = '#888';
 		      
 		      // Group the parts and flatten into a symbol
@@ -152,8 +152,8 @@ angular
 		      var WIDTH = 219;
 		      var HEIGHT = 14;
 		      
-		      var topLeft = new paper.Point(options.center.x - WIDTH/2, options.center.y - HEIGHT/2);
-		      var bottomRight = new paper.Point(options.center.x + WIDTH/2, options.center.y + HEIGHT/2);
+		      var topLeft = new paper.Point(options.position.x - WIDTH/2, options.position.y - HEIGHT/2);
+		      var bottomRight = new paper.Point(options.position.x + WIDTH/2, options.position.y + HEIGHT/2);
 		      var bounds = new paper.Rectangle(topLeft, bottomRight);
 		      
 		      // Draw the bar
@@ -267,9 +267,9 @@ angular
 			var component = _get(id);
 			
 			// Create an instance
-			if (!options.center) {
+			if (!options.position) {
 				
-				throw 'ComponentFactory requires a center option for component name "' + name + '".';
+				throw 'ComponentFactory requires a position option for component name "' + name + '".';
 			}
 			
 			var instance = component.new(options);

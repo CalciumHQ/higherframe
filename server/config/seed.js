@@ -5,6 +5,7 @@
 
 'use strict';
 
+var Frame = require('../api/frame/frame.model');
 var Thing = require('../api/thing/thing.model');
 var User = require('../api/user/user.model');
 
@@ -29,6 +30,20 @@ Thing.find({}).remove(function() {
     info : 'Easily deploy your app to Heroku or Openshift with the heroku and openshift subgenerators'
   });
 });
+
+/*Frame.find({}).remove(function() {
+  
+  Frame.create({
+    "components": [
+      {
+        "componentId": "circle",
+        "properties": {
+          "center": { "x": 200, "y": 400 }
+        }
+      }
+    ]
+  });
+});*/
 
 User.find({}).remove(function() {
   User.create({

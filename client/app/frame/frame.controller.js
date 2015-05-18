@@ -2,7 +2,7 @@
 
 angular
   .module('siteApp')
-  .controller('FrameCtrl', function ($scope, $filter, ComponentFactory) {
+  .controller('FrameCtrl', function (frame, $scope, $http, $filter, $stateParams, ComponentFactory) {
 
     /*
      * Controller variables
@@ -47,6 +47,27 @@ angular
 
     var serialize = function () {
 
+      var document = {
+        components: []
+      };
+      
+      // Components
+      angular.forEach($scope.wireframe.components, function (component) {
+        
+        document.components.push({
+          componentId: component.component.id,
+          properties: {
+            position: { x: component.position.x, y: component.position.y }
+          }
+        });
+      });
+      
+      $http
+        .patch('/api/frames/' + $stateParams.id, document)
+        .success(function (data) {
+          
+          console.log('saved', data);
+        });
     };
 
 
@@ -57,7 +78,7 @@ angular
     var addComponent = function (component, options) {
 
       var defaults = {
-        center: new paper.Point(400, 400),
+        position: new paper.Point(400, 400),
         radius: 100
       };
       
@@ -80,6 +101,7 @@ angular
     $scope.$on('componentsMoved', function (e, components) {
     
       console.log('componentMoved', e, components);
+      serialize();
     });
 
 
@@ -117,18 +139,7 @@ angular
     
       registerComponents();
       
-      // Deserialize the document
-      var document = {
-        components: [
-          {
-            componentId: 'circle',
-            properties: {
-              center: new paper.Point(200, 400)
-            }
-          }
-        ]  
-      };
-      
-      deserialize(document);
+      // Deserialize the loaded frame
+      deserialize(frame);
     })();
   });
