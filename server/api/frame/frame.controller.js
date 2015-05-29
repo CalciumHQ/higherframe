@@ -45,13 +45,18 @@ exports.create = function(req, res) {
 
 // Updates an existing frame in the DB.
 exports.update = function(req, res) {
-	
+
   if(req.body._id) { delete req.body._id; }
   Frame.findById(req.params.id, function (err, frame) {
 	  
     if (err) { return handleError(res, err); }
     if(!frame) { return res.send(404); }
     var updated = _.merge(frame, req.body);
+		
+		if (req.body.components) {
+			
+			updated.components = req.body.components;
+		}
 	
     updated.save(function (err) {
 		

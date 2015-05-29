@@ -37,6 +37,11 @@ angular
     var deserialize = function (document) {
 
       setTimeout(function () {
+				
+				// Add components in order of z index
+				document.components = _.sortBy(
+					document.components,
+					function (component) { return component.properties.index; });
         
         angular.forEach(document.components, function (component) {
           
@@ -48,6 +53,7 @@ angular
     var serialize = function () {
 
       var document = {
+				view: {},
         components: []
       };
       
@@ -57,7 +63,8 @@ angular
         document.components.push({
           componentId: component.component.id,
           properties: {
-            position: { x: component.position.x, y: component.position.y }
+            position: { x: component.position.x, y: component.position.y },
+						index: component.index
           }
         });
       });
@@ -66,7 +73,6 @@ angular
         .patch('/api/frames/' + $stateParams.id, document)
         .success(function (data) {
           
-          console.log('saved', data);
         });
     };
 
@@ -87,6 +93,21 @@ angular
       var instance = ComponentFactory.create(component.id, options);
       $scope.wireframe.components.push(instance);
     };
+		
+		var removeComponent = function (component, options) {
+			
+			var index;
+			_.find($scope.wireframe.components, function (c, i) {
+				
+				if (c.id == component.id) {
+					
+					index = i;
+					return c;
+				}
+			});
+			
+			$scope.wireframe.components.splice(index, 1);
+		};
     
     
     /*
@@ -95,12 +116,26 @@ angular
      
     $scope.$on('componentAdded', function () {
     
-      console.log('componentAdded');
+			
     });
     
     $scope.$on('componentsMoved', function (e, components) {
     
-      console.log('componentMoved', e, components);
+      serialize();
+    });
+		
+		$scope.$on('componentsIndexModified', function (e, components) {
+    
+      serialize();
+    });
+		
+		$scope.$on('componentsDeleted', function (e, components) {
+    
+			angular.forEach(components, function (component) {
+			
+				removeComponent(component);	
+			});
+			
       serialize();
     });
 
@@ -112,6 +147,7 @@ angular
     $scope.onComponentClick = function (component) {
 
       addComponent(component);
+			serialize();
     };
 
     $scope.onQuickAddKeyDown = function (event) {

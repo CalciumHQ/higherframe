@@ -21,7 +21,7 @@ angular
 		    ],
 			thumbnail: '/assets/images/components/rectangle-thumbnail@2x.png',
 			resizable: true,
-			new: function () {
+			new: function (options) {
 				
 				var rectangle = new paper.Rectangle(new Point(100, 200), new Point(200, 300));
 				var path = new paper.Path.Rectangle(rectangle);
@@ -64,8 +64,7 @@ angular
 			resizable: true,
 			new: function (options) {
 		
-		      var position = new paper.Point(100, 200);
-		      var path = new paper.Path.RegularPolygon(position, 3, 50);
+		      var path = new paper.Path.RegularPolygon(options.position, 3, 50);
 		      path.strokeColor = '#888';
 		      path.fillColor = 'white';
 		

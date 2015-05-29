@@ -38,9 +38,21 @@ angular
 					 */
 
 					function mouseUp(event) {
-	
-						// End drag selection
-						endDragSelection();
+						
+						// If dragging an item
+						if (selectedItems.length) {
+
+							angular.forEach(selectedItems, function (item) {
+								
+								moveItem(item, item.position);
+							});	
+						}
+						
+						else {
+							
+							// End drag selection
+							endDragSelection();
+						}
 						
 						selectedSegment = null;
 					};
@@ -49,14 +61,14 @@ angular
 
 						if (hoveredItem) {
 
-							hoveredItem.strokeColor = colors.normal;
+							// hoveredItem.strokeColor = colors.normal;
 						}
 
 						var hitResult = project.hitTest(event.point, hitOptions);
 
 						if (hitResult) {
 
-							hitResult.item.strokeColor = colors.hover;
+							// hitResult.item.strokeColor = colors.hover;
 							hoveredItem = hitResult.item;
 						}
 					};
@@ -313,6 +325,8 @@ angular
 							items = [items];
 						}
 						
+						$scope.$emit('componentsDeleted', items);
+						
 						while(items.length) {
 						
 							var item = items[items.length-1];
@@ -326,6 +340,21 @@ angular
 								selectedItems.splice(index, 1);
 							}
 						}
+					};
+					
+					function moveItem(items, position) {
+						
+						if (!angular.isArray(items)) {
+							
+							items = [items];
+						}
+					
+						angular.forEach(items, function (item) {
+							
+							item.position = position;
+						});
+						
+						$scope.$emit('componentsMoved', items);
 					};
 					 
 					function nudge(items, x, y) {
@@ -366,6 +395,8 @@ angular
 							item.remove();
 							item.insertAbove(siblings[index]);
 						});
+						
+						$scope.$emit('componentsIndexModified', items);
 					};
 					
 					function moveToFront(items) {
@@ -379,6 +410,8 @@ angular
 	
 							item.bringToFront();
 						});
+						
+						$scope.$emit('componentsIndexModified', items);
 					};
 					
 					function moveBackward(items) {
@@ -403,6 +436,8 @@ angular
 							item.remove();
 							item.insertBelow(siblings[index-1]);
 						});
+						
+						$scope.$emit('componentsIndexModified', items);
 					};
 					
 					function moveToBack(items) {
@@ -416,6 +451,8 @@ angular
 	
 							item.sendToBack();
 						});
+						
+						$scope.$emit('componentsIndexModified', items);
 					};
 	
 
