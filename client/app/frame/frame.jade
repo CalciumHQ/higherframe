@@ -11,4 +11,4 @@
 					span.name {{ component.name }}
 					span.tags {{ component.tags.join(', ') }}
 
-	canvas#canvas(wireframe, data="wireframe", resize)
+	canvas#canvas(wireframe, data="wireframe", resize, keepalive="true")

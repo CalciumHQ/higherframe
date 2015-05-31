@@ -1,7 +1,8 @@
 /* global io */
 'use strict';
 
-angular.module('siteApp')
+angular
+	.module('siteApp')
   .factory('socket', function(socketFactory) {
 
     // socket.io now auto-configures its connection when we ommit a connection url
@@ -35,6 +36,7 @@ angular.module('siteApp')
          */
         socket.on(modelName + ':save', function (item) {
           var oldItem = _.find(array, {_id: item._id});
+					console.log(array);
           var index = array.indexOf(oldItem);
           var event = 'created';
 
@@ -55,7 +57,13 @@ angular.module('siteApp')
          */
         socket.on(modelName + ':remove', function (item) {
           var event = 'deleted';
-          _.remove(array, {_id: item._id});
+					var index;
+					_.find(array, function (a, i) {
+						
+						if (a._id == item._id) { index = i; return true; }
+					});
+					
+          array.splice(index, 1);
           cb(event, item, array);
         });
       },

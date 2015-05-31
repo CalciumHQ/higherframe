@@ -2,7 +2,7 @@
 
 angular
   .module('siteApp')
-  .controller('FrameCtrl', function (frame, $scope, $http, $filter, $stateParams, ComponentFactory) {
+  .controller('FrameCtrl', function (frame, $scope, $http, $filter, $stateParams, socket, ComponentFactory, Session) {
 
     /*
      * Controller variables
@@ -22,12 +22,48 @@ angular
      
     var registerComponents = function () {
 
-      $scope.components.push(ComponentFactory.components.rectangle);
-      $scope.components.push(ComponentFactory.components.circle);
-      $scope.components.push(ComponentFactory.components.triangle);
-      $scope.components.push(ComponentFactory.components.iphone);
-      $scope.components.push(ComponentFactory.components.iphoneTitlebar);
+      $scope.components.push(ComponentFactory.definitions.rectangle);
+      $scope.components.push(ComponentFactory.definitions.circle);
+      $scope.components.push(ComponentFactory.definitions.triangle);
+      $scope.components.push(ComponentFactory.definitions.iphone);
+      $scope.components.push(ComponentFactory.definitions.iphoneTitlebar);
     };
+		
+		var registerSockets = function () {
+			
+			socket.syncUpdates('component', $scope.wireframe.components, function (event, component, array) {
+				
+				// If the event was triggered by this session
+				// don't update
+				if (component.lastModifiedBy == Session.getSessionId()) {
+					
+					return;
+				}
+				
+				if (event == 'created') {
+					
+					console.log('created', component);
+					addComponentToView(component.componentId, component.properties, component._id);
+				}
+				
+				else if (event == 'updated') {
+					
+					console.log('updated', component);
+					updateComponentInView(component, component._id);
+				}
+				
+				else if (event == 'deleted') {
+					
+					console.log('deleted', component);
+					removeComponentFromView(component);
+				}
+			});
+			
+			$scope.$on('$destroy', function () {
+				
+				socket.unsyncUpdates('component');
+			});
+		};
 
 
     /* 
@@ -45,7 +81,8 @@ angular
         
         angular.forEach(document.components, function (component) {
           
-          addComponent(ComponentFactory.get(component.componentId), component.properties);
+					$scope.wireframe.components.push(component);
+          addComponentToView(component.componentId, component.properties, component._id);
         });
       }, 200);
     };
@@ -55,88 +92,121 @@ angular
       var document = {
 				view: {},
         components: []
-      };
-      
-      // Components
-      angular.forEach($scope.wireframe.components, function (component) {
-        
-        document.components.push({
-          componentId: component.component.id,
-          properties: {
-            position: { x: component.position.x, y: component.position.y },
-						index: component.index
-          }
-        });
-      });
-      
-      $http
-        .patch('/api/frames/' + $stateParams.id, document)
-        .success(function (data) {
-          
-        });
+      };  
     };
+		
+		
+		/*
+		 * Data methods
+		 */
+		 
+		var saveComponent = function (component) {
+			
+			var serialized = {
+				lastModifiedBy: Session.getSessionId(),
+        componentId: component.definition.id,
+        properties: {
+          position: { x: component.position.x, y: component.position.y },
+					index: component.index
+        }
+      };
+			
+			// Update
+			if (component.remoteId) {
+				
+				$http
+	        .patch('/api/components/' + component.remoteId, serialized)
+	        .success(function (data) {
+	          
+	        });
+			}
+			
+			// Create
+			else {
+				
+				$http
+	        .post('/api/frames/' + $stateParams.id + '/components', serialized)
+	        .success(function (data) {
+	          
+						component.remoteId = data._id;
+	        });
+			}
+		};
+		
+		var deleteComponent = function (component) {
+			
+			if (component.remoteId) {
+				
+				$http
+	        .delete('/api/components/' + component.remoteId)
+	        .success(function (data) {
+	          
+	        });
+			}
+		};
 
 
     /*
      * View methods
      */
      
-    var addComponent = function (component, options) {
-
-      var defaults = {
-        position: new paper.Point(400, 400),
-        radius: 100
-      };
+    var addComponentToView = function (componentId, options, remoteId) {
       
-      options = angular.extend(defaults, options);
-      
-      var instance = ComponentFactory.create(component.id, options);
-      $scope.wireframe.components.push(instance);
+      var instance = ComponentFactory.create(componentId, options, remoteId);
+			return instance;
     };
 		
-		var removeComponent = function (component, options) {
+		var removeComponentFromView = function (component) {
 			
-			var index;
-			_.find($scope.wireframe.components, function (c, i) {
+			// Find the component with this remoteId
+			angular.forEach(project.activeLayer.children, function (item) {
 				
-				if (c.id == component.id) {
+				if (item.remoteId == component._id) {
 					
-					index = i;
-					return c;
+					item.remove();
 				}
 			});
+		};
+		
+		var updateComponentInView = function (component) {
 			
-			$scope.wireframe.components.splice(index, 1);
+			// Find the component with this remoteId
+			angular.forEach(project.activeLayer.children, function (item) {
+				
+				if (item.remoteId == component._id) {
+					
+					item.position = component.properties.position;
+				}
+			});
 		};
     
     
     /*
      * Wireframe notifications
      */
-     
-    $scope.$on('componentAdded', function () {
-    
-			
-    });
     
     $scope.$on('componentsMoved', function (e, components) {
     
-      serialize();
+			angular.forEach(components, function (component) {
+				
+				saveComponent(component);	
+			});
     });
 		
 		$scope.$on('componentsIndexModified', function (e, components) {
     
-      serialize();
+      angular.forEach(components, function (component) {
+			
+				saveComponent(component);	
+			});
     });
 		
 		$scope.$on('componentsDeleted', function (e, components) {
     
 			angular.forEach(components, function (component) {
 			
-				removeComponent(component);	
+				deleteComponent(component);	
 			});
-			
-      serialize();
     });
 
 
@@ -144,10 +214,15 @@ angular
      * Event handlers
      */
      
-    $scope.onComponentClick = function (component) {
+    $scope.onComponentClick = function (definition) {
+			
+			var options = {
+        position: new paper.Point(400, 400),
+        radius: 100
+      };
 
-      addComponent(component);
-			serialize();
+      var instance = addComponentToView(definition.id, options);
+			saveComponent(instance);
     };
 
     $scope.onQuickAddKeyDown = function (event) {
@@ -163,7 +238,8 @@ angular
 
         if (component) {
 
-          addComponent(component);
+          addComponentToView(component.id);
+					saveComponent(component);
           $scope.quickAdd = '';
         }
 
@@ -174,6 +250,7 @@ angular
     (function init() {
     
       registerComponents();
+			registerSockets();
       
       // Deserialize the loaded frame
       deserialize(frame);

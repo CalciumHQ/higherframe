@@ -4,7 +4,7 @@ angular
 	.module('siteApp')
 	.factory('ComponentFactory', [function () {
 		
-		var components = [];	// component definitions
+		var definitions = [];	// component definitions
 		
 		
 		/*
@@ -12,7 +12,7 @@ angular
 	     */
 		
 		// Rectangle component
-		components.rectangle = {
+		definitions.rectangle = {
 			id: 'rectangle',
 			name: 'Rectangle',
 			tags: [
@@ -32,8 +32,8 @@ angular
 			}
 		};
 	     
-	    // Circle component
-	    components.circle = {
+	  // Circle component
+	 	definitions.circle = {
 			id: 'circle',
 			name: 'Circle',
 			tags: [
@@ -44,6 +44,11 @@ angular
 			resizable: true,
 			new: function (options) {
 				
+				if (!options.radius) {
+					
+					options.radius = 100;
+				}
+				
 				var path = new paper.Path.Circle(options.position, options.radius);
 				path.strokeColor = '#888';
 				path.fillColor = 'white';
@@ -53,7 +58,7 @@ angular
 		};
 	
 	    // Triangle component
-		components.triangle = {
+		definitions.triangle = {
 			id: 'triangle',
 			name: 'Triangle',
 			tags: [
@@ -73,7 +78,7 @@ angular
 		};
 	    
 	    // iPhone component
-		components.iphone = {
+		definitions.iphone = {
 			id: 'iphone',
 			name: 'iPhone',
 			tags: [
@@ -137,7 +142,7 @@ angular
 		};
 		
 		// iPhone titlebar component
-		components.iphoneTitlebar = {
+		definitions.iphoneTitlebar = {
 			id: 'iphoneTitlebar',
 			name: 'iPhone titlebar',
 			tags: [
@@ -256,40 +261,41 @@ angular
 		 * Methods
 		 */
 		 
-		var _create = function (id, options) {
+		var _create = function (componentId, options, remoteId) {
 			
 			if (!options) {
 				
 				options = {};
 			}
 			
-			var component = _get(id);
+			var definition = _get(componentId);
 			
 			// Create an instance
 			if (!options.position) {
 				
-				throw 'ComponentFactory requires a position option for component name "' + name + '".';
+				throw 'ComponentFactory requires a position option for component name "' + component.name + '".';
 			}
 			
-			var instance = component.new(options);
+			var instance = definition.new(options);
 			
 			// Attach metadata and return
-			instance.component = component;
+			instance.remoteId = remoteId;
+			instance.definition = definition;
 			return instance;
 		};
 		
-		var _get = function (id) {
+		var _get = function (componentId) {
 			
 			// Attempt to find a component definition with 
 			// this id
-			var component = components[id];
+			var definition = definitions[componentId];
 			
-			if (!component) {
+			if (!definition) {
 				
-				throw 'No component with id "' + id + '".';
+				throw 'No component with id "' + componentId + '".';
 			}
 			
-			return component;	
+			return definition;	
 		};
 	
 		
@@ -300,6 +306,6 @@ angular
 		return {
 			create: _create,
 			get: _get,
-			components: components
+			definitions: definitions
 		};
 	}]);
