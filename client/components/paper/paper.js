@@ -9,15 +9,30 @@ angular
 					data: '='
 				},
 				link: function postLink($scope, element, attrs) {
-	
-					var isDragSelecting = false;
-					var dragSelectionRectangle;
-					var dragSelectionOverlay;
-
+					
+					
+					/**
+					 * Constants
+					 */
+					
+					var layerGrid,
+						layerDrawing,
+					 	layerAnnotations,
+					 	layerSelections,
+						layerGuides;
+					
 					var colors = {
 						normal: '#888',
 						hover: '#333'
 					};
+					 
+					/**
+					 * Variables
+					 */
+	
+					var isDragSelecting = false;
+					var dragSelectionRectangle;
+					var dragSelectionOverlay;
 
 					var hoveredItem;
 					var selectedItems = [];
@@ -118,7 +133,8 @@ angular
 
 							angular.forEach(selectedItems, function(item) {
 							
-								item.position = item.position.add(event.delta);	
+								item.position = item.position.add(event.delta);
+								item.boundingBox.position = item.boundingBox.position.add(event.delta);	
 							});
 						}
 						
@@ -137,7 +153,7 @@ angular
 						);
 						
 						// Add the new selection
-						var hitResult = project.hitTest(event.point, hitOptions);
+						var hitResult = layerDrawing.hitTest(event.point, hitOptions);
 						
 						// If no hit target clear the last selection
 						if (!hitResult) {
@@ -292,13 +308,27 @@ angular
 					
 					
 					/**
+					 * State handlers
+					 */
+					 
+					var onItemUpdated = function (item) {
+						
+						updateBoundingBox(item);
+					};
+					
+					
+					/**
 					 * Data methods
 					 */
 					 
 					function clearSelection() {
 						
-						project.activeLayer.selected = false;
 						selectedItems = [];
+						
+						angular.forEach(layerDrawing.children, function (item) {
+							
+							onItemUpdated(item);
+						});
 					};
 					
 					function selectItems(items) {
@@ -312,8 +342,8 @@ angular
 							
 							if (selectedItems.indexOf(item) === -1) {
 								
-								item.selected = true;
 								selectedItems.push(item);
+								onItemUpdated(item);
 							}
 						});
 					};
@@ -339,6 +369,8 @@ angular
 								
 								selectedItems.splice(index, 1);
 							}
+							
+							removeBoundingBox(item);
 						}
 					};
 					
@@ -352,6 +384,7 @@ angular
 						angular.forEach(items, function (item) {
 							
 							item.position = position;
+							updateBoundingBox(item);
 						});
 						
 						$scope.$emit('componentsMoved', items);
@@ -513,14 +546,13 @@ angular
 					function endDragSelection() {
 						
 						// Select the items in the rectangle
-						angular.forEach(project.activeLayer.children, function (item) {
+						angular.forEach(layerDrawing.children, function (item) {
 							
 							if (item.isInside(dragSelectionRectangle) && 
 								selectedItems.indexOf(item) === -1
 							) {
 								
 								selectedItems.push(item);
-								item.selected = true;
 							}
 						});
 						
@@ -552,9 +584,108 @@ angular
 						dragSelectionOverlay.opacity = 0.3;
 					};
 					
+					
+					/**
+					 * Bounding box
+					 * 
+					 * Updates an item's bounding box according to
+					 * whether it is selected. The bounding box will
+					 * be added/removed/updated as appropriate.
+					 */
+					var updateBoundingBox = function(item) {
+						
+						var selected = (selectedItems.indexOf(item) !== -1);
+						
+						if (selected && !item.boundingBox) {
+							
+							addBoundingBox(item);
+						}
+						
+						else if (!selected && item.boundingBox) {
+							
+							removeBoundingBox(item);
+						}
+						
+						else if (selected && item.boundingBox) {
+							
+							removeBoundingBox(item);
+							addBoundingBox(item);
+						}
+					};
+					
+					var addBoundingBox = function (item) {
+						
+						if (!item.boundingBox) {
+							
+							layerSelections.activate()
+							
+							var bb = new paper.Path.Rectangle(item.bounds);
+							bb.strokeColor = '#0047a1';
+							bb.strokeWidth = 1;
+							
+							var drawHandle = function (point) {
+								
+								var handle = new paper.Path.Rectangle(
+									new paper.Point(point.x - 3, point.y - 3),
+									new paper.Point(point.x + 3, point.y + 3)
+								);
+								
+								handle.strokeColor = '#0047a1';
+								handle.strokeWidth = 1;
+								handle.fillColor = 'white';
+								
+								return handle;
+							};
+							
+							var topLeft = drawHandle(item.bounds.topLeft);
+							var topCenter = drawHandle(item.bounds.topCenter);
+							var topRight = drawHandle(item.bounds.topRight);
+							var rightCenter = drawHandle(item.bounds.rightCenter);
+							var bottomRight = drawHandle(item.bounds.bottomRight);
+							var bottomCenter = drawHandle(item.bounds.bottomCenter);
+							var bottomLeft = drawHandle(item.bounds.bottomLeft);
+							var leftCenter = drawHandle(item.bounds.leftCenter);
+							
+							item.boundingBox = new paper.Group([
+								bb,
+								topLeft,
+								topCenter,
+								topRight,
+								rightCenter,
+								bottomRight,
+								bottomCenter,
+								bottomLeft,
+								leftCenter
+							]);
+							
+							layerDrawing.activate();
+						}
+					};
+					
+					var removeBoundingBox = function (item) {
+						
+						if (item.boundingBox) {
+							
+							item.boundingBox.remove();
+							item.boundingBox = null;
+						}
+					};
+					
+					
 					/**
 					 * Init
 					 */
+					 
+					function initLayers() {
+						
+						layerGrid = new paper.Layer();
+						layerDrawing = new paper.Layer();
+					 	layerAnnotations = new paper.Layer();
+					 	layerSelections = new paper.Layer();
+						layerGuides = new paper.Layer();
+						
+						layerDrawing.activate();
+					};
 
 					function initPaper() {
 						
@@ -573,6 +704,7 @@ angular
 					};
 	
 					initPaper();
+					initLayers();
 				}
 			};
 		}]);
