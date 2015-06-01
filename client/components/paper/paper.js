@@ -60,6 +60,7 @@ angular
 							angular.forEach(selectedItems, function (item) {
 								
 								moveItem(item, item.position);
+								removeSmartGuides(item);
 							});	
 						}
 						
@@ -132,6 +133,8 @@ angular
 						else if (selectedItems.length) {
 
 							angular.forEach(selectedItems, function(item) {
+								
+								updateSmartGuides(item);
 							
 								item.position = item.position.add(event.delta);
 								item.boundingBox.position = item.boundingBox.position.add(event.delta);	
@@ -540,7 +543,10 @@ angular
 					
 						isDragSelecting = true;
 						dragSelectionRectangle = new paper.Rectangle(from, from);
+						
+						layerSelections.activate();
 						dragSelectionOverlay = new paper.Path.Rectangle(dragSelectionRectangle);
+						layerDrawing.activate();
 					};
 					
 					function endDragSelection() {
@@ -552,7 +558,7 @@ angular
 								selectedItems.indexOf(item) === -1
 							) {
 								
-								selectedItems.push(item);
+								selectItems([item]);
 							}
 						});
 						
@@ -577,11 +583,13 @@ angular
 							dragSelectionOverlay.remove();	
 						}
 						
+						layerSelections.activate();
 						dragSelectionOverlay = new paper.Path.Rectangle(dragSelectionRectangle);
 						dragSelectionOverlay.fillColor = '#4d7cb8';
 						dragSelectionOverlay.strokeColor = '#0047a1';
 						dragSelectionOverlay.strokeWidth = 2;
 						dragSelectionOverlay.opacity = 0.3;
+						layerDrawing.activate();
 					};
 					
 					
@@ -668,6 +676,139 @@ angular
 							
 							item.boundingBox.remove();
 							item.boundingBox = null;
+						}
+					};
+					
+					
+					/**
+					 * Smart guides
+					 */
+					 
+					var updateSmartGuides = function (item) {
+						
+						var snappedPosition;
+						
+						if (!item.smartGuides || !item.smartGuides.length) {
+							
+							snappedPosition = addSmartGuides(item);
+						}
+						
+						else if (item.smartGuides.length) {
+							
+							removeSmartGuides(item);
+							snappedPosition = addSmartGuides(item);
+						}
+						
+						return snappedPosition;
+					};
+					
+					var addSmartGuides = function (item) {
+						
+						var snappedPosition;
+						var snap;
+						item.smartGuides = [];
+						
+						var snapPoints = [
+							item.bounds.topLeft,
+							item.bounds.topRight,
+							item.bounds.bottomLeft,
+							item.bounds.bottomRight
+						];
+						
+						// TODO: Whittle down to elements in the nearby area
+						
+						// Work through each element
+						angular.forEach(layerDrawing.children, function (relation) {
+							
+							// Don't compare target element to itself
+							if (relation == item) {
+								
+								return;
+							}
+							
+							var relationSnapPoints = [
+								relation.bounds.topLeft,
+								relation.bounds.topRight,
+								relation.bounds.bottomLeft,
+								relation.bounds.bottomRight
+							];
+							
+							// Look for alignment in snap points
+							angular.forEach(snapPoints, function (snapPoint) {
+							
+								angular.forEach(relationSnapPoints, function (relationSnapPoint) {
+								
+									var xDelta = relationSnapPoint.x - snapPoint.x;
+									var yDelta = relationSnapPoint.y - snapPoint.y;
+									
+									if (
+										!snap && (Math.abs(xDelta) <= 10 || Math.abs(yDelta) <= 10) ||
+										snap && (Math.abs(xDelta) <= snap.delta || Math.abs(yDelta) <= snap.delta)
+									) {
+										
+										snap = {
+											relation: relationSnapPoint
+										};
+										
+										if (Math.abs(xDelta) <= Math.abs(yDelta)) {
+											
+											snap.target = snapPoint.add(new paper.Point(xDelta, 0));
+											snap.delta = Math.abs(xDelta);
+											snap.axis = 'x';
+										}
+										
+										else {
+											
+											snap.target = snapPoint.add(new paper.Point(0, yDelta));
+											snap.delta = Math.abs(yDelta);
+											snap.axis = 'y';
+										}
+									}
+								});
+							});
+						});
+						
+						if (snap) {
+							
+							// Draw a guide from the adjusted point through the 
+							// relation snap point to the extent of the window
+							
+							var from, to;
+							if (snap.axis == 'x') {
+								
+								from = new paper.Point(snap.relation.x, view.bounds.top);
+								to = new paper.Point(snap.relation.x, view.bounds.bottom);
+							}
+							
+							else {
+								
+								from = new paper.Point(view.bounds.left, snap.relation.y);
+								to = new paper.Point(view.bounds.right, snap.relation.y);
+							}
+							
+							layerGuides.activate();
+							
+							var guide = new paper.Path.Line(from, to);
+							guide.strokeColor = 'magenta';
+							guide.strokeWidth = 1;
+							item.smartGuides.push(guide);
+							
+							layerDrawing.activate();
+						}
+						
+						return snap;
+					};
+					
+					var removeSmartGuides = function (item) {
+						
+						if (item.smartGuides) {
+							
+							angular.forEach(item.smartGuides, function (guide) {
+								
+								guide.remove();
+							});
+							
+							item.smartGuides = [];
 						}
 					};
 					
