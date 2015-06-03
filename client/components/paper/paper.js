@@ -734,12 +734,7 @@ angular
 						
 						item.smartGuides = [];
 						
-						var snapPoints = [
-							item.bounds.topLeft,
-							item.bounds.topRight,
-							item.bounds.bottomLeft,
-							item.bounds.bottomRight
-						];
+						var snapPoints = item.getSnapPoints();
 						
 						// TODO: Whittle down to elements in the nearby area
 						
@@ -752,12 +747,7 @@ angular
 								return;
 							}
 							
-							var relationSnapPoints = [
-								relation.bounds.topLeft,
-								relation.bounds.topRight,
-								relation.bounds.bottomLeft,
-								relation.bounds.bottomRight
-							];
+							var relationSnapPoints = relation.getSnapPoints();
 							
 							// Look for alignment in snap points
 							angular.forEach(snapPoints, function (snapPoint) {
@@ -887,9 +877,31 @@ angular
 						
 						$(element).mousewheel(mouseWheel);
 					};
+					
+					function initPrototypes() {
+						
+						paper.Item.prototype.getSnapPoints = function () {
+						
+							var snapPoints = [];
+							
+							if (!this.definition || !this.definition.snapPoints) {
+								
+								return [];
+							}
+							
+							var that = this;
+							angular.forEach(this.definition.snapPoints, function (snapPoint) {
+								
+								snapPoints.push(that.position.add(snapPoint));
+							});
+							
+							return snapPoints;
+						};
+					};
 	
 					initPaper();
 					initLayers();
+					initPrototypes();
 				}
 			};
 		}]);

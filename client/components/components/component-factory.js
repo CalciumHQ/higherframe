@@ -77,7 +77,7 @@ angular
 		    }		
 		};
 	    
-	    // iPhone component
+	  // iPhone component
 		definitions.iphone = {
 			id: 'iphone',
 			name: 'iPhone',
@@ -88,6 +88,16 @@ angular
 		    ],
 			thumbnail: '/assets/images/components/iphone-thumbnail@2x.png',
 			resizable: false,
+			snapPoints: [
+				{ x: -116, y: -232 },		// Bounding box
+				{ x: 116, y: -232 },
+				{ x: 116, y: 232 },
+				{ x: -116, y: 232 },
+				{ x: -110, y: -184 },		// Screen corners
+				{ x: 110, y: -184 },
+				{ x: 110, y: 162 },
+				{ x: -110, y: 162 },
+			],
 			new: function (options) {
 		
 		      var WIDTH = 232;
@@ -146,14 +156,20 @@ angular
 			id: 'iphoneTitlebar',
 			name: 'iPhone titlebar',
 			tags: [
-		      'apple',
-		      'phone'
-		    ],
+	      'apple',
+	      'phone'
+	    ],
 			thumbnail: '/assets/images/components/iphone-thumbnail@2x.png',
 			resizable: false,
+			snapPoints: [
+				{ x: -110, y: -7 },
+				{ x: 110, y: -7 },
+				{ x: 110, y: 7 },
+				{ x: -110, y: 7 }
+			],
 			new: function (options) {
 		
-		      var WIDTH = 219;
+		      var WIDTH = 220;
 		      var HEIGHT = 14;
 		      
 		      var topLeft = new paper.Point(options.position.x - WIDTH/2, options.position.y - HEIGHT/2);
