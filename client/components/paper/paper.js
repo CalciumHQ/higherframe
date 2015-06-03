@@ -61,6 +61,7 @@ angular
 								
 								moveItem(item, item.position);
 								removeSmartGuides(item);
+								item.mousePositionDelta = null;
 							});	
 						}
 						
@@ -134,10 +135,25 @@ angular
 
 							angular.forEach(selectedItems, function(item) {
 								
-								updateSmartGuides(item);
+								// The new position
+								var position = event.point.add(item.mouseDownDelta);
+								
+								// Position the item and its bounding box
+								item.position = position;
+								item.boundingBox.position = position;	
+								
+								// Find a snap point
+								var snapAdjustment = updateSmartGuides(item);
 							
-								item.position = item.position.add(event.delta);
-								item.boundingBox.position = item.boundingBox.position.add(event.delta);	
+								// If a snap point was found
+								if (snapAdjustment) {
+									
+									position = position.add(snapAdjustment);
+									
+									// Reposition the item and its bounding box
+									item.position = position;
+									item.boundingBox.position = position;	
+								}	
 							});
 						}
 						
@@ -197,6 +213,15 @@ angular
 
 								selectItems(item);
 							}
+							
+							// Store where the mouse down point is in relation
+							// to the position of each selected item
+							// This is used to position an item correctly during
+							// a drag
+							angular.forEach(selectedItems, function (item) {
+								
+								item.mouseDownDelta = item.position.subtract(event.point);
+							});
 						}
 					};
 					
@@ -686,26 +711,27 @@ angular
 					 
 					var updateSmartGuides = function (item) {
 						
-						var snappedPosition;
+						var snapAdjustment;
 						
 						if (!item.smartGuides || !item.smartGuides.length) {
 							
-							snappedPosition = addSmartGuides(item);
+							snapAdjustment = addSmartGuides(item);
 						}
 						
 						else if (item.smartGuides.length) {
 							
 							removeSmartGuides(item);
-							snappedPosition = addSmartGuides(item);
+							snapAdjustment = addSmartGuides(item);
 						}
 						
-						return snappedPosition;
+						return snapAdjustment;
 					};
 					
 					var addSmartGuides = function (item) {
 						
-						var snappedPosition;
-						var snap;
+						var snaps = [];
+						var snapAdjustment = new paper.Point();
+						
 						item.smartGuides = [];
 						
 						var snapPoints = [
@@ -741,38 +767,55 @@ angular
 									var xDelta = relationSnapPoint.x - snapPoint.x;
 									var yDelta = relationSnapPoint.y - snapPoint.y;
 									
-									if (
-										!snap && (Math.abs(xDelta) <= 10 || Math.abs(yDelta) <= 10) ||
-										snap && (Math.abs(xDelta) <= snap.delta || Math.abs(yDelta) <= snap.delta)
-									) {
+									// If within the snap threshold
+									if (Math.abs(xDelta) <= 10 || Math.abs(yDelta) <= 10) {
 										
-										snap = {
-											relation: relationSnapPoint
+										// Which axis is the snap in?
+										var axis = (Math.abs(xDelta) <= Math.abs(yDelta)) ? 'x' : 'y';
+										
+										// If a snap already exists in this axis with a 
+										// smaller delta, don't continue
+										var previous = _.find(snaps, function (snap) {
+											
+											if (snap.axis != axis) { return false; }
+											
+											if (snap.axis == 'x') { return snap.delta <= xDelta; }
+											else { return snap.delta <= yDelta; }
+										});
+										
+										if (previous) {
+											
+											return;
+										}
+
+										// Create the new snap										
+										var snap = {
+											relation: relationSnapPoint,
+											axis: axis
 										};
 										
-										if (Math.abs(xDelta) <= Math.abs(yDelta)) {
+										if (snap.axis == 'x') {
 											
-											snap.target = snapPoint.add(new paper.Point(xDelta, 0));
 											snap.delta = Math.abs(xDelta);
-											snap.axis = 'x';
+											snapAdjustment.x = xDelta;
 										}
 										
 										else {
 											
-											snap.target = snapPoint.add(new paper.Point(0, yDelta));
 											snap.delta = Math.abs(yDelta);
-											snap.axis = 'y';
+											snapAdjustment.y = yDelta;
 										}
+										
+										snaps.push(snap);
 									}
 								});
 							});
 						});
 						
-						if (snap) {
+						angular.forEach(snaps, function (snap) {
 							
 							// Draw a guide from the adjusted point through the 
 							// relation snap point to the extent of the window
-							
 							var from, to;
 							if (snap.axis == 'x') {
 								
@@ -794,9 +837,10 @@ angular
 							item.smartGuides.push(guide);
 							
 							layerDrawing.activate();
-						}
+						});
 						
-						return snap;
+						// Return the required adjustment on the item
+						return snapAdjustment;
 					};
 					
 					var removeSmartGuides = function (item) {
