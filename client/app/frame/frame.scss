@@ -32,6 +32,25 @@ $headerHeight: 40px;
 					padding: 5px 10px;
 				}
 			}
+			
+			#collaborators {
+				@include clearfix;
+				
+				.collaborator {
+					float: left;
+					border-bottom: 3px solid transparent;
+					
+					& + .collaborator {
+						margin-left: 5px;
+					}
+					
+					.image {
+						display: block;
+						width: 32px;
+						height: 32px;
+					}
+				}
+			}
 
 			#components {
 				.component {

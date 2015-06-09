@@ -1,7 +1,8 @@
 #frame
 	.sidebar
-		#quickAdd.row(ng-hide="true")
-			input(ng-model="quickAdd", type="text", placeholder="Quick add (+)", ng-keydown="onQuickAddKeyDown($event)")
+		#collaborators
+			.collaborator(ng-repeat="user in collaborators", ng-style="{ 'border-color': user.color }")
+				img.image(ng-if="user.provider == 'facebook'", ng-src="http://graph.facebook.com/{{ user.facebook.id }}/picture?type=large", title="{{ user.name }}")
 
 		#components
 			.component.row(ng-repeat="component in components | filter:quickAdd", ng-click="onComponentClick(component)")

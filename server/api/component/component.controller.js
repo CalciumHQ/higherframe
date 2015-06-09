@@ -52,6 +52,11 @@ exports.update = function(req, res) {
     if (err) { return handleError(res, err); }
     if(!Component) { return res.send(404); }
     var updated = _.merge(Component, req.body);
+		
+		if (req.body.properties) {
+			
+			updated.markModified('properties');
+		}
 	
     updated.save(function (err) {
 		

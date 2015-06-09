@@ -2,14 +2,14 @@
 
 angular
   .module('siteApp')
-  .controller('FrameCtrl', function (frame, $scope, $http, $filter, $stateParams, socket, ComponentFactory, Session) {
+  .controller('FrameCtrl', function (frame, $scope, $http, $filter, $stateParams, socket, ComponentFactory, Session, Auth) {
 
     /*
      * Controller variables
      */
      
-    $scope.quickAdd = '';
     $scope.components = [];
+		$scope.collaborators = frame.collaborators;
 
     $scope.wireframe = {
       components: []
@@ -31,6 +31,13 @@ angular
 		
 		var registerSockets = function () {
 			
+			// Document updating
+			socket.syncUpdates('collaborator', $scope.collaborators, function (event) {
+				
+				console.log(event);
+			});
+			
+			// Components updating
 			socket.syncUpdates('component', $scope.wireframe.components, function (event, component, array) {
 				
 				// If the event was triggered by this session
@@ -42,19 +49,16 @@ angular
 				
 				if (event == 'created') {
 					
-					console.log('created', component);
 					addComponentToView(component.componentId, component.properties, component._id);
 				}
 				
 				else if (event == 'updated') {
 					
-					console.log('updated', component);
 					updateComponentInView(component, component._id);
 				}
 				
 				else if (event == 'deleted') {
 					
-					console.log('deleted', component);
 					removeComponentFromView(component);
 				}
 			});
@@ -64,6 +68,42 @@ angular
 				socket.unsyncUpdates('component');
 			});
 		};
+		
+		var registerUser = function () {
+			
+			// Broadcast the connected user
+			socket.emit('collaborator:save', { 
+				frame: { _id: $stateParams.id },
+				user: Auth.getCurrentUser() 
+			});
+			
+			$scope.$on('$destroy', function () {
+				
+				socket.emit('collaborator:remove', {
+					frame: { _id: $stateParams.id },
+					user: Auth.getCurrentUser()
+				});
+			});
+		};
+		
+		$scope.$watchCollection('collaborators', function () {
+			
+			// Don't include the current user
+			var user = _.findWhere($scope.collaborators, { _id: Auth.getCurrentUser()._id });
+			if (user) {
+			
+				$scope.collaborators.splice($scope.collaborators.indexOf(user), 1);
+			}
+			
+			// Assign a colour to each user
+			angular.forEach($scope.collaborators, function (user) {
+				
+				if (!user.color) {
+					
+					user.color = "#" + Math.random().toString(16).slice(2, 8);
+				}
+			});
+		});
 
 
     /* 
@@ -179,6 +219,49 @@ angular
 				}
 			});
 		};
+		
+		
+		/*
+		 * Server notifications
+		 */
+		 
+		socket.on('component:select', function (data) {
+			
+			// Find the collaborator who selected
+			var user = _.find($scope.collaborators, function (user) {
+				
+				if (user._id == data.user._id) { return true; }
+			});
+			
+			if (!user) {
+				
+				return;
+			}
+			
+			$scope.$broadcast('component:collaboratorSelect', {
+				component: data.component, 
+				user: user
+			});
+		});
+		
+		socket.on('component:deselect', function (data) {
+			
+			// Find the collaborator who deselected
+			var user = _.find($scope.collaborators, function (user) {
+				
+				if (user._id == data.user._id) { return true; }
+			});
+			
+			if (!user) {
+				
+				return;
+			}
+			
+			$scope.$broadcast('component:collaboratorDeselect', {
+				component: data.component, 
+				user: user
+			});
+		});
     
     
     /*
@@ -208,6 +291,28 @@ angular
 				deleteComponent(component);	
 			});
     });
+		
+		$scope.$on('componentsSelected', function (e, components) {
+    
+			angular.forEach(components, function (component) {
+				
+				socket.emit('component:select', {
+					component: { _id: component.remoteId },
+					user: { _id: Auth.getCurrentUser()._id }
+				});	
+			});
+    });
+		
+		$scope.$on('componentsDeselected', function (e, components) {
+    
+			angular.forEach(components, function (component) {
+				
+				socket.emit('component:deselect', {
+					component: { _id: component.remoteId },
+					user: { _id: Auth.getCurrentUser()._id }
+				});	
+			});
+    });
 
 
     /*
@@ -225,32 +330,11 @@ angular
 			saveComponent(instance);
     };
 
-    $scope.onQuickAddKeyDown = function (event) {
-
-      if (!$scope.quickAdd) {
-
-        return;
-      }
-
-      if (event.keyCode == 13 || event.keyCode == 9) {
-
-        var component = $filter('filter')($scope.components, $scope.quickAdd)[0];
-
-        if (component) {
-
-          addComponentToView(component.id);
-					saveComponent(component);
-          $scope.quickAdd = '';
-        }
-
-        event.preventDefault();
-      }
-    };
-
     (function init() {
     
       registerComponents();
 			registerSockets();
+			registerUser();
       
       // Deserialize the loaded frame
       deserialize(frame);

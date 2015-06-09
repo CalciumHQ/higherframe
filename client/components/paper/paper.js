@@ -23,7 +23,7 @@ angular
 					
 					var colors = {
 						normal: '#888',
-						hover: '#333'
+						hover: '#7ae'
 					};
 					 
 					/**
@@ -78,14 +78,14 @@ angular
 
 						if (hoveredItem) {
 
-							// hoveredItem.strokeColor = colors.normal;
+							hoveredItem.setComponentColor(colors.normal);
 						}
 
-						var hitResult = project.hitTest(event.point, hitOptions);
+						var hitResult = layerDrawing.hitTest(event.point, hitOptions);
 
 						if (hitResult) {
 
-							// hitResult.item.strokeColor = colors.hover;
+							hitResult.item.setComponentColor(colors.hover);
 							hoveredItem = hitResult.item;
 						}
 					};
@@ -336,6 +336,35 @@ angular
 					
 					
 					/**
+					 * Controller notifications
+					 */
+					 
+					$scope.$on('component:collaboratorSelect', function (e, data) {
+						
+						// Find the component with this id
+						var component = _.find(layerDrawing.children, function (child) {
+							
+							if (child.remoteId == data.component._id) { return true; }
+						});
+						
+						// Set the color for the user
+						component.setComponentColor(data.user.color);
+					});
+					
+					$scope.$on('component:collaboratorDeselect', function (e, data) {
+						
+						// Find the component with this id
+						var component = _.find(layerDrawing.children, function (child) {
+							
+							if (child.remoteId == data.component._id) { return true; }
+						});
+						
+						// Set the color for the user
+						component.setComponentColor(colors.normal);
+					});
+					
+					
+					/**
 					 * State handlers
 					 */
 					 
@@ -350,6 +379,8 @@ angular
 					 */
 					 
 					function clearSelection() {
+						
+						$scope.$emit('componentsDeselected', selectedItems);
 						
 						selectedItems = [];
 						
@@ -374,6 +405,8 @@ angular
 								onItemUpdated(item);
 							}
 						});
+						
+						$scope.$emit('componentsSelected', items);
 					};
 					
 					function removeItems(items) {
@@ -653,7 +686,7 @@ angular
 							layerSelections.activate()
 							
 							var bb = new paper.Path.Rectangle(item.bounds);
-							bb.strokeColor = '#0047a1';
+							bb.strokeColor = colors.hover;
 							bb.strokeWidth = 1;
 							
 							var drawHandle = function (point) {
@@ -663,7 +696,7 @@ angular
 									new paper.Point(point.x + 3, point.y + 3)
 								);
 								
-								handle.strokeColor = '#0047a1';
+								handle.strokeColor = colors.hover;
 								handle.strokeWidth = 1;
 								handle.fillColor = 'white';
 								
@@ -879,6 +912,54 @@ angular
 					};
 					
 					function initPrototypes() {
+						
+						paper.Item.prototype.setComponentColor = function (color) {
+							
+							var item = this;
+							
+							// Find the top-level group
+							while (item.parent && item.parent.className == 'Group'
+							) {
+							
+								item = item.parent;
+							}
+							
+							// Set on the item
+							(function loop(item) {
+								
+								// A group with children
+								if (item.className == 'Group') {
+									
+									angular.forEach(item.children, function (child) {
+										
+										loop(child);							
+									});
+								}
+									
+								// A leaf item
+								else {
+								
+									if (item.className == 'PointText') {
+								
+										item.fillColor = color;	
+									}
+									
+									else if (item.strokeWidth) {
+									
+										item.strokeColor = color;
+									}
+									
+									if (
+										item.fillColor && 							// Has fill
+										item.fillColor.alpha &&					// Not transparent
+										item.fillColor.lightness != 1		// Not white
+									) {
+										
+										item.fillColor = color;
+									}	
+								}
+							})(item);
+						};
 						
 						paper.Item.prototype.getSnapPoints = function () {
 						

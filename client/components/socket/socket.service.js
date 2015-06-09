@@ -17,6 +17,16 @@ angular
 
     return {
       socket: socket,
+			
+			on: function (event, cb) {
+				
+				socket.on(event, cb);
+			},
+			
+			emit: function (event, data) {
+				
+				socket.emit(event, data);
+			},
 
       /**
        * Register listeners to sync an array with updates on a model

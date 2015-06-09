@@ -28,7 +28,7 @@ exports.show = function(req, res) {
   
   Frame
 		.findById(req.params.id)
-		.populate('components')
+		.populate('components collaborators')
 		.exec(function (err, frame) {
 	  
 	    if(err) { return handleError(res, err); }
@@ -56,11 +56,6 @@ exports.update = function(req, res) {
     if (err) { return handleError(res, err); }
     if(!frame) { return res.send(404); }
     var updated = _.merge(frame, req.body);
-		
-		if (req.body.components) {
-			
-			updated.components = req.body.components;
-		}
 	
     updated.save(function (err) {
 		

@@ -169,43 +169,43 @@ angular
 			],
 			new: function (options) {
 		
-		      var WIDTH = 220;
-		      var HEIGHT = 14;
-		      
-		      var topLeft = new paper.Point(options.position.x - WIDTH/2, options.position.y - HEIGHT/2);
-		      var bottomRight = new paper.Point(options.position.x + WIDTH/2, options.position.y + HEIGHT/2);
-		      var bounds = new paper.Rectangle(topLeft, bottomRight);
-		      
-		      // Draw the bar
-		      var bar = new paper.Path.Rectangle(bounds);
-		      bar.strokeWidth = 0;
-			  bar.fillColor = '#DDDDDD';
+	      var WIDTH = 220;
+	      var HEIGHT = 14;
+	      
+	      var topLeft = new paper.Point(options.position.x - WIDTH/2, options.position.y - HEIGHT/2);
+	      var bottomRight = new paper.Point(options.position.x + WIDTH/2, options.position.y + HEIGHT/2);
+	      var bounds = new paper.Rectangle(topLeft, bottomRight);
+	      
+	      // Draw the bar
+	      var bar = new paper.Path.Rectangle(bounds);
+	      bar.strokeWidth = 0;
+		  	bar.fillColor = 'rgba(255,255,255,0)';
 			  
 			  // Draw the mobile area
 			  var c1 = paper.Path.Circle(new paper.Point(topLeft.x + 6, topLeft.y + HEIGHT/2), 2);
 			  c1.strokeWidth = 0;
-			  c1.fillColor = '#AAAAAA';
+			  c1.fillColor = '#888';
 			  
 			  var c2 = paper.Path.Circle(new paper.Point(topLeft.x + 11, topLeft.y + HEIGHT/2), 2);
 			  c2.strokeWidth = 0;
-			  c2.fillColor = '#AAAAAA';
+			  c2.fillColor = '#888';
 			  
 			  var c3 = paper.Path.Circle(new paper.Point(topLeft.x + 16, topLeft.y + HEIGHT/2), 2);
 			  c3.strokeWidth = 0;
-			  c3.fillColor = '#AAAAAA';
+			  c3.fillColor = '#888';
 			  
 			  var c4 = paper.Path.Circle(new paper.Point(topLeft.x + 21, topLeft.y + HEIGHT/2), 2);
 			  c4.strokeWidth = 0;
-			  c4.fillColor = '#AAAAAA';
+			  c4.fillColor = '#888';
 			  
 			  var c5 = paper.Path.Circle(new paper.Point(topLeft.x + 26, topLeft.y + HEIGHT/2), 2);
 			  c5.strokeWidth = 0;
-			  c5.fillColor = '#AAAAAA';
+			  c5.fillColor = '#888';
 			  
 			  var carrier = new paper.PointText({
 				  point: new paper.Point(topLeft.x + 32, topLeft.y + HEIGHT/2 + 3),
 				  content: 'Carrier',
-				  fillColor: '#AAAAAA',
+				  fillColor: '#888',
 				  fontSize: 9
 			  });
 			   
@@ -226,7 +226,7 @@ angular
 			  
 			  var batteryOuter = new paper.Path.Rectangle(batteryOuterRect);
 			  batteryOuter.strokeWidth = 1;
-			  batteryOuter.strokeColor = '#AAAAAA';
+			  batteryOuter.strokeColor = '#888';
 			  
 			  var batteryInnerRect = new paper.Rectangle(
 				  new paper.Point(bottomRight.x - 19, bottomRight.y - 5),
@@ -235,7 +235,7 @@ angular
 			  
 			  var batteryInner = new paper.Path.Rectangle(batteryInnerRect);
 			  batteryInner.strokeWidth = 0;
-			  batteryInner.fillColor = '#AAAAAA'; 
+			  batteryInner.fillColor = '#888'; 
 			  
 			  var batteryKnobRect = new paper.Rectangle(
 				new paper.Point(bottomRight.x - 5, bottomRight.y - 8),
@@ -244,7 +244,7 @@ angular
 			  
 			  var batteryKnob = new paper.Path.Rectangle(batteryKnobRect);
 			  batteryKnob.strokeWidth = 0;
-			  batteryKnob.fillColor = '#AAAAAA';
+			  batteryKnob.fillColor = '#888';
 			  
 			  var indicators = new paper.Group([
 				  batteryOuter,
@@ -255,7 +255,7 @@ angular
 			  var time = new paper.PointText({
 				  point: new paper.Point(topLeft.x + WIDTH/2 - 16, topLeft.y + HEIGHT/2 + 3),
 				  content: '7:54 am',
-				  fillColor: '#AAAAAA',
+				  fillColor: '#888',
 				  fontSize: 9,
 				  fontWeight: 'bold'
 			  });
