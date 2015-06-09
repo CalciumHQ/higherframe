@@ -76,17 +76,29 @@ angular
 
 					function mouseMove(event) {
 
+						// Return the last hovered item to default state
 						if (hoveredItem) {
 
-							hoveredItem.setComponentColor(colors.normal);
+							if (hoveredItem.collaborator) {
+								
+								hoveredItem.setComponentColor(hoveredItem.collaborator.color);
+							}
+							
+							else {
+							
+								hoveredItem.setComponentColor(colors.normal);	
+							}
 						}
 
+						// Hit test a new item and set hover style
 						var hitResult = layerDrawing.hitTest(event.point, hitOptions);
 
 						if (hitResult) {
 
-							hitResult.item.setComponentColor(colors.hover);
-							hoveredItem = hitResult.item;
+							var component = getTopmost(hitResult.item);
+							
+							component.setComponentColor(colors.hover);
+							hoveredItem = component;
 						}
 					};
 	
@@ -186,14 +198,8 @@ angular
 						// Add the new selection
 						else {
 							
-							var item = hitResult.item;
-							
 							// Find the top-level group
-							while (item.parent && item.parent.className == 'Group'
-							) {
-							
-								item = item.parent;
-							}
+							var item = getTopmost(hitResult.item);
 							
 							// First clear the last selection unless the shift key
 							// is held down, or the hit target is selected 
@@ -348,6 +354,7 @@ angular
 						});
 						
 						// Set the color for the user
+						component.collaborator = data.user;
 						component.setComponentColor(data.user.color);
 					});
 					
@@ -360,6 +367,7 @@ angular
 						});
 						
 						// Set the color for the user
+						component.collaborator = null;
 						component.setComponentColor(colors.normal);
 					});
 					
@@ -652,6 +660,27 @@ angular
 					
 					
 					/**
+					 * Helper methods
+					 */
+					 
+					// Given a paper item, finds the top-most item in its
+					// hierarchy. This is typically a component.
+					var getTopmost = function (item) {
+						
+						var result = item;
+
+						// Find the top-level group
+						while (result.parent && result.parent.className == 'Group'
+						) {
+						
+							result = result.parent;
+						}
+						
+						return result;
+					};
+					
+					
+					/**
 					 * Bounding box
 					 * 
 					 * Updates an item's bounding box according to
@@ -913,16 +942,16 @@ angular
 					
 					function initPrototypes() {
 						
+						paper.Item.prototype._collaborator;
+						
+						Object.defineProperty(paper.Item.prototype, 'collaborator', {
+							get: function () { return this._collaborator; },
+							set: function (value) { this._collaborator = value; }
+						});
+						
 						paper.Item.prototype.setComponentColor = function (color) {
 							
 							var item = this;
-							
-							// Find the top-level group
-							while (item.parent && item.parent.className == 'Group'
-							) {
-							
-								item = item.parent;
-							}
 							
 							// Set on the item
 							(function loop(item) {

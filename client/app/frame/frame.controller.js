@@ -32,10 +32,7 @@ angular
 		var registerSockets = function () {
 			
 			// Document updating
-			socket.syncUpdates('collaborator', $scope.collaborators, function (event) {
-				
-				console.log(event);
-			});
+			socket.syncUpdates('collaborator', $scope.collaborators);
 			
 			// Components updating
 			socket.syncUpdates('component', $scope.wireframe.components, function (event, component, array) {
