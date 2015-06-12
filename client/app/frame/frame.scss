@@ -9,7 +9,6 @@ $headerHeight: 40px;
 	right: 0;
 	top: $headerHeight;
 	bottom: 0;
-	@include display-flex;
 	-webkit-font-smoothing: antialiased;
 
 	.sidebar,
@@ -22,6 +21,7 @@ $headerHeight: 40px;
 
 	.sidebar {
 		position: relative;
+		display: none;
 		width: 300px;
 		padding: 25px 16px;
 		@include box-sizing(border-box);
@@ -30,25 +30,6 @@ $headerHeight: 40px;
 				input {
 					@include span(full);
 					padding: 5px 10px;
-				}
-			}
-			
-			#collaborators {
-				@include clearfix;
-				
-				.collaborator {
-					float: left;
-					border-bottom: 3px solid transparent;
-					
-					& + .collaborator {
-						margin-left: 5px;
-					}
-					
-					.image {
-						display: block;
-						width: 32px;
-						height: 32px;
-					}
 				}
 			}
 
@@ -104,8 +85,49 @@ $headerHeight: 40px;
 			}
 		}
 	}
+	
+	#collaborators {
+		@include clearfix;
+		
+		.collaborator {
+			float: left;
+			
+			& + .collaborator {
+				margin-left: 5px;
+			}
+			
+			.image {
+				display: block;
+				width: 40px;
+				height: 40px;
+				border-radius: 20px;
+			}
+			
+			.indicator {
+				position: absolute;
+				right: 2px;
+				bottom: 2px;
+				width: 8px;
+				height: 8px;
+				border-radius: 4px;
+			}
+		}
+	}
 
 	#canvas {
-		@include flex(1);
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+	}
+	
+	.bottomRight {
+		position: absolute;
+	}
+	
+	.bottomRight {
+		bottom: 20px;
+		right: 20px;
 	}
 }

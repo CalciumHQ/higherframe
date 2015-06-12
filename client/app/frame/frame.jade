@@ -1,9 +1,5 @@
 #frame
 	.sidebar
-		#collaborators
-			.collaborator(ng-repeat="user in collaborators", ng-style="{ 'border-color': user.color }")
-				img.image(ng-if="user.provider == 'facebook'", ng-src="http://graph.facebook.com/{{ user.facebook.id }}/picture?type=large", title="{{ user.name }}")
-
 		#components
 			.component.row(ng-repeat="component in components | filter:quickAdd", ng-click="onComponentClick(component)")
 				.thumbnail(ng-style="{ 'background-image': 'url(' + component.thumbnail + ')' }")
@@ -13,3 +9,9 @@
 					span.tags {{ component.tags.join(', ') }}
 
 	canvas#canvas(wireframe, data="wireframe", resize, keepalive="true")
+	
+	div.bottomRight
+		#collaborators
+				.collaborator(ng-repeat="user in collaborators")
+					img.image(ng-if="user.provider == 'facebook'", ng-src="http://graph.facebook.com/{{ user.facebook.id }}/picture?type=large", title="{{ user.name }}")
+					div.indicator(ng-style="{ 'background': user.color }")

@@ -46,6 +46,8 @@ angular
 						fill: true,
 						tolerance: 5
 					};
+					
+					var gridLines = { x: [], y: [] };
 	
 	
 					/**
@@ -568,6 +570,8 @@ angular
 							-deltaX / paper.view.zoom, 
 							-deltaY / paper.view.zoom
 						));
+						
+						updateGrid();
 					};
 
 					function changeZoom(delta, target) {
@@ -603,6 +607,8 @@ angular
 						
 						paper.view.zoom = newZoom;
 						paper.view.center = paper.view.center.add(a);
+						
+						updateGrid();
 					};
 					
 					function startDragSelection(from) {
@@ -910,6 +916,106 @@ angular
 					
 					
 					/**
+					 * Grid
+					 */
+					 
+					var updateGrid = function () {
+					
+							var gridMajorSize = 100,
+								gridMinorSize = 20,
+								gridMajorColor = 'rgba(0,0,0,0.07)',
+								gridMinorColor = 'rgba(0,0,0,0.03)';
+					
+							layerGrid.activate();
+							
+							// Establish an origin and line count, 
+							// starting just outside the viewport
+							var startX = Math.floor(view.bounds.topLeft.x / gridMajorSize) * gridMajorSize,
+								endX = Math.ceil(view.bounds.bottomRight.x / gridMajorSize) * gridMajorSize,
+								startY = Math.floor(view.bounds.topLeft.y / gridMajorSize) * gridMajorSize,
+								endY = Math.ceil(view.bounds.bottomRight.y / gridMajorSize) * gridMajorSize,
+								countX = (endX - startX) / gridMinorSize,
+								countY = (endY - startY) / gridMinorSize;
+								
+							// Don't display grid beyond a zoom level
+							if (paper.view.zoom < 0.4) {
+								
+								countX = countY = 0;
+							}
+								
+							// Create or remove existing grid lines to match
+							// the required number
+							while(gridLines.x.length > countX) {
+								
+								var line = gridLines.x.pop();
+								line.remove();
+							}
+							
+							while(gridLines.y.length > countY) {
+								
+								var line = gridLines.y.pop();
+								line.remove();
+							}
+							
+							while(gridLines.x.length < countX) {
+								
+								var line = new paper.Path.Line(paper.Point(0, 0), paper.Point(0, 0));
+								gridLines.x.push(line);
+							}
+							
+							while(gridLines.y.length < countY) {
+								
+								var line = new paper.Path.Line(paper.Point(0, 0), paper.Point(0, 0));
+								line.strokeWidth = 1;
+								gridLines.y.push(line);
+							}
+							
+							// Position the grid lines
+							for (var i = 0; i < countY; i++) {
+								
+								var y = i*gridMinorSize;
+								
+								var from = new paper.Point(view.bounds.left, startY + y);
+								var to = new paper.Point(view.bounds.right, startY + y);
+								
+								var line = gridLines.y[i];
+								line.segments[0].point = from;
+								line.segments[1].point = to;
+								
+								if (y % gridMajorSize == 0) {
+								
+									line.strokeColor = gridMajorColor;	
+								} else {
+									
+									line.strokeColor = gridMinorColor;
+								}
+							}
+							
+							for (var i = 0; i < countX; i++) {
+								
+								var x = i*gridMinorSize;
+								
+								var from = new paper.Point(startX + x, view.bounds.top);
+								var to = new paper.Point(startX + x, view.bounds.bottom);
+								
+								var line = gridLines.x[i];
+								line.segments[0].point = from;
+								line.segments[1].point = to;
+								
+								if (x % gridMajorSize == 0) {
+								
+									line.strokeColor = gridMajorColor;	
+								} else {
+									
+									line.strokeColor = gridMinorColor;
+								}
+							}
+							
+							layerDrawing.activate();
+					};
+					
+					
+					/**
 					 * Init
 					 */
 					 
@@ -1012,6 +1118,7 @@ angular
 					initPaper();
 					initLayers();
 					initPrototypes();
+					updateGrid();
 				}
 			};
 		}]);
