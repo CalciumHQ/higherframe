@@ -2,12 +2,20 @@
 
 angular
   .module('siteApp')
-  .controller('FrameCtrl', function (frame, $scope, $http, $filter, $stateParams, socket, ComponentFactory, Session, Auth) {
+  .controller('FrameCtrl', function (frame, $scope, $http, $filter, $stateParams, socket, localStorageService, ComponentFactory, Session, Auth) {
+
+		/**
+		 * Constants
+		 */
+		 
+		var STORAGE_LEFTSIDEBAR_OPEN_KEY = 'frame.leftSidebar.open';
+
 
     /*
      * Controller variables
      */
      
+		$scope.leftSidebarOpen = localStorageService.get(STORAGE_LEFTSIDEBAR_OPEN_KEY);
     $scope.components = [];
 		$scope.collaborators = frame.collaborators;
 
@@ -186,6 +194,12 @@ angular
     /*
      * View methods
      */
+		 
+		var toggleSidebar = function () {
+			
+			$scope.leftSidebarOpen = !$scope.leftSidebarOpen;
+			localStorageService.set(STORAGE_LEFTSIDEBAR_OPEN_KEY, $scope.leftSideabarOpen);
+		};
      
     var addComponentToView = function (componentId, options, remoteId) {
       
@@ -315,6 +329,11 @@ angular
     /*
      * Event handlers
      */
+		 
+		$scope.onToggleSidebarClick = function () {
+			
+			toggleSidebar();
+		};
      
     $scope.onComponentClick = function (definition) {
 			

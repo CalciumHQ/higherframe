@@ -1,5 +1,6 @@
 #frame
-	.sidebar
+	button#toggleLeftSidebar(type="button", ng-class="{ open: leftSidebarOpen }", ng-click="onToggleSidebarClick()") Toggle sidebar
+	.sidebar(ng-class="{ open: leftSidebarOpen }")
 		#components
 			.component.row(ng-repeat="component in components | filter:quickAdd", ng-click="onComponentClick(component)")
 				.thumbnail(ng-style="{ 'background-image': 'url(' + component.thumbnail + ')' }")

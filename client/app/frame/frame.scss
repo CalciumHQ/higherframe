@@ -1,4 +1,6 @@
 $headerHeight: 40px;
+$leftSidebarWidth: 300px;
+$canvasMargin: 20px;
 
 #frame {
 	$sidebarColumns: 4;
@@ -13,18 +15,56 @@ $headerHeight: 40px;
 
 	.sidebar,
 	#canvas {
+		position: relative;
+		z-index: 1;
+		
 		&,
 		.inner {
 			height: 100%;
 		}
 	}
+	
+	#toggleLeftSidebar {
+		position: absolute;
+		left: $canvasMargin;
+		top: $canvasMargin;
+		width: 18px;
+		height: 0;
+		padding-top: 26px;
+		border: none;
+		overflow: hidden;
+		z-index: 3;
+		background: url('/assets/images/icon-open-leftsidebar@2x.png') no-repeat;
+		background-size: contain;
+		opacity: 0.3;
+		cursor: pointer;
+		@include transition(transform 200ms);
+		
+		&:hover {
+			opacity: 0.5;
+		}
+		
+		&:focus {
+			outline: none;
+		}
+		
+		&.open {
+			@include transform(translateX($leftSidebarWidth));
+		}
+	}
 
 	.sidebar {
-		position: relative;
-		display: none;
-		width: 300px;
+		&.open {
+			@include transform(translateX($leftSidebarWidth));
+		}
+		
+		position: absolute;
+		left: -$leftSidebarWidth;
+		z-index: 2;
+		width: $leftSidebarWidth;
 		padding: 25px 16px;
 		@include box-sizing(border-box);
+		@include transition(transform 200ms);
 		@include nested(4) {
 			#quickAdd {
 				input {
@@ -127,7 +167,7 @@ $headerHeight: 40px;
 	}
 	
 	.bottomRight {
-		bottom: 20px;
-		right: 20px;
+		bottom: $canvasMargin;
+		right: $canvasMargin;
 	}
 }

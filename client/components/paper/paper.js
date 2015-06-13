@@ -718,7 +718,7 @@ angular
 						
 						if (!item.boundingBox) {
 							
-							layerSelections.activate()
+							layerSelections.activate();
 							
 							var bb = new paper.Path.Rectangle(item.bounds);
 							bb.strokeColor = colors.hover;
