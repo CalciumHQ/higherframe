@@ -238,8 +238,7 @@ angular
 						event.preventDefault();
 						
 						var mousePosition = new paper.Point(event.offsetX, event.offsetY);
-						var viewPosition = paper.view.viewToProject(mousePosition);
-						changeZoom(event.deltaY, viewPosition);
+						changeCenter(-event.deltaX, event.deltaY);
 					};
 
 					function keyDown(event) {
