@@ -1,76 +1,61 @@
 $navbarHeight: 40px;
-$navbarBackground:#2c2c2c;
+$navbarPadding: 20px;
 
 #navbar {
 	position: relative;
-	height: $navbarHeight;
+	height: 0;
 	line-height: $navbarHeight;
-	background: $chromeBackgroundMedium;
+	z-index: 100;
+	padding: 0 $navbarPadding;
 	
-	.navbar-toggle {
+	.container {
+		@include display-flex;
+		height: 0;
+		
+		.left {
+			@include flex-grow(1);
+		}
+		
+		.right {
+			@include flex-shrink(0);
+		}
+	}	
+
+	#primaryNavigation,
+	#identity {
+		display: inline-block;
+	}
+	
+	#primaryNavigation {
 		display: none;
 	}
 	
-	.row {
-		@include display-flex;
-	}
-	
-	#navbarLogo {
-		$logoWidth: 132px;
-		$logoHeight: 23px;
+	#identity {
+		white-space: nowrap;
 		
-		position: absolute;
-		left: 50%;
-		top: 50%;
-		width: $logoWidth;
-		padding-top: $logoHeight;
-		height: 0;
-		margin-left: -$logoWidth/2;
-		margin-top: -$logoHeight/2;
-		background: url('/assets/images/logo@2x.png') no-repeat;
-		background-size: contain;
-		overflow: hidden;
-		opacity: 0.9;
-		@include transition(opacity 0.2s);
+		.image {
+			width: 40px;
+			height: 40px;
+			border-radius: 20px;
+		}
 		
-		&:hover {
-			opacity: 1;
+		.text {
+			display: none;
+			margin-left: 10px
 		}
 	}
 	
-	#navbarSupp {
-		@include flex(1);
-	}
-	
-	#navbarNavigation {
-		#primaryNavigation,
-		#identityNavigation {
-			display: inline-block;
+	.navItem {
+		position: relative;
+		display: inline-block;
+		top: 20px;
+		
+		.navItem + .navItem {
+			margin-left: 20px;	
 		}
 		
-		#identityNavigation {
-			#identity {
-				white-space: nowrap;
-				
-				.image {
-					float: left;
-					width: 30px;
-					height: 30px;
-					margin-right: 10px;
-					border-radius: 15px;
-				}
-				
-				.text {
-					
-				}
-			}
-		}
-	}
-	
-	.nav {
-		li {
-			display: inline-block;
-			margin-left: 20px;
+		.dropdown {
+			display: none;
 		}
 	}
 }
