@@ -8,8 +8,8 @@ angular
 		
 		
 		/*
-	     * Component definitions
-	     */
+     * Component definitions
+     */
 		
 		// Rectangle component
 		definitions.rectangle = {
@@ -21,7 +21,7 @@ angular
 		    ],
 			thumbnail: '/assets/images/components/rectangle-thumbnail@2x.png',
 			resizable: true,
-			new: function (options) {
+			create: function (options) {
 				
 				var rectangle = new paper.Rectangle(new Point(100, 200), new Point(200, 300));
 				var path = new paper.Path.Rectangle(rectangle);
@@ -42,7 +42,7 @@ angular
 		    ],
 			thumbnail: '/assets/images/components/circle-thumbnail@2x.png',
 			resizable: true,
-			new: function (options) {
+			create: function (options) {
 				
 				if (!options.radius) {
 					
@@ -54,7 +54,7 @@ angular
 				path.fillColor = 'white';
 				
 				return path;
-			}	
+			}
 		};
 	
 	    // Triangle component
@@ -67,7 +67,7 @@ angular
 		    ],
 			thumbnail: '/assets/images/components/triangle-thumbnail@2x.png',
 			resizable: true,
-			new: function (options) {
+			create: function (options) {
 		
 		      var path = new paper.Path.RegularPolygon(options.position, 3, 50);
 		      path.strokeColor = '#888';
@@ -88,6 +88,20 @@ angular
 		    ],
 			thumbnail: '/assets/images/components/iphone-thumbnail@2x.png',
 			resizable: false,
+			properties: {
+				index: {
+					label: 'Index',
+					visible: false
+				},
+				x: {
+					label: 'x',
+					visible: true
+				},
+				y: {
+					label: 'y',
+					visible: true
+				}
+			},
 			snapPoints: [
 				{ x: -116, y: -232 },		// Bounding box
 				{ x: 116, y: -232 },
@@ -98,13 +112,29 @@ angular
 				{ x: 110, y: 162 },
 				{ x: -110, y: 162 },
 			],
-			new: function (options) {
+			create: function (options) {
 		
-		      var WIDTH = 232;
+		      // Group the parts as a component
+		      var component = new paper.Group([]);
+					
+					// Set properties on the component
+					component.properties = options;
+					
+					// Perform the initial draw
+					this.update(component);
+					
+					return component;
+		    },
+				update: function (component) {
+					
+					var WIDTH = 232;
 		      var HEIGHT = 464;
+					
+					// Remove the old parts
+					component.removeChildren();
 		      
-		      var topLeft = new paper.Point(options.position.x - WIDTH/2, options.position.y - HEIGHT/2);
-		      var bottomRight = new paper.Point(options.position.x + WIDTH/2, options.position.y + HEIGHT/2);
+		      var topLeft = new paper.Point(component.properties.x - WIDTH/2, component.properties.y - HEIGHT/2);
+		      var bottomRight = new paper.Point(component.properties.x + WIDTH/2, component.properties.y + HEIGHT/2);
 		      var bounds = new paper.Rectangle(topLeft, bottomRight);
 		      
 		      // Draw the outer frame
@@ -121,34 +151,39 @@ angular
 		      screen.strokeColor = '#888';
 		      
 		      // Draw the button
-		      var buttonposition = new paper.Point(options.position.x, bounds.bottom - 35);
+		      var buttonposition = new paper.Point(component.properties.x, bounds.bottom - 35);
 		      var button = new paper.Path.Circle(buttonposition, 24);
 		      button.strokeColor = '#888';
 		      
 		      // Draw the speaker
 		      var speakerRectangle = new paper.Rectangle(
-		        new paper.Point(options.position.x - 23, bounds.top + 27),
-		        new paper.Point(options.position.x + 23, bounds.top + 33)
+		        new paper.Point(component.properties.x - 23, bounds.top + 27),
+		        new paper.Point(component.properties.x + 23, bounds.top + 33)
 		      );
 		      var speaker = new paper.Path.Rectangle(speakerRectangle, 3);
 		      speaker.strokeColor = '#888';
 		      
 		      // Draw the camera
-		      var cameraposition = new paper.Point(options.position.x, bounds.top + 18);
+		      var cameraposition = new paper.Point(component.properties.x, bounds.top + 18);
 		      var camera = new paper.Path.Circle(cameraposition, 4);
 		      camera.strokeColor = '#888';
 		      
-		      // Group the parts and flatten into a symbol
-		      var group = new paper.Group([
-		        outer,
-		        screen,
-		        button,
-		        camera,
-		        speaker
-		      ]);
+		      // Group the parts as a component
+		      component.addChild(outer);
+		      component.addChild(screen);
+		      component.addChild(button);
+		      component.addChild(camera);
+		      component.addChild(speaker);
+					
+					// Define the component parts
+					component.parts.outer = outer;
+					component.parts.screen = screen;
+					component.parts.button = button;
+					component.parts.camera = camera;
+					component.parts.speaker = speaker;
 		      
-		      return group;
-		    }	
+		      return component;
+				}
 		};
 		
 		// iPhone titlebar component
@@ -167,7 +202,7 @@ angular
 				{ x: 110, y: 7 },
 				{ x: -110, y: 7 }
 			],
-			new: function (options) {
+			create: function (options) {
 		
 	      var WIDTH = 220;
 	      var HEIGHT = 14;
@@ -263,11 +298,11 @@ angular
 		      // Group the parts and flatten into a symbol
 		      var group = new paper.Group([
 		        bar,
-				mobile,
-				indicators,
-				time
-		      ]);
-		      
+						mobile,
+						indicators,
+						time
+				      ]);
+				      
 		      return group;
 		    }	
 		};
@@ -292,7 +327,7 @@ angular
 				throw 'ComponentFactory requires a position option for component name "' + component.name + '".';
 			}
 			
-			var instance = definition.new(options);
+			var instance = definition.create(options);
 			
 			// Attach metadata and return
 			instance.remoteId = remoteId;

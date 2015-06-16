@@ -1,6 +1,14 @@
 #frame
 	button#toggleLeftSidebar(type="button", ng-class="{ open: leftSidebarOpen }", ng-click="onToggleSidebarClick()") Toggle sidebar
 	.sidebar(ng-class="{ open: leftSidebarOpen }")
+		#componentProperties
+			span(ng-show="!currentComponent") No component selected
+			
+			ul.properties(ng-show="currentComponent")
+				li(ng-repeat="(key, property) in (currentComponent.definition.properties | filter:{ visible: true })")
+					span.label {{ property.label }}
+					input(type="text", ng-model="currentComponent.properties[key]", ng-change="onComponentPropertyChange(key, property.model, currentComponent, property)")
+		
 		#components
 			.component.row(ng-repeat="component in components | filter:quickAdd", ng-click="onComponentClick(component)")
 				.thumbnail(ng-style="{ 'background-image': 'url(' + component.thumbnail + ')' }")

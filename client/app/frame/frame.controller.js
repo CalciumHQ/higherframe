@@ -16,6 +16,8 @@ angular
      */
      
 		$scope.leftSidebarOpen = localStorageService.get(STORAGE_LEFTSIDEBAR_OPEN_KEY);
+		$scope.currentComponent;
+		
     $scope.components = [];
 		$scope.collaborators = frame.collaborators;
 
@@ -151,7 +153,8 @@ angular
 				lastModifiedBy: Session.getSessionId(),
         componentId: component.definition.id,
         properties: {
-          position: { x: component.position.x, y: component.position.y },
+          x: component.position.x, 
+					y: component.position.y,
 					index: component.index
         }
       };
@@ -198,7 +201,7 @@ angular
 		var toggleSidebar = function () {
 			
 			$scope.leftSidebarOpen = !$scope.leftSidebarOpen;
-			localStorageService.set(STORAGE_LEFTSIDEBAR_OPEN_KEY, $scope.leftSideabarOpen);
+			localStorageService.set(STORAGE_LEFTSIDEBAR_OPEN_KEY, $scope.leftSidebarOpen);
 		};
      
     var addComponentToView = function (componentId, options, remoteId) {
@@ -206,6 +209,11 @@ angular
       var instance = ComponentFactory.create(componentId, options, remoteId);
 			return instance;
     };
+		
+		var updateUiWithComponent = function (component) {
+			
+			$scope.currentComponent = component;
+		};
 		
 		var removeComponentFromView = function (component) {
 			
@@ -307,16 +315,22 @@ angular
     
 			angular.forEach(components, function (component) {
 				
+				// Update the UI to match selection
+				updateUiWithComponent(component);
+				
 				socket.emit('component:select', {
 					component: { _id: component.remoteId },
 					user: { _id: Auth.getCurrentUser()._id }
-				});	
+				});
 			});
     });
 		
 		$scope.$on('componentsDeselected', function (e, components) {
     
 			angular.forEach(components, function (component) {
+				
+				// Update the UI to match selection
+				updateUiWithComponent();
 				
 				socket.emit('component:deselect', {
 					component: { _id: component.remoteId },
@@ -345,6 +359,19 @@ angular
       var instance = addComponentToView(definition.id, options);
 			saveComponent(instance);
     };
+		
+		$scope.onComponentPropertyChange = function (key, value, component) {
+			
+			// Copy the change onto the component
+			component.properties[key] = value;
+			
+			// Inform the view
+			$scope.$broadcast('component:propertyChange', {
+				component: component,
+				key: key,
+				value: value
+			});
+		};
 
     (function init() {
     

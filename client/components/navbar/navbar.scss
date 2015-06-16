@@ -1,5 +1,5 @@
 $navbarHeight: 40px;
-$navbarPadding: 20px;
+$navbarPadding: 15px;
 
 #navbar {
 	position: relative;
@@ -34,6 +34,7 @@ $navbarPadding: 20px;
 		white-space: nowrap;
 		
 		.image {
+			display: block;
 			width: 40px;
 			height: 40px;
 			border-radius: 20px;
@@ -48,10 +49,10 @@ $navbarPadding: 20px;
 	.navItem {
 		position: relative;
 		display: inline-block;
-		top: 20px;
+		top: $navbarPadding;
 		
 		.navItem + .navItem {
-			margin-left: 20px;	
+			margin-left: 15px;	
 		}
 		
 		.dropdown {

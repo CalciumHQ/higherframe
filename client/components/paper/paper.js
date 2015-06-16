@@ -346,6 +346,12 @@ angular
 					 * Controller notifications
 					 */
 					 
+					$scope.$on('component:propertyChange', function (e, data) {
+						
+						data.component.definition.update(data.component);
+						console.log(data);
+					});
+					 
 					$scope.$on('component:collaboratorSelect', function (e, data) {
 						
 						// Find the component with this id
@@ -1048,10 +1054,22 @@ angular
 					function initPrototypes() {
 						
 						paper.Item.prototype._collaborator;
+						paper.Item.prototype._parts = {};
+						paper.Item.prototype._properties = {};
+						
+						Object.defineProperty(paper.Item.prototype, 'parts', {
+							get: function () { return this._parts; },
+							set: function (value) { this._parts = value; }
+						});
 						
 						Object.defineProperty(paper.Item.prototype, 'collaborator', {
 							get: function () { return this._collaborator; },
 							set: function (value) { this._collaborator = value; }
+						});
+						
+						Object.defineProperty(paper.Item.prototype, 'properties', {
+							get: function () { return this._properties; },
+							set: function (value) { this._properties = value; }
 						});
 						
 						paper.Item.prototype.setComponentColor = function (color) {
