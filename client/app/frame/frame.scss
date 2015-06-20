@@ -58,6 +58,9 @@ $canvasMargin: 20px;
 	}
 
 	.sidebar {
+		background: #edeff1;
+		border-right: 1px solid shade(#edeff1, 7); 
+		
 		&.open {
 			@include transform(translateX($leftSidebarWidth));
 		}

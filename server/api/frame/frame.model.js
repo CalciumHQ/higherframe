@@ -4,7 +4,10 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var FrameSchema = new Schema({
-	name: String,
+	name: {
+		type: String,
+		default: 'Untitled wireframe'
+	},
 	created_at: {
 		type: Date,
 		default: Date.now

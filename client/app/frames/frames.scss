@@ -1,14 +1,23 @@
 $easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
 
+$cardHeight: 112px;
+$cardMargin: 12px;
+
+@include keyframes(cardEntry) {
+	from {
+		opacity: 0;
+	}
+}
+
 .cards {
+	position: relative;
+	
 	.card {
 		@include display-flex;
 		background: white;
 		color: #3f4249;
 		text-decoration: none;
 		letter-spacing: 0.01em;
-		
-		@include transition(all 150ms $easeOutQuint);
 		box-shadow: 0.025rem 0.04rem 0.16rem 0 rgba(0, 0, 0, 0.2);
 		
 		&:hover {
@@ -16,12 +25,35 @@ $easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
 		}
 		
 		&:active {
+			@include transition(all 150ms $easeOutQuint);
 			@include transform(translateY(-0.05rem));
 			box-shadow: 0.1rem 0.16rem 0.64rem 0 rgba(0, 0, 0, 0.2);
 		}
 		
 		& + .card {
-			margin-top: 12px;
+			margin-top: $cardMargin;
+		}
+		
+		// Card entry animation
+		&.ng-enter {
+			position: absolute;
+			left: 0;
+			right: 0;
+			@include animation(cardEntry 500ms);
+			
+			& ~ .card {
+				@include transition(transform 500ms $easeOutQuint);
+			}
+			
+			& + .card {
+				margin-top: 0;
+			}
+			
+			&.ng-enter-active {
+				& ~ .card {
+					@include transform(translateY($cardHeight + $cardMargin));
+				}	
+			}
 		}
 		
 		.content {
@@ -32,8 +64,6 @@ $easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .sidebar {
-	padding-top: 30px;
-	
 	&.filters {
 		.item {
 			@include clearfix;
@@ -68,10 +98,14 @@ $easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
 
 #frames {
 	@include container;
-	margin-top: 80px;
+	margin-top: 140px;
 	
 	.sidebar {
 		@include span(3);
+		
+		.button {
+			width: 100%;
+		}
 		
 		.item {
 			.dot {
@@ -85,43 +119,45 @@ $easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
 		}
 	}
 	
-	.cards {
+	#framesListContainer {
 		@include span(8);
 		margin-left: span(2) + 3*gutter();
 		
-		.card {
-			height: 112px;
-			
-			.marker {
-				width: 12px;
-				height: 100%;
-			}
-			
-			.left {
-				float: left;
-			}
-			
-			.right {
-				float: right;
-			}
-			
-			.block {
-				display: block;
-			}
-			
-			.name {
-				font-size: 18px;
-			}
-			
-			.project {
-				font-size: 15px;
-				color: #7f848e;
-				margin-top: 8px;
-			}
-			
-			.lastModified {
-				font-size: 15px;
-				color: #7f848e;
+		.cards {	
+			.card {
+				height: $cardHeight;
+				
+				.marker {
+					width: 12px;
+					height: 100%;
+				}
+				
+				.left {
+					float: left;
+				}
+				
+				.right {
+					float: right;
+				}
+				
+				.block {
+					display: block;
+				}
+				
+				.name {
+					font-size: 18px;
+				}
+				
+				.project {
+					font-size: 15px;
+					color: #7f848e;
+					margin-top: 8px;
+				}
+				
+				.lastModified {
+					font-size: 15px;
+					color: #7f848e;
+				}
 			}
 		}
 	}

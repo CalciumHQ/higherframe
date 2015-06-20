@@ -2,7 +2,7 @@
 
 angular
   .module('siteApp')
-  .controller('FramesCtrl', function ($scope, $state, $animate, $window, $timeout, frames) {
+  .controller('FramesCtrl', function ($scope, $state, $animate, $window, $timeout, $http, frames) {
 
 		/**
 		 * Constants
@@ -39,6 +39,25 @@ angular
     /*
      * Event handlers
      */
+		 
+		$scope.onNewFrameClick = function () {
+			
+			$http
+				.post('/api/frames', {})
+				.success(function (frame) {
+					
+					$scope.frames.unshift(frame);
+					
+					// Allow the entry transition on the frame card
+					// to complete before opening the frame
+					$timeout(function () { 
+						
+						$scope.onFrameClick({ 
+							currentTarget: angular.element('#framesList').children()[0]
+						}, frame); 
+					}, 550);
+				});
+		};
 		 
 		$scope.onFrameClick = function ($event, frame) {
 			

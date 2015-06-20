@@ -1,16 +1,20 @@
 div#frames
 	div.sidebar.filters
+		button.button(type="button", ng-click="onNewFrameClick()") + New wireframe 
+	
+		div.divider
+		
 		div.item.active
 			span.name My wireframes
-			span.counter 3
+			span.counter {{ frames.length }}
 
 		div.item
 			span.name Shared with me
-			span.counter 2
+			span.counter 0
 
 		div.item
 			span.name Favorites
-			span.counter 2
+			span.counter 0
 			
 		div.divider
 		
@@ -22,14 +26,14 @@ div#frames
 			span.dot(ng-style="{ 'background-color': '#03a9f4' }")
 			span.name Higherframe
 	
-	div.cards
-		// a.card(ng-repeat="frame in frames", ui-sref="frame({ id: frame._id })")
-		a.card(ng-repeat="frame in frames", ng-click="onFrameClick($event, frame)")
-			div.marker(ng-style="{ 'background-color': '#ff5722' }")
-			div.content
-				div.left
-					span.name.block {{ frame.name }}
-					span.project.block Architizer Source
-					
-				div.right
-					span.lastModified {{ (frame.created_at | moment).fromNow() }}
+	div#framesListContainer
+		div#framesList.cards
+			a.card(ng-repeat="frame in frames | orderBy:'-created_at'", ng-click="onFrameClick($event, frame)")
+				div.marker(ng-style="{ 'background-color': '#ff5722' }")
+				div.content
+					div.left
+						span.name.block {{ frame.name }}
+						span.project.block Architizer Source
+						
+					div.right
+						span.lastModified {{ (frame.created_at | moment).fromNow() }}
