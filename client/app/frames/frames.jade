@@ -1,0 +1,35 @@
+div#frames
+	div.sidebar.filters
+		div.item.active
+			span.name My wireframes
+			span.counter 3
+
+		div.item
+			span.name Shared with me
+			span.counter 2
+
+		div.item
+			span.name Favorites
+			span.counter 2
+			
+		div.divider
+		
+		div.item
+			span.dot(ng-style="{ 'background-color': '#ff5722' }")
+			span.name Architizer
+			
+		div.item
+			span.dot(ng-style="{ 'background-color': '#03a9f4' }")
+			span.name Higherframe
+	
+	div.cards
+		// a.card(ng-repeat="frame in frames", ui-sref="frame({ id: frame._id })")
+		a.card(ng-repeat="frame in frames", ng-click="onFrameClick($event, frame)")
+			div.marker(ng-style="{ 'background-color': '#ff5722' }")
+			div.content
+				div.left
+					span.name.block {{ frame.name }}
+					span.project.block Architizer Source
+					
+				div.right
+					span.lastModified {{ (frame.created_at | moment).fromNow() }}

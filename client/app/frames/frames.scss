@@ -1,0 +1,128 @@
+$easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
+
+.cards {
+	.card {
+		@include display-flex;
+		background: white;
+		color: #3f4249;
+		text-decoration: none;
+		letter-spacing: 0.01em;
+		
+		@include transition(all 150ms $easeOutQuint);
+		box-shadow: 0.025rem 0.04rem 0.16rem 0 rgba(0, 0, 0, 0.2);
+		
+		&:hover {
+			cursor: pointer;
+		}
+		
+		&:active {
+			@include transform(translateY(-0.05rem));
+			box-shadow: 0.1rem 0.16rem 0.64rem 0 rgba(0, 0, 0, 0.2);
+		}
+		
+		& + .card {
+			margin-top: 12px;
+		}
+		
+		.content {
+			@include flex-grow(1);
+			padding: 18px;
+		}
+	}
+}
+
+.sidebar {
+	padding-top: 30px;
+	
+	&.filters {
+		.item {
+			@include clearfix;
+			display: block;
+			font-size: 18px;
+			letter-spacing: 0.01em;
+			color: #757b86;
+			
+			& + .item {
+				margin-top: 30px;
+			}
+			
+			&.active {
+				color: #2f3748;
+			}
+			
+			.name {
+				float: left;	
+			}
+			
+			.counter {
+				float: right;
+			}
+		}
+		
+		.divider {
+			border-top: 1px solid #d6dade;
+			margin: 30px 0;
+		}
+	}
+}
+
+#frames {
+	@include container;
+	margin-top: 80px;
+	
+	.sidebar {
+		@include span(3);
+		
+		.item {
+			.dot {
+				float: left;
+				width: 14px;
+				height: 14px;
+				margin-right: 8px;
+				border-radius: 7px;
+				margin-top: 2px;
+			}
+		}
+	}
+	
+	.cards {
+		@include span(8);
+		margin-left: span(2) + 3*gutter();
+		
+		.card {
+			height: 112px;
+			
+			.marker {
+				width: 12px;
+				height: 100%;
+			}
+			
+			.left {
+				float: left;
+			}
+			
+			.right {
+				float: right;
+			}
+			
+			.block {
+				display: block;
+			}
+			
+			.name {
+				font-size: 18px;
+			}
+			
+			.project {
+				font-size: 15px;
+				color: #7f848e;
+				margin-top: 8px;
+			}
+			
+			.lastModified {
+				font-size: 15px;
+				color: #7f848e;
+			}
+		}
+	}
+}
