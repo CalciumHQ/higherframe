@@ -29,6 +29,7 @@ div#frames
 	div#framesListContainer
 		div#framesList.cards
 			a.card(ng-repeat="frame in frames | orderBy:'-created_at'", ng-click="onFrameClick($event, frame)")
+				div.delete(ng-click="onFrameDeleteClick($event, frame)") Delete
 				div.marker(ng-style="{ 'background-color': '#ff5722' }")
 				div.content
 					div.left

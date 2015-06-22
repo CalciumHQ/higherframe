@@ -134,7 +134,7 @@ $canvasMargin: 20px;
 	}
 	
 	#collaborators {
-		display: relative;
+		position: relative;
 		z-index: 2;
 		@include clearfix;
 		

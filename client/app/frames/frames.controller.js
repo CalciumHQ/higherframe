@@ -102,6 +102,28 @@ angular
 				);
 			}
 		};
+		
+		$scope.onFrameDeleteClick = function ($event, frame) {
+			
+			// Stop the frame from opening
+			$event.stopPropagation();
+			
+			$http
+				.delete('/api/frames/' + frame._id)
+				.success(function () {
+					
+					var index;
+					_.find($scope.frames, function (f, i) {
+						
+						if (f._id == frame._id) { index = i; return true; }
+					});
+					
+					if (index) {
+					
+						$scope.frames.splice(index, 1);	
+					}
+				});
+		};
 
 		
     (function init() {
