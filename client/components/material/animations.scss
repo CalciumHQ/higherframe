@@ -1,7 +1,7 @@
 $easeInOutQuint: cubic-bezier(0.860, 0.000, 0.070, 1.000);
 
 .animateGrowToScreen {
-	
+	z-index: 2;
 }
 
 .animateGrowToScreen-add {
@@ -16,7 +16,7 @@ $easeInOutQuint: cubic-bezier(0.860, 0.000, 0.070, 1.000);
 .animateGrowToScreen,
 .animateGrowToScreen-add-active {
 	* {
-		opacity: 0;
+		opacity: 0 !important;
 	}
 }
 
@@ -24,7 +24,7 @@ $easeInOutQuint: cubic-bezier(0.860, 0.000, 0.070, 1.000);
 	transition: transform 700ms $easeInOutQuint !important;
 	
 	* {
-		opacity: 0;
+		opacity: 0 !important;
 		@include transition(opacity 300ms);
 		@include transition-delay(700ms);
 	}

@@ -112,13 +112,13 @@ angular
 				.delete('/api/frames/' + frame._id)
 				.success(function () {
 					
-					var index;
+					var index = -1;
 					_.find($scope.frames, function (f, i) {
 						
 						if (f._id == frame._id) { index = i; return true; }
 					});
 					
-					if (index) {
+					if (index !== -1) {
 					
 						$scope.frames.splice(index, 1);	
 					}
