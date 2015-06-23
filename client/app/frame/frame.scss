@@ -25,6 +25,7 @@ $canvasMargin: 15px;
 	
 	#canvas {
 		z-index: 1;
+		background: white;
 	}
 	
 	#toggleLeftSidebar {
@@ -57,6 +58,9 @@ $canvasMargin: 15px;
 	}
 
 	.sidebar {
+		background: #edeff1;
+		border-right: 1px solid shade(#edeff1, 7); 
+		
 		&.open {
 			@include transform(translateX($leftSidebarWidth));
 		}
@@ -130,7 +134,7 @@ $canvasMargin: 15px;
 	}
 	
 	#collaborators {
-		display: relative;
+		position: relative;
 		z-index: 2;
 		@include clearfix;
 		

@@ -103,6 +103,30 @@ exports.createComponent = function(req, res) {
   });
 };
 
+// Deletes a component from this frame.
+exports.deleteComponent = function(req, res) {
+	
+	// Delete the component
+	Component.remove(
+    { _id: req.params.componentId }, 
+    function(err) {
+	  
+      if(err) { return handleError(res, err); }
+  		
+  		// Remove from the frame
+  		Frame.findOneAndUpdate(
+  			{ _id: req.params.frameId },
+  			{ $pop: { components: req.params.componentId }},
+  			{},
+  			function (err, Frame) {
+  		
+  				if(err) { return handleError(res, err); }
+  				return res.json(201, Component);		
+  			}
+  		)
+    });
+};
+
 function handleError(res, err) {
 	
   return res.send(500, err);

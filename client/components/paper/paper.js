@@ -1,4 +1,6 @@
 
+var _prototypesInitialized;
+
 angular
 	.module('siteApp')
 	.directive('wireframe', ['$window', function ($window) {
@@ -1053,6 +1055,11 @@ angular
 					
 					function initPrototypes() {
 						
+						if (_prototypesInitialized) {
+							
+							return;
+						}
+						
 						paper.Item.prototype._collaborator;
 						paper.Item.prototype._parts = {};
 						paper.Item.prototype._properties = {};
@@ -1130,6 +1137,8 @@ angular
 							
 							return snapPoints;
 						};
+						
+						_prototypesInitialized = true;
 					};
 	
 					initPaper();

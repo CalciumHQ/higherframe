@@ -1,0 +1,37 @@
+$easeInOutQuint: cubic-bezier(0.860, 0.000, 0.070, 1.000);
+
+.animateGrowToScreen {
+	z-index: 2;
+}
+
+.animateGrowToScreen-add {
+	transition: transform 700ms $easeInOutQuint !important;
+	
+	* {
+		opacity: 1;
+		@include transition(opacity 300ms);
+	}
+}
+
+.animateGrowToScreen,
+.animateGrowToScreen-add-active {
+	* {
+		opacity: 0 !important;
+	}
+}
+
+.animateGrowToScreen-remove {
+	transition: transform 700ms $easeInOutQuint !important;
+	
+	* {
+		opacity: 0 !important;
+		@include transition(opacity 300ms);
+		@include transition-delay(700ms);
+	}
+}
+
+.animateGrowToScreen-remove-active {
+	* {
+		opacity: 1;	
+	}
+}
