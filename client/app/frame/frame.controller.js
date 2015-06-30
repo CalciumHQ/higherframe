@@ -24,6 +24,8 @@ angular
     $scope.wireframe = {
       components: []
     };
+		
+		$scope.propertyModels = {};
 
 
     /*
@@ -35,6 +37,7 @@ angular
       $scope.components.push(ComponentFactory.definitions.rectangle);
       $scope.components.push(ComponentFactory.definitions.circle);
       $scope.components.push(ComponentFactory.definitions.triangle);
+			$scope.components.push(ComponentFactory.definitions.label);
       $scope.components.push(ComponentFactory.definitions.iphone);
       $scope.components.push(ComponentFactory.definitions.iphoneTitlebar);
     };
@@ -212,6 +215,18 @@ angular
 		
 		var updateUiWithComponent = function (component) {
 			
+			$scope.propertyModels = {};
+			
+			// Populate the property models if there is a 
+			// component definition set
+			/*if (component && component.definition) {
+				
+				angular.forEach(component.definition.properties, function (property, name) {
+					
+					$scope.propertyModels[name] = component.properties[name];
+				});
+			}*/
+			
 			$scope.currentComponent = component;
 		};
 		
@@ -234,7 +249,7 @@ angular
 				
 				if (item.remoteId == component._id) {
 					
-					item.position = component.properties.position;
+					item.position = [component.properties.x, component.properties.y];
 				}
 			});
 		};
@@ -291,6 +306,9 @@ angular
     
 			angular.forEach(components, function (component) {
 				
+				component.properties.x = component.position.x;
+				component.properties.y = component.position.y;
+				
 				saveComponent(component);	
 			});
     });
@@ -306,7 +324,8 @@ angular
 		$scope.$on('componentsDeleted', function (e, components) {
     
 			angular.forEach(components, function (component) {
-			
+					
+				updateUiWithComponent();
 				deleteComponent(component);	
 			});
     });
@@ -352,7 +371,8 @@ angular
     $scope.onComponentClick = function (definition) {
 			
 			var options = {
-        position: new paper.Point(400, 400),
+        x: 400,
+				y: 400,
         radius: 100
       };
 
@@ -361,9 +381,6 @@ angular
     };
 		
 		$scope.onComponentPropertyChange = function (key, value, component) {
-			
-			// Copy the change onto the component
-			component.properties[key] = value;
 			
 			// Inform the view
 			$scope.$broadcast('component:propertyChange', {

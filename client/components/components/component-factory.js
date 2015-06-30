@@ -76,6 +76,82 @@ angular
 		      return path;
 		    }		
 		};
+		
+		// Label component
+		definitions.label = {
+			id: 'label',
+			name: 'Label',
+			tags: [
+		      'text',
+		      'basic'
+		    ],
+			thumbnail: '/assets/images/components/rectangle-thumbnail@2x.png',
+			resizable: false,
+			properties: {
+				index: {
+					label: 'Index',
+					visible: false
+				},
+				x: {
+					label: 'x',
+					visible: true
+				},
+				y: {
+					label: 'y',
+					visible: true
+				},
+				text: {
+					label: 'Text',
+					visible: true,
+					default: 'Label'
+				},
+				fontSize: {
+					label: 'Font size',
+					visible: true,
+					default: '12'
+				}
+			},
+			create: function (options) {
+		
+	      // Group the parts as a component
+	      var component = new paper.Group([]);
+				
+				// Set default properties on the component
+				component.properties = {};
+				angular.forEach(this.properties, function (property, key) {
+					
+					component.properties[key] = property.default;
+				});
+				
+				// Extend with actual properties
+				component.properties = angular.extend(component.properties, options);
+				
+				// Perform the initial draw
+				this.update(component);
+				
+				return component;
+	    },
+			update: function (component) {
+				
+				// Remove the old parts
+				component.removeChildren();
+				
+				// Draw the text
+				var text = new paper.PointText({
+					point: [component.properties.x, component.properties.y],
+					content: component.properties.text,
+					fontSize: component.properties.fontSize
+				});
+				
+				// Add the child
+				component.addChild(text);
+				
+				// Add the new text part
+				component.parts.text = text;
+				
+				return component;
+			}
+		};
 	    
 	  // iPhone component
 		definitions.iphone = {
@@ -202,14 +278,49 @@ angular
 				{ x: 110, y: 7 },
 				{ x: -110, y: 7 }
 			],
+			properties: {
+				index: {
+					label: 'Index',
+					visible: false
+				},
+				x: {
+					label: 'x',
+					visible: true
+				},
+				y: {
+					label: 'y',
+					visible: true
+				},
+				time: {
+					label: 'Time',
+					visible: true,
+					default: '7:24 am'
+				}
+			},
 			create: function (options) {
+				
+				// Group the parts as a component
+	      var component = new paper.Group([]);
+				
+				// Set properties on the component
+				component.properties = options;
+				
+				// Perform the initial draw
+				this.update(component);
+				
+				return component;
+			},
+			update: function (component) {
 		
 	      var WIDTH = 220;
 	      var HEIGHT = 14;
 	      
-	      var topLeft = new paper.Point(options.position.x - WIDTH/2, options.position.y - HEIGHT/2);
-	      var bottomRight = new paper.Point(options.position.x + WIDTH/2, options.position.y + HEIGHT/2);
+	      var topLeft = new paper.Point(component.properties.x - WIDTH/2, component.properties.y - HEIGHT/2);
+	      var bottomRight = new paper.Point(component.properties.x + WIDTH/2, component.properties.y + HEIGHT/2);
 	      var bounds = new paper.Rectangle(topLeft, bottomRight);
+				
+				// Remove the old parts
+				component.removeChildren();
 	      
 	      // Draw the bar
 	      var bar = new paper.Path.Rectangle(bounds);
@@ -289,21 +400,25 @@ angular
 			  
 			  var time = new paper.PointText({
 				  point: new paper.Point(topLeft.x + WIDTH/2 - 16, topLeft.y + HEIGHT/2 + 3),
-				  content: '7:54 am',
+				  content: component.properties.time,
 				  fillColor: '#888',
 				  fontSize: 9,
 				  fontWeight: 'bold'
 			  });
+							
+					// Group the parts as a component
+		      component.addChild(bar);
+		      component.addChild(mobile);
+		      component.addChild(indicators);
+		      component.addChild(time);
+					
+					// Define the component parts
+					component.parts.outer = bar;
+					component.parts.screen = mobile;
+					component.parts.button = indicators;
+					component.parts.camera = time;
 		      
-		      // Group the parts and flatten into a symbol
-		      var group = new paper.Group([
-		        bar,
-						mobile,
-						indicators,
-						time
-				      ]);
-				      
-		      return group;
+		      return component;
 		    }	
 		};
 		
@@ -322,9 +437,9 @@ angular
 			var definition = _get(componentId);
 			
 			// Create an instance
-			if (!options.position) {
+			if (!options.x || !options.y) {
 				
-				throw 'ComponentFactory requires a position option for component name "' + component.name + '".';
+				throw 'ComponentFactory requires x/y options for component name "' + definition.name + '".';
 			}
 			
 			var instance = definition.create(options);

@@ -59,6 +59,7 @@ angular
 					function mouseUp(event) {
 						
 						// If dragging an item
+						
 						if (selectedItems.length) {
 
 							angular.forEach(selectedItems, function (item) {
@@ -351,7 +352,6 @@ angular
 					$scope.$on('component:propertyChange', function (e, data) {
 						
 						data.component.definition.update(data.component);
-						console.log(data);
 					});
 					 
 					$scope.$on('component:collaboratorSelect', function (e, data) {
@@ -479,6 +479,7 @@ angular
 							
 							var delta = new paper.Point(x, y);
 							item.position = item.position.add(delta);
+							updateBoundingBox(item);
 						});
 						
 						$scope.$emit('componentsMoved', items);
