@@ -165,11 +165,7 @@ angular
 			var serialized = {
 				lastModifiedBy: Session.getSessionId(),
         componentId: component.definition.id,
-        properties: {
-          x: component.position.x,
-					y: component.position.y,
-					index: component.index
-        }
+        properties: component.properties
       };
 
 			// Update
@@ -259,7 +255,14 @@ angular
 
 				if (item.remoteId == component._id) {
 
+          // Merge the changes into the view component object
+          angular.extend(item.properties, component.properties);
 					item.position = [component.properties.x, component.properties.y];
+
+          // Inform the view
+    			$scope.$broadcast('component:propertyChange', {
+    				component: item
+    			});
 				}
 			});
 		};
@@ -398,6 +401,9 @@ angular
 				key: key,
 				value: value
 			});
+
+      // Save the component
+      saveComponent(component);
 		};
 
     (function init() {

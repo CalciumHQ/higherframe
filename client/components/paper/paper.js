@@ -355,7 +355,7 @@ angular
 					 */
 
 					$scope.$on('component:propertyChange', function (e, data) {
-
+console.log(data.component);
 						data.component.definition.update(data.component);
 					});
 
