@@ -13,5 +13,6 @@ router.patch('/:id', controller.update);
 router.delete('/:id', controller.destroy);
 
 router.post('/:id/components', controller.createComponent);
+router.delete('/:frameId/components/:componentId', controller.deleteComponent);
 
 module.exports = router;

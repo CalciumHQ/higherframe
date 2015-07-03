@@ -2,7 +2,7 @@
 /*
  * Colors
  */
- 
+
 $chromeBackgroundLight: #f7f8f9;
 $chromeBackgroundMedium: #edeff1;
 
@@ -16,9 +16,16 @@ $chromeTextMedium: #d1d5d9;
 /*
  * Dimensions
  */
- 
+
 $chromePaddingSmall: 7px;
 
 $chromeMarginSmall: 8px;
 
 $chromeBorderRadiusMedium: 5px;
+
+
+/*
+ * Animations
+ */
+
+$easeInOutQuint: cubic-bezier(0.860, 0.000, 0.070, 1.000);

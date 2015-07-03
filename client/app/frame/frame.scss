@@ -208,6 +208,8 @@ $canvasMargin: 15px;
 	}
 
 	#collaborators {
+		$collaboratorAvatarSize: 40px;
+
 		position: relative;
 		z-index: 2;
 		@include clearfix;
@@ -219,11 +221,29 @@ $canvasMargin: 15px;
 				margin-left: 5px;
 			}
 
+			&.ng-enter {
+				@include transition(all 300ms $easeInOutQuint);
+				@include transform(translateY($canvasMargin + $collaboratorAvatarSize));
+
+				&.ng-enter-active {
+					@include transform(translateY(0));
+				}
+			}
+
+			&.ng-leave {
+				@include transition(all 300ms $easeInOutQuint);
+				@include transform(translateY(0));
+
+				&.ng-leave-active {
+					@include transform(translateY($canvasMargin + $collaboratorAvatarSize));
+				}
+			}
+
 			.image {
 				display: block;
-				width: 40px;
-				height: 40px;
-				border-radius: 20px;
+				width: $collaboratorAvatarSize;
+				height: $collaboratorAvatarSize;
+				border-radius: $collaboratorAvatarSize/2;
 			}
 
 			.indicator {

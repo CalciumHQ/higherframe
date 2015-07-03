@@ -2,7 +2,7 @@
 
 angular
   .module('siteApp')
-  .controller('FrameCtrl', function (frame, $scope, $http, $filter, $stateParams, socket, localStorageService, ComponentFactory, Session, Auth) {
+  .controller('FrameCtrl', function (frame, $scope, $window, $http, $filter, $stateParams, socket, localStorageService, ComponentFactory, Session, Auth) {
 
 		/**
 		 * Constants
@@ -87,6 +87,7 @@ angular
 				user: Auth.getCurrentUser()
 			});
 
+      // When the user navigates away from the frame
 			$scope.$on('$destroy', function () {
 
 				socket.emit('collaborator:remove', {
@@ -94,6 +95,15 @@ angular
 					user: Auth.getCurrentUser()
 				});
 			});
+
+      // When the user closes the window/navigates
+      $window.addEventListener('beforeunload', function (e) {
+
+        socket.emit('collaborator:remove', {
+					frame: { _id: $stateParams.id },
+					user: Auth.getCurrentUser()
+				});
+      });
 		};
 
 		$scope.$watchCollection('collaborators', function () {
@@ -189,7 +199,7 @@ angular
 			if (component.remoteId) {
 
 				$http
-	        .delete('/api/components/' + component.remoteId)
+	        .delete('/api/frames/' + $stateParams.id + '/components/' + component.remoteId)
 	        .success(function (data) {
 
 	        });
