@@ -355,7 +355,7 @@ angular
 					 */
 
 					$scope.$on('component:propertyChange', function (e, data) {
-console.log(data.component);
+
 						data.component.definition.update(data.component);
 					});
 
@@ -1046,6 +1046,7 @@ console.log(data.component);
 						paper.Item.prototype._collaborator;
 						paper.Item.prototype._parts = {};
 						paper.Item.prototype._properties = {};
+						paper.Item.prototype._displayColor = {};
 
 						Object.defineProperty(paper.Item.prototype, 'parts', {
 							get: function () { return this._parts; },
@@ -1060,6 +1061,11 @@ console.log(data.component);
 						Object.defineProperty(paper.Item.prototype, 'properties', {
 							get: function () { return this._properties; },
 							set: function (value) { this._properties = value; }
+						});
+
+						Object.defineProperty(paper.Item.prototype, 'displayColor', {
+							get: function () { return this._displayColor; },
+							set: function (value) { this._displayColor = value; }
 						});
 
 						paper.Item.prototype.setComponentColor = function (color) {
