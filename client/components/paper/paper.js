@@ -1,6 +1,17 @@
 
-var _prototypesInitialized;
+// Has paper been initialized yet
+var _paperInitialized;
 
+// Some interference occurring when placed inside link function.
+// Reference to layer appears to be overwritten by other code.
+// Make global for now.
+var layerGrid,
+	layerDrawing,
+	layerAnnotations,
+	layerSelections,
+	layerGuides;
+
+// The wireframe view
 angular
 	.module('siteApp')
 	.directive('wireframe', ['$window', function ($window) {
@@ -16,12 +27,6 @@ angular
 					/**
 					 * Constants
 					 */
-
-					var layerGrid,
-						layerDrawing,
-					 	layerAnnotations,
-					 	layerSelections,
-						layerGuides;
 
 					var colors = {
 						normal: '#888',
@@ -190,6 +195,7 @@ angular
 
 						// Add the new selection
 						var hitResult = layerDrawing.hitTest(event.point, hitOptions);
+						console.log(layerDrawing.children);
 
 						// If no hit target clear the last selection
 						if (!hitResult) {
@@ -1027,40 +1033,17 @@ angular
 					 * Init
 					 */
 
-					function initLayers() {
-
-						layerGrid = new paper.Layer();
-						layerDrawing = new paper.Layer();
-					 	layerAnnotations = new paper.Layer();
-					 	layerSelections = new paper.Layer();
-						layerGuides = new paper.Layer();
-
-						layerDrawing.activate();
-					};
-
 					function initPaper() {
 
-						paper.install($window);
-						paper.setup(element[0]);
-						paper.view.onFrame = function () {};
-
-						var tool = new Tool();
-						tool.onMouseDown = mouseDown;
-						tool.onMouseUp = mouseUp;
-						tool.onMouseMove = mouseMove;
-						tool.onMouseDrag = mouseDrag;
-						tool.onKeyDown = keyDown;
-
-						$(element).mousewheel(mouseWheel);
-					};
-
-					function initPrototypes() {
-
-						if (_prototypesInitialized) {
+						if (_paperInitialized) {
 
 							return;
 						}
 
+						// Initialize the paper object
+						paper.install($window);
+
+						// Extend paper items
 						paper.Item.prototype._collaborator;
 						paper.Item.prototype._parts = {};
 						paper.Item.prototype._properties = {};
@@ -1139,12 +1122,41 @@ angular
 							return snapPoints;
 						};
 
-						_prototypesInitialized = true;
+						_paperInitialized = true;
+					};
+
+					function initProject() {
+
+						paper.setup(element[0]);
+						paper.view.onFrame = function () {};
+
+						var tool = new Tool();
+						tool.onMouseDown = mouseDown;
+						tool.onMouseUp = mouseUp;
+						tool.onMouseMove = mouseMove;
+						tool.onMouseDrag = mouseDrag;
+						tool.onKeyDown = keyDown;
+
+						$(element).mousewheel(mouseWheel);
+					};
+
+					function initLayers() {
+
+						layerGrid = new paper.Layer();
+						layerDrawing = new paper.Layer();
+					 	layerAnnotations = new paper.Layer();
+					 	layerSelections = new paper.Layer();
+						layerGuides = new paper.Layer();
+setTimeout(function () {
+
+	console.log(layerDrawing.children);
+}, 1000);
+						layerDrawing.activate();
 					};
 
 					initPaper();
+					initProject();
 					initLayers();
-					initPrototypes();
 					updateGrid();
 				}
 			};
