@@ -17,14 +17,14 @@ angular
 
     return {
       socket: socket,
-			
+
 			on: function (event, cb) {
-				
+
 				socket.on(event, cb);
 			},
-			
+
 			emit: function (event, data) {
-				
+
 				socket.emit(event, data);
 			},
 
@@ -65,13 +65,14 @@ angular
          * Syncs removed items on 'model:remove'
          */
         socket.on(modelName + ':remove', function (item) {
+					
           var event = 'deleted';
 					var index;
 					_.find(array, function (a, i) {
-						
+
 						if (a._id == item._id) { index = i; return true; }
 					});
-					
+
           array.splice(index, 1);
           cb(event, item, array);
         });

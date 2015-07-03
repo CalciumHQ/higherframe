@@ -195,7 +195,6 @@ angular
 
 						// Add the new selection
 						var hitResult = layerDrawing.hitTest(event.point, hitOptions);
-						console.log(layerDrawing.children);
 
 						// If no hit target clear the last selection
 						if (!hitResult) {
@@ -1147,10 +1146,7 @@ angular
 					 	layerAnnotations = new paper.Layer();
 					 	layerSelections = new paper.Layer();
 						layerGuides = new paper.Layer();
-setTimeout(function () {
 
-	console.log(layerDrawing.children);
-}, 1000);
 						layerDrawing.activate();
 					};
 
