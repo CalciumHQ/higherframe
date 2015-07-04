@@ -359,6 +359,11 @@ angular
 						keyDown(keyEvent);
 					});
 
+					$scope.$on('view:zoom', function (e, zoom) {
+
+						changeZoom(zoom);
+					});
+
 					$scope.$on('component:propertyChange', function (e, data) {
 
 						data.component.definition.update(data.component);
@@ -592,31 +597,15 @@ angular
 						updateGrid();
 					};
 
-					function changeZoom(delta, target) {
+					function changeZoom(newZoom, target) {
 
 						var factor = 1.04;
 						var center = paper.view.center;
 						var oldZoom = paper.view.zoom;
-						var newZoom;
 
 						if (!target) {
 
 							target = center;
-						}
-
-						if (delta == 0) {
-
-							return;
-						}
-
-						else if (delta < 0) {
-
-							newZoom = oldZoom * factor;
-						}
-
-						else if (delta > 0) {
-
-							newZoom = oldZoom / factor;
 						}
 
 						var beta = oldZoom / newZoom;

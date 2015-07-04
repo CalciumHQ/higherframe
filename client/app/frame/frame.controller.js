@@ -10,6 +10,8 @@ angular
 
 		var STORAGE_LEFTSIDEBAR_OPEN_KEY = 'frame.leftSidebar.open';
 
+    var ZOOM_LEVELS = [0.1, 0.15, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 5.0];
+
 
     /*
      * Controller variables
@@ -22,7 +24,8 @@ angular
 		$scope.collaborators = frame.collaborators;
 
     $scope.wireframe = {
-      components: []
+      components: [],
+      zoom: 1
     };
 
 		$scope.propertyModels = {};
@@ -413,11 +416,39 @@ angular
 
     tool.onKeyDown = function (event) {
 
+      // Special cases
+      // Using the command/control modifier outputs special characters for the
+      // event.key parameter which could be OS-specific. We will use the raw
+      // JS event keyCode instead.
+      if (event.modifiers.command || event.modifiers.control) {
+
+        switch (event.event.keyCode) {
+
+          case 187:   // equals (zoom in)
+            var zoomIndex = ZOOM_LEVELS.indexOf($scope.wireframe.zoom);
+            $scope.wireframe.zoom = ZOOM_LEVELS[zoomIndex < (ZOOM_LEVELS.length - 1) ? zoomIndex + 1 : zoomIndex];
+
+            event.event.preventDefault();
+            $scope.$broadcast('view:zoom', $scope.wireframe.zoom);
+            break;
+
+          case 189:   // dash (zoom out)
+            var zoomIndex = ZOOM_LEVELS.indexOf($scope.wireframe.zoom);
+            $scope.wireframe.zoom = ZOOM_LEVELS[zoomIndex > 0 ? zoomIndex - 1 : zoomIndex];
+
+            event.event.preventDefault();
+            $scope.$broadcast('view:zoom', $scope.wireframe.zoom);
+            break;
+        }
+      }
+
+      // Standard cases
       switch(event.key) {
 
         case 'backspace':
           event.event.preventDefault();
           event.event.stopPropagation();
+          $scope.$broadcast('event:keydown', event);
           break;
 
         default:
