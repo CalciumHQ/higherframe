@@ -28,6 +28,9 @@ angular
       zoom: 1
     };
 
+    // Temporarily stores components
+    var clipboard = [];
+
 		$scope.propertyModels = {};
 
 
@@ -62,7 +65,11 @@ angular
 
 				if (event == 'created') {
 
-					addComponentToView(component.componentId, component.properties, component._id);
+					addComponentsToView({
+            id: component.componentId,
+            properties: component.properties,
+            remoteId: component._id
+          });
 				}
 
 				else if (event == 'updated') {
@@ -145,7 +152,11 @@ angular
         angular.forEach(document.components, function (component) {
 
 					$scope.wireframe.components.push(component);
-          addComponentToView(component.componentId, component.properties, component._id);
+          addComponentsToView({
+            id: component.componentId,
+            properties: component.properties,
+            remoteId: component._id
+          }, { select: false });
         });
       }, 200);
     };
@@ -163,34 +174,48 @@ angular
 		 * Data methods
 		 */
 
-		var saveComponent = function (component) {
+		var saveComponents = function (components) {
 
-			var serialized = {
-				lastModifiedBy: Session.getSessionId(),
-        componentId: component.definition.id,
-        properties: component.properties
-      };
+      if (!angular.isArray(components)) {
 
-			// Update
-			if (component.remoteId) {
+          components = [components];
+      }
 
-				$http
-	        .patch('/api/components/' + component.remoteId, serialized)
-	        .success(function (data) {
+      if (!components.length) {
 
-	        });
-			}
+        return;
+      }
 
-			// Create
-			else {
+      // Save components and set remoteId when saved
+      angular.forEach(components, function (component) {
 
-				$http
-	        .post('/api/frames/' + $stateParams.id + '/components', serialized)
-	        .success(function (data) {
+        var serialized = {
+  				lastModifiedBy: Session.getSessionId(),
+          componentId: component.definition.id,
+          properties: component.properties
+        };
 
-						component.remoteId = data._id;
-	        });
-			}
+  			// Update
+  			if (component.remoteId) {
+
+  				$http
+  	        .patch('/api/components/' + component.remoteId, serialized)
+  	        .success(function (data) {
+
+  	        });
+  			}
+
+  			// Create
+  			else {
+
+  				$http
+  	        .post('/api/frames/' + $stateParams.id + '/components', serialized)
+  	        .success(function (data) {
+
+  						component.remoteId = data._id;
+  	        });
+  			}
+      });
 		};
 
 		var deleteComponent = function (component) {
@@ -216,10 +241,32 @@ angular
 			localStorageService.set(STORAGE_LEFTSIDEBAR_OPEN_KEY, $scope.leftSidebarOpen);
 		};
 
-    var addComponentToView = function (componentId, options, remoteId) {
+    var addComponentsToView = function (components, options) {
 
-      var instance = ComponentFactory.create(componentId, options, remoteId);
-			return instance;
+      if (!angular.isArray(components)) {
+
+        components = [components];
+      }
+
+      if (!components.length) {
+
+        return;
+      }
+
+      // Create the components in the view
+      var instances = [];
+      angular.forEach(components, function (component) {
+
+          instances.push(ComponentFactory.create(component.id, component.properties, component.remoteId));
+      });
+
+      // Tell the view new components have been added
+      $scope.$broadcast('component:added', {
+        components: instances,
+        options: options
+      });
+
+			return instances;
     };
 
 		var updateUiWithComponent = function (component) {
@@ -324,17 +371,14 @@ angular
 
 				component.properties.x = component.position.x;
 				component.properties.y = component.position.y;
-
-				saveComponent(component);
 			});
+
+      saveComponents(components);
     });
 
 		$scope.$on('componentsIndexModified', function (e, components) {
 
-      angular.forEach(components, function (component) {
-
-				saveComponent(component);
-			});
+			saveComponents(components);
     });
 
 		$scope.$on('componentsDeleted', function (e, components) {
@@ -374,6 +418,45 @@ angular
 			});
     });
 
+    $scope.$on('component:copied', function (e, components) {
+
+      if (!angular.isArray(components)) {
+
+        components = [components];
+      }
+
+      if (!components.length) {
+
+        return;
+      }
+
+      // Reset the clipboard
+      clipboard = [];
+
+      // Copy representations of the components
+      angular.forEach(components, function (component) {
+
+        clipboard.push({
+          type: 'component',
+          id: component.definition.id,
+          properties: angular.copy(component.properties)
+        });
+      });
+    });
+
+    $scope.$on('component:pasted', function (e) {
+
+      // Copy representations of the components
+      angular.forEach(clipboard, function (entry) {
+
+        entry.properties.x += 50;
+        entry.properties.y += 50;
+      });
+
+      var instances = addComponentsToView(clipboard);
+      saveComponents(instances);
+    });
+
 
     /*
      * Event handlers
@@ -392,8 +475,11 @@ angular
         radius: 100
       };
 
-      var instance = addComponentToView(definition.id, options);
-			saveComponent(instance);
+      var instances = addComponentsToView({
+        id: definition.id,
+        properties: options
+      });
+			saveComponents(instances);
     };
 
 		$scope.onComponentPropertyChange = function (key, value, component) {
@@ -406,7 +492,7 @@ angular
 			});
 
       // Save the component
-      saveComponent(component);
+      saveComponents(component);
 		};
 
     if (!window.tool) {

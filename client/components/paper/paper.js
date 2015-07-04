@@ -345,6 +345,28 @@ angular
 								}
 
 								break;
+
+							// Copy on the 'c' key
+							case 'c':
+
+								if (event.modifiers.command || event.modifiers.control) {
+
+									event.event.preventDefault();
+									$scope.$emit('component:copied', selectedItems);
+								}
+
+								break;
+
+								// Paste on the 'v' key
+								case 'v':
+
+									if (event.modifiers.command || event.modifiers.control) {
+
+										event.event.preventDefault();
+										$scope.$emit('component:pasted');
+									}
+
+									break;
 						}
 
 					};
@@ -362,6 +384,23 @@ angular
 					$scope.$on('view:zoom', function (e, zoom) {
 
 						changeZoom(zoom);
+					});
+
+					$scope.$on('component:added', function (e, data) {
+
+						// Insertion options
+						var defaults = {
+								select: true
+						};
+
+						var options = angular.extend(defaults, data.options || {});
+
+						// Select new components if requested
+						if (options.select) {
+
+								clearSelection();
+								selectItems(data.components);
+						}
 					});
 
 					$scope.$on('component:propertyChange', function (e, data) {
