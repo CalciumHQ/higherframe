@@ -406,6 +406,25 @@ angular
       saveComponent(component);
 		};
 
+    if (!window.tool) {
+
+        window.tool = new paper.Tool();
+    }
+
+    tool.onKeyDown = function (event) {
+
+      switch(event.key) {
+
+        case 'backspace':
+          event.event.preventDefault();
+          event.event.stopPropagation();
+          break;
+
+        default:
+          $scope.$broadcast('event:keydown', event);
+      }
+    };
+
     (function init() {
 
       registerComponents();

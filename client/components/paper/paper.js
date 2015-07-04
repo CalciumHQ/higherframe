@@ -354,6 +354,11 @@ angular
 					 * Controller notifications
 					 */
 
+					$scope.$on('event:keydown', function (e, keyEvent) {
+
+						keyDown(keyEvent);
+					});
+
 					$scope.$on('component:propertyChange', function (e, data) {
 
 						data.component.definition.update(data.component);
@@ -1135,12 +1140,18 @@ angular
 						paper.setup(element[0]);
 						paper.view.onFrame = function () {};
 
-						var tool = new Tool();
+						// Tool may have already been created by controller
+						// We don't want multiple tools since only one can be active
+						// at once and the controller one capture key events
+						if (!window.tool) {
+
+								window.tool = new Tool();
+						}
+
 						tool.onMouseDown = mouseDown;
 						tool.onMouseUp = mouseUp;
 						tool.onMouseMove = mouseMove;
 						tool.onMouseDrag = mouseDrag;
-						tool.onKeyDown = keyDown;
 
 						$(element).mousewheel(mouseWheel);
 					};
