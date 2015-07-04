@@ -119,7 +119,7 @@ exports.deleteComponent = function(req, res) {
 			// Remove from the frame
 			Frame.findOneAndUpdate(
 				{ _id: req.params.frameId },
-				{ $pop: { components: req.params.componentId }},
+				{ $pull: { components: req.params.componentId }},
 				{},
 				function (err, Frame) {
 
