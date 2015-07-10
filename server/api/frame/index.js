@@ -15,4 +15,6 @@ router.delete('/:id', controller.destroy);
 router.post('/:id/components', controller.createComponent);
 router.delete('/:frameId/components/:componentId', controller.deleteComponent);
 
+router.get('/:id/export', controller.export);
+
 module.exports = router;
