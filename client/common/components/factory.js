@@ -1,8 +1,5 @@
 
-var paper = require('paper');
-var _ = require('lodash');
-
-(function(exports){
+(function(exports, paper, _){
 
   var definitions = {};	// component definitions
 
@@ -477,4 +474,8 @@ var _ = require('lodash');
   exports.get = _get;
   exports.definitions = definitions;
 
-})(typeof exports === 'undefined'? this['ComponentFactory']={}: exports);
+})(
+  typeof exports === 'undefined'? this['ComponentFactory']={}: exports,
+  typeof require === 'undefined'? this['paper']: require('paper'),
+  typeof require === 'undefined'? this['lodash']: require('lodash')
+);
