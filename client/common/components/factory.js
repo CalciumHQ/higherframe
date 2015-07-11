@@ -477,5 +477,5 @@
 })(
   typeof exports === 'undefined'? this['ComponentFactory']={}: exports,
   typeof require === 'undefined'? this['paper']: require('paper'),
-  typeof require === 'undefined'? this['lodash']: require('lodash')
+  typeof require === 'undefined'? this['_']: require('lodash')
 );
