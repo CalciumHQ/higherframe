@@ -143,15 +143,13 @@ exports.export = function (req, res) {
 	    if(!frame) { return res.send(404); }
 
       // Export parameters
-      var fileName = 'export';
+      var fileName = frame._id;
       var fileType = req.query.type;
 
       // When export is complete
-      function onSuccess(url) {
+      function onSuccess(image) {
 
-        res.json({
-          url: url
-        });
+        res.json(image);
       }
 
       // When export fails
