@@ -5,32 +5,56 @@ var _ = require('lodash');
 var ComponentFactory = require('./../../../client/common/components/factory.js');
 var paper = require('paper');
 var fs = require('fs');
+var Promise = require('promise');
 var Readable = require('stream').Readable
 var Image = require('./../../api/image/image.model');
+var Export = require('./../../api/export/export.model');
 
 
 /**
- * When an image files have been successfully uploaded to S3
+ * Create and save an image model to represent the new image
  */
 
-var _imagesReady = function (urls, options) {
+var _createImageEntry = function(urls) {
 
-  // Create the image in the database
-  Image.create({
-    thumbnail: urls.thumbnail,
-    small: urls.small,
-    medium: urls.medium,
-    large: urls.large
-  }, function (err, Image) {
+  return new Promise(function (resolve, reject) {
 
-    if (err) { return options.error('Error saving image', 400); }
-    return options.success(Image);
+    Image.create({
+      thumbnail: urls.thumbnail,
+      small: urls.small,
+      medium: urls.medium,
+      large: urls.large
+    }, function (err, Image) {
+
+      if (err) { return reject('Error saving image', 400); }
+      return resolve(Image);
+    });
   });
 };
 
 
 /**
- * The export function
+ * Create and save an export model to represent the export
+ */
+
+var _createExportEntry = function(image, frame) {
+
+  return new Promise(function (resolve, reject) {
+
+    Export.create({
+      image: image,
+      frame: frame
+    }, function (err, Export) {
+
+      if (err) { return reject('Error saving export', 400); }
+      return resolve(Export);
+    });
+  });
+};
+
+
+/**
+ * The public export function
  */
 
 exports.export = function (frame, fileName, options) {
@@ -73,12 +97,17 @@ exports.export = function (frame, fileName, options) {
     var svg = paper.project.exportSVG({ asString:true });
     out.write(svg);
 
-    return _imagesReady({
+    var imageData = {
       thumbnail: path,
       small: path,
       medium: path,
       large: path
-    }, options);
+    };
+
+    return _createImageEntry(imageData)
+      .then(function(image) { return _createExportEntry(image, frame); })
+      .then(options.success)
+      .catch(options.error);
   }
 
   // Output to another file type using a stream
@@ -106,12 +135,17 @@ exports.export = function (frame, fileName, options) {
 
     stream.on('end', function() {
 
-      return _imagesReady({
+      var imageData = {
         thumbnail: path,
         small: path,
         medium: path,
         large: path
-      }, options);
+      };
+
+      return _createImageEntry(imageData)
+        .then(function(image) { return _createExportEntry(image, frame); })
+        .then(options.success)
+        .catch(options.error);
     });
   }
 };
