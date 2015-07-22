@@ -10,7 +10,7 @@
 'use strict';
 
 var _ = require('lodash');
-var Image = require('./Image.model');
+var Image = require('./image.model');
 
 // Get list of Images
 exports.index = function(req, res) {

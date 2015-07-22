@@ -1,0 +1,11 @@
+{
+    "AWSEBDockerrunVersion": "1",
+    "Image": {
+        "Name": "node:latest"
+    },
+    "Ports": [
+        {
+            "ContainerPort": "8081"
+        }
+    ]
+}

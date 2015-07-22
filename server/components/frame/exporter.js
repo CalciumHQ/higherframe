@@ -5,10 +5,50 @@ var _ = require('lodash');
 var ComponentFactory = require('./../../../client/common/components/factory.js');
 var paper = require('paper');
 var fs = require('fs');
+var s3 = require('s3');
 var Promise = require('promise');
 var Readable = require('stream').Readable
 var Image = require('./../../api/image/image.model');
 var Export = require('./../../api/export/export.model');
+
+
+/**
+ * Save the images to S3
+ */
+
+var _saveImagesToS3 = function(paths) {
+
+  var urls = {},
+    promises = [];
+
+  // For each of the paths that make up the different sizes of this image
+  _.forEach(paths, function(path, key) {
+
+    var p = new Promise(function (resolve, reject) {
+
+      // Send to S3
+      s3.send(path, function () {
+
+        var url = 'something';
+
+        urls[key] = url;
+        resolve(url);
+      });
+    });
+
+    promises.push(p);
+  });
+
+  return Promise
+    .all(promises)
+    .then(function () {
+
+      return new Promise(function (resolve) {
+
+        resolve(urls);
+      });
+    });
+};
 
 
 /**
@@ -27,6 +67,7 @@ var _createImageEntry = function(urls) {
     }, function (err, Image) {
 
       if (err) { return reject('Error saving image', 400); }
+
       return resolve(Image);
     });
   });
@@ -97,14 +138,15 @@ exports.export = function (frame, fileName, options) {
     var svg = paper.project.exportSVG({ asString:true });
     out.write(svg);
 
-    var imageData = {
+    var paths = {
       thumbnail: path,
       small: path,
       medium: path,
       large: path
     };
 
-    return _createImageEntry(imageData)
+    return _saveImagesToS3(paths)
+      .then(function(urls) { _createImageEntry(urls); })
       .then(function(image) { return _createExportEntry(image, frame); })
       .then(options.success)
       .catch(options.error);
@@ -135,14 +177,15 @@ exports.export = function (frame, fileName, options) {
 
     stream.on('end', function() {
 
-      var imageData = {
+      var paths = {
         thumbnail: path,
         small: path,
         medium: path,
         large: path
       };
 
-      return _createImageEntry(imageData)
+      return _saveImagesToS3(paths)
+        .then(function(urls) { return _createImageEntry(urls); })
         .then(function(image) { return _createExportEntry(image, frame); })
         .then(options.success)
         .catch(options.error);
