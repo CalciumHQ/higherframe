@@ -1,62 +1,101 @@
-$navbarHeight: 40px;
+$navbarHeight: 56px;
+$logoHeight: 22px;
 $navbarPadding: 15px;
 
 #navbar {
+	@include box-sizing(border-box);
 	position: relative;
-	height: 0;
+	height: $navbarHeight;
 	line-height: $navbarHeight;
 	z-index: 100;
 	padding: 0 $navbarPadding;
-	
+
+	&.white {
+		background: white;
+	}
+
+	&.overlay {
+		height: 0;
+
+		.container {
+			height: 0;
+		}
+	}
+
 	.container {
 		@include display-flex;
-		height: 0;
-		
+
 		.left {
 			@include flex-grow(1);
 		}
-		
+
 		.right {
 			@include flex-shrink(0);
 		}
-	}	
+	}
+
+	#logo {
+    height: $logoHeight;
+		margin-top: ($navbarHeight - $logoHeight)/2 + 2px;
+
+    path {
+      fill: #1cbcbc;
+    }
+  }
 
 	#primaryNavigation,
 	#identity {
 		display: inline-block;
 	}
-	
+
 	#primaryNavigation {
 		display: none;
 	}
-	
+
 	#identity {
 		white-space: nowrap;
-		
+
 		.image {
 			display: block;
 			width: 40px;
 			height: 40px;
 			border-radius: 20px;
 		}
-		
+
 		.text {
-			display: none;
-			margin-left: 10px
+			margin-left: 10px;
 		}
 	}
-	
-	.navItem {
+
+	.navCollection {
 		position: relative;
 		display: inline-block;
-		top: $navbarPadding;
-		
-		.navItem + .navItem {
-			margin-left: 15px;	
+
+		.navCollection + .navCollection {
+			margin-left: 20px;
 		}
-		
+
 		.dropdown {
 			display: none;
 		}
+	}
+
+	.navItem {
+		display: inline-block;
+
+		.text,
+		a {
+			position: relative;
+			top: 1px;
+		}
+
+		a {
+			text-decoration: none;
+			font-weight: 600;
+		}
+	}
+
+	.navItem + .navItem {
+		margin-left: 20px;
 	}
 }

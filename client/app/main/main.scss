@@ -1,11 +1,10 @@
-#welcome {
-  .logo {
-    width: 180px;
-    margin-bottom: 30px;
+$blue: #1cbcbc;
+$yellow: #f6e867;
 
-    path {
-      fill: white;
-    }
+#welcome {
+  .title + .button-flat {
+    display: inline-block;
+    margin-top: 32px;
   }
 }
 
@@ -14,7 +13,7 @@
     padding: 80px;
 
     &.blue {
-      background: #1cbcbc;
+      background: $blue;
       color: white;
     }
 
@@ -46,6 +45,10 @@
             margin: 0 auto 24px;
             border: none;
             background: #f0f0f0;
+          }
+
+          .subhead {
+            color: $blue;
           }
         }
       }
@@ -91,4 +94,14 @@
 
 .semibold {
   font-weight: 600;
+}
+
+a {
+  color: $blue;
+}
+
+// Forms
+.button-flat {
+  font-weight: 600;
+  color: $yellow;
 }
