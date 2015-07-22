@@ -1,30 +1,94 @@
-.thing-form {
-    margin: 20px 0;
+#welcome {
+  .logo {
+    width: 180px;
+    margin-bottom: 30px;
+
+    path {
+      fill: white;
+    }
+  }
 }
 
-#banner {
-    border-bottom: none;
-    margin-top: -20px;
+.page.marketing {
+  .unit {
+    padding: 80px;
+
+    &.blue {
+      background: #1cbcbc;
+      color: white;
+    }
+
+    &.light {
+      background: white;
+    }
+
+    &.center {
+      text-align: center;
+    }
+
+    .unit-content {
+      @include container;
+
+      &.unit-points {
+        .unit-point {
+          @include span(4);
+          margin-left: span(1) + gutter();
+          text-align: center;
+
+          &:first-child {
+            margin-left: span(1) + gutter(3);
+          }
+
+          .image {
+            display: block;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 24px;
+            border: none;
+            background: #f0f0f0;
+          }
+        }
+      }
+    }
+  }
 }
 
-#banner h1 {
-    font-size: 60px;
-    line-height: 1;
-    letter-spacing: -1px;
+// Typography
+.display2 {
+  font-size: 48px;
+  font-weight: 600;
+  line-height: 56px;
 }
 
-.hero-unit {
-    position: relative;
-    padding: 30px 15px;
-    color: #F5F5F5;
-    text-align: center;
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
-    background: #4393B9;
+.title {
+  font-size: 24px;
+  line-height: 30px;
 }
 
-.footer {
-    text-align: center;
-    padding: 30px 0;
-    margin-top: 70px;
-    border-top: 1px solid #E5E5E5;
+.subhead {
+  font-size: 18px;
+  line-height: 28px;
+}
+
+.body, p {
+  font-size: 16px;
+  line-height: 26px;
+}
+
+.display2 {
+  & + .body,
+  & + p {
+    margin-top: 32px;
+  }
+}
+
+.subhead {
+  & + .body,
+  & + p {
+    margin-top: 8px;
+  }
+}
+
+.semibold {
+  font-weight: 600;
 }
