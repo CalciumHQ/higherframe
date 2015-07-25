@@ -1,7 +1,9 @@
+div#navbar.white(ng-include='"components/navbar/navbar.html"')
+
 .container
   .row
     .col-sm-12
-      h1 Login
+      h1.title Login
       p
         | Accounts are reset on server restart from
         code server/config/seed.js
@@ -30,21 +32,18 @@
           p.help-block {{ errors.other }}
 
         div
-          button.btn.btn-inverse.btn-lg.btn-login(type='submit')
+          button.button.btn-login(type='submit')
             | Login
           = ' '
           a.btn.btn-default.btn-lg.btn-register(href='/signup')
             | Register
 
-        hr
-
         div
-          a.btn.btn-facebook(href='', ng-click='loginOauth("facebook")')
+          button.button.btn-facebook(type="button", ng-click='loginOauth("facebook")')
             i.fa.fa-facebook
             |  Connect with Facebook
           = ' '
-          a.btn.btn-google-plus(href='', ng-click='loginOauth("google")')
+          button.button.btn-google-plus(type="button", ng-click='loginOauth("google")')
             i.fa.fa-google-plus
             |  Connect with Google+
           = ' '
-  hr

@@ -54,17 +54,6 @@ $navbarPadding: 15px;
 
 	#identity {
 		white-space: nowrap;
-
-		.image {
-			display: block;
-			width: 40px;
-			height: 40px;
-			border-radius: 20px;
-		}
-
-		.text {
-			margin-left: 10px;
-		}
 	}
 
 	.navCollection {
@@ -82,20 +71,89 @@ $navbarPadding: 15px;
 
 	.navItem {
 		display: inline-block;
+		vertical-align: top;
 
 		.text,
 		a {
-			position: relative;
-			top: 1px;
+			display: inline-block;
+			line-height: 14px;
+			vertical-align: middle;
 		}
 
 		a {
 			text-decoration: none;
 			font-weight: 600;
 		}
+
+		.dropdown {
+			display: none;
+			position: absolute;
+			top: $navbarHeight;
+			padding-top: 10px;
+
+			.dropdown-items {
+				position: relative;
+				box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+		    border-radius: 3px;
+				background: white;
+
+				&:before {
+					content: '';
+					position: absolute;
+					left: 50%;
+					bottom: 100%;
+					margin-bottom: -6px;
+					margin-left: -6px;
+					width: 12px;
+					height: 12px;
+					background: white;
+					@include transform(rotateZ(45deg));
+					box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+				}
+
+				li {
+					position: relative;
+					z-index: 1;
+					padding: 15px;
+					line-height: normal;
+					background: white;
+
+					&:first-child {
+						border-top-left-radius: 3px;
+						border-top-right-radius: 3px;
+					}
+
+					&:last-child {
+						border-bottom-left-radius: 3px;
+						border-bottom-right-radius: 3px;
+					}
+				}
+			}
+		}
+
+		&:hover  {
+			.dropdown {
+				display: block;
+			}
+		}
+
+		&.hasImage {
+			position: relative;
+			padding-left: 50px;
+
+			.image {
+				position: absolute;
+				left: 0;
+				top: 50%;
+				width: 40px;
+				height: 40px;
+				margin-top: -20px;
+				border-radius: 20px;
+			}
+		}
 	}
 
 	.navItem + .navItem {
-		margin-left: 20px;
+		margin-left: 30px;
 	}
 }

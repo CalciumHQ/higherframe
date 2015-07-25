@@ -5,7 +5,8 @@ div#welcome.page.marketing
     div.unit-content
       h2.display2 Seamless team wireframing.
       p.title Higherframe lets you collaborate on wireframes in real-time,<br />so you can prototype faster and more efficiently.
-      a.button-flat.title Try now for free
+      a.button-flat.title(ng-show="!isLoggedIn()") Try now for free
+      a.button-flat.title(ui-sref="frames", ng-show="isLoggedIn()") View your dashboard
       
   div.unit.light
     div.unit-content.unit-points

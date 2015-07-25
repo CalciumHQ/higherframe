@@ -98,10 +98,19 @@ $yellow: #f6e867;
 
 a {
   color: $blue;
+
+  &:hover {
+    color: shade($blue, 20);
+  }
+
+  &:active {
+    color: shade($blue, 40);
+  }
 }
 
 // Forms
 .button-flat {
   font-weight: 600;
+  text-decoration: none;
   color: $yellow;
 }
