@@ -169,6 +169,11 @@ angular
       };
     };
 
+    var save = function () {
+
+      $http.get('/api/frames/' + frame._id + '/export?type=png');
+    };
+
 
 		/*
 		 * Data methods
@@ -535,6 +540,16 @@ angular
           event.event.preventDefault();
           event.event.stopPropagation();
           $scope.$broadcast('event:keydown', event);
+          break;
+
+        case 's':
+          if (event.modifiers.command || event.modifiers.control) {
+
+            event.event.preventDefault();
+            event.event.stopPropagation();
+            save();
+          }
+
           break;
 
         default:

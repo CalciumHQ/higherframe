@@ -1,7 +1,7 @@
 'use strict';
 
 var express = require('express');
-var controller = require('./frame.controller');
+var controller = require('./image.controller');
 
 var router = express.Router();
 
@@ -11,10 +11,5 @@ router.post('/', controller.create);
 router.put('/:id', controller.update);
 router.patch('/:id', controller.update);
 router.delete('/:id', controller.destroy);
-
-router.post('/:id/components', controller.createComponent);
-router.delete('/:frameId/components/:componentId', controller.deleteComponent);
-
-router.get('/:id/export', controller.export);
 
 module.exports = router;

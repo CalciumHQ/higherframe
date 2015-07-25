@@ -12,6 +12,7 @@
 var _ = require('lodash');
 var Frame = require('./frame.model');
 var Component = require('./../component/component.model');
+var frameExporter = require('./../../components/frame/exporter');
 
 // Get list of frames
 exports.index = function(req, res) {
@@ -129,6 +130,41 @@ exports.deleteComponent = function(req, res) {
 			);
 		});
   });
+};
+
+exports.export = function (req, res) {
+
+  Frame
+		.findById(req.params.id)
+		.populate('components')
+		.exec(function (err, frame) {
+
+	    if(err) { return handleError(res, err); }
+	    if(!frame) { return res.send(404); }
+
+      // Export parameters
+      var fileName = frame._id;
+      var fileType = req.query.type;
+
+      // When export is complete
+      function onSuccess(image) {
+
+        res.json(image);
+      }
+
+      // When export fails
+      function onError(msg, statusCode) {
+
+        res.json({ msg: msg }, statusCode);
+      }
+
+      // Perform the export
+      frameExporter.export(frame, fileName, {
+        fileType: fileType,
+        success: onSuccess,
+        error: onError
+      });
+    });
 };
 
 function handleError(res, err) {
