@@ -377,6 +377,26 @@ module.exports = function (grunt) {
       ]
     },
 
+    // Typescript
+    typescript: {
+      base: {
+        src: [
+          '<%= yeoman.client %>/**/*.ts',
+          '!<%= yeoman.client %>/bower_components/**/*.ts',
+          '!<%= yeoman.client %>/typings/**/*.ts',
+        ],
+        dest: '.tmp',
+        options: {
+          module: 'commonjs',
+          target: 'es5',
+          basePath: '<%= yeoman.client %>',
+          keepDirectoryHierarchy: true,
+          sourceMap: true,
+          declaration: true
+        }
+      }
+    },
+
     // Test settings
     karma: {
       unit: {
@@ -556,6 +576,7 @@ module.exports = function (grunt) {
       'env:all',
       'injector:sass',
       'concurrent:server',
+      'typescript',
       'injector',
       'bowerInstall',
       'autoprefixer',
@@ -617,6 +638,7 @@ module.exports = function (grunt) {
     'clean:dist',
     'injector:sass',
     'concurrent:dist',
+    'typescript',
     'injector',
     'bowerInstall',
     'useminPrepare',
