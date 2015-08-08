@@ -14,6 +14,10 @@ div.container(ng-controller="NavbarCtrl")
         path(d="M192.3,33.7v-2.7c-1.9,2.2-4.3,3.3-6.9,3.3c-5.7,0-10.2-4.3-10.2-12.2c0-7.6,4.4-12.1,10.2-12.1c2.5,0,5,1,6.8,3.3v-2.7 h7.4v23.2H192.3z M192.3,25.7v-7.1c-1-1.2-2.9-2.1-4.5-2.1c-2.9,0-5.1,2.1-5.1,5.6c0,3.5,2.2,5.7,5.1,5.7) C189.4,27.8,191.3,26.9,192.3,25.7z")
         path(d="M232.6,33.7V19.6c0-1.8-0.9-3.1-3.1-3.1c-2,0-3.5,1.3-4.2,2.3v15H218V19.6c0-1.8-0.8-3.1-3-3.1c-2,0-3.4,1.3-4.2,2.3v15 h-7.4V10.6h7.4v2.8c1-1.3,4-3.4,7.6-3.4c3.4,0,5.6,1.4,6.6,4.1c1.3-2,4.4-4.1,8-4.1c4.3,0,7,2.2,7,7v16.8H232.6z")
         path(d="M242.4,22.1c0-6.7,5-12.1,12.3-12.1c6.9,0,11.9,5,11.9,12.9v1.7h-16.5c0.5,2.1,2.4,3.8,5.8,3.8c1.6,0,4.3-0.7,5.7-2 l3.2,4.8c-2.3,2.1-6.1,3.1-9.7,3.1C247.9,34.3,242.4,29.7,242.4,22.1z M254.7,15.9c-3.2,0-4.5,1.9-4.8,3.6h9.6 C259.3,17.9,258.1,15.9,254.7,15.9z")
+    
+    ul#authenticatedNavigation.navCollection      
+      li.navItem(ng-class="{active: isActive('/frames')}")
+        a(ui-sref="frames") Dashboard
   
   .right
     ul#primaryNavigation.navCollection
@@ -34,15 +38,13 @@ div.container(ng-controller="NavbarCtrl")
       a
         img.image(ng-if="getCurrentUser().provider == 'facebook'", ng-src="http://graph.facebook.com/{{ getCurrentUser().facebook.id }}/picture?type=large")
         span.text {{ getCurrentUser().name }}
+        svg.dropdown-chevron(version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="-227 374.7 44.6 24.3" style="enable-background:new -227 374.7 44.6 24.3;" xml:space="preserve")
+          path(d="M-185.8,375.3l-18.9,18.9l-18.9-18.9c-0.8-0.8-2-0.8-2.8,0c-0.8,0.8-0.8,2,0,2.8l20.3,20.3c0.4,0.4,0.9,0.6,1.4,0.6c0.5,0,1-0.2,1.4-0.6l20.3-20.3c0.8-0.8,0.8-2,0-2.8C-183.8,374.5-185.1,374.5-185.8,375.3z")
       
       div.dropdown
-        ul.dropdown-items
-          li(ng-show="isLoggedIn()", ng-class="{active: isActive('/settings')}")
+        ul.dropdown-items  
+          li(ng-class="{active: isActive('/settings')}")
             a(href="/settings") Settings
       
-          li(ng-show="isLoggedIn()", ng-class="{active: isActive('/logout')}")
+          li(ng-class="{active: isActive('/logout')}")
             a(href="", ng-click="logout()") Logout
-
-    div.navItem(ng-show="isLoggedIn()")
-      a(ui-sref="frames")
-        span.text Dashboard

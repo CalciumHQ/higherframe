@@ -1,4 +1,4 @@
-div#navbar.white(ng-include='"components/navbar/navbar.html"')
+div#navbar.white.border(ng-include='"components/navbar/navbar.html"')
 
 div#frames
 	div.sidebar.filters
@@ -21,22 +21,19 @@ div#frames
 		div.divider
 		
 		div.item
-			span.dot(ng-style="{ 'background-color': '#ff5722' }")
 			span.name Architizer
 			
 		div.item
-			span.dot(ng-style="{ 'background-color': '#03a9f4' }")
 			span.name Higherframe
 	
 	div#framesListContainer
 		div#framesList.cards
 			a.card(ng-repeat="frame in frames | orderBy:'-created_at'", ng-click="onFrameClick($event, frame)")
 				div.delete(ng-click="onFrameDeleteClick($event, frame)") Delete
-				div.marker(ng-style="{ 'background-color': '#ff5722' }")
 				div.content
 					div.left
-						span.name.block {{ frame.name }}
-						span.project.block Architizer Source
+						span.name.title.block {{ frame.name }}
+						span.project.subhead.block Architizer Source
 						
 					div.right
 						span.lastModified {{ (frame.created_at | moment).fromNow() }}

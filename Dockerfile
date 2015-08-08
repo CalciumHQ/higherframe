@@ -5,6 +5,9 @@
 # Pull base image.
 FROM node:latest
 
+# Get around proxy
+RUN git config --global url."https://".insteadOf git://
+
 # Install Ruby and Compass
 RUN \
   apt-get update && \

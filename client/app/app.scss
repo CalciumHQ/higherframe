@@ -5,6 +5,9 @@
 $fa-font-path: "/bower_components/font-awesome/fonts";
 @import 'font-awesome/scss/font-awesome';
 
+$blue: #1cbcbc;
+$yellow: #f6e867;
+
 // Component styles are injected through grunt
 // injector
 @import '_grids.scss';

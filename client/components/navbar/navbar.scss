@@ -2,6 +2,17 @@ $navbarHeight: 56px;
 $logoHeight: 22px;
 $navbarPadding: 15px;
 
+#navbar,
+#actionbar {
+	&.border {
+		border-bottom: 1px solid #dce1e0;
+	}
+
+	&.border-light {
+		border-bottom: 1px solid lighten(#dce1e0, 8);
+	}
+}
+
 #navbar {
 	@include box-sizing(border-box);
 	position: relative;
@@ -12,6 +23,38 @@ $navbarPadding: 15px;
 
 	&.white {
 		background: white;
+	}
+
+	&.transparent {
+
+	}
+
+	&.light {
+		#logo {
+			path {
+	      fill: white;
+	    }
+		}
+
+		.left,
+		.right {
+			& > .navCollection > .navItem,
+			& > .navItem {
+				& > a {
+					color: white;
+
+					svg {
+						path {
+							fill: white;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	&.dark {
+
 	}
 
 	&.overlay {
@@ -36,7 +79,8 @@ $navbarPadding: 15px;
 
 	#logo {
     height: $logoHeight;
-		margin-top: ($navbarHeight - $logoHeight)/2 + 2px;
+		margin-bottom: -6px;
+		margin-right: 30px;
 
     path {
       fill: #1cbcbc;
@@ -83,6 +127,11 @@ $navbarPadding: 15px;
 		a {
 			text-decoration: none;
 			font-weight: 600;
+
+			.dropdown-chevron {
+				height: 7px;
+				margin-left: 8px;
+			}
 		}
 
 		.dropdown {
@@ -155,5 +204,19 @@ $navbarPadding: 15px;
 
 	.navItem + .navItem {
 		margin-left: 30px;
+	}
+}
+
+#actionbar {
+	@include display-flex;
+	padding: 0 $navbarPadding;
+
+	.action {
+		padding: 8px 0 6px;
+		cursor: pointer;
+
+		& + .action {
+			margin-left: 30px;
+		}
 	}
 }

@@ -2,7 +2,7 @@
 
 angular
   .module('siteApp')
-  .controller('FrameCtrl', function (frame, $scope, $window, $http, $filter, $stateParams, socket, localStorageService, ComponentFactory, Session, Auth) {
+  .controller('FrameCtrl', function (frame, $scope, $window, $http, $filter, $stateParams, $state, $timeout, socket, localStorageService, ComponentFactory, Session, Auth) {
 
 		/**
 		 * Constants
@@ -18,9 +18,16 @@ angular
      */
 
 		$scope.leftSidebarOpen = localStorageService.get(STORAGE_LEFTSIDEBAR_OPEN_KEY);
+    $scope.quickAdd = {
+      open: false,
+      focus: false,
+      query: '',
+      results: [],
+      index: 0
+    };
 		$scope.currentComponent;
 
-    $scope.components = [];
+    var components = [];
 		$scope.collaborators = frame.collaborators;
 
     $scope.wireframe = {
@@ -40,12 +47,12 @@ angular
 
     var registerComponents = function () {
 
-      $scope.components.push(ComponentFactory.definitions.rectangle);
-      $scope.components.push(ComponentFactory.definitions.circle);
-      $scope.components.push(ComponentFactory.definitions.triangle);
-			$scope.components.push(ComponentFactory.definitions.label);
-      $scope.components.push(ComponentFactory.definitions.iphone);
-      $scope.components.push(ComponentFactory.definitions.iphoneTitlebar);
+      components.push(ComponentFactory.definitions.rectangle);
+      components.push(ComponentFactory.definitions.circle);
+      components.push(ComponentFactory.definitions.triangle);
+			components.push(ComponentFactory.definitions.label);
+      components.push(ComponentFactory.definitions.iphone);
+      components.push(ComponentFactory.definitions.iphoneTitlebar);
     };
 
 		var registerSockets = function () {
@@ -245,6 +252,17 @@ angular
 			$scope.leftSidebarOpen = !$scope.leftSidebarOpen;
 			localStorageService.set(STORAGE_LEFTSIDEBAR_OPEN_KEY, $scope.leftSidebarOpen);
 		};
+
+    var toggleQuickAdd = function () {
+
+      $scope.quickAdd.query = '';
+      $scope.quickAdd.open = !$scope.quickAdd.open;
+
+      if ($scope.quickAdd.open) {
+
+        $timeout(function () { $scope.quickAdd.focus = true; });
+      }
+    };
 
     var addComponentsToView = function (components, options) {
 
@@ -467,24 +485,65 @@ angular
      * Event handlers
      */
 
-		$scope.onToggleSidebarClick = function () {
+    // Action bar
+    $scope.onActionbarCloseClick = function () {
+
+ 			$state.go('frames');
+ 		};
+
+		$scope.onActionbarToggleSidebarClick = function () {
 
 			toggleSidebar();
 		};
 
-    $scope.onComponentClick = function (definition) {
+    $scope.onActionbarQuickAddClick = function () {
 
+ 			toggleQuickAdd();
+ 		};
+
+    // When the quick add input value is changed
+    $scope.$watch('quickAdd.query', function (query) {
+
+      $scope.quickAdd.results = $filter('filter')(components, query);
+      $scope.quickAdd.index = 0;
+    });
+
+    // When a key is pressed in the quick add input
+    $scope.onActionbarQuickAddKeyDown = function (event) {
+
+      switch (event.keyCode) {
+
+        // If the enter key is pressed, add the highlighted component
+        case 13:
+          var component = $scope.quickAdd.results[$scope.quickAdd.index];
+          if (component) {
+
+            $scope.onActionbarQuickAddComponentClick(component);
+          }
+
+          break;
+      }
+    };
+
+    // When a component in the quick add pane is clicked
+    $scope.onActionbarQuickAddComponentClick = function (definition) {
+
+      // Center new component in view
 			var options = {
-        x: 400,
-				y: 400,
+        x: paper.view.bounds.x + (paper.view.bounds.width/2),
+				y: paper.view.bounds.y + (paper.view.bounds.height/2),
         radius: 100
       };
 
+      // Create the instances and save to db
       var instances = addComponentsToView({
         id: definition.id,
         properties: options
       });
 			saveComponents(instances);
+
+      // Hide the quick add
+      toggleQuickAdd();
     };
 
 		$scope.onComponentPropertyChange = function (key, value, component) {
@@ -537,9 +596,32 @@ angular
       switch(event.key) {
 
         case 'backspace':
-          event.event.preventDefault();
-          event.event.stopPropagation();
-          $scope.$broadcast('event:keydown', event);
+          // If in an input, allow event to continue
+          if (event.event.target.tagName == 'INPUT') {}
+
+          // Otherwise cancel and broadcast to wireframe
+          else {
+
+            event.event.preventDefault();
+            event.event.stopPropagation();
+            $scope.$broadcast('event:keydown', event);
+          }
+
+          break;
+
+        case 'r':
+
+          if (event.modifiers.command || event.modifiers.control) {
+
+            event.event.preventDefault();
+            event.event.stopPropagation();
+
+            $scope.$apply(function() {
+
+              toggleQuickAdd();
+            });
+          }
+
           break;
 
         case 's':

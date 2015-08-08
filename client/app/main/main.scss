@@ -1,5 +1,4 @@
-$blue: #1cbcbc;
-$yellow: #f6e867;
+$unitPadding: 80px;
 
 #welcome {
   .title + .button-flat {
@@ -8,9 +7,50 @@ $yellow: #f6e867;
   }
 }
 
+.fullscreen-wrapper {
+  position: absolute;
+  @include display-flex;
+  @include flex-direction(column);
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.page.underlay-navbar {
+  margin-top: -56px;
+
+  .unit:first-child {
+    padding-top: $unitPadding + 56px;
+  }
+}
+
 .page.marketing {
   .unit {
-    padding: 80px;
+    padding: $unitPadding;
+
+    &.image {
+      position: relative;
+      background-position: center;
+      background-size: cover;
+      color: white;
+
+      &:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 1;
+        background: rgba(0,0,0,0.25);
+      }
+
+      .unit-content {
+        position: relative;
+        z-index: 2;
+      }
+    }
 
     &.blue {
       background: $blue;
@@ -19,6 +59,10 @@ $yellow: #f6e867;
 
     &.light {
       background: white;
+    }
+
+    &.shade {
+      background: #edeff1;
     }
 
     &.center {
@@ -78,6 +122,10 @@ $yellow: #f6e867;
   line-height: 26px;
 }
 
+.caption {
+  font-size: 14px;
+}
+
 .display2 {
   & + .body,
   & + p {
@@ -99,12 +147,30 @@ $yellow: #f6e867;
 a {
   color: $blue;
 
+  svg {
+    path {
+      fill: $blue;
+    }
+  }
+
   &:hover {
     color: shade($blue, 20);
+
+    svg {
+      path {
+        fill: shade($blue, 20);
+      }
+    }
   }
 
   &:active {
     color: shade($blue, 40);
+
+    svg {
+      path {
+        fill: shade($blue, 40);
+      }
+    }
   }
 }
 
@@ -113,4 +179,11 @@ a {
   font-weight: 600;
   text-decoration: none;
   color: $yellow;
+}
+
+// Tooltips
+._720kb-tooltip {
+  ._720kb-tooltip-title {
+      font-weight: 700;
+  }
 }
