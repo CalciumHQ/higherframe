@@ -2,7 +2,7 @@
 'use strict';
 
 var _ = require('lodash');
-var ComponentFactory = require('./../../../client/common/components/factory.js');
+var ComponentFactory = {}; /*require('./../../../client/common/component/factory.js');*/
 var paper = require('paper');
 var fs = require('fs');
 var s3 = require('s3');
@@ -10,7 +10,6 @@ var Promise = require('promise');
 var Readable = require('stream').Readable
 var Image = require('./../../api/image/image.model');
 var Export = require('./../../api/export/export.model');
-
 
 /**
  * Save the images to S3

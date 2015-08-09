@@ -22,6 +22,16 @@
     ],
     "files": [
         "./app/app.ts",
+        "./library/data/component.ts",
+        "./library/data/drawing-model.ts",
+        "./library/drawing/component/component.ts",
+        "./library/drawing/component/factory.ts",
+        "./library/drawing/component/library/iphone-titlebar.ts",
+        "./library/drawing/component/library/iphone.ts",
+        "./library/drawing/component/options.ts",
+        "./library/drawing/component/type.ts",
+        "./library/drawing/point.ts",
+        "./library/higherframe.ts",
         "./typings/angularjs/angular.d.ts",
         "./typings/jquery/jquery.d.ts"
     ]
