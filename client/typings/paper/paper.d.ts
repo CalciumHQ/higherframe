@@ -3932,6 +3932,12 @@ declare module paper {
         key: string;
 
         /**
+         * The original javascript event.
+         */
+
+        event;
+
+        /**
          * a string representation of the key event
          */
         toString(): string;

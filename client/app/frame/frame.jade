@@ -2,41 +2,41 @@ div.fullscreen-wrapper
 	div#navbar.white.border-light(ng-include='"components/navbar/navbar.html"')
 		
 	div#actionbar.border
-		a.action.caption.semibold(ng-click="onActionbarToggleSidebarClick()", ng-class="{ open: leftSidebarOpen }") Toggle sidebar
-		a.action.caption.semibold(ng-click="onActionbarQuickAddClick()", ng-class="{ open: quickAddOpen }", tooltips, tooltip-speed="fast", tooltip-side="bottom", tooltip-title="cmd+r") Quick add
+		a.action.caption.semibold(ng-click="FrameCtrl.onActionbarToggleSidebarClick()", ng-class="{ open: FrameCtrl.leftSidebarOpen }") Toggle sidebar
+		a.action.caption.semibold(ng-click="FrameCtrl.onActionbarQuickAddClick()", ng-class="{ open: FrameCtrl.quickAddOpen }", tooltips, tooltip-speed="fast", tooltip-side="bottom", tooltip-title="cmd+r") Quick add
 
 	#frame
 		// Left sidebar
-		.sidebar(ng-class="{ open: leftSidebarOpen }")
+		.sidebar(ng-class="{ open: FrameCtrl.leftSidebarOpen }")
 			#componentProperties.sidebar-panel
 				span.title Properties
-				span.placeholder(ng-show="!currentComponent") No component selected
-				ul.properties(ng-show="currentComponent")
-					li.control(ng-repeat="(name, property) in currentComponent.definition.properties", ng-if="property.visible")
+				span.placeholder(ng-show="!FrameCtrl.currentComponent") No component selected
+				ul.properties(ng-show="FrameCtrl.currentComponent")
+					li.control(ng-repeat="(name, property) in FrameCtrl.currentComponent.definition.properties", ng-if="property.visible")
 						span.label {{ property.label }}
-						input(type="text", ng-model="currentComponent.properties[name]", ng-change="onComponentPropertyChange(name, currentComponent.properties[name], currentComponent, property)")
+						input(type="text", ng-model="FrameCtrl.currentComponent.properties[name]", ng-change="FrameCtrl.onComponentPropertyChange(name, FrameCtrl.currentComponent.properties[name], FrameCtrl.currentComponent, property)")
 						
 		// Quick add
-		#quick-add(ng-show="quickAdd.open")
+		#quick-add(ng-show="FrameCtrl.quickAdd.open")
 			#quick-add-search
 				svg.search-icon(version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="-510.2 681.1 100.2 100" style="enable-background:new -510.2 681.1 100.2 100;" xml:space="preserve")
 					path(d="M-410.7,770.2l-31.3-31.3c4.1-6.1,6.2-13.2,6.2-20.6c0-9.9-3.9-19.3-10.9-26.3s-16.3-10.9-26.3-10.9c-9.9,0-19.3,3.9-26.3,10.9s-10.9,16.3-10.9,26.3s3.9,19.3,10.9,26.3s16.3,10.9,26.3,10.9c7.5,0,14.7-2.2,20.8-6.4l31.3,31.3c1.1,1.1,3,0.8,4.3-0.5l5.3-5.3C-409.8,773.2-409.6,771.3-410.7,770.2z M-472.9,745.4c-14.9,0-27.1-12.1-27.1-27.1s12.2-27.1,27.1-27.1c14.9,0,27.1,12.2,27.1,27.1S-457.9,745.4-472.9,745.4z")
 
-				input(ng-model="quickAdd.query", type="text", placeholder="Search for components...", focus-on="quickAdd.focus", ng-keydown="onActionbarQuickAddKeyDown($event)")
+				input(ng-model="FrameCtrl.quickAdd.query", type="text", placeholder="Search for components...", focus-on="FrameCtrl.quickAdd.focus", ng-keydown="FrameCtrl.onActionbarQuickAddKeyDown($event)")
 					
-			#quick-add-results(ng-show="quickAdd.query && quickAdd.results.length")
-				.component(ng-repeat="component in quickAdd.results | limitTo:4", ng-class="{ active: $index == quickAdd.index }", ng-click="onActionbarQuickAddComponentClick(component)")
+			#quick-add-results(ng-show="FrameCtrl.quickAdd.query && FrameCtrl.quickAdd.results.length")
+				.component(ng-repeat="component in FrameCtrl.quickAdd.results | limitTo:4", ng-class="{ active: $index == FrameCtrl.quickAdd.index }", ng-click="FrameCtrl.onActionbarQuickAddComponentClick(component)")
 					.thumbnail(ng-style="{ 'background-image': 'url(' + component.thumbnail + ')' }")
 
 					.text
 						span.name {{ component.name }}
 
 		// The canvas
-		canvas#canvas(wireframe, data="wireframe", resize, keepalive="true")
+		canvas#canvas(wireframe, data="FrameCtrl.wireframe", resize, keepalive="true")
 		
 		// Bottom right
 		div.bottomRight
 			#collaborators
-					.collaborator(ng-repeat="user in collaborators")
+					.collaborator(ng-repeat="user in FrameCtrl.collaborators")
 						img.image(ng-if="user.provider == 'facebook'", ng-src="http://graph.facebook.com/{{ user.facebook.id }}/picture?type=large", title="{{ user.name }}")
 						div.indicator(ng-style="{ 'background': user.color }")

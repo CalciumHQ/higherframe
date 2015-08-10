@@ -3,38 +3,43 @@
 module Higherframe.Drawing.Component {
 
   /**
-   * Create a drawing component and binds to a component data model.
+   * Factory for drawing components
    */
 
-  export function factory(type: Type, model?: Data.IDrawingModel, remoteId?: String): IComponent {
+  export class Factory {
 
-    // Get the component definition and create an instance
-    var component: IComponent = get(type);
+    /**
+     * Create a drawing component from a component data model.
+     */
+    static fromModel(model?: Data.Component): Drawing.Component.IComponent {
 
-    // Add a reference to the model
-    component.model = model;
+      // Get the component type
+      var type = Type[<string>model.type];
 
-    return component;
-  }
+      // Get the component definition and create an instance
+      var component: Drawing.Component.IComponent = this.get(type, model);
 
-
-  /**
-   * Creates a new component for a given component type
-   */
-
-  function get(type: Type): IComponent {
-
-    // Passing an enum value to the enum returns the corresponding
-    // enum key. Use this to return the requested component constructor.
-    var id = Component.Type[type];
-    var comConstr = Higherframe.Drawing.Component.Library[id];
-
-    if (!comConstr) {
-
-      throw `There isn't a registered component with id "${id}".`;
+      return component;
     }
 
 
-    return new comConstr();
+    /**
+     * Creates a new component for a given component type
+     */
+
+    private static get(type: Type, model: Data.Component): IComponent {
+
+      // Passing an enum value to the enum returns the corresponding
+      // enum key. Use this to return the requested component constructor.
+      var id = Component.Type[type];
+      var comConstr = Higherframe.Drawing.Component.Library[id];
+
+      if (!comConstr) {
+
+        throw `There isn't a registered component with id "${id}".`;
+      }
+
+      return new comConstr(model);
+    }
   }
 }

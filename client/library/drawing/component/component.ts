@@ -3,7 +3,8 @@
 module Higherframe.Drawing.Component {
 
   /**
-   * A component
+   * Defines the interface for a component which can be drawn on a
+   * paperjs canvas
    *
    * @extends Paper.Group
    */
@@ -11,15 +12,20 @@ module Higherframe.Drawing.Component {
   export interface IComponent {
 
     id: Component.Type,
-    name: String,
+    title: String,
     tags: Array<String>,
     thumbnail: String,
     resizable: Boolean,
     snapPoints: Array<IPoint>,
-    model: Data.IDrawingModel
+    model: Data.IDrawingModel,
 
     // new(options: IOptions)
     update()
+
+    // Provide definitions for paper.Item methods that we need in lieu
+    // of a definition file for the interface
+    position: paper.Point,
+    remove(): boolean,
   }
 
 
@@ -27,13 +33,22 @@ module Higherframe.Drawing.Component {
    * Provides boilerplate for creating components
    */
 
-  export class Base {
-    remoteId: String;
+  export class Base extends paper.Group implements IComponent {
 
-    constructor(options: IOptions) {
+    id: Component.Type;
+    title: String;
+    tags: Array<String>;
+    thumbnail: String;
+    resizable: Boolean;
+    snapPoints: Array<IPoint>;
+    model: Data.IDrawingModel;
 
-      // Set properties on the component
-      // component.properties = options;
+    constructor(model: Data.IDrawingModel) {
+
+      super();
+
+      // Bind to the model
+      this.model = model;
 
       // Perform the initial draw
       this.update();

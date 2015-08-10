@@ -3,7 +3,8 @@
 module Higherframe.Data {
 
   export interface IDrawingModel {
-    
-    remoteId: String
+
+    _id: String,
+    properties: IComponentProperties
   }
 }
