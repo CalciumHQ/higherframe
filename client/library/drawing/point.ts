@@ -2,7 +2,7 @@
 
 module Higherframe.Drawing {
   export interface IPoint {
-    x: Number,
-    y: Number
+    x: number,
+    y: number
   }
 }

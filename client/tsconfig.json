@@ -30,6 +30,7 @@
         "./library/data/user.ts",
         "./library/drawing/component/component.ts",
         "./library/drawing/component/factory.ts",
+        "./library/drawing/component/library/arrow.ts",
         "./library/drawing/component/library/iphone-titlebar.ts",
         "./library/drawing/component/library/iphone.ts",
         "./library/drawing/component/library/rectangle.ts",

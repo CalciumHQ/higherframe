@@ -19,11 +19,7 @@ module Higherframe.Drawing.Component.Library {
       { x: -116, y: -232 },		// Bounding box
       { x: 116, y: -232 },
       { x: 116, y: 232 },
-      { x: -116, y: 232 },
-      { x: -110, y: -184 },		// Screen corners
-      { x: 110, y: -184 },
-      { x: 110, y: 162 },
-      { x: -110, y: 162 },
+      { x: -116, y: 232 }
     ];
 
     model: Data.Component;
@@ -57,8 +53,8 @@ module Higherframe.Drawing.Component.Library {
       // Remove the old parts
       this.removeChildren();
 
-      var topLeft = new paper.Point(properties.x - properties.width/2, properties.y - properties.height/2);
-      var bottomRight = new paper.Point(properties.x + WIDTH/2, properties.y + HEIGHT/2);
+      var topLeft = new paper.Point(properties.x, properties.y);
+      var bottomRight = new paper.Point(properties.x + properties.width, properties.y + properties.height);
       var bounds = new paper.Rectangle(topLeft, bottomRight);
 
       // Draw the shape

@@ -138,7 +138,7 @@ angular
 							var selectedItem = selectedItems[0];
 
 							// Check if component definition allows resizing
-							if (!selectedItem.definition.resizable) {
+							if (!selectedItem.model.resizable) {
 
 								return;
 							}

@@ -14,6 +14,11 @@ module Higherframe.Data {
     cornerRadius: number
   }
 
+  export interface IArrowProperties extends IComponentProperties {
+    start: Drawing.IPoint,
+    end: Drawing.IPoint
+  }
+
   export interface IIPhoneProperties extends IComponentProperties {
 
   }

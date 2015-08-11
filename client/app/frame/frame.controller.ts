@@ -282,6 +282,10 @@ class FrameCtrl {
     });
     // this.components.push(this.ComponentFactory.definitions.circle);
     // this.components.push(this.ComponentFactory.definitions.triangle);
+    this.components.push({
+      id: Higherframe.Drawing.Component.Type[Higherframe.Drawing.Component.Type.Arrow],
+      title: Higherframe.Drawing.Component.Library.Arrow.title
+    });
 		// this.components.push(this.ComponentFactory.definitions.label);
     this.components.push({
       id: Higherframe.Drawing.Component.Type[Higherframe.Drawing.Component.Type.IPhone],

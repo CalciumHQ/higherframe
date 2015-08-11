@@ -510,6 +510,18 @@ declare module paper {
         isNan(): boolean;
 
         /**
+         * Vector addition
+         * @param point -
+         */
+        add(point: Point): Point;
+
+        /**
+         * Vector subtraction
+         * @param point -
+         */
+        subtract(point: Point): Point;
+
+        /**
          * Returns the dot product of the point and another point.
          * @param point -
          */
