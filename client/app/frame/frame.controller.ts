@@ -38,7 +38,7 @@ class FrameCtrl {
   components:Array<any> = [];
   currentComponent: Higherframe.Drawing.Component.IComponent;
 
-  collaborators: Array<Object>;
+  collaborators: Array<Object> = [];
 
   // UI variables
   leftSidebarOpen: boolean = false;
@@ -82,7 +82,10 @@ class FrameCtrl {
     this.leftSidebarOpen = localStorageService.get(this.STORAGE_LEFTSIDEBAR_OPEN_KEY);
     this.collaborators = frame.collaborators;
 
-    $scope.$watchCollection('collaborators', function () {
+    $scope.$watchCollection(function () {
+
+      return that.collaborators
+    }, function (c) {
 
   		// Don't include the current user
   		var user = _.findWhere(that.collaborators, { _id: that.Auth.getCurrentUser()._id });
@@ -102,7 +105,10 @@ class FrameCtrl {
   	});
 
     // When the quick add input value is changed
-    $scope.$watch('quickAdd.query', function (query) {
+    $scope.$watch(function () {
+
+      return that.quickAdd.query;
+    }, function (query) {
 
       that.quickAdd.results = $filter('filter')(that.components, query);
       that.quickAdd.index = 0;
