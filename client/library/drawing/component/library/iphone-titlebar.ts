@@ -7,12 +7,11 @@ module Higherframe.Drawing.Component.Library {
 
     // Implement IComponent members
     id = Drawing.Component.Type.IPhoneTitlebar;
-    title = 'iPhone titlebar';
+    static title = 'iPhone titlebar';
     tags = [
       'apple',
       'phone'
     ];
-    model: Data.Component;
     resizable = false;
     thumbnail = '/assets/images/components/iphone-thumbnail@2x.png';
     snapPoints = [
@@ -21,6 +20,8 @@ module Higherframe.Drawing.Component.Library {
       { x: 110, y: 7 },
       { x: -110, y: 7 }
     ];
+
+    model: Data.Component;
 
     constructor(model: Data.IDrawingModel) {
 

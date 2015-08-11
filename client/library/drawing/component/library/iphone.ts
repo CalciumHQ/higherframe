@@ -7,13 +7,12 @@ module Higherframe.Drawing.Component.Library {
 
     // Implement IDefinition members
     id = Drawing.Component.Type.IPhone;
-    title = 'iPhone';
+    static title = 'iPhone';
     tags = [
       'container',
       'apple',
       'phone'
     ];
-    model: Data.Component;
     resizable = false;
     thumbnail = '/assets/images/components/iphone-thumbnail@2x.png';
     snapPoints = [
@@ -27,6 +26,7 @@ module Higherframe.Drawing.Component.Library {
       { x: -110, y: 162 },
     ];
 
+    model: Data.Component;
     parts: any = {};
 
 

@@ -35,7 +35,7 @@ class FrameCtrl {
     zoom: 1
   };
 
-  components:Array<number> = [];
+  components:Array<any> = [];
   currentComponent: Higherframe.Drawing.Component.IComponent;
 
   collaborators: Array<Object>;
@@ -166,8 +166,8 @@ class FrameCtrl {
 
   		angular.forEach(components, function (component) {
 
-  			component.properties.x = component.position.x;
-  			component.properties.y = component.position.y;
+  			component.model.properties.x = component.position.x;
+  			component.model.properties.y = component.position.y;
   		});
 
       that.saveComponents(components);
@@ -195,7 +195,7 @@ class FrameCtrl {
   			that.updateUiWithComponent(component);
 
   			socket.emit('component:select', {
-  				component: { _id: component.remoteId },
+  				component: { _id: component.model._id },
   				user: { _id: Auth.getCurrentUser()._id }
   			});
   		});
@@ -209,7 +209,7 @@ class FrameCtrl {
   			that.updateUiWithComponent();
 
   			socket.emit('component:deselect', {
-  				component: { _id: component.remoteId },
+  				component: { _id: component.model._id },
   				user: { _id: Auth.getCurrentUser()._id }
   			});
   		});
@@ -235,7 +235,7 @@ class FrameCtrl {
 
         that.clipboard.push(new ClipboardItem(
           'component',
-          component.definition.id,
+          component.id,
           angular.copy(component.properties)
         ));
       });
@@ -274,8 +274,14 @@ class FrameCtrl {
     // this.components.push(this.ComponentFactory.definitions.circle);
     // this.components.push(this.ComponentFactory.definitions.triangle);
 		// this.components.push(this.ComponentFactory.definitions.label);
-    // this.components.push(this.ComponentFactory.definitions.iphone);
-    // this.components.push(this.ComponentFactory.definitions.iphoneTitlebar);
+    this.components.push({
+      id: Higherframe.Drawing.Component.Type[Higherframe.Drawing.Component.Type.IPhone],
+      title: Higherframe.Drawing.Component.Library.IPhone.title
+    });
+    this.components.push({
+      id: Higherframe.Drawing.Component.Type[Higherframe.Drawing.Component.Type.IPhoneTitlebar],
+      title: Higherframe.Drawing.Component.Library.IPhoneTitlebar.title
+    });
   };
 
 	private registerSockets() {
@@ -490,17 +496,14 @@ class FrameCtrl {
     // Save components and set remoteId when saved
     angular.forEach(components, function (component: Higherframe.Drawing.Component.IComponent) {
 
-      var serialized = {
-				lastModifiedBy: that.Session.getSessionId(),
-        componentId: component.id,
-        properties: component.model.properties
-      };
+      var model = <Higherframe.Data.Component>component.model;
+      model.lastModifiedBy = that.Session.getSessionId();
 
 			// Update
-			if (component.model._id) {
+			if (model._id) {
 
 				that.$http
-	        .patch('/api/components/' + component.model._id, serialized)
+	        .patch('/api/components/' + model._id, model)
 	        .success(function (data) {
 
 	        });
@@ -510,10 +513,10 @@ class FrameCtrl {
 			else {
 
 				that.$http
-	        .post('/api/frames/' + that.$stateParams.id + '/components', serialized)
+	        .post('/api/frames/' + that.$stateParams.id + '/components', model)
 	        .success(function (data: any) {
 
-						component.model._id = data._id;
+						model._id = data._id;
 	        });
 			}
     });
@@ -674,17 +677,17 @@ class FrameCtrl {
   onActionbarQuickAddComponentClick(definition) {
 
     // Center new component in view
-    var options = {
+    var properties = {
       x: paper.view.bounds.x + (paper.view.bounds.width/2),
       y: paper.view.bounds.y + (paper.view.bounds.height/2),
-      radius: 100
+      index: paper.project.activeLayer.children.length
     };
 
+    // Create the new model
+    var component = new Higherframe.Data.Component(definition.id, properties);
+
     // Create the instances and save to db
-    var instances = this.addComponentsToView({
-      id: definition.id,
-      properties: options
-    }, null);
+    var instances = this.addComponentsToView(component, null);
     this.saveComponents(instances);
 
     // Hide the quick add

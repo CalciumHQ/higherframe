@@ -413,7 +413,7 @@ angular
 						// Find the component with this id
 						var component = _.find(layerDrawing.children, function (child) {
 
-							if (child.remoteId == data.component._id) { return true; }
+							if (child.model._id == data.component._id) { return true; }
 						});
 
 						// Set the color for the user
@@ -426,7 +426,7 @@ angular
 						// Find the component with this id
 						var component = _.find(layerDrawing.children, function (child) {
 
-							if (child.remoteId == data.component._id) { return true; }
+							if (child.model._id == data.component._id) { return true; }
 						});
 
 						// Set the color for the user
@@ -1146,13 +1146,13 @@ angular
 
 							var snapPoints = [];
 
-							if (!this.definition || !this.definition.snapPoints) {
+							if (!this.snapPoints) {
 
 								return [];
 							}
 
 							var that = this;
-							angular.forEach(this.definition.snapPoints, function (snapPoint) {
+							angular.forEach(this.snapPoints, function (snapPoint) {
 
 								snapPoints.push(that.position.add(snapPoint));
 							});
