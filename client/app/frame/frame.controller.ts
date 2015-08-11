@@ -276,7 +276,10 @@ class FrameCtrl {
 
   private registerComponents() {
 
-    // this.components.push(this.ComponentFactory.definitions.rectangle);
+    this.components.push({
+      id: Higherframe.Drawing.Component.Type[Higherframe.Drawing.Component.Type.Rectangle],
+      title: Higherframe.Drawing.Component.Library.Rectangle.title
+    });
     // this.components.push(this.ComponentFactory.definitions.circle);
     // this.components.push(this.ComponentFactory.definitions.triangle);
 		// this.components.push(this.ComponentFactory.definitions.label);
@@ -499,7 +502,7 @@ class FrameCtrl {
       return;
     }
 
-    // Save components and set remoteId when saved
+    // Save components and set _id when saved
     angular.forEach(components, function (component: Higherframe.Drawing.Component.IComponent) {
 
       var model = <Higherframe.Data.Component>component.model;
@@ -530,10 +533,10 @@ class FrameCtrl {
 
 	private deleteComponent(component) {
 
-		if (component.remoteId) {
+		if (component.model._id) {
 
 			this.$http
-        .delete('/api/frames/' + this.$stateParams.id + '/components/' + component.remoteId)
+        .delete('/api/frames/' + this.$stateParams.id + '/components/' + component.model._id)
         .success(function (data) {
 
         });
@@ -612,7 +615,7 @@ class FrameCtrl {
 
 	private removeComponentFromView(component) {
 
-		// Find the component with this remoteId
+		// Find the component with this _id
 		angular.forEach(paper.project.activeLayer.children, function (item: Higherframe.Drawing.Component.IComponent) {
 
 			if (item.model._id == component._id) {
@@ -624,7 +627,7 @@ class FrameCtrl {
 
 	private updateComponentInView(component) {
 
-		// Find the component with this remoteId
+		// Find the component with this _id
 		angular.forEach(paper.project.activeLayer.children, function (item: Higherframe.Drawing.Component.IComponent) {
 
 			if (item.model._id == component._id) {

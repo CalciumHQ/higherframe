@@ -8,6 +8,12 @@ module Higherframe.Data {
     index: number
   }
 
+  export interface IRectangleProperties extends IComponentProperties {
+    width: number,
+    height: number,
+    cornerRadius: number
+  }
+
   export interface IIPhoneProperties extends IComponentProperties {
 
   }
