@@ -15,15 +15,8 @@ module Higherframe.Drawing.Component.Library {
     ];
     resizable = true;
     thumbnail = '/assets/images/components/iphone-thumbnail@2x.png';
-    snapPoints = [
-      { x: -116, y: -232 },		// Bounding box
-      { x: 116, y: -232 },
-      { x: 116, y: 232 },
-      { x: -116, y: 232 }
-    ];
 
     model: Data.Component;
-    parts: any = {};
 
 
     /**
@@ -33,6 +26,11 @@ module Higherframe.Drawing.Component.Library {
     constructor(model: Data.IDrawingModel) {
 
       super(model);
+
+      var properties = <Higherframe.Data.IRectangleProperties>this.model.properties;
+      properties.width = 200;
+      properties.height = 300;
+      properties.cornerRadius = 10;
     }
 
 
@@ -42,13 +40,7 @@ module Higherframe.Drawing.Component.Library {
 
     update() {
 
-      var WIDTH = 232;
-      var HEIGHT = 464;
-
       var properties = <Higherframe.Data.IRectangleProperties>this.model.properties;
-      properties.width = 200;
-      properties.height = 300;
-      properties.cornerRadius = 10;
 
       // Remove the old parts
       this.removeChildren();
@@ -64,10 +56,35 @@ module Higherframe.Drawing.Component.Library {
 
       // Group the parts as a component
       this.addChild(shape);
+    }
 
-      // Define the component parts
-      this.parts = {};
-      this.parts.shape = shape;
+
+    /**
+     * Update model with the state of the view component
+     */
+
+    updateModel() {
+
+      var properties = <Higherframe.Data.IRectangleProperties>this.model.properties;
+      this.model.properties.x = this.position.x - properties.width/2;
+      this.model.properties.y = this.position.y - properties.height/2;
+    }
+
+
+    /**
+     * Calculate the snap points for the component
+     */
+
+    getSnapPoints(): Array<IPoint> {
+
+      var properties = <Higherframe.Data.IRectangleProperties>this.model.properties;
+
+      return [
+        new paper.Point(this.position.x - properties.width/2, this.position.y - properties.height/2),
+        new paper.Point(this.position.x + properties.width/2, this.position.y - properties.height/2),
+        new paper.Point(this.position.x + properties.width/2, this.position.y + properties.height/2),
+        new paper.Point(this.position.x - properties.width/2, this.position.y + properties.height/2)
+      ];
     }
   }
 }

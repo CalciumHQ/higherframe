@@ -16,11 +16,12 @@ module Higherframe.Drawing.Component {
     tags: Array<String>,
     thumbnail: String,
     resizable: Boolean,
-    snapPoints: Array<IPoint>,
     model: Data.IDrawingModel,
 
     // new(options: IOptions)
     update()
+    updateModel();
+    getSnapPoints(): Array<IPoint>
 
     // Provide definitions for paper.Item methods that we need in lieu
     // of a definition file for the interface
@@ -40,7 +41,6 @@ module Higherframe.Drawing.Component {
     tags: Array<String>;
     thumbnail: String;
     resizable: Boolean;
-    snapPoints: Array<IPoint>;
     model: Data.IDrawingModel;
 
     constructor(model: Data.IDrawingModel) {
@@ -60,5 +60,7 @@ module Higherframe.Drawing.Component {
      */
 
     update() {}
+    updateModel() {}
+    getSnapPoints() { return []; }
   }
 };

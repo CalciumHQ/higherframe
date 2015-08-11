@@ -1142,24 +1142,6 @@ angular
 							})(item);
 						};
 
-						paper.Item.prototype.getSnapPoints = function () {
-
-							var snapPoints = [];
-
-							if (!this.snapPoints) {
-
-								return [];
-							}
-
-							var that = this;
-							angular.forEach(this.snapPoints, function (snapPoint) {
-
-								snapPoints.push(that.position.add(snapPoint));
-							});
-
-							return snapPoints;
-						};
-
 						_paperInitialized = true;
 					};
 

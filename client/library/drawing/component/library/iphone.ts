@@ -15,16 +15,6 @@ module Higherframe.Drawing.Component.Library {
     ];
     resizable = false;
     thumbnail = '/assets/images/components/iphone-thumbnail@2x.png';
-    snapPoints = [
-      { x: -116, y: -232 },		// Bounding box
-      { x: 116, y: -232 },
-      { x: 116, y: 232 },
-      { x: -116, y: 232 },
-      { x: -110, y: -184 },		// Screen corners
-      { x: 110, y: -184 },
-      { x: 110, y: 162 },
-      { x: -110, y: 162 },
-    ];
 
     model: Data.Component;
     parts: any = {};
@@ -101,6 +91,40 @@ module Higherframe.Drawing.Component.Library {
       this.parts.button = button;
       this.parts.camera = camera;
       this.parts.speaker = speaker;
+    }
+
+    /**
+     * Update model with the state of the view component
+     */
+
+    updateModel() {
+
+      this.model.properties.x = this.position.x;
+      this.model.properties.y = this.position.y;
+    }
+
+
+    /**
+     * Calculate the snap points for the component
+     */
+
+    getSnapPoints(): Array<IPoint> {
+
+      var snapPoints = [];
+
+      // Screen corners
+      snapPoints.push(this.position.add(new paper.Point({ x: -116, y: -232 })));
+      snapPoints.push(this.position.add(new paper.Point({ x: 116, y: -232 })));
+      snapPoints.push(this.position.add(new paper.Point({ x: 116, y: 232 })));
+      snapPoints.push(this.position.add(new paper.Point({ x: -116, y: 232 })));
+
+      // Inner screen corners
+      snapPoints.push(this.position.add(new paper.Point({ x: -110, y: -184 })));
+      snapPoints.push(this.position.add(new paper.Point({ x: 110, y: -184 })));
+      snapPoints.push(this.position.add(new paper.Point({ x: 110, y: 162 })));
+      snapPoints.push(this.position.add(new paper.Point({ x: -110, y: 162 })));
+
+      return snapPoints;
     }
   }
 }

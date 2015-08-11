@@ -172,8 +172,7 @@ class FrameCtrl {
 
   		angular.forEach(components, function (component) {
 
-  			component.model.properties.x = component.position.x;
-  			component.model.properties.y = component.position.y;
+  			component.updateModel();
   		});
 
       that.saveComponents(components);

@@ -14,12 +14,6 @@ module Higherframe.Drawing.Component.Library {
     ];
     resizable = false;
     thumbnail = '/assets/images/components/iphone-thumbnail@2x.png';
-    snapPoints = [
-      { x: -110, y: -7 },
-      { x: 110, y: -7 },
-      { x: 110, y: 7 },
-      { x: -110, y: 7 }
-    ];
 
     model: Data.Component;
 
@@ -131,6 +125,32 @@ module Higherframe.Drawing.Component.Library {
       this.addChild(mobile);
       this.addChild(indicators);
       this.addChild(time);
+    }
+
+    /**
+     * Update model with the state of the view component
+     */
+
+    updateModel() {
+
+      this.model.properties.x = this.position.x;
+      this.model.properties.y = this.position.y;
+    }
+
+
+    /**
+     * Calculate the snap points for the component
+     */
+
+    getSnapPoints(): Array<IPoint> {
+
+      var snapPoints = [];
+
+      snapPoints.push(this.position.add(new paper.Point({ x: -110, y: -7 })));
+      snapPoints.push(this.position.add(new paper.Point({ x: 110, y: -7 })));
+      snapPoints.push(this.position.add(new paper.Point({ x: 110, y: 7 })));
+      snapPoints.push(this.position.add(new paper.Point({ x: -110, y: 7 })));
+      return snapPoints;
     }
   }
 }
