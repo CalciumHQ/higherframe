@@ -845,6 +845,7 @@ angular
 
 						var snaps = [];
 						var snapAdjustment = new paper.Point();
+						var guideStrokeWidth = 1/paper.view.zoom;
 
 						item.smartGuides = [];
 
@@ -937,7 +938,7 @@ angular
 
 							var guide = new paper.Path.Line(from, to);
 							guide.strokeColor = 'magenta';
-							guide.strokeWidth = 1;
+							guide.strokeWidth = guideStrokeWidth;
 							item.smartGuides.push(guide);
 
 							layerDrawing.activate();
@@ -970,7 +971,8 @@ angular
 							var gridMajorSize = 100,
 								gridMinorSize = 20,
 								gridMajorColor = 'rgba(0,0,0,0.07)',
-								gridMinorColor = 'rgba(0,0,0,0.03)';
+								gridMinorColor = 'rgba(0,0,0,0.03)',
+								gridStrokeWidth = 1/paper.view.zoom;
 
 							layerGrid.activate();
 
@@ -1006,13 +1008,14 @@ angular
 							while(gridLines.x.length < countX) {
 
 								var line = new paper.Path.Line(paper.Point(0, 0), paper.Point(0, 0));
+								line.strokeWidth = gridStrokeWidth;
 								gridLines.x.push(line);
 							}
 
 							while(gridLines.y.length < countY) {
 
 								var line = new paper.Path.Line(paper.Point(0, 0), paper.Point(0, 0));
-								line.strokeWidth = 1;
+								line.strokeWidth = gridStrokeWidth;
 								gridLines.y.push(line);
 							}
 
@@ -1025,6 +1028,7 @@ angular
 								var to = new paper.Point(view.bounds.right, startY + y);
 
 								var line = gridLines.y[i];
+								line.strokeWidth = gridStrokeWidth;
 								line.segments[0].point = from;
 								line.segments[1].point = to;
 
@@ -1045,6 +1049,7 @@ angular
 								var to = new paper.Point(startX + x, view.bounds.bottom);
 
 								var line = gridLines.x[i];
+								line.strokeWidth = gridStrokeWidth;
 								line.segments[0].point = from;
 								line.segments[1].point = to;
 
