@@ -626,6 +626,15 @@ angular
 					 * View methods
 					 */
 
+					function updateCanvas() {
+
+						var w = element.width();
+						var h = element.height();
+
+						paper.view.viewSize = new paper.Size(w, h);
+						updateGrid();
+					};
+
 					function changeCenter(deltaX, deltaY) {
 
 						paper.view.center = paper.view.center.add(new paper.Point(
@@ -1185,7 +1194,24 @@ angular
 					initPaper();
 					initProject();
 					initLayers();
+					updateCanvas();
 					updateGrid();
+
+					/**
+					 * Keep canvas size updated.
+					 *
+					 * Not good using a loop for this. Using window.resize would be better
+					 * but this doesn't account for changes in layout without the window
+					 * resizing.
+					 *
+					 * TODO: Find a better way.
+					 */
+
+					(function updateLoop() {
+
+						updateCanvas();
+						requestAnimationFrame(updateLoop);
+					})();
 				}
 			};
 		}]);
