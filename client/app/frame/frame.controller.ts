@@ -706,7 +706,23 @@ class FrameCtrl {
     this.toggleQuickAdd();
   };
 
-  onComponentPropertyChange(key, value, component) {
+  onComponentPropertyChange(key, value, component, property) {
+
+    // Parse into the correct data type
+    switch (property.type) {
+
+      case Number:
+        value = Number(value);
+        break;
+    }
+
+    component.model.properties[property.model] = value;
+
+    // Validation
+
+
+    // Set default
+
 
     // Inform the view
     this.$scope.$broadcast('component:propertyChange', {

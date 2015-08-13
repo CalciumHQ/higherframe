@@ -30,7 +30,8 @@ angular
 
 					var colors = {
 						normal: '#888',
-						hover: '#7ae'
+						hover: '#7ae',
+						selected: '#7ae'
 					};
 
 					/**
@@ -89,7 +90,12 @@ angular
 						// Return the last hovered item to default state
 						if (hoveredItem) {
 
-							if (hoveredItem.collaborator) {
+							if (selectedItems.indexOf(hoveredItem) !== -1) {
+
+								hoveredItem.setComponentColor(colors.selected);
+							}
+
+							else if (hoveredItem.collaborator) {
 
 								hoveredItem.setComponentColor(hoveredItem.collaborator.color);
 							}
@@ -162,7 +168,11 @@ angular
 
 								// Position the item and its bounding box
 								item.position = position;
-								item.boundingBox.position = position;
+
+								if (item.boundingBox) {
+
+										item.boundingBox.position = position;
+								}
 
 								// Find a snap point
 								var snapAdjustment = updateSmartGuides(item);
@@ -174,7 +184,11 @@ angular
 
 									// Reposition the item and its bounding box
 									item.position = position;
-									item.boundingBox.position = position;
+
+									if (item.boundingBox) {
+
+											item.boundingBox.position = position;
+									}
 								}
 							});
 						}
@@ -405,7 +419,7 @@ angular
 
 					$scope.$on('component:propertyChange', function (e, data) {
 
-						data.component.definition.update(data.component);
+						data.component.update();
 					});
 
 					$scope.$on('component:collaboratorSelect', function (e, data) {
@@ -441,6 +455,7 @@ angular
 
 					var onItemUpdated = function (item) {
 
+						item.update();
 						updateBoundingBox(item);
 					};
 
@@ -451,8 +466,25 @@ angular
 
 					function clearSelection() {
 
-						$scope.$emit('componentsDeselected', selectedItems);
+						angular.forEach(selectedItems, function (item) {
 
+							if (item == hoveredItem) {
+
+								item.setComponentColor(colors.hover);
+							}
+
+							else if (item.collaborator) {
+
+								hoveredItem.setComponentColor(item.collaborator.color);
+							}
+
+							else {
+
+								hoveredItem.setComponentColor(colors.normal);
+							}
+						});
+
+						$scope.$emit('componentsDeselected', selectedItems);
 						selectedItems = [];
 
 						angular.forEach(layerDrawing.children, function (item) {
@@ -472,8 +504,10 @@ angular
 
 							if (selectedItems.indexOf(item) === -1) {
 
+								item.setComponentColor(colors.selected);
 								selectedItems.push(item);
 								onItemUpdated(item);
+								paper.view.draw();
 							}
 						});
 
@@ -750,6 +784,11 @@ angular
 					 */
 					var updateBoundingBox = function(item) {
 
+						if (!item.showBounds) {
+
+							return;
+						}
+
 						var selected = (selectedItems.indexOf(item) !== -1);
 
 						if (selected && !item.boundingBox) {
@@ -775,19 +814,21 @@ angular
 
 							layerSelections.activate();
 
+							var lineWidth = 1/paper.view.zoom;
 							var bb = new paper.Path.Rectangle(item.bounds);
 							bb.strokeColor = colors.hover;
-							bb.strokeWidth = 1;
+							bb.strokeWidth = lineWidth;
 
 							var drawHandle = function (point) {
 
+								var handleSize = 3/paper.view.zoom;
 								var handle = new paper.Path.Rectangle(
-									new paper.Point(point.x - 3, point.y - 3),
-									new paper.Point(point.x + 3, point.y + 3)
+									new paper.Point(point.x - handleSize, point.y - handleSize),
+									new paper.Point(point.x + handleSize, point.y + handleSize)
 								);
 
 								handle.strokeColor = colors.hover;
-								handle.strokeWidth = 1;
+								handle.strokeWidth = lineWidth;
 								handle.fillColor = 'white';
 
 								return handle;

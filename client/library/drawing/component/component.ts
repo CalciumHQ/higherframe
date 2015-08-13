@@ -14,8 +14,10 @@ module Higherframe.Drawing.Component {
     id: Component.Type,
     title: String,
     tags: Array<String>,
+    properties: Array<Object>,
     thumbnail: String,
     resizable: Boolean,
+    showBounds: Boolean,
     model: Data.IDrawingModel,
 
     // new(options: IOptions)
@@ -39,8 +41,10 @@ module Higherframe.Drawing.Component {
     id: Component.Type;
     title: String;
     tags: Array<String>;
+    properties: Array<Object>;
     thumbnail: String;
     resizable: Boolean;
+    showBounds: Boolean;
     model: Data.IDrawingModel;
 
     constructor(model: Data.IDrawingModel) {

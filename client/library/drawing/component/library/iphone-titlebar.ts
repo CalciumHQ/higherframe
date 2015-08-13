@@ -12,7 +12,15 @@ module Higherframe.Drawing.Component.Library {
       'apple',
       'phone'
     ];
+    properties = [
+      {
+        label: 'Time',
+        model: 'time',
+        type: String
+      }
+    ];
     resizable = false;
+    showBounds = true;
     thumbnail = '/assets/images/components/iphone-thumbnail@2x.png';
 
     model: Data.Component;

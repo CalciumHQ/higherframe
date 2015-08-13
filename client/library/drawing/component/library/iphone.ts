@@ -13,7 +13,9 @@ module Higherframe.Drawing.Component.Library {
       'apple',
       'phone'
     ];
+    properties = [];
     resizable = false;
+    showBounds = true;
     thumbnail = '/assets/images/components/iphone-thumbnail@2x.png';
 
     model: Data.Component;

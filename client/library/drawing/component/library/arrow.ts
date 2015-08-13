@@ -13,7 +13,9 @@ module Higherframe.Drawing.Component.Library {
       'line',
       'flowchart'
     ];
+    properties = [];
     resizable = true;
+    showBounds = false;
     thumbnail = '/assets/images/components/iphone-thumbnail@2x.png';
     snapPoints = [
       { x: -116, y: -232 },		// Bounding box
@@ -21,7 +23,6 @@ module Higherframe.Drawing.Component.Library {
     ];
 
     model: Data.Component;
-    parts: any = {};
 
 
     /**
@@ -70,12 +71,6 @@ module Higherframe.Drawing.Component.Library {
       this.addChild(line);
       this.addChild(startHead);
       this.addChild(endHead);
-
-      // Define the component parts
-      this.parts = {};
-      this.parts.line = line;
-      this.parts.startHead = startHead;
-      this.parts.endHead = endHead;
     }
 
     /**

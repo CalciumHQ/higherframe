@@ -11,10 +11,11 @@ div.fullscreen-wrapper
 			#componentProperties.sidebar-panel
 				span.title Properties
 				span.placeholder(ng-show="!FrameCtrl.currentComponent") No component selected
-				ul.properties(ng-show="FrameCtrl.currentComponent")
-					li.control(ng-repeat="(name, property) in FrameCtrl.currentComponent.definition.properties", ng-if="property.visible")
+				span.placeholder(ng-show="FrameCtrl.currentComponent && !FrameCtrl.currentComponent.properties.length") No editable properties
+				ul.properties(ng-show="FrameCtrl.currentComponent && FrameCtrl.currentComponent.properties.length")
+					li.control(ng-repeat="(name, property) in FrameCtrl.currentComponent.properties")
 						span.label {{ property.label }}
-						input(type="text", ng-model="FrameCtrl.currentComponent.properties[name]", ng-change="FrameCtrl.onComponentPropertyChange(name, FrameCtrl.currentComponent.properties[name], FrameCtrl.currentComponent, property)")
+						input(type="text", ng-model="FrameCtrl.currentComponent.model.properties[property.model]", ng-change="FrameCtrl.onComponentPropertyChange(property.model, FrameCtrl.currentComponent.model.properties[property.model], FrameCtrl.currentComponent, property)")
 						
 		// Quick add
 		#quick-add(ng-show="FrameCtrl.quickAdd.open")

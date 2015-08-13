@@ -13,7 +13,25 @@ module Higherframe.Drawing.Component.Library {
       'shape',
       'flowchart'
     ];
+    properties = [
+      {
+        label: 'Width',
+        model: 'width',
+        type: Number
+      },
+      {
+        label: 'Height',
+        model: 'height',
+        type: Number
+      },
+      {
+        label: 'Corner radius',
+        model: 'cornerRadius',
+        type: Number
+      }
+    ];
     resizable = true;
+    showBounds = false;
     thumbnail = '/assets/images/components/iphone-thumbnail@2x.png';
 
     model: Data.Component;
@@ -28,9 +46,9 @@ module Higherframe.Drawing.Component.Library {
       super(model);
 
       var properties = <Higherframe.Data.IRectangleProperties>this.model.properties;
-      properties.width = 200;
-      properties.height = 300;
-      properties.cornerRadius = 10;
+      properties.width = properties.width || 160;
+      properties.height = properties.height || 120;
+      properties.cornerRadius = properties.cornerRadius || 0;
     }
 
 
