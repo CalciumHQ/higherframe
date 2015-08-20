@@ -174,6 +174,8 @@ angular
 										item.boundingBox.position = position;
 								}
 
+								updateDragHandles(item);
+
 								// Find a snap point
 								var snapAdjustment = updateSmartGuides(item);
 
@@ -189,6 +191,8 @@ angular
 
 											item.boundingBox.position = position;
 									}
+
+									updateDragHandles(item);
 								}
 							});
 						}
@@ -420,6 +424,8 @@ angular
 					$scope.$on('component:propertyChange', function (e, data) {
 
 						data.component.update();
+						updateBoundingBox(data.component);
+						updateDragHandles(data.component);
 					});
 
 					$scope.$on('component:collaboratorSelect', function (e, data) {
@@ -457,6 +463,7 @@ angular
 
 						item.update();
 						updateBoundingBox(item);
+						updateDragHandles(item);
 					};
 
 
@@ -551,6 +558,7 @@ angular
 
 							item.position = position;
 							updateBoundingBox(item);
+							updateDragHandles(item);
 						});
 
 						$scope.$emit('componentsMoved', items);
@@ -568,6 +576,7 @@ angular
 							var delta = new paper.Point(x, y);
 							item.position = item.position.add(delta);
 							updateBoundingBox(item);
+							updateDragHandles(item);
 						});
 
 						$scope.$emit('componentsMoved', items);
@@ -866,6 +875,61 @@ angular
 							item.boundingBox.remove();
 							item.boundingBox = null;
 						}
+					};
+
+
+					/**
+					 * Drag handles
+					 *
+					 * Updates an item's drag handles according to
+					 * whether it is selected. The drag handles will
+					 * be added/removed/updated as appropriate.
+					 */
+					var updateDragHandles = function(item) {
+
+						var selected = (selectedItems.indexOf(item) !== -1);
+						removeDragHandles(item);
+
+						if (selected) {
+
+							addDragHandles(item);
+						}
+					};
+
+					var addDragHandles = function (item) {
+
+						layerSelections.activate();
+
+						var drawHandle = function (point) {
+
+							var handleSize = 3/paper.view.zoom;
+							var handle = new paper.Path.Rectangle(
+								new paper.Point(point.x - handleSize, point.y - handleSize),
+								new paper.Point(point.x + handleSize, point.y + handleSize)
+							);
+
+							handle.fillColor = colors.selected;
+
+							return handle;
+						};
+
+						angular.forEach(item.getDragHandles(), function (dh) {
+
+							var handle = drawHandle(dh.position);
+							item.dragHandles.push(handle);
+						});
+
+						layerDrawing.activate();
+					};
+
+					var removeDragHandles = function (item) {
+
+						angular.forEach(item.dragHandles, function (dh) {
+
+							dh.remove();
+						});
+
+						item.dragHandles = [];
 					};
 
 

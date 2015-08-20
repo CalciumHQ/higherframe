@@ -11,6 +11,26 @@ $navbarPadding: 15px;
 	&.border-light {
 		border-bottom: 1px solid lighten(#dce1e0, 8);
 	}
+
+	&.white {
+		background: white;
+	}
+
+	&.blue {
+		background: $blue;
+
+		&.border {
+			border-bottom: 1px solid #dce1e0;
+		}
+
+		&.border-light {
+			border-bottom: 1px solid $blue1;
+		}
+	}
+
+	&.transparent {
+		background: none;
+	}
 }
 
 #navbar {
@@ -21,12 +41,20 @@ $navbarPadding: 15px;
 	z-index: 100;
 	padding: 0 $navbarPadding;
 
-	&.white {
-		background: white;
+	&.blue {
+		#logo {
+			path {
+	      fill: white;
+	    }
+		}
 	}
 
 	&.transparent {
-
+		#logo {
+			path {
+	      fill: $blue;
+	    }
+		}
 	}
 
 	&.light {
@@ -81,10 +109,6 @@ $navbarPadding: 15px;
     height: $logoHeight;
 		margin-bottom: -6px;
 		margin-right: 30px;
-
-    path {
-      fill: #1cbcbc;
-    }
   }
 
 	#primaryNavigation,
@@ -214,9 +238,16 @@ $navbarPadding: 15px;
 	.action {
 		padding: 8px 0 6px;
 		cursor: pointer;
+		text-decoration: none;
 
 		& + .action {
 			margin-left: 30px;
+		}
+	}
+
+	&.light {
+		.action {
+			color: $blue2;
 		}
 	}
 }

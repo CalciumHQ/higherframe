@@ -1,0 +1,62 @@
+
+/*
+ * Colors
+ */
+
+$blue: #57aacc;
+$blue1: #72bad8;
+$blue2: #82cdec;
+$blue3: #d5f0fb;
+$blue5: #ecf5f9;
+$blue6: #a5ccdd;
+
+$teal-1: #85a7b6;
+$teal: #8aa0a8;
+
+$yellow: #f6e867;
+
+$grey2: #dcdcdc;
+
+$uiContainerBackground: $blue5;
+$uiContainerBackgroundHighlight: $blue;
+$uiContainerBackgroundDull: $grey2;
+$uiContainerTextColor: $teal-1;
+$uiContainerTextColorHighlight: $blue3;
+$uiContainerTextColorDull: $teal;
+
+$uiShadowColor: rgba(0, 0, 0, 0.28);
+$uiShadowOffset: 0.04rem;
+$uiShadow: $uiShadowOffset $uiShadowOffset 0 $uiShadowColor;
+
+$uiFontSizeSmall: 9px;
+$uiFontWeightSmall: 500;
+
+$uiControlHeightSmall: 21px;
+
+// legacy
+$chromeBackgroundLight: #f7f8f9;
+$chromeBackgroundMedium: #edeff1;
+$chromeBorderLight: #eff2f4;
+$chromeBorderMedium: #dfe2e6;
+$chromeBorderDark: #c6ccd2;
+$chromeTextMedium: #d1d5d9;
+
+
+/*
+ * Dimensions
+ */
+
+$chromePaddingSmall: 7px;
+
+$chromeMarginSmall: 8px;
+
+$chromeBorderRadiusMedium: 5px;
+
+$uiContainerPadding: 10px;
+
+
+/*
+ * Animations
+ */
+
+$easeInOutQuint: cubic-bezier(0.860, 0.000, 0.070, 1.000);

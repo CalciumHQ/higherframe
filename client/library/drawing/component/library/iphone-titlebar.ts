@@ -160,5 +160,15 @@ module Higherframe.Drawing.Component.Library {
       snapPoints.push(this.position.add(new paper.Point({ x: -110, y: 7 })));
       return snapPoints;
     }
+
+
+    /**
+     * Calculate the drag points for the component
+     */
+
+    getDragPoints(): Array<IPoint> {
+
+      return [];
+    }
   }
 }

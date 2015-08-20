@@ -25,7 +25,7 @@ module Higherframe.Drawing.Component.Library {
         type: Number
       },
       {
-        label: 'Corner radius',
+        label: 'Radius',
         model: 'cornerRadius',
         type: Number
       }
@@ -102,6 +102,22 @@ module Higherframe.Drawing.Component.Library {
         new paper.Point(this.position.x + properties.width/2, this.position.y - properties.height/2),
         new paper.Point(this.position.x + properties.width/2, this.position.y + properties.height/2),
         new paper.Point(this.position.x - properties.width/2, this.position.y + properties.height/2)
+      ];
+    }
+
+
+    /**
+     * Calculate the drag handles for the component
+     */
+
+    getDragHandles(): Array<IDragHandle> {
+
+      var properties = <Higherframe.Data.IRectangleProperties>this.model.properties;
+
+      return [
+        {
+          position: new paper.Point(this.position.x - properties.width/2 + properties.cornerRadius, this.position.y - properties.height/2)
+        }
       ];
     }
   }

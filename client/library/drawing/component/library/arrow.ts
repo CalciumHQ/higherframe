@@ -82,5 +82,15 @@ module Higherframe.Drawing.Component.Library {
       this.model.properties.x = this.position.x;
       this.model.properties.y = this.position.y;
     }
+
+
+    /**
+     * Calculate the drag points for the component
+     */
+
+    getDragPoints(): Array<IPoint> {
+
+      return [];
+    }
   }
 }

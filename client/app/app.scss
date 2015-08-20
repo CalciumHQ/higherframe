@@ -5,23 +5,27 @@
 $fa-font-path: "/bower_components/font-awesome/fonts";
 @import 'font-awesome/scss/font-awesome';
 
-$blue: #1cbcbc;
-$yellow: #f6e867;
+@import 'theme/_variables.scss';
+@import 'theme/_typography.scss';
+@import 'theme/_animations.scss';
 
 // Component styles are injected through grunt
 // injector
 @import '_grids.scss';
 @import '_helpers.scss';
-@import '_variables.scss';
 @import 'account/login/login.scss';
 @import 'admin/admin.scss';
 @import 'frame/frame.scss';
 @import 'frames/frames.scss';
 @import 'main/main.scss';
+@import 'theme/_animations.scss';
+@import 'theme/_typography.scss';
+@import 'theme/_variables.scss';
 @import 'form/button.scss';
 @import 'layout/layout.scss';
-@import 'material/animations.scss';
-@import 'material/card.scss';
 @import 'navbar/navbar.scss';
-@import 'typography/typography.scss';
+@import 'ui/forms/control.scss';
+@import 'ui/forms/input.scss';
+@import 'ui/forms/label.scss';
+@import 'ui/tray/tray.scss';
 // endinjector

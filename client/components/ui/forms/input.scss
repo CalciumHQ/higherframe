@@ -1,0 +1,22 @@
+
+.ui-input {
+  background: white;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.ui-control.small {
+  .ui-label {
+    line-height: $uiControlHeightSmall;
+  }
+
+  .ui-input {
+    padding: 5px 4px;
+    border: none;
+    font-size: $uiFontSizeSmall;
+    font-weight: $uiFontWeightSmall;
+    color: $uiContainerTextColor;
+  }
+}

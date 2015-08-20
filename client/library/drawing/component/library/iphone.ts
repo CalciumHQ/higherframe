@@ -128,5 +128,15 @@ module Higherframe.Drawing.Component.Library {
 
       return snapPoints;
     }
+
+
+    /**
+     * Calculate the drag points for the component
+     */
+
+    getDragPoints(): Array<IPoint> {
+
+      return [];
+    }
   }
 }

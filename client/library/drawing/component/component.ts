@@ -2,6 +2,10 @@
 
 module Higherframe.Drawing.Component {
 
+  export interface IDragHandle {
+    position: IPoint
+  }
+
   /**
    * Defines the interface for a component which can be drawn on a
    * paperjs canvas
@@ -18,12 +22,14 @@ module Higherframe.Drawing.Component {
     thumbnail: String,
     resizable: Boolean,
     showBounds: Boolean,
+    dragHandles: Array<IDragHandle>,
     model: Data.IDrawingModel,
 
     // new(options: IOptions)
     update()
     updateModel();
-    getSnapPoints(): Array<IPoint>
+    getSnapPoints(): Array<IPoint>;
+    getDragHandles(): Array<{ position: IPoint }>;
 
     // Provide definitions for paper.Item methods that we need in lieu
     // of a definition file for the interface
@@ -45,6 +51,7 @@ module Higherframe.Drawing.Component {
     thumbnail: String;
     resizable: Boolean;
     showBounds: Boolean;
+    dragHandles: Array<IDragHandle> = [];
     model: Data.IDrawingModel;
 
     constructor(model: Data.IDrawingModel) {
@@ -66,5 +73,6 @@ module Higherframe.Drawing.Component {
     update() {}
     updateModel() {}
     getSnapPoints() { return []; }
+    getDragHandles() { return []; }
   }
 };
