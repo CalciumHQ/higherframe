@@ -25,6 +25,7 @@
         "./app/frame/frame.controller.ts",
         "./app/frame/trays/properties.ts",
         "./app/frame/trays/toolbox.ts",
+        "./app/frame/trays/view.ts",
         "./library/data/component-properties.ts",
         "./library/data/component.ts",
         "./library/data/document.ts",

@@ -5,8 +5,8 @@ module Higherframe.UI {
   /**
    * The attributes which may be defined on a TrayRegionDirective.
    */
-   
-  interface ITrayRegionAttributes extends ng.IAttributes {
+
+  export interface ITrayRegionAttributes extends ng.IAttributes {
     position: string
   }
 
@@ -15,7 +15,7 @@ module Higherframe.UI {
    * The scope on a TrayRegionDirective.
    */
 
-  interface ITrayRegionScope extends ng.IScope {
+  export interface ITrayRegionScope extends ng.IScope {
     position: string
   }
 

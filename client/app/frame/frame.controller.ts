@@ -86,15 +86,26 @@ class FrameCtrl {
     // Create and register trays
     var propertiesTray = new Higherframe.Controllers.Frame.PropertiesTray();
     var toolboxTray = new Higherframe.Controllers.Frame.ToolboxTray();
+    var viewTray = new Higherframe.Controllers.Frame.ViewTray();
     TrayManager.registerTray('properties', propertiesTray);
     TrayManager.registerTray('toolbox', toolboxTray);
+    TrayManager.registerTray('view', viewTray);
     TrayManager.moveTray(propertiesTray, 'left');
     TrayManager.moveTray(toolboxTray, 'left');
+    TrayManager.moveTray(viewTray, 'left');
 
-    $scope.$watchCollection(function () {
+    $scope.$watchCollection(() => { return this.selection; }, (selection) => {
 
-      return that.collaborators
-    }, function (c) {
+      // Update the UI to match selection
+      this.updateUiWithComponents(selection);
+    });
+
+    $scope.$watch(() => { return this.wireframe.zoom; }, (zoom) => {
+
+      $scope.$broadcast('controller:view:zoom', zoom);
+    });
+
+    $scope.$watchCollection(() => { return this.collaborators }, (c) => {
 
   		// Don't include the current user
   		var user = _.findWhere(that.collaborators, { _id: that.Auth.getCurrentUser()._id });
@@ -114,10 +125,7 @@ class FrameCtrl {
   	});
 
     // When the quick add input value is changed
-    $scope.$watch(function () {
-
-      return that.quickAdd.query;
-    }, function (query) {
+    $scope.$watch(() => { return this.quickAdd.query; }, (query) => {
 
       that.quickAdd.results = $filter('filter')(that.components, query);
       that.quickAdd.index = 0;
@@ -204,9 +212,6 @@ class FrameCtrl {
 
         return components.indexOf(c) < 0;
       });
-
-      // Update the UI to match selection
-      this.updateUiWithComponents(this.selection);
     });
 
   	$scope.$on('componentsSelected', (e, components) => {
@@ -221,9 +226,6 @@ class FrameCtrl {
 
       // Update selection
       this.selection = this.selection.concat(components);
-
-      // Update the UI to match selection
-      this.updateUiWithComponents(this.selection);
     });
 
   	$scope.$on('componentsDeselected', (e, components) => {
@@ -241,9 +243,6 @@ class FrameCtrl {
 
         return components.indexOf(c) < 0;
       });
-
-      // Update the UI to match selection
-      this.updateUiWithComponents(this.selection);
     });
 
     $scope.$on('component:copied', function (e, components) {
@@ -405,19 +404,29 @@ class FrameCtrl {
         switch (event.event.keyCode) {
 
           case 187:   // equals (zoom in)
-            var zoomIndex = that.ZOOM_LEVELS.indexOf(that.wireframe.zoom);
-            that.wireframe.zoom = that.ZOOM_LEVELS[zoomIndex < (that.ZOOM_LEVELS.length - 1) ? zoomIndex + 1 : zoomIndex];
 
-            event.event.preventDefault();
-            that.$scope.$broadcast('view:zoom', that.wireframe.zoom);
+            that.$scope.$apply(function () {
+
+              var zoomIndex = that.ZOOM_LEVELS.indexOf(that.wireframe.zoom);
+              that.wireframe.zoom = that.ZOOM_LEVELS[zoomIndex < (that.ZOOM_LEVELS.length - 1) ? zoomIndex + 1 : zoomIndex];
+
+              event.event.preventDefault();
+              that.$scope.$broadcast('view:zoom', that.wireframe.zoom);
+            });
+
             break;
 
           case 189:   // dash (zoom out)
-            var zoomIndex = that.ZOOM_LEVELS.indexOf(that.wireframe.zoom);
-            that.wireframe.zoom = that.ZOOM_LEVELS[zoomIndex > 0 ? zoomIndex - 1 : zoomIndex];
 
-            event.event.preventDefault();
-            that.$scope.$broadcast('view:zoom', that.wireframe.zoom);
+            that.$scope.$apply(function () {
+
+              var zoomIndex = that.ZOOM_LEVELS.indexOf(that.wireframe.zoom);
+              that.wireframe.zoom = that.ZOOM_LEVELS[zoomIndex > 0 ? zoomIndex - 1 : zoomIndex];
+
+              event.event.preventDefault();
+              that.$scope.$broadcast('view:zoom', that.wireframe.zoom);
+            });
+
             break;
         }
       }
