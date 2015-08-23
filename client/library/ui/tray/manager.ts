@@ -14,12 +14,12 @@ module Higherframe.UI {
       this.queue = {};
     }
 
-    registerRegion(position: string, region: TrayRegion) {
+    registerRegion(region: TrayRegion) {
 
-      this.regions[position] = region;
+      this.regions[region.position] = region;
 
-      region.trays = region.trays.concat(this.getQueue(position));
-      this.purgeQueue(position);
+      region.trays = region.trays.concat(this.getQueue(region.position));
+      this.purgeQueue(region.position);
     }
 
     deregisterRegion(position: string) {

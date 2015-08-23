@@ -17,6 +17,8 @@ module Higherframe.Drawing.Component {
 
     id: Component.Type,
     title: String,
+    preview?: String,
+    category?: String,
     tags: Array<String>,
     properties: Array<Object>,
     thumbnail: String,

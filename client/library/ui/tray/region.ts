@@ -27,25 +27,40 @@ module Higherframe.UI {
   export class TrayRegion {
 
     // Member variables
+    position: string;
     tabIndex: number = 0;
     trays: Array<ITray> = [];
 
-    constructor(private $scope: ITrayRegionScope, private TrayManager: TrayManager) {
+    constructor(
+      private $scope: ITrayRegionScope,
+      private TrayManager: TrayManager,
+      private localStorageService
+    ) {
 
-      TrayManager.registerRegion($scope.position, this);
+      this.position = $scope.position;
+      TrayManager.registerRegion(this);
+
+      this.tabIndex = this.localStorageService.get(`ui.tray.${this.position}`) || 0;
     }
 
     onTabClick($index: number) {
 
-      if (this.tabIndex == $index) {
+      this.setActiveTray($index);
+    }
+
+    setActiveTray(index: number) {
+
+      if (this.tabIndex == index) {
 
         this.tabIndex = -1;
       }
 
       else {
 
-        this.tabIndex = $index;
+        this.tabIndex = index;
       }
+
+      this.localStorageService.set(`ui.tray.${this.position}`, this.tabIndex);
     }
   }
 

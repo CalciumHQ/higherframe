@@ -1,12 +1,11 @@
-.ui-content
-  .ui-header Mobile
-  .ui-pane
-    span.ui-tray-message.caption No components available
+#toolbox-tray-components.ui-content
+  div(ng-repeat="category in TrayController.categories")
+    .ui-header {{ category }}
+    .ui-pane
+      .ui-swatch
+        div.ui-swatch-item.toolbox-tray-component(ng-repeat="component in TrayController.components | filter:TrayController.categoryComparitor(category)", ng-click="TrayController.onComponentClick(component)")
+          svg-replace.ui-swatch-image(ng-src="{{component.preview}}")
 
-  .ui-header Desktop
-  .ui-pane
-    span.ui-tray-message.caption No components available
-    
-  .ui-header Basic shapes
-  .ui-pane
-    span.ui-tray-message.caption No components available
+.ui-footer
+  div.caption.semibold Component info
+  div.caption Select a component for more information. Double-click to add it to your wireframe.

@@ -8,6 +8,8 @@ module Higherframe.Drawing.Component.Library {
     // Implement IDefinition members
     id = Drawing.Component.Type.Rectangle;
     static title = 'Rectangle';
+    static preview = '/assets/images/components/rectangle.svg';
+    static category = 'Basic shapes';
     tags = [
       'basic',
       'shape',
@@ -35,7 +37,6 @@ module Higherframe.Drawing.Component.Library {
     ];
     resizable = true;
     showBounds = false;
-    thumbnail = '/assets/images/components/iphone-thumbnail@2x.png';
 
     model: Data.Component;
 

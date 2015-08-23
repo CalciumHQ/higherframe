@@ -8,6 +8,8 @@ module Higherframe.Drawing.Component.Library {
     // Implement IComponent members
     id = Drawing.Component.Type.IPhoneTitlebar;
     static title = 'iPhone titlebar';
+    static preview = '/assets/images/components/iphone-titlebar.svg';
+    static category = 'Mobile';
     tags = [
       'apple',
       'phone'
@@ -22,7 +24,7 @@ module Higherframe.Drawing.Component.Library {
     ];
     resizable = false;
     showBounds = true;
-    thumbnail = '/assets/images/components/iphone-thumbnail@2x.png';
+    preview = '/assets/images/components/iphone.svg';
 
     model: Data.Component;
 

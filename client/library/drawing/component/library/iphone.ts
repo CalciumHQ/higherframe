@@ -8,6 +8,8 @@ module Higherframe.Drawing.Component.Library {
     // Implement IDefinition members
     id = Drawing.Component.Type.IPhone;
     static title = 'iPhone';
+    static preview = '/assets/images/components/iphone.svg';
+    static category = 'Mobile';
     tags = [
       'container',
       'apple',
@@ -16,7 +18,6 @@ module Higherframe.Drawing.Component.Library {
     properties = [];
     resizable = false;
     showBounds = true;
-    thumbnail = '/assets/images/components/iphone-thumbnail@2x.png';
 
     model: Data.Component;
     parts: any = {};

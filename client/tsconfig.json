@@ -40,6 +40,7 @@
         "./library/drawing/component/type.ts",
         "./library/drawing/point.ts",
         "./library/higherframe.ts",
+        "./library/ui/helpers/svg-replace.ts",
         "./library/ui/tray/manager.ts",
         "./library/ui/tray/region.ts",
         "./library/ui/tray/tray.ts",

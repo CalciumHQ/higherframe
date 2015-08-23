@@ -32,7 +32,8 @@ class FrameCtrl {
 
   wireframe = {
     components: [],
-    zoom: 1
+    zoom: 1,
+    center: { x: 0, y: 0 }
   };
 
   components:Array<any> = [];
@@ -84,15 +85,15 @@ class FrameCtrl {
     this.collaborators = frame.collaborators;
 
     // Create and register trays
-    var propertiesTray = new Higherframe.Controllers.Frame.PropertiesTray();
     var toolboxTray = new Higherframe.Controllers.Frame.ToolboxTray();
+    var propertiesTray = new Higherframe.Controllers.Frame.PropertiesTray();
     var viewTray = new Higherframe.Controllers.Frame.ViewTray();
-    TrayManager.registerTray('properties', propertiesTray);
     TrayManager.registerTray('toolbox', toolboxTray);
+    TrayManager.registerTray('properties', propertiesTray);
     TrayManager.registerTray('view', viewTray);
-    TrayManager.moveTray(propertiesTray, 'left');
     TrayManager.moveTray(toolboxTray, 'left');
-    TrayManager.moveTray(viewTray, 'left');
+    TrayManager.moveTray(propertiesTray, 'right');
+    TrayManager.moveTray(viewTray, 'right');
 
     $scope.$watchCollection(() => { return this.selection; }, (selection) => {
 
@@ -137,6 +138,13 @@ class FrameCtrl {
       paper.tool = new paper.Tool();
     }
 
+    // Set the zoom and pan
+    $timeout(() => {
+
+      this.setCenter(this.localStorageService.get(`frame.${ this.frame._id }.view.center`));
+      this.setZoom(this.localStorageService.get(`frame.${ this.frame._id }.view.zoom`));
+    });
+
 
     /*
   	 * Server notifications
@@ -179,6 +187,28 @@ class FrameCtrl {
   			user: user
   		});
   	});
+
+
+    /*
+     * Tray notifications
+     */
+
+    $scope.$on('tray:component:added', (e, componentId) => {
+
+      // Center new component in view
+      var properties = {
+        x: paper.view.bounds.x + (paper.view.bounds.width/2),
+        y: paper.view.bounds.y + (paper.view.bounds.height/2),
+        index: paper.project.activeLayer.children.length
+      };
+
+      // Create the new model
+      var component = new Higherframe.Data.Component(componentId, properties);
+
+      // Create the instances and save to db
+      var instances = this.addComponentsToView(component, null);
+      this.saveComponents(instances);
+    });
 
 
     /*
@@ -284,7 +314,16 @@ class FrameCtrl {
       // that.saveComponents(instances);
     });
 
-    this.registerComponents();
+    $scope.$on('view:panned', (event, center) => {
+
+      this.localStorageService.set(`frame.${ this.frame._id }.view.center`, { x: center.x, y: center.y });
+    });
+
+    $scope.$on('view:zoomed', (event, zoom) => {
+
+      this.localStorageService.set(`frame.${ this.frame._id }.view.zoom`, zoom);
+    });
+
 		this.registerSockets();
 		this.registerUser();
     this.initializeTool();
@@ -297,29 +336,6 @@ class FrameCtrl {
   /*
    * Initialization
    */
-
-  private registerComponents() {
-
-    this.components.push({
-      id: Higherframe.Drawing.Component.Type[Higherframe.Drawing.Component.Type.Rectangle],
-      title: Higherframe.Drawing.Component.Library.Rectangle.title
-    });
-    // this.components.push(this.ComponentFactory.definitions.circle);
-    // this.components.push(this.ComponentFactory.definitions.triangle);
-    this.components.push({
-      id: Higherframe.Drawing.Component.Type[Higherframe.Drawing.Component.Type.Arrow],
-      title: Higherframe.Drawing.Component.Library.Arrow.title
-    });
-		// this.components.push(this.ComponentFactory.definitions.label);
-    this.components.push({
-      id: Higherframe.Drawing.Component.Type[Higherframe.Drawing.Component.Type.IPhone],
-      title: Higherframe.Drawing.Component.Library.IPhone.title
-    });
-    this.components.push({
-      id: Higherframe.Drawing.Component.Type[Higherframe.Drawing.Component.Type.IPhoneTitlebar],
-      title: Higherframe.Drawing.Component.Library.IPhoneTitlebar.title
-    });
-  };
 
 	private registerSockets() {
 
@@ -408,10 +424,10 @@ class FrameCtrl {
             that.$scope.$apply(function () {
 
               var zoomIndex = that.ZOOM_LEVELS.indexOf(that.wireframe.zoom);
-              that.wireframe.zoom = that.ZOOM_LEVELS[zoomIndex < (that.ZOOM_LEVELS.length - 1) ? zoomIndex + 1 : zoomIndex];
+              var zoom = that.ZOOM_LEVELS[zoomIndex < (that.ZOOM_LEVELS.length - 1) ? zoomIndex + 1 : zoomIndex];
 
               event.event.preventDefault();
-              that.$scope.$broadcast('view:zoom', that.wireframe.zoom);
+              that.setZoom(zoom);
             });
 
             break;
@@ -421,10 +437,10 @@ class FrameCtrl {
             that.$scope.$apply(function () {
 
               var zoomIndex = that.ZOOM_LEVELS.indexOf(that.wireframe.zoom);
-              that.wireframe.zoom = that.ZOOM_LEVELS[zoomIndex > 0 ? zoomIndex - 1 : zoomIndex];
+              var zoom = that.ZOOM_LEVELS[zoomIndex > 0 ? zoomIndex - 1 : zoomIndex];
 
               event.event.preventDefault();
-              that.$scope.$broadcast('view:zoom', that.wireframe.zoom);
+              that.setZoom(zoom);
             });
 
             break;
@@ -669,6 +685,18 @@ class FrameCtrl {
 			}
 		});
 	};
+
+  private setZoom(zoom: number) {
+
+    this.wireframe.zoom = zoom;
+    this.$scope.$broadcast('view:zoom', this.wireframe.zoom);
+  }
+
+  private setCenter(center: Higherframe.Drawing.IPoint) {
+
+    this.wireframe.center = center;
+    this.$scope.$broadcast('view:pan', this.wireframe.center);
+  }
 
 
   /*

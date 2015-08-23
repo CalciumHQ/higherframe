@@ -8,6 +8,8 @@ module Higherframe.Drawing.Component.Library {
     // Implement IDefinition members
     id = Drawing.Component.Type.Arrow;
     static title = 'Arrow';
+    static preview = '/assets/images/components/arrow.svg';
+    static category = 'Basic shapes';
     tags = [
       'basic',
       'line',

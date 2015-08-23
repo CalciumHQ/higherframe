@@ -8,18 +8,6 @@ div.fullscreen-wrapper
 	#frame
 		ui-tray-region(position="left")
 		ui-tray-region(position="right")
-		.ui-tray-regionz
-					
-			.ui-tray(ng-show="tabIndex==1")
-				.ui-content
-					.ui-header Metrics
-					.ui-pane
-						span.ui-tray-message.caption(ng-show="!FrameCtrl.currentComponent") No component selected
-						span.ui-tray-message.caption(ng-show="FrameCtrl.currentComponent && !FrameCtrl.currentComponent.properties.length") No editable properties
-						ul.properties(ng-show="FrameCtrl.currentComponent && FrameCtrl.currentComponent.properties.length")
-							li.ui-control.small(ng-repeat="(name, property) in FrameCtrl.currentComponent.properties")
-								span.ui-label {{ property.label }}:
-								input.ui-input(type="text", ng-model="FrameCtrl.currentComponent.model.properties[property.model]", ng-change="FrameCtrl.onComponentPropertyChange(property.model, FrameCtrl.currentComponent.model.properties[property.model], FrameCtrl.currentComponent, property)")
 						
 		// Quick add
 		#quick-add(ng-show="FrameCtrl.quickAdd.open")

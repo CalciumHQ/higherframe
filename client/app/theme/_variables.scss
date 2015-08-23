@@ -3,10 +3,12 @@
  * Colors
  */
 
+$blue-3: #4e8ca6;
 $blue: #57aacc;
 $blue1: #72bad8;
 $blue2: #82cdec;
 $blue3: #d5f0fb;
+$blue4: #d2e6ef;
 $blue5: #ecf5f9;
 $blue6: #a5ccdd;
 
@@ -23,6 +25,9 @@ $uiContainerBackgroundDull: $grey2;
 $uiContainerTextColor: $teal-1;
 $uiContainerTextColorHighlight: $blue3;
 $uiContainerTextColorDull: $teal;
+
+$uiTrayHeaderMarginTop: 20px;
+$uiTrayHeaderMarginBottom: 15px;
 
 $uiShadowColor: rgba(0, 0, 0, 0.28);
 $uiShadowOffset: 0.04rem;

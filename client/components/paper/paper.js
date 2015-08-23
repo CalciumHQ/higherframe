@@ -404,6 +404,11 @@ angular
 						changeZoom(zoom);
 					});
 
+					$scope.$on('view:pan', function (e, center) {
+
+						changeCenter(center);
+					});
+
 					$scope.$on('component:added', function (e, data) {
 
 						// Insertion options
@@ -680,12 +685,24 @@ angular
 
 					function changeCenter(deltaX, deltaY) {
 
-						paper.view.center = paper.view.center.add(new paper.Point(
-							-deltaX / paper.view.zoom,
-							-deltaY / paper.view.zoom
-						));
+						// May provide a point object for first argument instead.
+						// In this case calculate the delta from the current center.
+						if (angular.isObject(deltaX)) {
+
+							paper.view.center = deltaX;
+						}
+
+						else {
+
+							paper.view.center = paper.view.center.add(new paper.Point(
+								-deltaX / paper.view.zoom,
+								-deltaY / paper.view.zoom
+							));
+						}
 
 						updateGrid();
+
+						$scope.$emit('view:panned', paper.view.center);
 					};
 
 					function changeZoom(newZoom, target) {
@@ -707,6 +724,9 @@ angular
 						paper.view.center = paper.view.center.add(a);
 
 						updateGrid();
+
+						$scope.$emit('view:zoomed', paper.view.zoom);
+						$scope.$emit('view:panned', paper.view.center);
 					};
 
 					function startDragSelection(from) {

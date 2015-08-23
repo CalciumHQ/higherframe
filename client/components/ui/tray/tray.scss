@@ -12,6 +12,10 @@
       @include transform-origin(0, 100%);
       @include transform(rotate(90deg));
       padding-left: 15px;
+
+      .ui-tray-tab {
+        @include box-shadow($uiShadowOffset (-$uiShadowOffset) 0 $uiShadowColor);
+      }
     }
   }
 
@@ -23,6 +27,10 @@
       @include transform-origin(100%, 100%);
       @include transform(rotate(-90deg));
       padding-right: 15px;
+
+      .ui-tray-tab {
+        @include box-shadow((-$uiShadowOffset) $uiShadowOffset 0 $uiShadowColor);
+      }
     }
   }
 
@@ -30,6 +38,7 @@
     @include display-flex;
     position: absolute;
     bottom: 100%;
+    z-index: 1;
 
     .ui-tray-tab {
       margin-left: 2px;
@@ -40,7 +49,6 @@
       color: $uiContainerTextColorDull;
       background: $uiContainerBackgroundDull;
       cursor: pointer;
-      @include box-shadow($uiShadowOffset (-$uiShadowOffset) 0 $uiShadowColor);
 
       &.active {
         color: $uiContainerTextColorHighlight;
@@ -51,30 +59,45 @@
 }
 
 .ui-tray {
+  position: relative;
   @include display-flex;
   @include flex-direction(column);
   @include box-sizing(border-box);
   height: 100%;
   width: 260px;
+  z-index: 2;
   background: $uiContainerBackground;
   color: $uiContainerTextColor;
   @include box-shadow($uiShadow);
 
   .ui-content {
     @include flex-grow(1);
-    padding: $uiContainerPadding;
 
     .ui-header {
-      margin: 20px (-$uiContainerPadding) 15px;
+      margin: $uiTrayHeaderMarginTop 0 $uiTrayHeaderMarginBottom;
       padding: 0 $uiContainerPadding 6px;
       border-bottom: 1px solid $blue6;
       color: $blue;
       font-size: 12px;
       font-weight: 700;
       text-transform: uppercase;
+    }
 
-      &:first-child {
-        margin-top: 20px - $uiContainerPadding;
+    .ui-pane {
+      padding: 0 $uiContainerPadding;
+    }
+
+    .ui-swatch {
+      position: relative;
+      margin: (-$uiTrayHeaderMarginBottom) (-$uiContainerPadding) 0;
+
+      &:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-bottom: 1px solid $blue6;
       }
     }
 
