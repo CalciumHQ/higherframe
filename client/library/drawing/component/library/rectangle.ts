@@ -17,17 +17,20 @@ module Higherframe.Drawing.Component.Library {
       {
         label: 'Width',
         model: 'width',
-        type: Number
+        type: Number,
+        description: 'The width of the rectangle.'
       },
       {
         label: 'Height',
         model: 'height',
-        type: Number
+        type: Number,
+        description: 'The height of the rectangle.'
       },
       {
         label: 'Radius',
         model: 'cornerRadius',
-        type: Number
+        type: Number,
+        description: 'The corner radius describes how rounded the corners should be.'
       }
     ];
     resizable = true;

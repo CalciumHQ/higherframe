@@ -36,7 +36,7 @@ class FrameCtrl {
   };
 
   components:Array<any> = [];
-  currentComponent: Higherframe.Drawing.Component.IComponent;
+  selection: Array<Higherframe.Drawing.Component.IComponent> = [];
 
   collaborators: Array<Object> = [];
 
@@ -73,7 +73,8 @@ class FrameCtrl {
     private socket,
     private localStorageService,
     private Session,
-    private Auth
+    private Auth,
+    private TrayManager: Higherframe.UI.TrayManager
   ) {
 
     var that = this;
@@ -81,6 +82,14 @@ class FrameCtrl {
     // Initialise UI
     this.leftSidebarOpen = localStorageService.get(this.STORAGE_LEFTSIDEBAR_OPEN_KEY);
     this.collaborators = frame.collaborators;
+
+    // Create and register trays
+    var propertiesTray = new Higherframe.Controllers.Frame.PropertiesTray();
+    var toolboxTray = new Higherframe.Controllers.Frame.ToolboxTray();
+    TrayManager.registerTray('properties', propertiesTray);
+    TrayManager.registerTray('toolbox', toolboxTray);
+    TrayManager.moveTray(propertiesTray, 'left');
+    TrayManager.moveTray(toolboxTray, 'left');
 
     $scope.$watchCollection(function () {
 
@@ -183,41 +192,58 @@ class FrameCtrl {
   		that.saveComponents(components);
     });
 
-  	$scope.$on('componentsDeleted', function (e, components) {
+  	$scope.$on('componentsDeleted', (e, components) => {
 
-  		angular.forEach(components, function (component) {
+  		components.forEach((component) => {
 
-  			that.updateUiWithComponent();
-  			that.deleteComponent(component);
+  			this.deleteComponent(component);
   		});
+
+      // Update selection
+      this.selection = this.selection.filter((c) => {
+
+        return components.indexOf(c) < 0;
+      });
+
+      // Update the UI to match selection
+      this.updateUiWithComponents(this.selection);
     });
 
-  	$scope.$on('componentsSelected', function (e, components) {
+  	$scope.$on('componentsSelected', (e, components) => {
 
-  		angular.forEach(components, function (component) {
-
-  			// Update the UI to match selection
-  			that.updateUiWithComponent(component);
+  		angular.forEach(components, (component) => {
 
   			socket.emit('component:select', {
   				component: { _id: component.model._id },
   				user: { _id: Auth.getCurrentUser()._id }
   			});
   		});
+
+      // Update selection
+      this.selection = this.selection.concat(components);
+
+      // Update the UI to match selection
+      this.updateUiWithComponents(this.selection);
     });
 
-  	$scope.$on('componentsDeselected', function (e, components) {
+  	$scope.$on('componentsDeselected', (e, components) => {
 
-  		angular.forEach(components, function (component) {
-
-  			// Update the UI to match selection
-  			that.updateUiWithComponent();
+  		angular.forEach(components, (component) => {
 
   			socket.emit('component:deselect', {
   				component: { _id: component.model._id },
   				user: { _id: Auth.getCurrentUser()._id }
   			});
   		});
+
+      // Update selection
+      this.selection = this.selection.filter((c) => {
+
+        return components.indexOf(c) < 0;
+      });
+
+      // Update the UI to match selection
+      this.updateUiWithComponents(this.selection);
     });
 
     $scope.$on('component:copied', function (e, components) {
@@ -599,21 +625,9 @@ class FrameCtrl {
 		return instances;
   };
 
-	private updateUiWithComponent(component?: Higherframe.Drawing.Component.IComponent) {
+	private updateUiWithComponents(components: Array<Higherframe.Drawing.Component.IComponent>) {
 
-		this.propertyModels = {};
-
-		// Populate the property models if there is a
-		// component definition set
-		/*if (component && component.definition) {
-
-			angular.forEach(component.definition.properties, function (property, name) {
-
-				$scope.propertyModels[name] = component.properties[name];
-			});
-		}*/
-
-		this.currentComponent = component;
+    this.$scope.$broadcast('controller:component:selected', components);
 	};
 
 	private removeComponentFromView(component) {

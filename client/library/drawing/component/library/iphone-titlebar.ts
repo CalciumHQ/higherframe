@@ -16,7 +16,8 @@ module Higherframe.Drawing.Component.Library {
       {
         label: 'Time',
         model: 'time',
-        type: String
+        type: String,
+        description: 'Set the time displayed on the titlebar.'
       }
     ];
     resizable = false;

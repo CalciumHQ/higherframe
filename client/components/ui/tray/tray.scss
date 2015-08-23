@@ -1,18 +1,35 @@
 .ui-tray-region {
   position: absolute;
-  left: 0;
   top: 10px;
   height: 500px;
   z-index: 100;
+
+  &[position="left"] {
+    left: 0;
+
+    .ui-tray-tabs {
+      left: 100%;
+      @include transform-origin(0, 100%);
+      @include transform(rotate(90deg));
+      padding-left: 15px;
+    }
+  }
+
+  &[position="right"] {
+    right: 0;
+
+    .ui-tray-tabs {
+      right: 100%;
+      @include transform-origin(100%, 100%);
+      @include transform(rotate(-90deg));
+      padding-right: 15px;
+    }
+  }
 
   .ui-tray-tabs {
     @include display-flex;
     position: absolute;
     bottom: 100%;
-    left: 100%;
-    @include transform-origin(0, 100%);
-    @include transform(rotate(90deg));
-    padding-left: 15px;
 
     .ui-tray-tab {
       margin-left: 2px;
@@ -28,7 +45,6 @@
       &.active {
         color: $uiContainerTextColorHighlight;
         background: $uiContainerBackgroundHighlight;
-        cursor: default;
       }
     }
   }
@@ -60,6 +76,12 @@
       &:first-child {
         margin-top: 20px - $uiContainerPadding;
       }
+    }
+
+    .ui-tray-message {
+      display: block;
+      font-style: italic;
+      text-align: center;
     }
   }
 

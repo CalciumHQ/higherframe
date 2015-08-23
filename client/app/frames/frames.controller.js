@@ -56,46 +56,7 @@ angular
 
 		$scope.onFrameClick = function ($event, frame) {
 
-			var card = angular.element($event.currentTarget);
-
-			// Calculate position
-			var rect = card[0].getBoundingClientRect();
-			var x = rect.left + (rect.width/2);
-			var y = rect.top + (rect.height/2);
-
-			// Required transformation
-			var translateX = ($window.innerWidth / 2) - x;
-			var translateY = ($window.innerHeight / 2) - y;
-			var scaleX = $window.innerWidth / rect.width;
-			var scaleY = $window.innerHeight / rect.height;
-
-			if (!card.hasClass('animateGrowToScreen')) {
-
-				$animate.addClass(card, 'animateGrowToScreen');
-				$animate.animate(card,
-					{},
-					{
-						transform: 'translateX(' + translateX + 'px)' +
-							' translateY(' + translateY + 'px)' +
-							' scaleX(' + scaleX + ')' +
-							' scaleY(' + scaleY + ')'
-					}
-				);
-
-				$timeout(function () {
-
-					$state.go('frame', { id: frame._id })
-				}, 600);
-			}
-
-			else {
-
-				$animate.removeClass(card, 'animateGrowToScreen');
-				$animate.animate(card,
-					{},
-					{ transform: 'none'	}
-				);
-			}
+			$state.go('frame', { id: frame._id })
 		};
 
 		$scope.onFrameDeleteClick = function ($event, frame) {

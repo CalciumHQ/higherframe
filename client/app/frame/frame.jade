@@ -3,50 +3,23 @@ div.fullscreen-wrapper
 		
 	div#actionbar.blue.light.border
 		a.action.body.semibold(ui-sref="frames") Dashboard
-		a.action.body.semibold(ng-click="FrameCtrl.onActionbarToggleSidebarClick()", ng-class="{ open: FrameCtrl.leftSidebarOpen }") Toggle sidebar
 		a.action.body.semibold(ng-click="FrameCtrl.onActionbarQuickAddClick()", ng-class="{ open: FrameCtrl.quickAddOpen }", tooltips, tooltip-speed="fast", tooltip-side="bottom", tooltip-title="cmd+r") Quick add
 
 	#frame
-		// Left sidebar
-		.ui-tray-region
-			.ui-tray-tabs(ng-init="tabIndex = 0")
-				span.ui-tray-tab(ng-class="{ active: tabIndex==0 }", ng-click="tabIndex = 0") Toolbox
-				span.ui-tray-tab(ng-class="{ active: tabIndex==1 }", ng-click="tabIndex = 1") Properties
-				span.ui-tray-tab(ng-class="{ active: tabIndex==2 }", ng-click="tabIndex = 2") Tools
-				
-			.ui-tray(ng-show="tabIndex==0")
-				#componentProperties.ui-content
-					.ui-header First header
-					.ui-pane
-					
-					.ui-header Another header
-					.ui-pane
-							
-				.ui-footer
-					div.caption.semibold iPhone titlebar
-					div.caption Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.
+		ui-tray-region(position="left")
+		ui-tray-region(position="right")
+		.ui-tray-regionz
 					
 			.ui-tray(ng-show="tabIndex==1")
 				.ui-content
 					.ui-header Metrics
 					.ui-pane
-						span.placeholder(ng-show="!FrameCtrl.currentComponent") No component selected
-						span.placeholder(ng-show="FrameCtrl.currentComponent && !FrameCtrl.currentComponent.properties.length") No editable properties
+						span.ui-tray-message.caption(ng-show="!FrameCtrl.currentComponent") No component selected
+						span.ui-tray-message.caption(ng-show="FrameCtrl.currentComponent && !FrameCtrl.currentComponent.properties.length") No editable properties
 						ul.properties(ng-show="FrameCtrl.currentComponent && FrameCtrl.currentComponent.properties.length")
 							li.ui-control.small(ng-repeat="(name, property) in FrameCtrl.currentComponent.properties")
 								span.ui-label {{ property.label }}:
 								input.ui-input(type="text", ng-model="FrameCtrl.currentComponent.model.properties[property.model]", ng-change="FrameCtrl.onComponentPropertyChange(property.model, FrameCtrl.currentComponent.model.properties[property.model], FrameCtrl.currentComponent, property)")
-							
-				.ui-footer
-					div.caption.semibold iPhone titlebar
-					div.caption Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.
-	
-			.ui-tray(ng-show="tabIndex==2")
-				.ui-content
-							
-				.ui-footer
-					div.caption.semibold iPhone titlebar
-					div.caption Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.
 						
 		// Quick add
 		#quick-add(ng-show="FrameCtrl.quickAdd.open")

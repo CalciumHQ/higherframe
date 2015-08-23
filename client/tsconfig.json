@@ -23,6 +23,8 @@
     "files": [
         "./app/app.ts",
         "./app/frame/frame.controller.ts",
+        "./app/frame/trays/properties.ts",
+        "./app/frame/trays/toolbox.ts",
         "./library/data/component-properties.ts",
         "./library/data/component.ts",
         "./library/data/document.ts",
@@ -37,6 +39,9 @@
         "./library/drawing/component/type.ts",
         "./library/drawing/point.ts",
         "./library/higherframe.ts",
+        "./library/ui/tray/manager.ts",
+        "./library/ui/tray/region.ts",
+        "./library/ui/tray/tray.ts",
         "./typings/angularjs/angular.d.ts",
         "./typings/jquery/jquery.d.ts",
         "./typings/lodash/lodash.d.ts",

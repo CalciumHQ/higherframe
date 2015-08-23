@@ -1,0 +1,86 @@
+/// <reference path="../../higherframe.ts"/>
+
+module Higherframe.UI {
+
+  /**
+   * The attributes which may be defined on a TrayRegionDirective.
+   */
+   
+  interface ITrayRegionAttributes extends ng.IAttributes {
+    position: string
+  }
+
+
+  /**
+   * The scope on a TrayRegionDirective.
+   */
+
+  interface ITrayRegionScope extends ng.IScope {
+    position: string
+  }
+
+
+  /**
+   * Controller of the TrayRegionDirective directive.
+   */
+
+  export class TrayRegion {
+
+    // Member variables
+    tabIndex: number = 0;
+    trays: Array<ITray> = [];
+
+    constructor(private $scope: ITrayRegionScope, private TrayManager: TrayManager) {
+
+      TrayManager.registerRegion($scope.position, this);
+    }
+
+    onTabClick($index: number) {
+
+      if (this.tabIndex == $index) {
+
+        this.tabIndex = -1;
+      }
+
+      else {
+
+        this.tabIndex = $index;
+      }
+    }
+  }
+
+
+  /**
+   * Directive that creates a region which can house trays.
+   */
+
+  export class TrayRegionDirective implements ng.IDirective {
+
+    // Directive configuration
+    link: (scope: ng.IScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes) => void;
+    restrict = 'E';
+    replace = true;
+    transclude = true;
+    templateUrl = '/library/ui/tray/region.html';
+    controller = TrayRegion;
+    controllerAs = 'region';
+    scope = { position: '@' };
+
+    constructor() {
+
+      TrayRegionDirective.prototype.link = (scope: ITrayRegionScope, element: ng.IAugmentedJQuery, attrs: ITrayRegionAttributes) => {
+
+        scope.position = attrs.position;
+      };
+    }
+
+    static factory(): ng.IDirectiveFactory {
+
+      const directive = () => new TrayRegionDirective();
+      directive.$inject = [];
+      return directive;
+    }
+  }
+}
+
+angular.module('siteApp').directive('uiTrayRegion', Higherframe.UI.TrayRegionDirective.factory());
