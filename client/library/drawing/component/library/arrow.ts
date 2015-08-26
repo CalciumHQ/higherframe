@@ -15,7 +15,14 @@ module Higherframe.Drawing.Component.Library {
       'line',
       'flowchart'
     ];
-    properties = [];
+    properties = [
+      {
+        label: 'Direction',
+        model: 'direction',
+        type: String,
+        description: 'Set which ends of the line should have an arrow head.'
+      }
+    ];
     resizable = true;
     showBounds = false;
     thumbnail = '/assets/images/components/iphone-thumbnail@2x.png';
@@ -59,20 +66,24 @@ module Higherframe.Drawing.Component.Library {
       line.add(start);
       line.add(end);
       line.strokeColor = '#888';
+      this.addChild(line);
 
       // Draw the heads
-      var startHead = paper.Path.RegularPolygon(start, 3, 6);
-      startHead.fillColor = '#888';
-      startHead.rotate(-90 + vector.angle, start);
+      if (properties.direction == 'left' || properties.direction == 'both') {
 
-      var endHead = paper.Path.RegularPolygon(end, 3, 6);
-      endHead.fillColor = '#888';
-      endHead.rotate(90 + vector.angle, end);
+        var startHead = paper.Path.RegularPolygon(start, 3, 6);
+        startHead.fillColor = '#888';
+        startHead.rotate(-90 + vector.angle, start);
+        this.addChild(startHead);
+      }
 
-      // Group the parts as a component
-      this.addChild(line);
-      this.addChild(startHead);
-      this.addChild(endHead);
+      if (properties.direction == 'right' || properties.direction == 'both') {
+
+        var endHead = paper.Path.RegularPolygon(end, 3, 6);
+        endHead.fillColor = '#888';
+        endHead.rotate(90 + vector.angle, end);
+        this.addChild(endHead);
+      }
     }
 
     /**
