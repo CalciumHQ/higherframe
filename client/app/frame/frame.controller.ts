@@ -75,7 +75,7 @@ class FrameCtrl {
     private localStorageService,
     private Session,
     private Auth,
-    private TrayManager: Higherframe.UI.TrayManager
+    private TrayManager: Higherframe.UI.Tray.Manager
   ) {
 
     var that = this;

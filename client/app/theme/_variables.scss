@@ -1,5 +1,18 @@
 
 /*
+ * Dimensions
+ */
+
+$vu: 0.40625rem;
+
+$chromePaddingSmall: 7px;
+$chromeMarginSmall: 8px;
+$chromeBorderRadiusMedium: 5px;
+
+$uiContainerPadding: 10px;
+
+
+/*
  * Colors
  */
 
@@ -18,7 +31,12 @@ $teal: #8aa0a8;
 
 $yellow: #f6e867;
 
+$green-2: #418c1b;
+$green-1: #60b934;
+$green: #6fcc41;
+
 $grey-3: #3c3c3c;
+$grey-2: #444444;
 $grey1: #858585;
 $grey2: #cdcdcd;
 $grey3: #dcdcdc;
@@ -40,7 +58,11 @@ $uiShadow: $uiShadowOffset $uiShadowOffset 0 $uiShadowColor;
 $uiFontSizeSmall: 9px;
 $uiFontWeightSmall: 500;
 
+$uiControlHeightMedium: 5*$vu;
 $uiControlHeightSmall: 21px;
+$uiControlBorderRadius: 5px;
+$uiControlBorderColor: $grey3;
+$uiControlFontSize: 0.875rem;
 
 // legacy
 $chromeBackgroundLight: #f7f8f9;
@@ -49,21 +71,6 @@ $chromeBorderLight: #eff2f4;
 $chromeBorderMedium: #dfe2e6;
 $chromeBorderDark: #c6ccd2;
 $chromeTextMedium: #d1d5d9;
-
-
-/*
- * Dimensions
- */
-
-$vu: 0.40625rem;
-
-$chromePaddingSmall: 7px;
-
-$chromeMarginSmall: 8px;
-
-$chromeBorderRadiusMedium: 5px;
-
-$uiContainerPadding: 10px;
 
 
 /*

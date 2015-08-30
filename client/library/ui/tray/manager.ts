@@ -1,7 +1,8 @@
+/// <reference path="../../higherframe.ts"/>
 
-module Higherframe.UI {
+module Higherframe.UI.Tray {
 
-  export class TrayManager {
+  export class Manager {
 
     regions: Object;
     trays: Object;
@@ -109,4 +110,4 @@ module Higherframe.UI {
   }
 }
 
-angular.module('siteApp').service('TrayManager', Higherframe.UI.TrayManager);
+angular.module('siteApp').service('TrayManager', Higherframe.UI.Tray.Manager);

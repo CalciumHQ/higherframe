@@ -9,6 +9,7 @@ angular
         url: '/frame/:id',
         templateUrl: 'app/frame/frame.html',
         controller: 'FrameCtrl',
+				controllerAs: 'FrameCtrl',
         resolve: {
           frame: function($stateParams, $http, $q) {
 
@@ -27,7 +28,6 @@ angular
 
              return deferred.promise;
           }
-        },
-				controllerAs: 'FrameCtrl'
+        }
       });
   });

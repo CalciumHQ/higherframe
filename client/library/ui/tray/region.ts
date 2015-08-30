@@ -33,7 +33,7 @@ module Higherframe.UI {
 
     constructor(
       private $scope: ITrayRegionScope,
-      private TrayManager: TrayManager,
+      private TrayManager: Tray.Manager,
       private localStorageService
     ) {
 

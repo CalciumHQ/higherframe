@@ -4,6 +4,8 @@ $logoHeight: 3 * $vu;
 
 #navbar,
 #actionbar {
+	width: 100%;
+	
 	&.border {
 		border-bottom: 1px solid #dce1e0;
 	}

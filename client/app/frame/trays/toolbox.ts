@@ -1,3 +1,4 @@
+/// <reference path="../../../library/higherframe.ts"/>
 /// <reference path="../../../typings/lodash/lodash.d.ts"/>
 
 module Higherframe.Controllers.Frame {

@@ -1,5 +1,11 @@
 
 .ui-input {
+  @include box-sizing(border-box);
+  padding: 0 10px;
+  height: $uiControlHeightMedium;
+  border: 1px solid $uiControlBorderColor;
+  border-radius: $uiControlBorderRadius;
+  font-size: 14px;
   background: white;
 
   &:focus {
@@ -13,6 +19,7 @@
   }
 
   .ui-input {
+    height: auto;
     padding: 5px 4px;
     border: none;
     font-size: $uiFontSizeSmall;

@@ -94,6 +94,10 @@ h4,
 	@include h4();
 }
 
+.b1 {
+	@include b1();
+}
+
 .b3 {
 	@include b3();
 }
@@ -104,6 +108,10 @@ h4,
 
 .medium {
 	font-weight: 600;
+}
+
+.loose {
+	letter-spacing: 0.05em;
 }
 
 .airy {

@@ -1,3 +1,4 @@
+/// <reference path="../../../library/higherframe.ts"/>
 
 module Higherframe.Controllers.Frame {
 
