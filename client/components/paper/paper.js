@@ -31,7 +31,8 @@ angular
 					var colors = {
 						normal: '#888',
 						hover: '#7ae',
-						selected: '#7ae'
+						selected: '#7ae',
+						dragHandles: '#98e001'
 					};
 
 					/**
@@ -45,6 +46,7 @@ angular
 					var hoveredItem;
 					var selectedItems = [];
 					var selectedSegment;
+					var selectedDragHandle;
 
 					var lastMousePosition;
 
@@ -65,7 +67,6 @@ angular
 					function mouseUp(event) {
 
 						// If dragging an item
-
 						if (selectedItems.length) {
 
 							angular.forEach(selectedItems, function (item) {
@@ -76,12 +77,18 @@ angular
 							});
 						}
 
+						// If dragging a drag handle
+						else if (selectedDragHandle) {
+
+						}
+
 						else {
 
 							// End drag selection
 							endDragSelection();
 						}
 
+						selectedDragHandle = null;
 						selectedSegment = null;
 					};
 
@@ -106,8 +113,16 @@ angular
 							}
 						}
 
+						// Hit test a drag handle and set hover style
+						var hitResult = layerSelections.hitTest(event.point, hitOptions);
+
+						if (hitResult) {
+
+							hoveredDragHandle = hitResult.item;
+						}
+
 						// Hit test a new item and set hover style
-						var hitResult = layerDrawing.hitTest(event.point, hitOptions);
+						hitResult = layerDrawing.hitTest(event.point, hitOptions);
 
 						if (hitResult) {
 
@@ -156,6 +171,14 @@ angular
 								1 + event.delta.y / selectedItem.bounds.height;
 
 							selectedItem.scale(scaleX, scaleY);
+						}
+
+						// If dragging a drag handle
+						else if (selectedDragHandle) {
+
+							// The new position
+							var position = event.point.add(selectedDragHandle.mouseDownDelta);
+							selectedDragHandle.position = selectedDragHandle.model.move(position);
 						}
 
 						// If dragging an item
@@ -211,26 +234,41 @@ angular
 							event.event.screenY
 						);
 
-						// Add the new selection
-						var hitResult = layerDrawing.hitTest(event.point, hitOptions);
+						// If a drag handle is clicked
+						var hitResult = layerSelections.hitTest(event.point, hitOptions);
 
-						// If no hit target clear the last selection
-						if (!hitResult) {
+						if (hitResult) {
 
-							clearSelection();
+							var handle = hitResult.item;
 
-							// Start drag selection
-							startDragSelection(event.downPoint);
+							selectedDragHandle = handle;
+
+							// Store where the mouse down point is in relation
+							// to the position of the handle
+							// This is used to position an handle correctly during
+							// a drag
+							selectedDragHandle.mouseDownDelta = selectedDragHandle.position.subtract(event.point);
+
+							return;
 						}
 
-						// Add the new selection
-						else {
+						hitResult = layerDrawing.hitTest(event.point, hitOptions);
+
+						// Clear the last selection unless the shift key
+						// is held down, or the hit target is already selected
+						if (!event.modifiers.shift && !hitResult) {
+
+							clearSelection();
+						}
+
+						// If a component is clicked
+						if (hitResult) {
 
 							// Find the top-level group
 							var item = getTopmost(hitResult.item);
 
-							// First clear the last selection unless the shift key
-							// is held down, or the hit target is selected
+							// Clear the last selection unless the shift key
+							// is held down, or the hit target is already selected
 							if (!event.modifiers.shift && selectedItems.indexOf(item) === -1) {
 
 								clearSelection();
@@ -256,7 +294,12 @@ angular
 
 								item.mouseDownDelta = item.position.subtract(event.point);
 							});
+
+							return;
 						}
+
+						// If no hit target start drag selection
+						startDragSelection(event.downPoint);
 					};
 
 					function mouseWheel(event) {
@@ -549,6 +592,7 @@ angular
 							}
 
 							removeBoundingBox(item);
+							removeDragHandles(item);
 						}
 					};
 
@@ -685,6 +729,11 @@ angular
 
 					function changeCenter(deltaX, deltaY) {
 
+						if (angular.isUndefined(deltaX) || deltaX === null ) {
+
+							return;
+						}
+
 						// May provide a point object for first argument instead.
 						// In this case calculate the delta from the current center.
 						if (angular.isObject(deltaX)) {
@@ -706,6 +755,11 @@ angular
 					};
 
 					function changeZoom(newZoom, target) {
+
+						if (angular.isUndefined(newZoom) || newZoom === null ) {
+
+							return;
+						}
 
 						var factor = 1.04;
 						var center = paper.view.center;
@@ -928,7 +982,7 @@ angular
 								new paper.Point(point.x + handleSize, point.y + handleSize)
 							);
 
-							handle.fillColor = colors.selected;
+							handle.fillColor = colors.dragHandles;
 
 							return handle;
 						};
@@ -936,6 +990,8 @@ angular
 						angular.forEach(item.getDragHandles(), function (dh) {
 
 							var handle = drawHandle(dh.position);
+							handle.model = dh;
+
 							item.dragHandles.push(handle);
 						});
 

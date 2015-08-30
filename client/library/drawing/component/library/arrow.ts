@@ -41,6 +41,38 @@ module Higherframe.Drawing.Component.Library {
     constructor(model: Data.IDrawingModel) {
 
       super(model);
+
+      var properties = <Higherframe.Data.IArrowProperties>(model.properties);
+      properties.start = properties.start || new paper.Point(properties.x - 100, properties.y);
+      properties.end = properties.end || new paper.Point(properties.x + 100, properties.y);
+      properties.direction = properties.direction || 'right';
+
+      // Perform the initial draw
+      this.update();
+    }
+
+
+    /**
+     * Perform any necessary transformation on the component when saving
+     */
+
+    serialize(): Data.Component {
+
+      var model = angular.copy(this.model);
+
+      // Transform paper.Points into relevant data
+      var properties = <Higherframe.Data.IArrowProperties>model.properties;
+      properties.start = {
+        x: properties.start.x,
+        y: properties.start.y
+      };
+
+      properties.end = {
+        x: properties.end.x,
+        y: properties.end.y
+      };
+
+      return model;
     }
 
 
@@ -51,8 +83,6 @@ module Higherframe.Drawing.Component.Library {
     update() {
 
       var properties = <Higherframe.Data.IArrowProperties>this.model.properties;
-      properties.start = new paper.Point(100, 200);
-      properties.end = new paper.Point(300, 300);
 
       // Remove the old parts
       this.removeChildren();
@@ -71,7 +101,7 @@ module Higherframe.Drawing.Component.Library {
       // Draw the heads
       if (properties.direction == 'left' || properties.direction == 'both') {
 
-        var startHead = paper.Path.RegularPolygon(start, 3, 6);
+        var startHead = paper.Path.RegularPolygon(start.add(new paper.Point(0,5)), 3, 6);
         startHead.fillColor = '#888';
         startHead.rotate(-90 + vector.angle, start);
         this.addChild(startHead);
@@ -79,7 +109,7 @@ module Higherframe.Drawing.Component.Library {
 
       if (properties.direction == 'right' || properties.direction == 'both') {
 
-        var endHead = paper.Path.RegularPolygon(end, 3, 6);
+        var endHead = paper.Path.RegularPolygon(end.add(new paper.Point(0,5)), 3, 6);
         endHead.fillColor = '#888';
         endHead.rotate(90 + vector.angle, end);
         this.addChild(endHead);
@@ -98,12 +128,50 @@ module Higherframe.Drawing.Component.Library {
 
 
     /**
-     * Calculate the drag points for the component
+     * Calculate the snap points for the component
      */
 
-    getDragPoints(): Array<IPoint> {
+    getSnapPoints(): Array<IPoint> {
 
-      return [];
+      var properties = <Higherframe.Data.IArrowProperties>this.model.properties;
+
+      return [
+        properties.start,
+        properties.end
+      ];
+    }
+
+
+    /**
+     * Calculate the drag handles for the component
+     */
+
+    getDragHandles(): Array<IDragHandle> {
+
+      var properties = <Higherframe.Data.IArrowProperties>this.model.properties;
+
+      return [
+        {
+          position: properties.start,
+          move: (position: paper.Point): paper.Point => {
+
+            properties.start = position;
+            this.update();
+
+            return position;
+          }
+        },
+        {
+          position: properties.end,
+          move: (position: paper.Point): paper.Point => {
+
+            properties.end = position;
+            this.update();
+
+            return position;
+          }
+        }
+      ];
     }
   }
 }

@@ -17,7 +17,10 @@ var frameExporter = require('./../../components/frame/exporter');
 // Get list of frames
 exports.index = function(req, res) {
 
-  Frame.find(function (err, frames) {
+  Frame
+    .find()
+    .populate('organisation users')
+    .exec(function (err, frames) {
 
     if(err) { return handleError(res, err); }
     return res.json(200, frames);
@@ -29,7 +32,7 @@ exports.show = function(req, res) {
 
   Frame
 		.findById(req.params.id)
-		.populate('components collaborators')
+		.populate('organisation components users collaborators')
 		.exec(function (err, frame) {
 
 	    if(err) { return handleError(res, err); }
@@ -41,10 +44,16 @@ exports.show = function(req, res) {
 // Creates a new frame in the DB.
 exports.create = function(req, res) {
 
+  if(!req.body.organisation) { return handleError(res, null); }
   Frame.create(req.body, function(err, frame) {
 
     if(err) { return handleError(res, err); }
-    return res.json(201, frame);
+
+    Frame.populate(frame, {path:'organisation'}, function(err, frame) {
+
+      if(err) { return handleError(res, err); }
+      return res.json(201, frame);
+    });
   });
 };
 

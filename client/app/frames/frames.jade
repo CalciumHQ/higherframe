@@ -1,39 +1,27 @@
-div#navbar.white.border(ng-include='"components/navbar/navbar.html"')
-
+div#navbar.row.blue.border-light(ng-include='"components/navbar/navbar.html"')
+div#actionbar.row.blue.light
+	a.action.b3.roboto.semibold(ui-sref="frames") Wireframes
+	a.action.b3.roboto.semibold() Organisations
+	a.action.b3.roboto.semibold() Sharing
+		
 div#frames
-	div.sidebar.filters
-		button.button(type="button", ng-click="onNewFrameClick()") + New wireframe 
-	
-		div.divider
-		
-		div.item.active
-			span.name My wireframes
-			span.counter {{ frames.length }}
-
-		div.item
-			span.name Shared with me
-			span.counter 0
-
-		div.item
-			span.name Favorites
-			span.counter 0
+	div#framesListContainer(ng-repeat="organisation in organisations")
+		div.organisation.row
+			div.name.b3.uppercase.strong.airy {{ organisation.organisation.name }}
 			
-		div.divider
-		
-		div.item
-			span.name Architizer
-			
-		div.item
-			span.name Higherframe
-	
-	div#framesListContainer
-		div#framesList.cards
-			a.card(ng-repeat="frame in frames | orderBy:'-created_at'", ng-click="onFrameClick($event, frame)")
-				div.delete(ng-click="onFrameDeleteClick($event, frame)") Delete
+		div.frames.cards.row
+			a.card(ng-repeat="frame in organisation.frames | orderBy:'-created_at'", ng-click="onFrameClick($event, frame)")
 				div.content
 					div.left
-						span.name.title.block {{ frame.name }}
-						span.project.subhead.block Architizer Source
+						span.name.h3.block {{ frame.name }}
+						span.project.b1.block {{ frame.organisation.name }}
+						ul.users
+							li.user(ng-repeat="user in frame.users", tooltips, tooltip-speed="fast", tooltip-side="bottom", tooltip-title="Shared with {{ user.name }}")
+								img.image(ng-if="user.provider == 'facebook'", ng-src="http://graph.facebook.com/{{ user.facebook.id }}/picture?type=large")
 						
 					div.right
 						span.lastModified {{ (frame.created_at | moment).fromNow() }}
+						
+			a.card.new(ng-click="onNewFrameClick(organisation.organisation)")
+				div.content
+					span + add new

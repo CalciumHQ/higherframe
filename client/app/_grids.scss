@@ -4,14 +4,15 @@
 @import "susy";
 
 $susy: (
-	container: 1200px,
   columns: 16,
   gutters: 1/4,
   math: fluid,
   output: float,
-  gutter-position: split
+  gutter-position: after
 );
 
 .row {
-	@include container();
+	@include container;
+  padding-left: 2%;
+  padding-right: 2%;
 }

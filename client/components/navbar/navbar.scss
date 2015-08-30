@@ -1,6 +1,6 @@
-$navbarHeight: 56px;
-$logoHeight: 22px;
-$navbarPadding: 15px;
+$navbarHeight: 7 * $vu;
+$actionbarHeight: 4 * $vu;
+$logoHeight: 3 * $vu;
 
 #navbar,
 #actionbar {
@@ -39,7 +39,6 @@ $navbarPadding: 15px;
 	height: $navbarHeight;
 	line-height: $navbarHeight;
 	z-index: 100;
-	padding: 0 $navbarPadding;
 
 	&.blue {
 		#logo {
@@ -106,9 +105,18 @@ $navbarPadding: 15px;
 	}
 
 	#logo {
-    height: $logoHeight;
-		margin-bottom: -6px;
+		position: relative;
+		display: block;
+		float: left;
+		top: 2px;
+		height: $logoHeight;
+		margin-top: 2 * $vu;
 		margin-right: 30px;
+
+		svg {
+			display: block;
+			height: $logoHeight;
+		}
   }
 
 	#primaryNavigation,
@@ -218,10 +226,10 @@ $navbarPadding: 15px;
 				position: absolute;
 				left: 0;
 				top: 50%;
-				width: 40px;
-				height: 40px;
-				margin-top: -20px;
-				border-radius: 20px;
+				width: 5 * $vu;
+				height: 5 * $vu;
+				margin-top: -2.5 * $vu;
+				border-radius: 2.5 * $vu;
 			}
 		}
 	}
@@ -233,12 +241,13 @@ $navbarPadding: 15px;
 
 #actionbar {
 	@include display-flex;
-	padding: 0 $navbarPadding;
+	height: $actionbarHeight;
 
 	.action {
-		padding: 8px 0 6px;
+		padding: $vu 0;
 		cursor: pointer;
 		text-decoration: none;
+		margin: 0;
 
 		& + .action {
 			margin-left: 30px;
@@ -247,7 +256,7 @@ $navbarPadding: 15px;
 
 	&.light {
 		.action {
-			color: $blue2;
+			color: $blue3;
 		}
 	}
 }

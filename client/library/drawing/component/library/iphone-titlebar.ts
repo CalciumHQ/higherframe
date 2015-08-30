@@ -31,6 +31,9 @@ module Higherframe.Drawing.Component.Library {
     constructor(model: Data.IDrawingModel) {
 
       super(model);
+
+      // Perform the initial draw
+      this.update();
     }
 
     update() {

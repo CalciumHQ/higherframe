@@ -559,14 +559,21 @@ class FrameCtrl {
     // Save components and set _id when saved
     angular.forEach(components, function (component: Higherframe.Drawing.Component.IComponent) {
 
-      var model = <Higherframe.Data.Component>component.model;
-      model.lastModifiedBy = that.Session.getSessionId();
+      // We will first serialize the data in the component's model.
+      // If an _id key is found on the model, we know this component has already
+      // been saved to the database, so we will update.
+      // If no _id is found, we know it is a new component and do a post. When
+      // the post is completed, we will assign the returned _id to the original
+      // component model, since the serialized version is a throwaway copy.
+      var serialized = <Higherframe.Data.Component>component.serialize();
+
+      serialized.lastModifiedBy = that.Session.getSessionId();
 
 			// Update
-			if (model._id) {
+			if (serialized._id) {
 
 				that.$http
-	        .patch('/api/components/' + model._id, model)
+	        .patch('/api/components/' + serialized._id, serialized)
 	        .success(function (data) {
 
 	        });
@@ -576,10 +583,10 @@ class FrameCtrl {
 			else {
 
 				that.$http
-	        .post('/api/frames/' + that.$stateParams.id + '/components', model)
+	        .post('/api/frames/' + that.$stateParams.id + '/components', serialized)
 	        .success(function (data: any) {
 
-						model._id = data._id;
+						component.model._id = data._id;
 	        });
 			}
     });

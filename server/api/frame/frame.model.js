@@ -12,9 +12,17 @@ var FrameSchema = new Schema({
 		type: Date,
 		default: Date.now
 	},
-	updated_at: { 
-		type: Date 
+	updated_at: {
+		type: Date
 	},
+  organisation: {
+    type: Schema.ObjectId,
+    ref: 'Organisation'
+  },
+  users: [{
+    type: Schema.ObjectId,
+    ref: 'User'
+  }],
 	collaborators: [{
 		type: Schema.ObjectId,
 		ref: 'User'
@@ -26,7 +34,7 @@ var FrameSchema = new Schema({
 });
 
 FrameSchema.pre('update', function (next) {
-	
+
 	var now = new Date();
 	this.updated_at = now;
 	next();

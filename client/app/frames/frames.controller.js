@@ -14,22 +14,44 @@ angular
      * Controller variables
      */
 
-		$scope.frames = frames;
-
 
     /*
      * Initialization
      */
 
-		function registerSockets () {
+		function registerSockets() {
 
       // Document updating
-			socket.syncUpdates('frame', $scope.frames);
+			socket.syncUpdates('frame', frames);
     }
+
+    function groupFrames() {
+
+      var organisations = {};
+
+      frames.forEach(function(frame) {
+
+        organisations[frame.organisation._id] =
+          organisations[frame.organisation._id] ||
+          {
+            organisation: frame.organisation,
+            frames: []
+          };
+
+        organisations[frame.organisation._id].frames.push(frame);
+      });
+
+      $scope.organisations = organisations;
+    };
 
     (function () {
 
       registerSockets();
+
+      $scope.$watchCollection(function() {
+
+        return frames;
+      }, groupFrames);
     })();
 
 		/*
@@ -49,9 +71,9 @@ angular
      * Event handlers
      */
 
-		$scope.onNewFrameClick = function () {
+		$scope.onNewFrameClick = function (organisation) {
 
-			$http.post('/api/frames', {});
+			$http.post('/api/frames', { organisation: organisation._id });
 		};
 
 		$scope.onFrameClick = function ($event, frame) {

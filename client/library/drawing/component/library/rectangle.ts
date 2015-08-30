@@ -53,6 +53,9 @@ module Higherframe.Drawing.Component.Library {
       properties.width = properties.width || 160;
       properties.height = properties.height || 120;
       properties.cornerRadius = properties.cornerRadius || 0;
+
+      // Perform the initial draw
+      this.update();
     }
 
 
@@ -120,7 +123,27 @@ module Higherframe.Drawing.Component.Library {
 
       return [
         {
-          position: new paper.Point(this.position.x - properties.width/2 + properties.cornerRadius, this.position.y - properties.height/2)
+          position: new paper.Point(this.position.x - properties.width/2 + Number(properties.cornerRadius), this.position.y - properties.height/2),
+          move: (position: paper.Point): paper.Point => {
+
+            // The distance from the top-left corner
+            var distance = position.x - (this.position.x - properties.width/2);
+
+            // Only allow the drag handle to move horizontally
+            position.y = this.position.y - properties.height/2;
+
+            // Only allow positive radius
+            distance = Math.max(0, distance);
+
+            // Only allow up to half the width
+            distance = Math.min(properties.width/2, distance);
+
+            position.x = distance + (this.position.x - properties.width/2);
+            properties.cornerRadius = distance;
+            this.update();
+
+            return position;
+          }
         }
       ];
     }

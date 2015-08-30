@@ -3,7 +3,8 @@
 module Higherframe.Drawing.Component {
 
   export interface IDragHandle {
-    position: IPoint
+    position: IPoint,
+    move?: (position: paper.Point) => paper.Point
   }
 
   /**
@@ -28,10 +29,12 @@ module Higherframe.Drawing.Component {
     model: Data.IDrawingModel,
 
     // new(options: IOptions)
-    update()
-    updateModel();
-    getSnapPoints(): Array<IPoint>;
-    getDragHandles(): Array<{ position: IPoint }>;
+    deserialize?: () => void;
+    serialize: () => Data.IDrawingModel;
+    update: () => void;
+    updateModel: () => void;
+    getSnapPoints: () => Array<IPoint>;
+    getDragHandles: () => Array<{ position: IPoint }>;
 
     // Provide definitions for paper.Item methods that we need in lieu
     // of a definition file for the interface
@@ -62,18 +65,16 @@ module Higherframe.Drawing.Component {
 
       // Bind to the model
       this.model = model;
-
-      // Perform the initial draw
-      this.update();
     }
 
+    serialize(): Data.IDrawingModel {
 
-    /**
-     * Will be obscured by descendant class implementation
-     */
+      return this.model;
+    }
 
-    update() {}
-    updateModel() {}
+    // Will be obscured by child implementation
+    update() {};
+    updateModel() {};
     getSnapPoints() { return []; }
     getDragHandles() { return []; }
   }

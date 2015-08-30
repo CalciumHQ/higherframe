@@ -4,18 +4,18 @@
 
 'use strict';
 
-var frame = require('./frame.model');
+var Frame = require('./frame.model');
 
 exports.register = function(socket, socketio) {
 
 	socket.on('collaborator:save', function (data) {
 
 		// Add to the frame
-		frame.findOneAndUpdate(
+		Frame.findOneAndUpdate(
 			{ _id: data.frame._id },
 			{ $addToSet: { collaborators: data.user._id }},
 			{ safe: true, upsert: false },
-			function (err, Frame) {
+			function (err, frame) {
 
 				// Broadcast to children
 				socketio.sockets.emit('collaborator:save', data.user);
@@ -24,9 +24,9 @@ exports.register = function(socket, socketio) {
 	});
 
 	socket.on('collaborator:remove', function (data) {
-		
+
 		// Add to the frame
-		frame.findOneAndUpdate(
+		Frame.findOneAndUpdate(
 			{ _id: data.frame._id },
 			{ $pull: { collaborators: data.user._id }},
 			{ safe: true, upsert: false },
@@ -38,11 +38,15 @@ exports.register = function(socket, socketio) {
 		);
 	});
 
-  frame.schema.post('save', function (doc) {
-    onSave(socket, doc);
+  Frame.schema.post('save', function (doc) {
+
+		Frame.populate(doc, {path:'organisation users'}, function(err, frame) {
+
+      onSave(socket, frame);
+    });
   });
 
-  frame.schema.post('remove', function (doc) {
+  Frame.schema.post('remove', function (doc) {
     onRemove(socket, doc);
   });
 }

@@ -185,6 +185,6 @@ a {
 // Tooltips
 ._720kb-tooltip {
   ._720kb-tooltip-title {
-      font-weight: 700;
+      @include b3;
   }
 }

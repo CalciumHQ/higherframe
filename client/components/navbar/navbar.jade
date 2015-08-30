@@ -1,7 +1,7 @@
 div.container(ng-controller="NavbarCtrl")
   .left
-    a(ui-sref="main")
-      svg#logo(version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 266.6 43.2" enable-background="new 0 0 266.6 43.2" xml:space="preserve")
+    a#logo(ui-sref="main")
+      svg(version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 266.6 43.2" enable-background="new 0 0 266.6 43.2" xml:space="preserve")
         g
         path(d="M20.6,33.7V18.9c-3.8-0.7-9.4-0.7-12.3,2v12.9H0v-32h8.3v13c3.8-3,8.5-3,12.3-3v-10h8.3v32H20.6z")
         path(d="M32.5,4.2c0-2.4,1.9-4.2,4.2-4.2C39.1,0,41,1.9,41,4.2s-1.9,4.3-4.3,4.3C34.4,8.5,32.5,6.6,32.5,4.2z M33,33.7V10.6h7.4 v23.2H33z")
@@ -37,7 +37,6 @@ div.container(ng-controller="NavbarCtrl")
     div#identity.navItem.hasImage(ng-show="isLoggedIn()")
       a
         img.image(ng-if="getCurrentUser().provider == 'facebook'", ng-src="http://graph.facebook.com/{{ getCurrentUser().facebook.id }}/picture?type=large")
-        span.text {{ getCurrentUser().name }}
         svg.dropdown-chevron(version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="-227 374.7 44.6 24.3" style="enable-background:new -227 374.7 44.6 24.3;" xml:space="preserve")
           path(d="M-185.8,375.3l-18.9,18.9l-18.9-18.9c-0.8-0.8-2-0.8-2.8,0c-0.8,0.8-0.8,2,0,2.8l20.3,20.3c0.4,0.4,0.9,0.6,1.4,0.6c0.5,0,1-0.2,1.4-0.6l20.3-20.3c0.8-0.8,0.8-2,0-2.8C-183.8,374.5-185.1,374.5-185.8,375.3z")
       
