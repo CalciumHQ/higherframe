@@ -47,6 +47,17 @@ module Higherframe.Modals.Frame {
       this.close();
     }
 
+    onDeleteButtonClick() {
+
+      var injector = angular.injector(['ng']);
+      injector.invoke(($http) => {
+
+        $http.delete(`/api/frames/${this.frame._id}`);
+      });
+
+      this.close();
+    }
+
     onSaveButtonClick() {
 
       this.form.$setSubmitted();

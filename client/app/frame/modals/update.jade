@@ -10,6 +10,10 @@ form(name="ModalCtrl.form").ui-modal
     div.ui-control.block
       label.ui-label.b1(for="organisation") Organisation
       select.ui-input(name="organisation", type="text", ng-model="ModalCtrl.organisation", ng-options="o._id as o.name for o in ModalCtrl.organisations", placeholder="Pick an organisation", required)
+        
+    div.ui-control.block
+      button.ui-button.danger(ng-click="ModalCtrl.onDeleteButtonClick()")
+        span.b1.medium.loose.uppercase Delete
     
   .ui-modal-footer
     .ui-modal-buttons
