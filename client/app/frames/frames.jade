@@ -5,7 +5,7 @@ div#actionbar.row.blue.light
 	a.action.b3.roboto.semibold() Sharing
 		
 div#frames
-	div#framesListContainer(ng-repeat="organisation in FramesCtrl.organisations")
+	div.group(ng-repeat="organisation in FramesCtrl.organisations")
 		div.organisation.row
 			div.name.b3.uppercase.strong.airy {{ organisation.organisation.name }}
 			
@@ -15,6 +15,9 @@ div#frames
 					div.left
 						span.name.h3.block {{ frame.name }}
 						span.project.b1.block {{ frame.organisation.name }}
+						span.settings(ng-click="FramesCtrl.onFrameSettingsClick($event, frame)")
+							svg-replace(ng-src="/assets/images/settings.svg")
+								
 						ul.users
 							li.user(ng-repeat="user in frame.users", tooltips, tooltip-speed="fast", tooltip-side="bottom", tooltip-title="Shared with {{ user.name }}")
 								img.image(ng-if="user.provider == 'facebook'", ng-src="http://graph.facebook.com/{{ user.facebook.id }}/picture?type=large")

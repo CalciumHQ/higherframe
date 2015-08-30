@@ -1,6 +1,9 @@
 
 .ui-control {
 
+  & + .ui-control {
+    margin-top: 6*$vu;
+  }
 }
 
 .ui-control.block {

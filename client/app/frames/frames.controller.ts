@@ -61,19 +61,28 @@ module Higherframe.Controllers {
      * Event handlers
      */
 
-		onNewFrameClick = function (organisation) {
+		onNewFrameClick(organisation) {
 
       var modal = new Higherframe.Modals.Frame.New();
       modal.organisation = organisation;
       this.ModalManager.present(modal);
 		};
 
-		onFrameClick = function ($event, frame) {
+		onFrameClick($event, frame) {
 
 			this.$state.go('frame', { id: frame._id })
 		};
 
-		onFrameDeleteClick = function ($event, frame) {
+    onFrameSettingsClick($event, frame) {
+
+      $event.preventDefault();
+      $event.stopPropagation();
+
+      var modal = new Higherframe.Modals.Frame.Update(frame);
+      this.ModalManager.present(modal);
+    };
+
+		onFrameDeleteClick($event, frame) {
 
 			// Stop the frame from opening
 			$event.stopPropagation();

@@ -51,7 +51,11 @@ $easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
 #frames {
 	margin-top: 6*$vu;
 
-	#framesListContainer {
+	.group {
+		& + .group {
+			margin-top: 10*$vu;
+		}
+
 		.organisation {
 			.name {
 				@include span(full);
@@ -100,6 +104,38 @@ $easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
 				.project {
 					margin-top: $vu;
 					color: $grey1;
+				}
+
+				.settings {
+					display: none;
+					position: absolute;
+					right: 0;
+					top: 0;
+					width: 12px;
+					height: 12px;
+					padding: 10px;
+
+					path {
+						fill: $grey3;
+					}
+
+					&:hover {
+						path {
+							fill: $grey1;
+						}
+					}
+
+					&:active {
+						path {
+							fill: $blue;
+						}
+					}
+				}
+
+				&:hover {
+					.settings {
+						display: block;
+					}
 				}
 
 				.users {

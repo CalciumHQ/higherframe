@@ -1,11 +1,15 @@
-form(name="ModalCtrl.frame").ui-modal
+form(name="ModalCtrl.form").ui-modal
   .ui-modal-header
     h2 {{ ModalCtrl.title }}
     
   .ui-modal-body
     div.ui-control.block
-      label.ui-label.b1(for="name") What is the wireframe's name?
+      label.ui-label.b1(for="name") Name
       input.ui-input(name="name", type="text", ng-model="ModalCtrl.name", placeholder="Enter a name", required)
+        
+    div.ui-control.block
+      label.ui-label.b1(for="organisation") Organisation
+      select.ui-input(name="organisation", type="text", ng-model="ModalCtrl.organisation", ng-options="o._id as o.name for o in ModalCtrl.organisations", placeholder="Pick an organisation", required)
     
   .ui-modal-footer
     .ui-modal-buttons
