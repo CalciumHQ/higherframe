@@ -1,0 +1,24 @@
+
+.ui-tokens {
+  .ui-token {
+    @include box-sizing(border-box);
+    display: inline-block;
+    height: 4*$vu;
+    padding: $vu 5px 0;
+    margin-right: 5px;
+    margin-top: 0.5*$vu;
+    border: 1px solid $uiControlBorderColor;
+    border-radius: $uiControlBorderRadius;
+    background: white;
+
+    span {
+      display: block;
+    }
+  }
+}
+
+.ui-control.block {
+  .ui-tokens {
+    margin-top: 2*$vu;
+  }
+}

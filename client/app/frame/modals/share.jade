@@ -5,8 +5,15 @@ form(name="ModalCtrl.form").ui-modal
   .ui-modal-body
     div.ui-control.block
       label.ui-label.b1(for="user") Choose people to share this wireframe with:
-      ui-autocomplete(name="user", type="text", ng-model="ModalCtrl.user", placeholder="Enter a name, username or email address", required)
+      ui-autocomplete(name="user", type="text", ng-model="ModalCtrl.users", placeholder="Enter a name, username or email address", required)
       p.ui-hint.b3 If you can't find a user, they might not have registered on Higherframe yet.
+      
+    div.ui-control.block
+      label.ui-label.b1(ng-if="ModalCtrl.frame.users.length") You are already sharing this wireframe with:
+      label.ui-label.b1(ng-if="!ModalCtrl.frame.users.length") You are not currently sharing this wireframe with anybody.
+      div.ui-tokens
+        div.ui-token(ng-repeat="user in ModalCtrl.frame.users") 
+          span.b3.medium {{ user.name }}
     
   .ui-modal-footer
     .ui-modal-buttons

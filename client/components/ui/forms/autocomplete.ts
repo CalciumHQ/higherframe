@@ -8,6 +8,7 @@ module Higherframe.UI {
   export class AutocompleteController {
 
     query: String = '';
+    values: Array<any> = [];
     options: Array<any> = [];
     open: Boolean = false;
 
@@ -20,6 +21,7 @@ module Higherframe.UI {
 
       this.$scope.ngModel.$formatters.push(this.format);
       this.$scope.ngModel.$parsers.push(this.parse);
+      this.$scope.ngModel.$render = () => this.render.call(this);
     }
 
     registerWatches() {
@@ -52,21 +54,70 @@ module Higherframe.UI {
 
     format(value) {
 
+      console.log(value);
       return value;
     }
 
     parse(value) {
 
+      console.log(value);
       return value;
     }
 
-    render(value) {
+    render() {
 
+      this.values = this.$scope.ngModel.$viewValue;
+    }
+
+    select(option) {
+
+      this.$scope.ngModel.$modelValue.push(option);
+      this.$scope.ngModel.$setViewValue(this.$scope.ngModel.$modelValue);
+      this.$scope.ngModel.$validate();
+      this.$scope.ngModel.$render();
+    }
+
+    deselect(option) {
+
+      var index = this.$scope.ngModel.$modelValue.indexOf(option);
+
+      if (index === -1) {
+
+        return;
+      }
+
+      this.$scope.ngModel.$modelValue.splice(index, 1);
+      this.$scope.ngModel.$setViewValue(this.$scope.ngModel.$modelValue);
+      this.$scope.ngModel.$validate();
+      this.$scope.ngModel.$render();
+    }
+
+    onKeyDown(event) {
+
+      switch(event.keyCode) {
+
+        case 8:   // delete key
+
+          this.handleDeleteKey(event);
+          break;
+      }
+    }
+
+    private handleDeleteKey(event: ng.IAngularEvent) {
+
+      if (!this.query) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        this.deselect(this.values[this.values.length-1]);
+      }
     }
 
     onOptionClick(option) {
 
-      this.$scope.ngModel.$setViewValue(option._id);
+      this.select(option);
+
       this.open = false;
       this.query = '';
     }

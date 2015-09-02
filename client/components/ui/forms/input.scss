@@ -1,7 +1,7 @@
 
 .ui-input {
   @include box-sizing(border-box);
-  padding: 0 10px;
+  padding: 0 $uiControlPaddingHorizontalMedium;
   height: $uiControlHeightMedium;
   border: 1px solid $uiControlBorderColor;
   border-radius: $uiControlBorderRadius;

@@ -6,6 +6,7 @@ module Higherframe.Modals.Frame {
 
     title = 'Share wireframe';
     templateUrl = '/app/frame/modals/share.html';
+    frame: any;
 
     // Form
     form: ng.IFormController;
@@ -14,11 +15,13 @@ module Higherframe.Modals.Frame {
     organisations: Array<any>;
 
     // Models
-    user: string = 'foo';
+    users: Array<any> = [];
 
-    constructor(private frame: any) {
+    constructor(frame: any) {
 
       super();
+
+      this.frame = frame;
 
       var injector = angular.injector(['ng']);
       injector.invoke(($http) => {
@@ -65,7 +68,7 @@ module Higherframe.Modals.Frame {
       var injector = angular.injector(['ng']);
       injector.invoke(($http) => {
 
-        $http.post(`/api/frames/${this.frame._id}/users`, [this.user]);
+        $http.post(`/api/frames/${this.frame._id}/users`, this.users.map(user => user._id));
       });
 
       this.close();

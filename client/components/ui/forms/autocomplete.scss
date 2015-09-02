@@ -1,5 +1,6 @@
 
-.ui-autocomplete {
+.ui-autocomplete,
+.ui-control .ui-autocomplete {
   position: relative;
 
   &.ui-autocomplete-options-open {
@@ -14,8 +15,42 @@
     }
   }
 
-  .ui-input {
+  .ui-autocomplete-input.ui-input {
+    @include display-flex;
 
+    .ui-autocomplete-tokens {
+      margin-top: -1px;
+      margin-left: -3px;
+      padding-top: $vu;
+
+      .ui-autocomplete-token {
+        @include box-sizing(border-box);
+        display: inline-block;
+        height: 3*$vu;
+        padding: 0.5*$vu 5px 0;
+        margin-right: 5px;
+        border: 1px solid $blue4;
+        border-radius: 3px;
+        background: $blue5;
+
+        span {
+          display: block;
+        }
+      }
+    }
+
+    input {
+      @include flex-grow(1);
+      @include b1();
+      top: 0;
+      height: 100%;
+      padding: 0;
+      border: none;
+
+      &:focus {
+        outline: none;
+      }
+    }
   }
 
   .ui-autocomplete-options {
@@ -31,16 +66,39 @@
     z-index: 10;
 
     li {
-      padding: $vu;
+      padding: 2*$vu $uiControlPaddingHorizontalMedium;
       background: white;
+      cursor: pointer;
+
+      & + li {
+        border-top: 1px solid $grey4;
+      }
 
       &:hover {
-        background: $blue5;
+        color: white;
+        background: $blue;
+
+        .secondary {
+          color: $blue4;
+        }
+      }
+
+      & + li:hover {
+        border-color: $blue;
       }
 
       &:last-child {
         border-bottom-left-radius: $uiControlBorderRadius;
         border-bottom-right-radius: $uiControlBorderRadius;
+      }
+
+      span {
+        display: block;
+      }
+
+      .secondary {
+        margin-top: $vu;
+        color: $grey1;
       }
     }
   }
