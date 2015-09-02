@@ -75,7 +75,8 @@ class FrameCtrl {
     private localStorageService,
     private Session,
     private Auth,
-    private TrayManager: Higherframe.UI.Tray.Manager
+    private TrayManager: Higherframe.UI.Tray.Manager,
+    private ModalManager: Higherframe.UI.Modal.Manager
   ) {
 
     var that = this;
@@ -762,7 +763,13 @@ class FrameCtrl {
 
     // Hide the quick add
     this.toggleQuickAdd();
-  };
+  }
+
+  onActionbarShareClick() {
+
+    var modal = new Higherframe.Modals.Frame.Share(this.frame);
+    this.ModalManager.present(modal);
+  }
 
   onComponentPropertyChange(key, value, component, property) {
 

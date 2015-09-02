@@ -1,8 +1,12 @@
 
 .ui-control {
-
   & + .ui-control {
     margin-top: 6*$vu;
+  }
+
+  .ui-hint {
+    margin-top: $vu;
+    color: $grey2;
   }
 }
 

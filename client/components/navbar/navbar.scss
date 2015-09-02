@@ -4,8 +4,9 @@ $logoHeight: 3 * $vu;
 
 #navbar,
 #actionbar {
+	@include box-sizing(border-box);
 	width: 100%;
-	
+
 	&.border {
 		border-bottom: 1px solid #dce1e0;
 	}
@@ -36,7 +37,6 @@ $logoHeight: 3 * $vu;
 }
 
 #navbar {
-	@include box-sizing(border-box);
 	position: relative;
 	height: $navbarHeight;
 	line-height: $navbarHeight;

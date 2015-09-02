@@ -1,0 +1,47 @@
+
+.ui-autocomplete {
+  position: relative;
+
+  &.ui-autocomplete-options-open {
+    .ui-input {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      border-bottom-color: $grey4;
+    }
+
+    .ui-autocomplete-options {
+      display: block;
+    }
+  }
+
+  .ui-input {
+
+  }
+
+  .ui-autocomplete-options {
+    display: none;
+    @include box-sizing(border-box);
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    border: 1px solid $uiControlBorderColor;
+    border-top: none;
+    border-bottom-left-radius: $uiControlBorderRadius;
+    border-bottom-right-radius: $uiControlBorderRadius;
+    z-index: 10;
+
+    li {
+      padding: $vu;
+      background: white;
+
+      &:hover {
+        background: $blue5;
+      }
+
+      &:last-child {
+        border-bottom-left-radius: $uiControlBorderRadius;
+        border-bottom-right-radius: $uiControlBorderRadius;
+      }
+    }
+  }
+}

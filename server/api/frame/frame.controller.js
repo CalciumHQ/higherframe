@@ -91,6 +91,22 @@ exports.destroy = function(req, res) {
   });
 };
 
+// Shares this frame with a user.
+exports.addUser = function(req, res) {
+
+  // Add to the frame
+  Frame.findOneAndUpdate(
+    { _id: req.params.id },
+    { $addToSet: { users: { $each: req.body } }},
+    { safe: true, upsert: false },
+    function (err, Frame) {
+
+      if(err) { return handleError(res, err); }
+      return res.json(201, Frame);
+    }
+  )
+};
+
 // Creates a new component in the DB for this frame.
 exports.createComponent = function(req, res) {
 

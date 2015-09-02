@@ -1,0 +1,6 @@
+div.ui-autocomplete(ng-class="{ 'ui-autocomplete-options-open': Ctrl.open }")
+  input.ui-input(ng-model="Ctrl.query", ng-model-options="{ debounce: 300 }")
+    
+  ul.ui-autocomplete-options
+    li(ng-repeat="option in Ctrl.options", ng-click="Ctrl.onOptionClick(option)") 
+      span.b1 {{ option.name }}

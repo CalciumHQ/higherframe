@@ -4,6 +4,7 @@ div.fullscreen-wrapper
 	div#actionbar.row.blue.light.border
 		a.action.b3.roboto.semibold(ui-sref="frames") Dashboard
 		a.action.b3.roboto.semibold(ng-click="FrameCtrl.onActionbarQuickAddClick()", ng-class="{ open: FrameCtrl.quickAddOpen }", tooltips, tooltip-speed="fast", tooltip-side="bottom", tooltip-title="cmd+r") Quick add
+		a.action.b3.roboto.semibold(ng-click="FrameCtrl.onActionbarShareClick()") Share
 
 	#frame
 		ui-tray-region(position="left")
