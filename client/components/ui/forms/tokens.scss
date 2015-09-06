@@ -1,18 +1,37 @@
 
 .ui-tokens {
   .ui-token {
-    @include box-sizing(border-box);
     display: inline-block;
-    height: 4*$vu;
-    padding: $vu 5px 0;
     margin-right: 5px;
     margin-top: 0.5*$vu;
     border: 1px solid $uiControlBorderColor;
     border-radius: $uiControlBorderRadius;
     background: white;
 
-    span {
-      display: block;
+    .ui-token-container {
+      @include display-flex;
+
+      span {
+        @include box-sizing(border-box);
+        display: block;
+        height: 4*$vu;
+        padding: $vu $vu 0;
+      }
+
+      .ui-token-remove {
+        @include box-sizing(border-box);
+        height: 4*$vu;
+        padding: $vu;
+        border-left: 1px solid $uiControlBorderColor;
+        border-top-right-radius: $uiControlBorderRadius - 1;
+        border-bottom-right-radius: $uiControlBorderRadius - 1;
+        cursor: pointer;
+
+        &:hover {
+          background: $uiControlBorderColor;
+          color: white;
+        }
+      }
     }
   }
 }

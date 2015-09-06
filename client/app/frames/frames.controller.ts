@@ -17,7 +17,8 @@ module Higherframe.Controllers {
       private $http: ng.IHttpService,
       private frames: Array<any>,
       private socket,
-      private ModalManager: Higherframe.UI.Modal.Manager
+      private ModalManager: Higherframe.UI.Modal.Manager,
+      private Auth
     ) {
 
       this.registerSockets();
@@ -63,7 +64,7 @@ module Higherframe.Controllers {
 
 		onNewFrameClick(organisation) {
 
-      var modal = new Higherframe.Modals.Frame.New();
+      var modal = new Higherframe.Modals.Frame.New(this.Auth);
       modal.organisation = organisation;
       this.ModalManager.present(modal);
 		};

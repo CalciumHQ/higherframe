@@ -10,6 +10,15 @@ form(name="ModalCtrl.form").ui-modal
     div.ui-control.block
       label.ui-label.b1(for="organisation") Organisation
       select.ui-input(name="organisation", type="text", ng-model="ModalCtrl.organisation", ng-options="o._id as o.name for o in ModalCtrl.organisations", placeholder="Pick an organisation", required)
+    
+    div.ui-control.block
+      label.ui-label.b1(ng-if="ModalCtrl.users.length") You are already sharing this wireframe with:
+      label.ui-label.b1(ng-if="!ModalCtrl.users.length") You are not currently sharing this wireframe with anybody.
+      div.ui-tokens
+        div.ui-token(ng-repeat="user in ModalCtrl.users") 
+          div.ui-token-container
+            span.b3.medium {{ user.name }}
+            a.ui-token-remove.b3.strong(ng-click="ModalCtrl.onRemoveUserClick(user)") x
         
     div.ui-control.block
       button.ui-button.danger(ng-click="ModalCtrl.onDeleteButtonClick()")

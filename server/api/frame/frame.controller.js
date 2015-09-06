@@ -18,7 +18,7 @@ var frameExporter = require('./../../components/frame/exporter');
 exports.index = function(req, res) {
 
   Frame
-    .find()
+    .find({ users: req.user._id })
     .populate('organisation users')
     .exec(function (err, frames) {
 
@@ -31,12 +31,13 @@ exports.index = function(req, res) {
 exports.show = function(req, res) {
 
   Frame
-		.findById(req.params.id)
+		.findOne({ _id: req.params.id, users: req.user._id })
 		.populate('organisation components users collaborators')
 		.exec(function (err, frame) {
 
 	    if(err) { return handleError(res, err); }
 	    if(!frame) { return res.send(404); }
+
 	    return res.json(frame);
 	  });
 };
@@ -45,6 +46,13 @@ exports.show = function(req, res) {
 exports.create = function(req, res) {
 
   if(!req.body.organisation) { return handleError(res, null); }
+
+  if (!_.find(req.body.users, function(user) { return req.user._id == req.user._id; })) {
+
+    req.body.users = req.body.users || [];
+    req.body.users.push(req.user);
+  }
+
   Frame.create(req.body, function(err, frame) {
 
     if(err) { return handleError(res, err); }
@@ -66,6 +74,7 @@ exports.update = function(req, res) {
     if (err) { return handleError(res, err); }
     if(!frame) { return res.send(404); }
     var updated = _.merge(frame, req.body);
+    frame.users = req.body.users;
 
     updated.save(function (err) {
 

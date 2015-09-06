@@ -11,12 +11,16 @@ angular
         controller: 'FramesCtrl',
 				controllerAs: 'FramesCtrl',
         resolve: {
-          frames: function($stateParams, $http, $q) {
+          frames: function($stateParams, $http, $q, Auth) {
 
             var deferred = $q.defer();
 
-            $http
-              .get('/api/frames')
+            $http({
+							url: '/api/frames',
+							headers: {
+								'Authorization': 'Bearer ' + Auth.getToken()
+							}
+						})
               .success(function (frames) {
 
                 deferred.resolve(frames);

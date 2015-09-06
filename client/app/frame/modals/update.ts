@@ -16,6 +16,7 @@ module Higherframe.Modals.Frame {
     // Models
     name: string;
     organisation: string;
+    users: Array<any>;
 
     constructor(private frame: any) {
 
@@ -23,6 +24,7 @@ module Higherframe.Modals.Frame {
 
       this.name = frame.name;
       this.organisation = frame.organisation._id;
+      this.users = angular.copy(frame.users);
 
       var injector = angular.injector(['ng']);
       injector.invoke(($http) => {
@@ -45,6 +47,12 @@ module Higherframe.Modals.Frame {
     onCloseButtonClick() {
 
       this.close();
+    }
+
+    onRemoveUserClick(user) {
+
+      var index = this.users.indexOf(user);
+      this.users.splice(index, 1);
     }
 
     onDeleteButtonClick() {
@@ -71,7 +79,8 @@ module Higherframe.Modals.Frame {
 
         $http.patch(`/api/frames/${this.frame._id}`, {
           name: this.name,
-          organisation: this.organisation
+          organisation: this.organisation,
+          users: this.users.map(user => user._id)
         });
       });
 

@@ -19,6 +19,11 @@ module Higherframe.Modals.Frame {
      * Event handlers
      */
 
+    constructor(private Auth) {
+
+      super();
+    }
+
     onCloseButtonClick() {
 
       this.close();
@@ -35,9 +40,16 @@ module Higherframe.Modals.Frame {
       var injector = angular.injector(['ng']);
       injector.invoke(($http) => {
 
-        $http.post('/api/frames', {
-          name: this.name,
-          organisation: this.organisation._id
+        $http({
+          method: 'POST',
+          url: '/api/frames',
+          headers: {
+            'Authorization': 'Bearer ' + this.Auth.getToken()
+          },
+          data: {
+            name: this.name,
+            organisation: this.organisation._id
+          }
         });
       });
 
