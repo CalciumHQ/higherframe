@@ -2,8 +2,40 @@ div.fullscreen-wrapper
 	div#navbar.row.blue.light.border-light(ng-include='"components/navbar/navbar.html"')
 		
 	div#actionbar.row.blue.light.border
-		a.action.b3.roboto.semibold(ui-sref="frames") Dashboard
-		a.action.b3.roboto.semibold(ng-click="FrameCtrl.onActionbarQuickAddClick()", ng-class="{ open: FrameCtrl.quickAddOpen }", tooltips, tooltip-speed="fast", tooltip-side="bottom", tooltip-title="cmd+r") Quick add
+		span.action.action-menu.b3.roboto.semibold(ui-action-menu) File
+			div.action-menu-items
+				a.action-menu-item.divider(ui-sref="frames")
+					span.action-menu-item-label Close
+					span.action-menu-item-shortcut cmd+shift+w
+					
+		span.action.action-menu.b3.roboto.semibold(ui-action-menu) Export
+			div.action-menu-items
+				a.action-menu-item
+					span.action-menu-item-label Save as PNG
+					span.action-menu-item-shortcut cmd+n
+					
+				a.action-menu-item
+					span.action-menu-item-label Save as PDF
+					span.action-menu-item-shortcut cmd+n
+					
+				a.action-menu-item
+					span.action-menu-item-label Save as SVG
+					span.action-menu-item-shortcut cmd+n
+					
+				a.action-menu-item.divider
+					span.action-menu-item-label View exports
+					span.action-menu-item-shortcut cmd+shift+p
+					
+		span.action.action-menu.b3.roboto.semibold(ui-action-menu) View
+			div.action-menu-items
+				a.action-menu-item
+					span.action-menu-item-label Show properties
+					span.action-menu-item-shortcut cmd+shift+p
+					
+				a.action-menu-item.divider
+					span.action-menu-item-label Toggle fullscreen
+					span.action-menu-item-shortcut tab
+					
 		a.action.b3.roboto.semibold(ng-click="FrameCtrl.onActionbarShareClick()") Share
 
 	#frame

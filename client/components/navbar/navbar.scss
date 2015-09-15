@@ -256,6 +256,88 @@ $logoHeight: 3 * $vu;
 		}
 	}
 
+	.action-menu {
+		position: relative;
+
+		&.active {
+			color: white !important;
+		}
+
+		.action-menu-items {
+			display: none;
+			position: absolute;
+			top: 100%;
+			left: -$vu;
+			z-index: 100;
+			min-width: 180px;
+			margin-top: 9px;
+			border: 1px solid $grey3;
+			border-radius: $uiControlBorderRadius;
+
+			&:before {
+				content: '';
+				position: absolute;
+				left: 2*$vu;
+				bottom: 100%;
+				margin-bottom: -5px;
+				margin-left: -5px;
+				width: 10px;
+				height: 10px;
+				z-index: 1;
+				border-top: 1px solid $grey3;
+				border-left: 1px solid $grey3;
+				background: white;
+				@include transform(rotateZ(45deg));
+			}
+
+			.action-menu-item {
+				position: relative;
+				@include display-flex;
+				padding: 10px $vu;
+				z-index: 2;
+				text-decoration: none;
+				color: $grey-1;
+				background: white;
+
+				&:first-child {
+					border-top-left-radius: $uiControlBorderRadius - 1;
+					border-top-right-radius: $uiControlBorderRadius - 1;
+				}
+
+				&:last-child {
+					border-bottom-left-radius: $uiControlBorderRadius - 1;
+					border-bottom-right-radius: $uiControlBorderRadius - 1;
+				}
+
+				&:hover {
+					background: $blue;
+
+					.action-menu-item-label {
+						color: white;
+					}
+
+					.action-menu-item-shortcut {
+						color: $blue4;
+					}
+				}
+
+				&.divider {
+					border-top: 1px solid $grey3;
+				}
+
+				.action-menu-item-label {
+					@include flex-grow(1);
+					white-space: nowrap;
+				}
+
+				.action-menu-item-shortcut {
+					margin-left: 40px;
+					color: $grey2;
+				}
+			}
+		}
+	}
+
 	&.light {
 		.action {
 			color: $blue3;

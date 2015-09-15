@@ -1,8 +1,20 @@
 div#navbar.row.blue.border-light(ng-include='"components/navbar/navbar.html"')
 div#actionbar.row.blue.light
-	a.action.b3.roboto.semibold(ui-sref="frames") Wireframes
-	a.action.b3.roboto.semibold() Organisations
-	a.action.b3.roboto.semibold() Sharing
+	span.action.action-menu.b3.roboto.semibold(ui-action-menu) File
+		div.action-menu-items
+			a.action-menu-item
+				span.action-menu-item-label New wireframe
+				span.action-menu-item-shortcut cmd+n
+				
+			a.action-menu-item 
+				span.action-menu-item-label New organisation
+				span.action-menu-item-shortcut cmd+shift+n
+		
+	span.action.action-menu.b3.roboto.semibold(ui-action-menu) Settings
+		div.action-menu-items
+			a.action-menu-item 
+				span.action-menu-item-label User settings
+				span.action-menu-item-shortcut cmd+u
 		
 div#frames
 	div.group(ng-repeat="group in FramesCtrl.groups")

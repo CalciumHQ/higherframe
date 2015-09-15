@@ -31,6 +31,7 @@
         "./app/frame/trays/view.ts",
         "./app/frames/frames.controller.ts",
         "./app/organisation/modals/update.ts",
+        "./components/ui/action-bar/menu.ts",
         "./components/ui/forms/autocomplete.ts",
         "./library/data/component-properties.ts",
         "./library/data/component.ts",
