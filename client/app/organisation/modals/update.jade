@@ -1,0 +1,20 @@
+form(name="ModalCtrl.form").ui-modal
+  .ui-modal-header
+    h2 {{ ModalCtrl.title }}
+    
+  .ui-modal-body
+    div.ui-control.block
+      label.ui-label.b1(for="name") Name
+      input.ui-input(name="name", type="text", ng-model="ModalCtrl.name", placeholder="Enter a name", required)
+        
+    div.ui-control.block
+      button.ui-button.danger(ng-click="ModalCtrl.onDeleteButtonClick()")
+        span.b1.medium.loose.uppercase Delete
+    
+  .ui-modal-footer
+    .ui-modal-buttons
+      a.ui-button.neutral(ng-click="ModalCtrl.onCloseButtonClick()")
+        span.b1.medium.loose.uppercase Close
+        
+      a.ui-button.success(ng-click="ModalCtrl.onSaveButtonClick()")
+        span.b1.medium.loose.uppercase Save

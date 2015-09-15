@@ -5,12 +5,14 @@ div#actionbar.row.blue.light
 	a.action.b3.roboto.semibold() Sharing
 		
 div#frames
-	div.group(ng-repeat="organisation in FramesCtrl.organisations")
+	div.group(ng-repeat="group in FramesCtrl.groups")
 		div.organisation.row
-			div.name.b3.uppercase.strong.airy {{ organisation.organisation.name }}
+			div.name.b3.uppercase.strong.airy {{ group.organisation.name }}
+				div.settings(ng-click="FramesCtrl.onOrganisationSettingsClick($event, group.organisation)")
+					svg-replace(ng-src="/assets/images/settings.svg")
 			
 		div.frames.cards.row
-			a.card(ng-repeat="frame in organisation.frames | orderBy:'-created_at'", ng-click="FramesCtrl.onFrameClick($event, frame)")
+			a.card(ng-repeat="frame in group.frames | orderBy:'-created_at'", ng-click="FramesCtrl.onFrameClick($event, frame)")
 				div.content
 					div.left
 						span.name.h3.block {{ frame.name }}
@@ -25,6 +27,6 @@ div#frames
 					div.right
 						span.lastModified {{ (frame.created_at | moment).fromNow() }}
 						
-			a.card.new(ng-click="FramesCtrl.onNewFrameClick(organisation.organisation)")
+			a.card.new(ng-click="FramesCtrl.onNewFrameClick(group.organisation)")
 				div.content
 					span + add new

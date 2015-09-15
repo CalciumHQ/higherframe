@@ -6,7 +6,7 @@ module Higherframe.Controllers {
 
   export class Frames {
 
-    organisations: any = [];
+    groups: any = [];
 
     constructor(
       private $scope: ng.IScope,
@@ -16,6 +16,7 @@ module Higherframe.Controllers {
       private $timeout: ng.ITimeoutService,
       private $http: ng.IHttpService,
       private frames: Array<any>,
+      private organisations: Array<any>,
       private socket,
       private ModalManager: Higherframe.UI.Modal.Manager,
       private Auth
@@ -25,24 +26,18 @@ module Higherframe.Controllers {
 
       $scope.$watchCollection(() => {
 
+        return this.organisations;
+      }, () => {
+
+        this.regroup();
+      });
+
+      $scope.$watchCollection(() => {
+
         return this.frames;
       }, () => {
 
-        var organisations = {};
-
-        frames.forEach(function(frame) {
-
-          organisations[frame.organisation._id] =
-            organisations[frame.organisation._id] ||
-            {
-              organisation: frame.organisation,
-              frames: []
-            };
-
-          organisations[frame.organisation._id].frames.push(frame);
-        });
-
-        this.organisations = organisations;
+        this.regroup();
       });
     }
 
@@ -55,12 +50,53 @@ module Higherframe.Controllers {
 
       // Document updating
 			this.socket.syncUpdates('frame', this.frames);
+      this.socket.syncUpdates('organisation', this.organisations);
+    }
+
+
+    /**
+     *
+     */
+
+    private regroup() {
+
+      var groups = {};
+
+      this.organisations.forEach((organisation) => {
+
+        groups[organisation._id] =
+          groups[organisation._id] ||
+          {
+            organisation: organisation,
+            frames: []
+          };
+      });
+
+      this.frames.forEach((frame) => {
+
+        groups[frame.organisation._id] =
+          groups[frame.organisation._id] ||
+          {
+            organisation: frame.organisation,
+            frames: []
+          };
+
+        groups[frame.organisation._id].frames.push(frame);
+      });
+
+      this.groups = groups;
     }
 
 
     /*
      * Event handlers
      */
+
+    onOrganisationSettingsClick($event, organisation) {
+
+      var modal = new Higherframe.Modals.Organisation.Update(organisation);
+      this.ModalManager.present(modal);
+    }
 
 		onNewFrameClick(organisation) {
 

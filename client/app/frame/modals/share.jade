@@ -12,8 +12,9 @@ form(name="ModalCtrl.form").ui-modal
       label.ui-label.b1(ng-if="ModalCtrl.frame.users.length") You are already sharing this wireframe with:
       label.ui-label.b1(ng-if="!ModalCtrl.frame.users.length") You are not currently sharing this wireframe with anybody.
       div.ui-tokens
-        div.ui-token(ng-repeat="user in ModalCtrl.frame.users") 
-          span.b3.medium {{ user.name }}
+        div.ui-token(ng-repeat="user in ModalCtrl.frame.users")
+          div.ui-token-container
+            span.b3.medium {{ user.name }}
     
   .ui-modal-footer
     .ui-modal-buttons

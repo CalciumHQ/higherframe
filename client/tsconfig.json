@@ -30,6 +30,7 @@
         "./app/frame/trays/toolbox.ts",
         "./app/frame/trays/view.ts",
         "./app/frames/frames.controller.ts",
+        "./app/organisation/modals/update.ts",
         "./components/ui/forms/autocomplete.ts",
         "./library/data/component-properties.ts",
         "./library/data/component.ts",

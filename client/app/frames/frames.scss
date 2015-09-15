@@ -56,10 +56,46 @@ $easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
 			margin-top: 10*$vu;
 		}
 
+		&:hover {
+			.organisation {
+				.name {
+					.settings {
+						display: inline-block;
+					}
+				}
+			}
+		}
+
 		.organisation {
 			.name {
 				@include span(full);
 				color: $grey2;
+
+				.settings {
+					$padding: 5px;
+					display: none;
+					margin: (-$padding) (-$padding) (-$padding - 1px) (-$padding + 5px);
+					padding: $padding;
+					cursor: pointer;
+
+					&:hover {
+						svg {
+							path {
+								fill: $blue;
+							}
+						}
+					}
+
+					svg {
+						display: block;
+						width: 11px;
+						height: auto;
+
+						path {
+							fill: $grey2;
+						}
+					}
+				}
 			}
 		}
 
