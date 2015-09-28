@@ -33,6 +33,7 @@
         "./app/organisation/modals/update.ts",
         "./components/ui/action-bar/menu.ts",
         "./components/ui/forms/autocomplete.ts",
+        "./components/ui/tooltip/tooltip.ts",
         "./library/data/component-properties.ts",
         "./library/data/component.ts",
         "./library/data/document.ts",

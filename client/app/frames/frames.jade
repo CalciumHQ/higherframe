@@ -33,7 +33,7 @@ div#frames
 							svg-replace(ng-src="/assets/images/settings.svg")
 								
 						ul.users
-							li.user(ng-repeat="user in frame.users", tooltips, tooltip-speed="fast", tooltip-side="bottom", tooltip-title="Shared with {{ user.name }}")
+							li.user(ng-repeat="user in frame.users", ui-tooltip="'Shared with ' + user.name")
 								img.image(ng-if="user.provider == 'facebook'", ng-src="http://graph.facebook.com/{{ user.facebook.id }}/picture?type=large")
 						
 					div.right
