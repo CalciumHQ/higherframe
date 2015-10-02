@@ -4,35 +4,104 @@ div.fullscreen-wrapper
 	div#actionbar.row.blue.light.border
 		span.action.action-menu.b3.roboto.semibold(ui-action-menu) File
 			div.action-menu-items
+				a.action-menu-item
+					span.action-menu-item-label Settings
+					span.action-menu-item-shortcut 
+						span(ng-bind-html="'ctrl' | symbol")
+						| ,
+					
 				a.action-menu-item.divider(ui-sref="frames")
 					span.action-menu-item-label Close
-					span.action-menu-item-shortcut cmd+shift+w
+					span.action-menu-item-shortcut 
+						span(ng-bind-html="'shift' | symbol")
+						span(ng-bind-html="'ctrl' | symbol")
+						| W
+					
+		span.action.action-menu.b3.roboto.semibold(ui-action-menu) Edit
+			div.action-menu-items
+				a.action-menu-item
+					span.action-menu-item-label Copy
+					span.action-menu-item-shortcut
+						span(ng-bind-html="'ctrl' | symbol")
+						| C
+					
+				a.action-menu-item
+					span.action-menu-item-label Cut
+					span.action-menu-item-shortcut
+						span(ng-bind-html="'ctrl' | symbol")
+						| X
+				
+				a.action-menu-item
+					span.action-menu-item-label Paste
+					span.action-menu-item-shortcut 
+						span(ng-bind-html="'ctrl' | symbol")
+						| V
+					
+				a.action-menu-item.divider
+					span.action-menu-item-label Select all
+					span.action-menu-item-shortcut 
+						span(ng-bind-html="'ctrl' | symbol")
+						| A
 					
 		span.action.action-menu.b3.roboto.semibold(ui-action-menu) Export
 			div.action-menu-items
 				a.action-menu-item
 					span.action-menu-item-label Save as PNG
-					span.action-menu-item-shortcut cmd+n
+					span.action-menu-item-shortcut
+						span(ng-bind-html="'ctrl' | symbol")
+						| N
 					
 				a.action-menu-item
 					span.action-menu-item-label Save as PDF
-					span.action-menu-item-shortcut cmd+n
+					span.action-menu-item-shortcut
+						span(ng-bind-html="'ctrl' | symbol")
+						| N
 					
 				a.action-menu-item
 					span.action-menu-item-label Save as SVG
-					span.action-menu-item-shortcut cmd+n
+					span.action-menu-item-shortcut
+						span(ng-bind-html="'ctrl' | symbol")
+						| N
 					
 				a.action-menu-item.divider
-					span.action-menu-item-label View exports
-					span.action-menu-item-shortcut cmd+shift+p
+					span.action-menu-item-label Export to Omnigraffle
 					
+				a.action-menu-item
+					span.action-menu-item-label Export to Balsamiq
+			
 		span.action.action-menu.b3.roboto.semibold(ui-action-menu) View
 			div.action-menu-items
 				a.action-menu-item
-					span.action-menu-item-label Show properties
-					span.action-menu-item-shortcut cmd+shift+p
+					span.action-menu-item-label Goto artboard
+					span.action-menu-item-shortcut 
+						span(ng-bind-html="'ctrl' | symbol")
+						| 1-9
 					
 				a.action-menu-item.divider
+					span.action-menu-item-label Show minimap
+						
+				a.action-menu-item
+					span.action-menu-item-label Show properties
+					span.action-menu-item-shortcut
+						span(ng-bind-html="'shift' | symbol")
+						span(ng-bind-html="'ctrl' | symbol")
+						| P
+					
+				a.action-menu-item.divider
+					span.action-menu-item-label Toggle grid
+					span.action-menu-item-shortcut 
+						span(ng-bind-html="'alt' | symbol")
+						span(ng-bind-html="'ctrl' | symbol")
+						| ,
+					
+				a.action-menu-item
+					span.action-menu-item-label Toggle annotations
+					span.action-menu-item-shortcut
+						span(ng-bind-html="'alt' | symbol")
+						span(ng-bind-html="'ctrl' | symbol")
+						| R
+					
+				a.action-menu-item
 					span.action-menu-item-label Toggle fullscreen
 					span.action-menu-item-shortcut tab
 					

@@ -8,7 +8,6 @@ angular.module('siteApp', [
   'btford.socket-io',
   'ui.router',
   'ui.bootstrap',
-  '720kb.tooltips',
   'LocalStorageModule'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {

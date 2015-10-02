@@ -138,11 +138,15 @@ body,
 input,
 button,
 select {
-	font-family: 'Proxima Nova Alt';
+	font-family: "Proxima Nova Alt";
 	-webkit-font-smoothing: antialiased;
 	color: #444444;
 }
 
 .roboto {
-	font-family: 'Roboto';
+	font-family: "Roboto";
+}
+
+.lucida {
+	font-family: "Lucida Sans Unicode";
 }

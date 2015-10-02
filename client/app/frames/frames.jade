@@ -4,17 +4,24 @@ div#actionbar.row.blue.light
 		div.action-menu-items
 			a.action-menu-item
 				span.action-menu-item-label New wireframe
-				span.action-menu-item-shortcut cmd+n
+				span.action-menu-item-shortcut
+					span(ng-bind-html="'ctrl' | symbol")
+					| N
 				
 			a.action-menu-item 
 				span.action-menu-item-label New organisation
-				span.action-menu-item-shortcut cmd+shift+n
+				span.action-menu-item-shortcut
+					span(ng-bind-html="'shift' | symbol")
+					span(ng-bind-html="'ctrl' | symbol")
+					| N
 		
 	span.action.action-menu.b3.roboto.semibold(ui-action-menu) Settings
 		div.action-menu-items
 			a.action-menu-item 
 				span.action-menu-item-label User settings
-				span.action-menu-item-shortcut cmd+u
+				span.action-menu-item-shortcut
+					span(ng-bind-html="'ctrl' | symbol")
+					| U
 		
 div#frames
 	div.group(ng-repeat="group in FramesCtrl.groups")
