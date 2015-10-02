@@ -1,0 +1,116 @@
+.ui-tray-region {
+  position: absolute;
+  top: 10px;
+  height: 500px;
+  z-index: 100;
+
+  &[position="left"] {
+    left: 0;
+
+    .ui-tray-tabs {
+      left: 100%;
+      @include transform-origin(0, 100%);
+      @include transform(rotate(90deg));
+      padding-left: 15px;
+
+      .ui-tray-tab {
+        @include box-shadow($uiShadowOffset (-$uiShadowOffset) 0 $uiShadowColor);
+      }
+    }
+  }
+
+  &[position="right"] {
+    right: 0;
+
+    .ui-tray-tabs {
+      right: 100%;
+      @include transform-origin(100%, 100%);
+      @include transform(rotate(-90deg));
+      padding-right: 15px;
+
+      .ui-tray-tab {
+        @include box-shadow((-$uiShadowOffset) $uiShadowOffset 0 $uiShadowColor);
+      }
+    }
+  }
+
+  .ui-tray-tabs {
+    @include display-flex;
+    position: absolute;
+    bottom: 100%;
+    z-index: 1;
+
+    .ui-tray-tab {
+      margin-left: 2px;
+      padding: 5px 9px;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: $uiContainerTextColorDull;
+      background: $uiContainerBackgroundDull;
+      cursor: pointer;
+
+      &.active {
+        color: $uiContainerTextColorHighlight;
+        background: $uiContainerBackgroundHighlight;
+      }
+    }
+  }
+}
+
+.ui-tray {
+  position: relative;
+  @include display-flex;
+  @include flex-direction(column);
+  @include box-sizing(border-box);
+  height: 100%;
+  width: 260px;
+  z-index: 2;
+  background: $uiContainerBackground;
+  color: $uiContainerTextColor;
+  @include box-shadow($uiShadow);
+
+  .ui-content {
+    @include flex-grow(1);
+
+    .ui-header {
+      margin: $uiTrayHeaderMarginTop 0 $uiTrayHeaderMarginBottom;
+      padding: 0 $uiContainerPadding 6px;
+      border-bottom: 1px solid $blue6;
+      color: $blue;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .ui-pane {
+      padding: 0 $uiContainerPadding;
+    }
+
+    .ui-swatch {
+      position: relative;
+      margin: (-$uiTrayHeaderMarginBottom) (-$uiContainerPadding) 0;
+
+      &:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-bottom: 1px solid $blue6;
+      }
+    }
+
+    .ui-tray-message {
+      display: block;
+      font-style: italic;
+      text-align: center;
+    }
+  }
+
+  .ui-footer {
+    padding: $uiContainerPadding;
+    background: $uiContainerBackgroundHighlight;
+    color: $uiContainerTextColorHighlight;
+  }
+}

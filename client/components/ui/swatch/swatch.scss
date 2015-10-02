@@ -1,0 +1,44 @@
+
+.ui-swatch {
+  @include display-flex;
+  @include flex-wrap(wrap);
+
+  .ui-swatch-item {
+    @include flex-shrink(1);
+    position: relative;
+    width: 33%;
+    padding-top: 33%;
+    border-bottom: 1px solid $blue4;
+
+    &:nth-child(3n+1),
+    &:nth-child(3n+2) {
+      border-right: 1px solid $blue4;
+    }
+
+    &:hover {
+      background: $blue4;
+    }
+
+    &:active {
+      background: $blue2;
+
+      .ui-swatch-image {
+        path {
+          fill: white;
+        }
+      }  
+    }
+
+    .ui-swatch-image {
+      position: absolute;
+      left: 20%;
+      top: 20%;
+      max-width: 60%;
+      max-height: 60%;
+
+      path {
+        fill: $blue-3;
+      }
+    }
+  }
+}

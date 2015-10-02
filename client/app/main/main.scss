@@ -1,30 +1,190 @@
-.thing-form {
-    margin: 20px 0;
+$unitPadding: 80px;
+
+#welcome {
+  .title + .button-flat {
+    display: inline-block;
+    margin-top: 32px;
+  }
 }
 
-#banner {
-    border-bottom: none;
-    margin-top: -20px;
+.fullscreen-wrapper {
+  position: absolute;
+  @include display-flex;
+  @include flex-direction(column);
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
 }
 
-#banner h1 {
-    font-size: 60px;
-    line-height: 1;
-    letter-spacing: -1px;
+.page.underlay-navbar {
+  margin-top: -56px;
+
+  .unit:first-child {
+    padding-top: $unitPadding + 56px;
+  }
 }
 
-.hero-unit {
-    position: relative;
-    padding: 30px 15px;
-    color: #F5F5F5;
-    text-align: center;
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
-    background: #4393B9;
+.page.marketing {
+  .unit {
+    padding: $unitPadding;
+
+    &.image {
+      position: relative;
+      background-position: center;
+      background-size: cover;
+      color: white;
+
+      &:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 1;
+        background: rgba(0,0,0,0.25);
+      }
+
+      .unit-content {
+        position: relative;
+        z-index: 2;
+      }
+    }
+
+    &.blue {
+      background: $blue;
+      color: white;
+    }
+
+    &.light {
+      background: white;
+    }
+
+    &.shade {
+      background: #edeff1;
+    }
+
+    &.center {
+      text-align: center;
+    }
+
+    .unit-content {
+      @include container;
+
+      &.unit-points {
+        .unit-point {
+          @include span(4);
+          margin-left: span(1) + gutter();
+          text-align: center;
+
+          &:first-child {
+            margin-left: span(1) + gutter(3);
+          }
+
+          .image {
+            display: block;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 24px;
+            border: none;
+            background: #f0f0f0;
+          }
+
+          .subhead {
+            color: $blue;
+          }
+        }
+      }
+    }
+  }
 }
 
-.footer {
-    text-align: center;
-    padding: 30px 0;
-    margin-top: 70px;
-    border-top: 1px solid #E5E5E5;
+// Typography
+.display2 {
+  font-size: 48px;
+  font-weight: 600;
+  line-height: 56px;
+}
+
+.title {
+  font-size: 24px;
+  line-height: 30px;
+}
+
+.subhead {
+  font-size: 18px;
+  line-height: 28px;
+}
+
+.body, p {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.caption {
+  font-size: 12px;
+  line-height: 15px;
+}
+
+.display2 {
+  & + .body,
+  & + p {
+    margin-top: 32px;
+  }
+}
+
+.subhead {
+  & + .body,
+  & + p {
+    margin-top: 8px;
+  }
+}
+
+.semibold {
+  font-weight: 500;
+}
+
+a {
+  color: $blue;
+
+  svg {
+    path {
+      fill: $blue;
+    }
+  }
+
+  &:hover {
+    color: shade($blue, 20);
+
+    svg {
+      path {
+        fill: shade($blue, 20);
+      }
+    }
+  }
+
+  &:active {
+    color: shade($blue, 40);
+
+    svg {
+      path {
+        fill: shade($blue, 40);
+      }
+    }
+  }
+}
+
+// Forms
+.button-flat {
+  font-weight: 600;
+  text-decoration: none;
+  color: $yellow;
+}
+
+// Tooltips
+._720kb-tooltip {
+  ._720kb-tooltip-title {
+      @include b3;
+  }
 }

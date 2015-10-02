@@ -1,0 +1,43 @@
+
+.ui-control {
+  & + .ui-control {
+    margin-top: 6*$vu;
+  }
+
+  .ui-hint {
+    margin-top: $vu;
+    color: $grey2;
+  }
+}
+
+.ui-control.block {
+  .ui-label,
+  .ui-input {
+    display: block;
+    width: 100%;
+  }
+
+  .ui-input {
+    margin-top: 2*$vu;
+  }
+}
+
+.ui-control.inline {
+  @include display-flex;
+
+  .ui-input {
+    @include flex-grow(1);
+  }
+}
+
+.ui-control.small {
+  .ui-label {
+    width: 40px;
+    margin-right: 7px;
+    text-align: right;
+  }
+
+  .ui-control + & {
+    margin-top: 15px;
+  }
+}

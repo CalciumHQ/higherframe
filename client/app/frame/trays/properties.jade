@@ -1,0 +1,13 @@
+div.ui-content
+  .ui-header Metrics
+  .ui-pane
+    span.ui-tray-message.caption(ng-show="!TrayController.selection.length") No component selected
+    span.ui-tray-message.caption(ng-show="TrayController.selection.length && !TrayController.selection[0].properties.length") No editable properties
+    ul.properties(ng-show="TrayController.selection.length && TrayController.selection[0].properties.length")
+      li.ui-control.small(ng-repeat="(name, property) in TrayController.selection[0].properties")
+        span.ui-label {{ property.label }}:
+        input.ui-input(type="text", ng-model="TrayController.selection[0].model.properties[property.model]", ng-focus="TrayController.onPropertyFocus(property)", ng-blur="TrayController.onPropertyBlur()", ng-change="TrayController.onComponentPropertyChange(property.model, TrayController.selection[0].model.properties[property.model], TrayController.selection[0], property)")
+
+div.ui-footer
+  div.caption.semibold {{ TrayController.hint.title || 'Component properties' }}
+  div.caption {{ TrayController.hint.description || 'Focus on a property input for more information about that property.' }}

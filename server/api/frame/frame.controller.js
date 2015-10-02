@@ -12,11 +12,15 @@
 var _ = require('lodash');
 var Frame = require('./frame.model');
 var Component = require('./../component/component.model');
+var frameExporter = require('./../../components/frame/exporter');
 
 // Get list of frames
 exports.index = function(req, res) {
 
-  Frame.find(function (err, frames) {
+  Frame
+    .find({ users: req.user._id })
+    .populate('organisation users')
+    .exec(function (err, frames) {
 
     if(err) { return handleError(res, err); }
     return res.json(200, frames);
@@ -27,12 +31,13 @@ exports.index = function(req, res) {
 exports.show = function(req, res) {
 
   Frame
-		.findById(req.params.id)
-		.populate('components collaborators')
+		.findOne({ _id: req.params.id, users: req.user._id })
+		.populate('organisation components users collaborators')
 		.exec(function (err, frame) {
 
 	    if(err) { return handleError(res, err); }
 	    if(!frame) { return res.send(404); }
+
 	    return res.json(frame);
 	  });
 };
@@ -40,10 +45,23 @@ exports.show = function(req, res) {
 // Creates a new frame in the DB.
 exports.create = function(req, res) {
 
+  if(!req.body.organisation) { return handleError(res, null); }
+
+  if (!_.find(req.body.users, function(user) { return req.user._id == req.user._id; })) {
+
+    req.body.users = req.body.users || [];
+    req.body.users.push(req.user);
+  }
+
   Frame.create(req.body, function(err, frame) {
 
     if(err) { return handleError(res, err); }
-    return res.json(201, frame);
+
+    Frame.populate(frame, {path:'organisation'}, function(err, frame) {
+
+      if(err) { return handleError(res, err); }
+      return res.json(201, frame);
+    });
   });
 };
 
@@ -56,6 +74,7 @@ exports.update = function(req, res) {
     if (err) { return handleError(res, err); }
     if(!frame) { return res.send(404); }
     var updated = _.merge(frame, req.body);
+    frame.users = req.body.users;
 
     updated.save(function (err) {
 
@@ -79,6 +98,22 @@ exports.destroy = function(req, res) {
       return res.send(204);
     });
   });
+};
+
+// Shares this frame with a user.
+exports.addUser = function(req, res) {
+
+  // Add to the frame
+  Frame.findOneAndUpdate(
+    { _id: req.params.id },
+    { $addToSet: { users: { $each: req.body } }},
+    { safe: true, upsert: false },
+    function (err, Frame) {
+
+      if(err) { return handleError(res, err); }
+      return res.json(201, Frame);
+    }
+  )
 };
 
 // Creates a new component in the DB for this frame.
@@ -129,6 +164,41 @@ exports.deleteComponent = function(req, res) {
 			);
 		});
   });
+};
+
+exports.export = function (req, res) {
+
+  Frame
+		.findById(req.params.id)
+		.populate('components')
+		.exec(function (err, frame) {
+
+	    if(err) { return handleError(res, err); }
+	    if(!frame) { return res.send(404); }
+
+      // Export parameters
+      var fileName = frame._id;
+      var fileType = req.query.type;
+
+      // When export is complete
+      function onSuccess(image) {
+
+        res.json(image);
+      }
+
+      // When export fails
+      function onError(msg, statusCode) {
+
+        res.json({ msg: msg }, statusCode);
+      }
+
+      // Perform the export
+      frameExporter.export(frame, fileName, {
+        fileType: fileType,
+        success: onSuccess,
+        error: onError
+      });
+    });
 };
 
 function handleError(res, err) {

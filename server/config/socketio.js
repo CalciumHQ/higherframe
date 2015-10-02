@@ -12,13 +12,14 @@ function onDisconnect(socket) {
 
 // When the user connects.. perform this
 function onConnect(socket, socketio) {
-	
+
   // When the client emits 'info', this listens and executes
   socket.on('info', function (data) {
     console.info('[%s] %s', socket.address, JSON.stringify(data, null, 2));
   });
 
   // Insert sockets below
+	require('../api/organisation/organisation.socket').register(socket, socketio);
 	require('../api/frame/frame.socket').register(socket, socketio);
 	require('../api/component/component.socket').register(socket, socketio);
 }

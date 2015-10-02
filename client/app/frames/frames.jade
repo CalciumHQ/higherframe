@@ -1,40 +1,51 @@
+div#navbar.row.blue.border-light(ng-include='"components/navbar/navbar.html"')
+div#actionbar.row.blue.light
+	span.action.action-menu.b3.roboto.semibold(ui-action-menu) File
+		div.action-menu-items
+			a.action-menu-item
+				span.action-menu-item-label New wireframe
+				span.action-menu-item-shortcut
+					span(ng-bind-html="'ctrl' | symbol")
+					| N
+				
+			a.action-menu-item 
+				span.action-menu-item-label New organisation
+				span.action-menu-item-shortcut
+					span(ng-bind-html="'shift' | symbol")
+					span(ng-bind-html="'ctrl' | symbol")
+					| N
+		
+	span.action.action-menu.b3.roboto.semibold(ui-action-menu) Settings
+		div.action-menu-items
+			a.action-menu-item 
+				span.action-menu-item-label User settings
+				span.action-menu-item-shortcut
+					span(ng-bind-html="'ctrl' | symbol")
+					| U
+		
 div#frames
-	div.sidebar.filters
-		button.button(type="button", ng-click="onNewFrameClick()") + New wireframe 
-	
-		div.divider
-		
-		div.item.active
-			span.name My wireframes
-			span.counter {{ frames.length }}
-
-		div.item
-			span.name Shared with me
-			span.counter 0
-
-		div.item
-			span.name Favorites
-			span.counter 0
+	div.group(ng-repeat="group in FramesCtrl.groups")
+		div.organisation.row
+			div.name.b3.uppercase.strong.airy {{ group.organisation.name }}
+				div.settings(ng-click="FramesCtrl.onOrganisationSettingsClick($event, group.organisation)")
+					svg-replace(ng-src="/assets/images/settings.svg")
 			
-		div.divider
-		
-		div.item
-			span.dot(ng-style="{ 'background-color': '#ff5722' }")
-			span.name Architizer
-			
-		div.item
-			span.dot(ng-style="{ 'background-color': '#03a9f4' }")
-			span.name Higherframe
-	
-	div#framesListContainer
-		div#framesList.cards
-			a.card(ng-repeat="frame in frames | orderBy:'-created_at'", ng-click="onFrameClick($event, frame)")
-				div.delete(ng-click="onFrameDeleteClick($event, frame)") Delete
-				div.marker(ng-style="{ 'background-color': '#ff5722' }")
+		div.frames.cards.row
+			a.card(ng-repeat="frame in group.frames | orderBy:'-created_at'", ng-click="FramesCtrl.onFrameClick($event, frame)")
 				div.content
 					div.left
-						span.name.block {{ frame.name }}
-						span.project.block Architizer Source
+						span.name.h3.block {{ frame.name }}
+						span.project.b1.block {{ frame.organisation.name }}
+						span.settings(ng-click="FramesCtrl.onFrameSettingsClick($event, frame)")
+							svg-replace(ng-src="/assets/images/settings.svg")
+								
+						ul.users
+							li.user(ng-repeat="user in frame.users", ui-tooltip="'Shared with ' + user.name")
+								img.image(ng-if="user.provider == 'facebook'", ng-src="http://graph.facebook.com/{{ user.facebook.id }}/picture?type=large")
 						
 					div.right
 						span.lastModified {{ (frame.created_at | moment).fromNow() }}
+						
+			a.card.new(ng-click="FramesCtrl.onNewFrameClick(group.organisation)")
+				div.content
+					span + add new

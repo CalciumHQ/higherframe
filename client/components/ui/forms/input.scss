@@ -1,0 +1,29 @@
+
+.ui-input {
+  @include box-sizing(border-box);
+  padding: 0 $uiControlPaddingHorizontalMedium;
+  height: $uiControlHeightMedium;
+  border: 1px solid $uiControlBorderColor;
+  border-radius: $uiControlBorderRadius;
+  font-size: 14px;
+  background: white;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.ui-control.small {
+  .ui-label {
+    line-height: $uiControlHeightSmall;
+  }
+
+  .ui-input {
+    height: auto;
+    padding: 5px 4px;
+    border: none;
+    font-size: $uiFontSizeSmall;
+    font-weight: $uiFontWeightSmall;
+    color: $uiContainerTextColor;
+  }
+}

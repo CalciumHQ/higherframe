@@ -1,0 +1,12 @@
+div.ui-autocomplete(ng-class="{ 'ui-autocomplete-options-open': Ctrl.open }")
+  div.ui-autocomplete-input.ui-input
+    div.ui-autocomplete-tokens
+      div.ui-autocomplete-token(ng-repeat="value in Ctrl.values") 
+        span.b3.medium {{ value.name }}
+    
+    input(ng-model="Ctrl.query", ng-model-options="{ debounce: 300 }", ng-keydown="Ctrl.onKeyDown($event)")
+    
+  ul.ui-autocomplete-options
+    li(ng-repeat="option in Ctrl.options", ng-click="Ctrl.onOptionClick(option)") 
+      span.b1.medium.primary {{ option.name }}
+      span.b1.secondary {{ option.email }}

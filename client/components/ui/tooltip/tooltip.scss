@@ -1,0 +1,26 @@
+
+$uiTooltipCalloutSize: 4px;
+
+.uiTooltip {
+  position: absolute;
+  padding: 2px 10px 4px;
+  border-radius: 3px;
+  background: rgba(0,0,0,0.8);
+  @include transform(translateX($uiTooltipCalloutSize + 2px));
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    margin-top: -$uiTooltipCalloutSize;
+    border-top: $uiTooltipCalloutSize solid transparent;
+    border-bottom: $uiTooltipCalloutSize solid transparent;
+    border-right: $uiTooltipCalloutSize solid rgba(0,0,0,0.8);
+  }
+
+  .text {
+    @include b3();
+    color: white;
+  }
+}

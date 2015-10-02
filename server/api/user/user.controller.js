@@ -14,7 +14,32 @@ var validationError = function(res, err) {
  * restriction: 'admin'
  */
 exports.index = function(req, res) {
-  User.find({}, '-salt -hashedPassword', function (err, users) {
+
+  if (req.params.q) {
+
+    res.json(200, {});
+  }
+
+  else {
+
+    User.find({}, '-salt -hashedPassword', function (err, users) {
+      if(err) return res.send(500, err);
+      res.json(200, users);
+    });
+  }
+};
+
+/**
+ * Searches users
+ */
+exports.query = function(req, res) {
+
+  if (!req.query.q) {
+
+    res.json(400, 'No q parameter provided');
+  }
+
+  User.find({ email: new RegExp(req.query.q, 'i') }, '-salt -hashedPassword', function (err, users) {
     if(err) return res.send(500, err);
     res.json(200, users);
   });

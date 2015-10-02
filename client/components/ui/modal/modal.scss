@@ -1,0 +1,67 @@
+
+$modal-padding: 25px;
+
+.ui-modal-wrapper {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 102;
+}
+
+.ui-modal {
+  @include display-flex;
+  @include flex-direction(column);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 680px;
+  height: 500px;
+  margin-left: -340px;
+  margin-top: -250px;
+
+  .ui-modal-header {
+    @include box-sizing(border-box);
+    height: 12*$vu;
+    padding-top: 2*$vu;
+    padding-left: $modal-padding;
+    padding-right: $modal-padding;
+    background: #f8f8f8;
+    color: $grey-2;
+  }
+
+  .ui-modal-body {
+    @include box-sizing(border-box);
+    @include flex-grow(1);
+    padding-top: 4*$vu;
+    padding-bottom: 4*$vu;
+    padding-left: $modal-padding;
+    padding-right: $modal-padding;
+    background: white;
+  }
+
+  .ui-modal-footer {
+    @include box-sizing(border-box);
+    height: 12*$vu;
+    padding-top: 3*$vu;
+    padding-left: $modal-padding;
+    padding-right: $modal-padding;
+    background: #f8f8f8;
+
+    .ui-modal-buttons {
+      text-align: right;
+    }
+  }
+}
+
+.ui-modal-mask {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: #393939;
+  opacity: 0.86;
+  z-index: 101;
+}

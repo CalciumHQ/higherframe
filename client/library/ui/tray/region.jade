@@ -1,0 +1,5 @@
+div.ui-tray-region
+  .ui-tray-tabs
+    span.ui-tray-tab(ng-repeat="tray in region.trays", ng-class="{ active: region.tabIndex==$index }", ng-click="region.onTabClick($index)") {{tray.label}}
+    
+  div.ui-tray(ng-repeat="tray in region.trays", ng-show="region.tabIndex==$index", ng-include="tray.templateUrl", ng-controller="tray.controller as TrayController")

@@ -1,0 +1,88 @@
+
+/*
+ * Dimensions
+ */
+
+$vu: 0.40625rem;
+
+$chromePaddingSmall: 7px;
+$chromeMarginSmall: 8px;
+$chromeBorderRadiusMedium: 5px;
+
+$uiContainerPadding: 10px;
+
+
+/*
+ * Colors
+ */
+
+$blue-3: #4e8ca6;
+$blue: #57aacc;
+$blue1: #72bad8;
+$blue2: #82cdec;
+$blue3: #d5f0fb;
+$blue4: #d2e6ef;
+$blue5: #ecf5f9;
+$blue6: #a5ccdd;
+$blue8: #dadfe1;
+
+$teal-1: #85a7b6;
+$teal: #8aa0a8;
+
+$yellow: #f6e867;
+
+$green-2: #418c1b;
+$green-1: #60b934;
+$green: #6fcc41;
+
+$red-2: #9d2d1e;
+$red: #cc5141;
+
+$grey-3: #3c3c3c;
+$grey-2: #444444;
+$grey-1: #555555;
+$grey: #777777;
+$grey1: #858585;
+$grey2: #cdcdcd;
+$grey3: #dcdcdc;
+$grey4: #e5e5e5;
+$grey5: #f0f0f0;
+
+$uiContainerBackground: $blue5;
+$uiContainerBackgroundHighlight: $blue;
+$uiContainerBackgroundDull: $grey2;
+$uiContainerTextColor: $teal-1;
+$uiContainerTextColorHighlight: $blue3;
+$uiContainerTextColorDull: $teal;
+
+$uiTrayHeaderMarginTop: 20px;
+$uiTrayHeaderMarginBottom: 15px;
+
+$uiShadowColor: rgba(0, 0, 0, 0.28);
+$uiShadowOffset: 0.04rem;
+$uiShadow: $uiShadowOffset $uiShadowOffset 0 $uiShadowColor;
+
+$uiFontSizeSmall: 9px;
+$uiFontWeightSmall: 500;
+
+$uiControlHeightMedium: 5*$vu;
+$uiControlHeightSmall: 21px;
+$uiControlPaddingHorizontalMedium: 8px;
+$uiControlBorderRadius: 5px;
+$uiControlBorderColor: $grey3;
+$uiControlFontSize: 0.875rem;
+
+// legacy
+$chromeBackgroundLight: #f7f8f9;
+$chromeBackgroundMedium: #edeff1;
+$chromeBorderLight: #eff2f4;
+$chromeBorderMedium: #dfe2e6;
+$chromeBorderDark: #c6ccd2;
+$chromeTextMedium: #d1d5d9;
+
+
+/*
+ * Animations
+ */
+
+$easeInOutQuint: cubic-bezier(0.860, 0.000, 0.070, 1.000);

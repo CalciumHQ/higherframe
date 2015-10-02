@@ -30,7 +30,9 @@ angular
 
 					var colors = {
 						normal: '#888',
-						hover: '#7ae'
+						hover: '#7ae',
+						selected: '#7ae',
+						dragHandles: '#98e001'
 					};
 
 					/**
@@ -44,6 +46,7 @@ angular
 					var hoveredItem;
 					var selectedItems = [];
 					var selectedSegment;
+					var selectedDragHandle;
 
 					var lastMousePosition;
 
@@ -64,7 +67,6 @@ angular
 					function mouseUp(event) {
 
 						// If dragging an item
-
 						if (selectedItems.length) {
 
 							angular.forEach(selectedItems, function (item) {
@@ -75,12 +77,18 @@ angular
 							});
 						}
 
+						// If dragging a drag handle
+						else if (selectedDragHandle) {
+
+						}
+
 						else {
 
 							// End drag selection
 							endDragSelection();
 						}
 
+						selectedDragHandle = null;
 						selectedSegment = null;
 					};
 
@@ -89,7 +97,12 @@ angular
 						// Return the last hovered item to default state
 						if (hoveredItem) {
 
-							if (hoveredItem.collaborator) {
+							if (selectedItems.indexOf(hoveredItem) !== -1) {
+
+								hoveredItem.setComponentColor(colors.selected);
+							}
+
+							else if (hoveredItem.collaborator) {
 
 								hoveredItem.setComponentColor(hoveredItem.collaborator.color);
 							}
@@ -100,8 +113,16 @@ angular
 							}
 						}
 
+						// Hit test a drag handle and set hover style
+						var hitResult = layerSelections.hitTest(event.point, hitOptions);
+
+						if (hitResult) {
+
+							hoveredDragHandle = hitResult.item;
+						}
+
 						// Hit test a new item and set hover style
-						var hitResult = layerDrawing.hitTest(event.point, hitOptions);
+						hitResult = layerDrawing.hitTest(event.point, hitOptions);
 
 						if (hitResult) {
 
@@ -138,7 +159,7 @@ angular
 							var selectedItem = selectedItems[0];
 
 							// Check if component definition allows resizing
-							if (!selectedItem.definition.resizable) {
+							if (!selectedItem.model.resizable) {
 
 								return;
 							}
@@ -152,6 +173,14 @@ angular
 							selectedItem.scale(scaleX, scaleY);
 						}
 
+						// If dragging a drag handle
+						else if (selectedDragHandle) {
+
+							// The new position
+							var position = event.point.add(selectedDragHandle.mouseDownDelta);
+							selectedDragHandle.position = selectedDragHandle.model.move(position);
+						}
+
 						// If dragging an item
 						else if (selectedItems.length) {
 
@@ -162,7 +191,13 @@ angular
 
 								// Position the item and its bounding box
 								item.position = position;
-								item.boundingBox.position = position;
+
+								if (item.boundingBox) {
+
+										item.boundingBox.position = position;
+								}
+
+								updateDragHandles(item);
 
 								// Find a snap point
 								var snapAdjustment = updateSmartGuides(item);
@@ -174,7 +209,13 @@ angular
 
 									// Reposition the item and its bounding box
 									item.position = position;
-									item.boundingBox.position = position;
+
+									if (item.boundingBox) {
+
+											item.boundingBox.position = position;
+									}
+
+									updateDragHandles(item);
 								}
 							});
 						}
@@ -193,26 +234,41 @@ angular
 							event.event.screenY
 						);
 
-						// Add the new selection
-						var hitResult = layerDrawing.hitTest(event.point, hitOptions);
+						// If a drag handle is clicked
+						var hitResult = layerSelections.hitTest(event.point, hitOptions);
 
-						// If no hit target clear the last selection
-						if (!hitResult) {
+						if (hitResult) {
 
-							clearSelection();
+							var handle = hitResult.item;
 
-							// Start drag selection
-							startDragSelection(event.downPoint);
+							selectedDragHandle = handle;
+
+							// Store where the mouse down point is in relation
+							// to the position of the handle
+							// This is used to position an handle correctly during
+							// a drag
+							selectedDragHandle.mouseDownDelta = selectedDragHandle.position.subtract(event.point);
+
+							return;
 						}
 
-						// Add the new selection
-						else {
+						hitResult = layerDrawing.hitTest(event.point, hitOptions);
+
+						// Clear the last selection unless the shift key
+						// is held down, or the hit target is already selected
+						if (!event.modifiers.shift && !hitResult) {
+
+							clearSelection();
+						}
+
+						// If a component is clicked
+						if (hitResult) {
 
 							// Find the top-level group
 							var item = getTopmost(hitResult.item);
 
-							// First clear the last selection unless the shift key
-							// is held down, or the hit target is selected
+							// Clear the last selection unless the shift key
+							// is held down, or the hit target is already selected
 							if (!event.modifiers.shift && selectedItems.indexOf(item) === -1) {
 
 								clearSelection();
@@ -238,7 +294,12 @@ angular
 
 								item.mouseDownDelta = item.position.subtract(event.point);
 							});
+
+							return;
 						}
+
+						// If no hit target start drag selection
+						startDragSelection(event.downPoint);
 					};
 
 					function mouseWheel(event) {
@@ -386,6 +447,11 @@ angular
 						changeZoom(zoom);
 					});
 
+					$scope.$on('view:pan', function (e, center) {
+
+						changeCenter(center);
+					});
+
 					$scope.$on('component:added', function (e, data) {
 
 						// Insertion options
@@ -405,7 +471,9 @@ angular
 
 					$scope.$on('component:propertyChange', function (e, data) {
 
-						data.component.definition.update(data.component);
+						data.component.update();
+						updateBoundingBox(data.component);
+						updateDragHandles(data.component);
 					});
 
 					$scope.$on('component:collaboratorSelect', function (e, data) {
@@ -413,7 +481,7 @@ angular
 						// Find the component with this id
 						var component = _.find(layerDrawing.children, function (child) {
 
-							if (child.remoteId == data.component._id) { return true; }
+							if (child.model._id == data.component._id) { return true; }
 						});
 
 						// Set the color for the user
@@ -426,7 +494,7 @@ angular
 						// Find the component with this id
 						var component = _.find(layerDrawing.children, function (child) {
 
-							if (child.remoteId == data.component._id) { return true; }
+							if (child.model._id == data.component._id) { return true; }
 						});
 
 						// Set the color for the user
@@ -441,7 +509,9 @@ angular
 
 					var onItemUpdated = function (item) {
 
+						item.update();
 						updateBoundingBox(item);
+						updateDragHandles(item);
 					};
 
 
@@ -451,8 +521,25 @@ angular
 
 					function clearSelection() {
 
-						$scope.$emit('componentsDeselected', selectedItems);
+						angular.forEach(selectedItems, function (item) {
 
+							if (item == hoveredItem) {
+
+								item.setComponentColor(colors.hover);
+							}
+
+							else if (item.collaborator) {
+
+								hoveredItem.setComponentColor(item.collaborator.color);
+							}
+
+							else {
+
+								hoveredItem.setComponentColor(colors.normal);
+							}
+						});
+
+						$scope.$emit('componentsDeselected', selectedItems);
 						selectedItems = [];
 
 						angular.forEach(layerDrawing.children, function (item) {
@@ -472,8 +559,10 @@ angular
 
 							if (selectedItems.indexOf(item) === -1) {
 
+								item.setComponentColor(colors.selected);
 								selectedItems.push(item);
 								onItemUpdated(item);
+								paper.view.draw();
 							}
 						});
 
@@ -503,6 +592,7 @@ angular
 							}
 
 							removeBoundingBox(item);
+							removeDragHandles(item);
 						}
 					};
 
@@ -517,6 +607,7 @@ angular
 
 							item.position = position;
 							updateBoundingBox(item);
+							updateDragHandles(item);
 						});
 
 						$scope.$emit('componentsMoved', items);
@@ -534,6 +625,7 @@ angular
 							var delta = new paper.Point(x, y);
 							item.position = item.position.add(delta);
 							updateBoundingBox(item);
+							updateDragHandles(item);
 						});
 
 						$scope.$emit('componentsMoved', items);
@@ -626,17 +718,48 @@ angular
 					 * View methods
 					 */
 
-					function changeCenter(deltaX, deltaY) {
+					function updateCanvas() {
 
-						paper.view.center = paper.view.center.add(new paper.Point(
-							-deltaX / paper.view.zoom,
-							-deltaY / paper.view.zoom
-						));
+						var w = element.width();
+						var h = element.height();
 
+						paper.view.viewSize = new paper.Size(w, h);
 						updateGrid();
 					};
 
+					function changeCenter(deltaX, deltaY) {
+
+						if (angular.isUndefined(deltaX) || deltaX === null ) {
+
+							return;
+						}
+
+						// May provide a point object for first argument instead.
+						// In this case calculate the delta from the current center.
+						if (angular.isObject(deltaX)) {
+
+							paper.view.center = deltaX;
+						}
+
+						else {
+
+							paper.view.center = paper.view.center.add(new paper.Point(
+								-deltaX / paper.view.zoom,
+								-deltaY / paper.view.zoom
+							));
+						}
+
+						updateGrid();
+
+						$scope.$emit('view:panned', paper.view.center);
+					};
+
 					function changeZoom(newZoom, target) {
+
+						if (angular.isUndefined(newZoom) || newZoom === null ) {
+
+							return;
+						}
 
 						var factor = 1.04;
 						var center = paper.view.center;
@@ -655,6 +778,9 @@ angular
 						paper.view.center = paper.view.center.add(a);
 
 						updateGrid();
+
+						$scope.$emit('view:zoomed', paper.view.zoom);
+						$scope.$emit('view:panned', paper.view.center);
 					};
 
 					function startDragSelection(from) {
@@ -741,6 +867,11 @@ angular
 					 */
 					var updateBoundingBox = function(item) {
 
+						if (!item.showBounds) {
+
+							return;
+						}
+
 						var selected = (selectedItems.indexOf(item) !== -1);
 
 						if (selected && !item.boundingBox) {
@@ -766,19 +897,21 @@ angular
 
 							layerSelections.activate();
 
+							var lineWidth = 1/paper.view.zoom;
 							var bb = new paper.Path.Rectangle(item.bounds);
 							bb.strokeColor = colors.hover;
-							bb.strokeWidth = 1;
+							bb.strokeWidth = lineWidth;
 
 							var drawHandle = function (point) {
 
+								var handleSize = 3/paper.view.zoom;
 								var handle = new paper.Path.Rectangle(
-									new paper.Point(point.x - 3, point.y - 3),
-									new paper.Point(point.x + 3, point.y + 3)
+									new paper.Point(point.x - handleSize, point.y - handleSize),
+									new paper.Point(point.x + handleSize, point.y + handleSize)
 								);
 
 								handle.strokeColor = colors.hover;
-								handle.strokeWidth = 1;
+								handle.strokeWidth = lineWidth;
 								handle.fillColor = 'white';
 
 								return handle;
@@ -820,6 +953,63 @@ angular
 
 
 					/**
+					 * Drag handles
+					 *
+					 * Updates an item's drag handles according to
+					 * whether it is selected. The drag handles will
+					 * be added/removed/updated as appropriate.
+					 */
+					var updateDragHandles = function(item) {
+
+						var selected = (selectedItems.indexOf(item) !== -1);
+						removeDragHandles(item);
+
+						if (selected) {
+
+							addDragHandles(item);
+						}
+					};
+
+					var addDragHandles = function (item) {
+
+						layerSelections.activate();
+
+						var drawHandle = function (point) {
+
+							var handleSize = 3/paper.view.zoom;
+							var handle = new paper.Path.Rectangle(
+								new paper.Point(point.x - handleSize, point.y - handleSize),
+								new paper.Point(point.x + handleSize, point.y + handleSize)
+							);
+
+							handle.fillColor = colors.dragHandles;
+
+							return handle;
+						};
+
+						angular.forEach(item.getDragHandles(), function (dh) {
+
+							var handle = drawHandle(dh.position);
+							handle.model = dh;
+
+							item.dragHandles.push(handle);
+						});
+
+						layerDrawing.activate();
+					};
+
+					var removeDragHandles = function (item) {
+
+						angular.forEach(item.dragHandles, function (dh) {
+
+							dh.remove();
+						});
+
+						item.dragHandles = [];
+					};
+
+
+					/**
 					 * Smart guides
 					 */
 
@@ -845,6 +1035,7 @@ angular
 
 						var snaps = [];
 						var snapAdjustment = new paper.Point();
+						var guideStrokeWidth = 1/paper.view.zoom;
 
 						item.smartGuides = [];
 
@@ -937,7 +1128,7 @@ angular
 
 							var guide = new paper.Path.Line(from, to);
 							guide.strokeColor = 'magenta';
-							guide.strokeWidth = 1;
+							guide.strokeWidth = guideStrokeWidth;
 							item.smartGuides.push(guide);
 
 							layerDrawing.activate();
@@ -970,7 +1161,8 @@ angular
 							var gridMajorSize = 100,
 								gridMinorSize = 20,
 								gridMajorColor = 'rgba(0,0,0,0.07)',
-								gridMinorColor = 'rgba(0,0,0,0.03)';
+								gridMinorColor = 'rgba(0,0,0,0.03)',
+								gridStrokeWidth = 1/paper.view.zoom;
 
 							layerGrid.activate();
 
@@ -1006,13 +1198,14 @@ angular
 							while(gridLines.x.length < countX) {
 
 								var line = new paper.Path.Line(paper.Point(0, 0), paper.Point(0, 0));
+								line.strokeWidth = gridStrokeWidth;
 								gridLines.x.push(line);
 							}
 
 							while(gridLines.y.length < countY) {
 
 								var line = new paper.Path.Line(paper.Point(0, 0), paper.Point(0, 0));
-								line.strokeWidth = 1;
+								line.strokeWidth = gridStrokeWidth;
 								gridLines.y.push(line);
 							}
 
@@ -1025,6 +1218,7 @@ angular
 								var to = new paper.Point(view.bounds.right, startY + y);
 
 								var line = gridLines.y[i];
+								line.strokeWidth = gridStrokeWidth;
 								line.segments[0].point = from;
 								line.segments[1].point = to;
 
@@ -1045,6 +1239,7 @@ angular
 								var to = new paper.Point(startX + x, view.bounds.bottom);
 
 								var line = gridLines.x[i];
+								line.strokeWidth = gridStrokeWidth;
 								line.segments[0].point = from;
 								line.segments[1].point = to;
 
@@ -1142,24 +1337,6 @@ angular
 							})(item);
 						};
 
-						paper.Item.prototype.getSnapPoints = function () {
-
-							var snapPoints = [];
-
-							if (!this.definition || !this.definition.snapPoints) {
-
-								return [];
-							}
-
-							var that = this;
-							angular.forEach(this.definition.snapPoints, function (snapPoint) {
-
-								snapPoints.push(that.position.add(snapPoint));
-							});
-
-							return snapPoints;
-						};
-
 						_paperInitialized = true;
 					};
 
@@ -1198,7 +1375,24 @@ angular
 					initPaper();
 					initProject();
 					initLayers();
+					updateCanvas();
 					updateGrid();
+
+					/**
+					 * Keep canvas size updated.
+					 *
+					 * Not good using a loop for this. Using window.resize would be better
+					 * but this doesn't account for changes in layout without the window
+					 * resizing.
+					 *
+					 * TODO: Find a better way.
+					 */
+
+					(function updateLoop() {
+
+						updateCanvas();
+						requestAnimationFrame(updateLoop);
+					})();
 				}
 			};
 		}]);

@@ -55,11 +55,12 @@ module.exports = function (grunt) {
     watch: {
       injectJS: {
         files: [
-          '<%= yeoman.client %>/{app,components}/**/*.js',
-          '!<%= yeoman.client %>/{app,components}/**/*.spec.js',
-          '!<%= yeoman.client %>/{app,components}/**/*.mock.js',
+          '<%= yeoman.client %>/{app,components,library}/**/*.ts',
+          '<%= yeoman.client %>/{app,components,library}/**/*.js',
+          '!<%= yeoman.client %>/{app,components,library}/**/*.spec.js',
+          '!<%= yeoman.client %>/{app,components,library}/**/*.mock.js',
           '!<%= yeoman.client %>/app/app.js'],
-        tasks: ['injector:scripts']
+        tasks: ['typescript', 'injector:scripts']
       },
       injectCss: {
         files: [
@@ -90,8 +91,8 @@ module.exports = function (grunt) {
       },
       jade: {
         files: [
-          '<%= yeoman.client %>/{app,components}/*',
-          '<%= yeoman.client %>/{app,components}/**/*.jade'],
+          '<%= yeoman.client %>/{app,components,library}/*',
+          '<%= yeoman.client %>/{app,components,library}/**/*.jade'],
         tasks: ['jade']
       },
       gruntfile: {
@@ -101,9 +102,9 @@ module.exports = function (grunt) {
         files: [
           '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.css',
           '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.html',
-          '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.js',
-          '!{.tmp,<%= yeoman.client %>}{app,components}/**/*.spec.js',
-          '!{.tmp,<%= yeoman.client %>}/{app,components}/**/*.mock.js',
+          '{.tmp,<%= yeoman.client %>}/{app,components,library}/**/*.js',
+          '!{.tmp,<%= yeoman.client %>}{app,components,library}/**/*.spec.js',
+          '!{.tmp,<%= yeoman.client %>}/{app,components,library}/**/*.mock.js',
           '<%= yeoman.client %>/assets/images/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}'
         ],
         options: {
@@ -135,14 +136,14 @@ module.exports = function (grunt) {
         src: [ 'server/{,*/}*.js']
       },
       all: [
-        '<%= yeoman.client %>/{app,components}/**/*.js',
-        '!<%= yeoman.client %>/{app,components}/**/*.spec.js',
-        '!<%= yeoman.client %>/{app,components}/**/*.mock.js'
+        '<%= yeoman.client %>/{app,components,library}/**/*.js',
+        '!<%= yeoman.client %>/{app,components,library}/**/*.spec.js',
+        '!<%= yeoman.client %>/{app,components,library}/**/*.mock.js'
       ],
       test: {
         src: [
-          '<%= yeoman.client %>/{app,components}/**/*.spec.js',
-          '<%= yeoman.client %>/{app,components}/**/*.mock.js'
+          '<%= yeoman.client %>/{app,components,library}/**/*.spec.js',
+          '<%= yeoman.client %>/{app,components,library}/**/*.mock.js'
         ]
       }
     },
@@ -335,6 +336,13 @@ module.exports = function (grunt) {
             'package.json',
             'server/**/*'
           ]
+        }, {
+          expand: true,
+          cwd: '<%= yeoman.client %>',
+          dest: '<%= yeoman.dist %>/public',
+          src: [
+            'library/**/*.js'
+          ]
         }]
       },
       styles: {
@@ -368,6 +376,26 @@ module.exports = function (grunt) {
         'jade',
         'sass'
       ]
+    },
+
+    // Typescript
+    typescript: {
+      base: {
+        src: [
+          '<%= yeoman.client %>/**/*.ts',
+          '!<%= yeoman.client %>/bower_components/**/*.ts',
+          '!<%= yeoman.client %>/typings/**/*.ts',
+        ],
+        dest: '.tmp',
+        options: {
+          module: 'commonjs',
+          target: 'es5',
+          basePath: '<%= yeoman.client %>',
+          keepDirectoryHierarchy: true,
+          sourceMap: true,
+          declaration: true
+        }
+      }
     },
 
     // Test settings
@@ -420,7 +448,7 @@ module.exports = function (grunt) {
           expand: true,
           cwd: '<%= yeoman.client %>',
           src: [
-            '{app,components}/**/*.jade'
+            '{app,components,library}/**/*.jade'
           ],
           dest: '.tmp',
           ext: '.html'
@@ -463,10 +491,11 @@ module.exports = function (grunt) {
         },
         files: {
           '<%= yeoman.client %>/index.html': [
-              ['{.tmp,<%= yeoman.client %>}/{app,components}/**/*.js',
+              ['{.tmp,<%= yeoman.client %>}/library/**/*.js',
+               '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.js',
                '!{.tmp,<%= yeoman.client %>}/app/app.js',
-               '!{.tmp,<%= yeoman.client %>}/{app,components}/**/*.spec.js',
-               '!{.tmp,<%= yeoman.client %>}/{app,components}/**/*.mock.js']
+               '!{.tmp,<%= yeoman.client %>}/{app,components,library}/**/*.spec.js',
+               '!{.tmp,<%= yeoman.client %>}/{app,components,library}/**/*.mock.js']
             ]
         }
       },
@@ -535,7 +564,7 @@ module.exports = function (grunt) {
       return grunt.task.run([
         'clean:server',
         'env:all',
-        'injector:sass', 
+        'injector:sass',
         'concurrent:server',
         'injector',
         'bowerInstall',
@@ -547,8 +576,9 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server',
       'env:all',
-      'injector:sass', 
+      'injector:sass',
       'concurrent:server',
+      'typescript',
       'injector',
       'bowerInstall',
       'autoprefixer',
@@ -577,7 +607,7 @@ module.exports = function (grunt) {
       return grunt.task.run([
         'clean:server',
         'env:all',
-        'injector:sass', 
+        'injector:sass',
         'concurrent:test',
         'injector',
         'autoprefixer',
@@ -590,7 +620,7 @@ module.exports = function (grunt) {
         'clean:server',
         'env:all',
         'env:test',
-        'injector:sass', 
+        'injector:sass',
         'concurrent:test',
         'injector',
         'bowerInstall',
@@ -608,8 +638,9 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
-    'injector:sass', 
+    'injector:sass',
     'concurrent:dist',
+    'typescript',
     'injector',
     'bowerInstall',
     'useminPrepare',

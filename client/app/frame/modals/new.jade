@@ -1,0 +1,16 @@
+form(name="ModalCtrl.frame").ui-modal
+  .ui-modal-header
+    h2 {{ ModalCtrl.title }}
+    
+  .ui-modal-body
+    div.ui-control.block
+      label.ui-label.b1(for="name") What is the wireframe's name?
+      input.ui-input(name="name", type="text", ng-model="ModalCtrl.name", placeholder="Enter a name", required)
+    
+  .ui-modal-footer
+    .ui-modal-buttons
+      a.ui-button.neutral(ng-click="ModalCtrl.onCloseButtonClick()")
+        span.b1.medium.loose.uppercase Close
+        
+      a.ui-button.success(ng-click="ModalCtrl.onSaveButtonClick()")
+        span.b1.medium.loose.uppercase Save
