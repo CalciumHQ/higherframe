@@ -52,7 +52,8 @@ angular
               });
 
              return deferred.promise;
-          }
+          },
+					$title: function() { return 'Dashboard'; }
         }
       });
   });

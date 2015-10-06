@@ -23,6 +23,7 @@ angular
 						})
               .success(function (frame) {
 
+
                 deferred.resolve(frame);
               })
               .error(function () {
@@ -31,7 +32,8 @@ angular
               });
 
              return deferred.promise;
-          }
+          },
+					$title: function(frame) { return frame.name; }
         }
       });
   });

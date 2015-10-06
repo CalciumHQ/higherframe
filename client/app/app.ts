@@ -7,6 +7,7 @@ angular.module('siteApp', [
   'ngAnimate',
   'btford.socket-io',
   'ui.router',
+  'ui.router.title',
   'ui.bootstrap',
   'LocalStorageModule'
 ])

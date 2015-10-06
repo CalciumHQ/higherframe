@@ -32,6 +32,7 @@
         "./app/frames/frames.controller.ts",
         "./app/organisation/modals/update.ts",
         "./components/filters/symbol.ts",
+        "./components/root-scope/root-scope.ts",
         "./components/ui/action-bar/menu.ts",
         "./components/ui/filters/symbol.ts",
         "./components/ui/forms/autocomplete.ts",
