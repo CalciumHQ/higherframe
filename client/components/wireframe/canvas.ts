@@ -142,87 +142,7 @@ module Higherframe.Wireframe {
 				 * Init
 				 */
 
-				function initPaper() {
-
-					if (_paperInitialized) {
-
-						return;
-					}
-
-					// Initialize the paper object
-					paper.install($window);
-
-					// Extend paper items
-					/*paper.Item.prototype._collaborator;
-					paper.Item.prototype._parts = {};
-					paper.Item.prototype._properties = {};
-					paper.Item.prototype._displayColor = {};*/
-
-					Object.defineProperty(paper.Item.prototype, 'parts', {
-						get: function () { return this._parts; },
-						set: function (value) { this._parts = value; }
-					});
-
-					Object.defineProperty(paper.Item.prototype, 'collaborator', {
-						get: function () { return this._collaborator; },
-						set: function (value) { this._collaborator = value; }
-					});
-
-					Object.defineProperty(paper.Item.prototype, 'properties', {
-						get: function () { return this._properties; },
-						set: function (value) { this._properties = value; }
-					});
-
-					Object.defineProperty(paper.Item.prototype, 'displayColor', {
-						get: function () { return this._displayColor; },
-						set: function (value) { this._displayColor = value; }
-					});
-
-					(<any>paper.Item).prototype.setComponentColor = function (color) {
-
-						var item = this;
-
-						// Set on the item
-						(function loop(item) {
-
-							// A group with children
-							if (item.className == 'Group') {
-
-								angular.forEach(item.children, function (child) {
-
-									loop(child);
-								});
-							}
-
-							// A leaf item
-							else {
-
-								if (item.className == 'PointText') {
-
-									item.fillColor = color;
-								}
-
-								else if (item.strokeWidth) {
-
-									item.strokeColor = color;
-								}
-
-								if (
-									item.fillColor && 							// Has fill
-									item.fillColor.alpha &&					// Not transparent
-									item.fillColor.lightness != 1		// Not white
-								) {
-
-									item.fillColor = color;
-								}
-							}
-						})(item);
-					};
-
-					_paperInitialized = true;
-				};
-
-				initPaper();
+				this.initPaper();
 				this.initProject();
 				this.initLayers();
 				this.updateCanvas();
@@ -252,6 +172,19 @@ module Higherframe.Wireframe {
 		 * Init
 		 */
 
+		 initPaper() {
+
+ 			if (_paperInitialized) {
+
+ 				return;
+ 			}
+
+ 			// Initialize the paper object
+ 			paper.install(this.$window);
+
+ 			_paperInitialized = true;
+ 		};
+
 		initProject() {
 
  			paper.setup(<HTMLCanvasElement>this.element[0]);
@@ -265,10 +198,10 @@ module Higherframe.Wireframe {
  				this.$window.tool = new paper.Tool();
  			}
 
- 			paper.tool.onMouseDown = (event) => this.mouseDown.call(this, event);
- 			paper.tool.onMouseUp = (event) => this.mouseUp.call(this, event);
- 			paper.tool.onMouseMove = (event) => this.mouseMove.call(this, event);
- 			paper.tool.onMouseDrag = (event) => this.mouseDrag.call(this, event);
+ 			this.$window.tool.onMouseDown = (event) => this.mouseDown.call(this, event);
+ 			this.$window.tool.onMouseUp = (event) => this.mouseUp.call(this, event);
+ 			this.$window.tool.onMouseMove = (event) => this.mouseMove.call(this, event);
+ 			this.$window.tool.onMouseDrag = (event) => this.mouseDrag.call(this, event);
 
  			(<any>$(this.element)).mousewheel((event) => this.mouseWheel.call(this, event));
  		}
@@ -701,12 +634,7 @@ module Higherframe.Wireframe {
 			});
 		}
 
-		selectItems(items) {
-
-			if (!angular.isArray(items)) {
-
-				items = [items];
-			}
+		selectItems(items: Array<Higherframe.Drawing.Component.IComponent>) {
 
 			angular.forEach(items, (item) => {
 
@@ -722,12 +650,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('componentsSelected', items);
 		}
 
-		removeItems(items) {
-
-			if (!angular.isArray(items)) {
-
-				items = [items];
-			}
+		removeItems(items: Array<Higherframe.Drawing.Component.IComponent>) {
 
 			this.scope.$emit('componentsDeleted', items);
 
@@ -749,12 +672,7 @@ module Higherframe.Wireframe {
 			}
 		}
 
-		moveItem(items, position) {
-
-			if (!angular.isArray(items)) {
-
-				items = [items];
-			}
+		moveItem(items: Array<Higherframe.Drawing.Component.IComponent>, position) {
 
 			angular.forEach(items, (item) => {
 
@@ -766,12 +684,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('componentsMoved', items);
 		}
 
-		nudge(items, x, y) {
-
-			if (!angular.isArray(items)) {
-
-				items = [items];
-			}
+		nudge(items: Array<Higherframe.Drawing.Component.IComponent>, x, y) {
 
 			angular.forEach(items, (item) => {
 
@@ -784,12 +697,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('componentsMoved', items);
 		}
 
-		moveForward(items) {
-
-			if (!angular.isArray(items)) {
-
-				items = [items];
-			}
+		moveForward(items: Array<Higherframe.Drawing.Component.IComponent>) {
 
 			angular.forEach(items, (item) => {
 
@@ -810,12 +718,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('componentsIndexModified', items);
 		}
 
-		moveToFront(items) {
-
-			if (!angular.isArray(items)) {
-
-				items = [items];
-			}
+		moveToFront(items: Array<Higherframe.Drawing.Component.IComponent>) {
 
 			angular.forEach(items, (item) => {
 
@@ -825,12 +728,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('componentsIndexModified', items);
 		}
 
-		moveBackward(items) {
-
-			if (!angular.isArray(items)) {
-
-				items = [items];
-			}
+		moveBackward(items: Array<Higherframe.Drawing.Component.IComponent>) {
 
 			angular.forEach(items, (item) => {
 
@@ -851,12 +749,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('componentsIndexModified', items);
 		}
 
-		moveToBack(items) {
-
-			if (!angular.isArray(items)) {
-
-				items = [items];
-			}
+		moveToBack(items: Array<Higherframe.Drawing.Component.IComponent>) {
 
 			angular.forEach(items, (item) => {
 
@@ -955,7 +848,7 @@ module Higherframe.Wireframe {
 					this.selectedItems.indexOf(item) === -1
 				) {
 
-					this.selectItems([item]);
+					this.selectItems([<Higherframe.Drawing.Component.Base>item]);
 				}
 			});
 
