@@ -45,7 +45,7 @@ module Higherframe.Drawing.Component.Library {
       super(model);
 
       var properties = this.getProperties();
-      properties.text = 'Label';
+      properties.text = properties.text || 'Label';
       properties.fontSize = properties.fontSize || 14;
 
       // Perform the initial draw
@@ -66,7 +66,7 @@ module Higherframe.Drawing.Component.Library {
 
       // Draw the text
       var value = new paper.PointText({
-        point: new paper.Point(properties.x, properties.y + properties.fontSize/3),
+        point: new paper.Point(properties.x, properties.y),
         content: properties.text,
         fillColor: 'black',
         fontSize: properties.fontSize,
@@ -81,8 +81,8 @@ module Higherframe.Drawing.Component.Library {
 
     updateModel() {
 
-      this.model.properties.x = this.position.x;
-      this.model.properties.y = this.position.y;
+      this.model.properties.x = this.bounds.leftCenter.x;
+      this.model.properties.y = this.bounds.leftCenter.y;
     }
 
 
