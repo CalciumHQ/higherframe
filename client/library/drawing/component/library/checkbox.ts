@@ -3,29 +3,30 @@
 
 module Higherframe.Drawing.Component.Library {
 
-  export class TextInput extends Drawing.Component.Base implements Drawing.Component.IComponent {
+  export class Checkbox extends Drawing.Component.Base implements Drawing.Component.IComponent {
 
     // Implement IDefinition members
     id = Drawing.Component.Type.TextInput;
-    static title = 'Text control';
+    static title = 'Checkbox control';
     static preview = '/assets/images/components/iphone.svg';
     static category = 'Form';
     tags = [
       'form',
       'input',
-      'text'
+      'checkbox',
+      'tick'
     ];
     properties = [
       {
-        label: 'Placeholder',
-        model: 'placeholder',
+        label: 'Label',
+        model: 'label',
         type: String,
-        description: 'Set the placeholder of the input.'
+        description: 'Set the label on the checkbox.'
       },
       {
-        label: 'Value',
+        label: 'Checked',
         model: 'value',
-        type: String,
+        type: Boolean,
         description: 'Set the value of the input.'
       },
       {
@@ -35,14 +36,14 @@ module Higherframe.Drawing.Component.Library {
         description: 'Set the font size of the input.'
       }
     ];
-    resizable = true;
+    resizable = false;
     showBounds = false;
 
     model: Data.Component;
 
 
     /**
-     * Create a new Text Input component
+     * Create a new Select component
      */
 
     constructor(model: Data.IDrawingModel) {
@@ -50,8 +51,8 @@ module Higherframe.Drawing.Component.Library {
       super(model);
 
       var properties = this.getProperties();
-      properties.width = properties.width || 160;
-      properties.placeholder = properties.placeholder || 'Text input';
+      properties.label = 'Label';
+      properties.value = properties.value ? true : false;
       properties.fontSize = properties.fontSize || 14;
 
       // Perform the initial draw
@@ -66,32 +67,41 @@ module Higherframe.Drawing.Component.Library {
     update() {
 
       var properties = this.getProperties();
-      var HEIGHT = this.getHeight();
+      let size = 14;
 
       // Remove the old parts
       this.removeChildren();
 
-      var topLeft = new paper.Point(this.model.properties.x - properties.width/2, this.model.properties.y - HEIGHT/2);
-      var bottomRight = new paper.Point(this.model.properties.x + properties.width/2, this.model.properties.y + HEIGHT/2);
+      // Draw the box
+      var topLeft = new paper.Point(this.model.properties.x - size/2, this.model.properties.y - size/2);
+      var bottomRight = new paper.Point(this.model.properties.x + size/2, this.model.properties.y + size/2);
       var bounds = new paper.Rectangle(topLeft, bottomRight);
+      var box = paper.Path.Rectangle(bounds);
+      box.strokeColor = '#888';
+      box.strokeWidth = 1.5;
+      box.fillColor = 'rgba(255,255,255,1)';
+      this.addChild(box);
 
-      // Draw the outer frame
-      var outer = paper.Path.Rectangle(bounds);
-      outer.strokeColor = '#888';
-      outer.strokeWidth = 1.5;
-      outer.fillColor = 'rgba(255,255,255,1)';
+      // Draw the check
+      if (properties.value) {
+
+        var check = new paper.Path();
+        check.add(new paper.Point(properties.x - 4, properties.y - 0));
+        check.add(new paper.Point(properties.x - 1, properties.y + 3));
+        check.add(new paper.Point(properties.x + 4, properties.y - 3));
+        check.strokeColor = '#888';
+        check.strokeWidth = 2;
+        this.addChild(check);
+      }
 
       // Draw the value
       var value = new paper.PointText({
-        point: new paper.Point(topLeft.x + 10, topLeft.y + HEIGHT/2 + properties.fontSize/3+1),
-        content: properties.value ? properties.value : properties.placeholder,
-        fillColor: properties.value ? 'black' : '#aaa',
+        point: new paper.Point(properties.x + size/2 + 7, topLeft.y + size/2 + properties.fontSize/3),
+        content: properties.label,
+        fillColor: 'black',
         fontSize: properties.fontSize,
         fontFamily: 'Myriad Pro'
       });
-
-      // Group the parts as a component
-      this.addChild(outer);
       this.addChild(value);
     }
 
@@ -115,13 +125,12 @@ module Higherframe.Drawing.Component.Library {
       var snapPoints = [];
       var properties = <Higherframe.Data.ITextInputProperties>this.model.properties;
       var width = properties.width;
-      var height = this.getHeight();
 
       // Corners
-      snapPoints.push(this.position.add(new paper.Point({ x: -(width/2), y: -(height/2) })));
+      /*snapPoints.push(this.position.add(new paper.Point({ x: -(width/2), y: -(height/2) })));
       snapPoints.push(this.position.add(new paper.Point({ x: (width/2), y: -(height/2) })));
       snapPoints.push(this.position.add(new paper.Point({ x: (width/2), y: (height/2) })));
-      snapPoints.push(this.position.add(new paper.Point({ x: -(width/2), y: (height/2) })));
+      snapPoints.push(this.position.add(new paper.Point({ x: -(width/2), y: (height/2) })));*/
 
       return snapPoints;
     }
@@ -141,20 +150,9 @@ module Higherframe.Drawing.Component.Library {
      * Cast the model properties into the correct type
      */
 
-    getProperties(): Higherframe.Data.ITextInputProperties {
+    getProperties(): Higherframe.Data.ICheckboxProperties {
 
-      return <Higherframe.Data.ITextInputProperties>this.model.properties;
-    }
-
-
-    /**
-     * Calculate the height of the component
-     */
-
-    getHeight(): number {
-
-      var properties = this.getProperties();
-      return 2*Number(properties.fontSize);
+      return <Higherframe.Data.ICheckboxProperties>this.model.properties;
     }
   }
 }

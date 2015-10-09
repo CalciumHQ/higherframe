@@ -42,6 +42,7 @@ module Higherframe.Controllers.Frame {
       this.registerComponent(Higherframe.Drawing.Component.Type.IPhoneTitlebar);
       this.registerComponent(Higherframe.Drawing.Component.Type.TextInput);
       this.registerComponent(Higherframe.Drawing.Component.Type.SelectInput);
+      this.registerComponent(Higherframe.Drawing.Component.Type.Checkbox);
 
       this.categories = _.uniq(this.components.map((component) => {
 

@@ -34,4 +34,10 @@ module Higherframe.Data {
     value: String,
     fontSize: number
   }
+
+  export interface ICheckboxProperties extends IComponentProperties {
+    label: String,
+    value: Boolean,
+    fontSize: number
+  }
 }

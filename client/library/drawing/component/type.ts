@@ -7,6 +7,7 @@ module Higherframe.Drawing.Component {
     IPhone,
     IPhoneTitlebar,
     TextInput,
-    SelectInput
+    SelectInput,
+    Checkbox
   };
 };
