@@ -3,17 +3,17 @@
 
 module Higherframe.Drawing.Component.Library {
 
-  export class TextInput extends Drawing.Component.Base implements Drawing.Component.IComponent {
+  export class SelectInput extends Drawing.Component.Base implements Drawing.Component.IComponent {
 
     // Implement IDefinition members
     id = Drawing.Component.Type.TextInput;
-    static title = 'Text control';
+    static title = 'Select control';
     static preview = '/assets/images/components/iphone.svg';
     static category = 'Form';
     tags = [
       'form',
       'input',
-      'text'
+      'select'
     ];
     properties = [
       {
@@ -42,7 +42,7 @@ module Higherframe.Drawing.Component.Library {
 
 
     /**
-     * Create a new Text Input component
+     * Create a new Select component
      */
 
     constructor(model: Data.IDrawingModel) {
@@ -51,7 +51,7 @@ module Higherframe.Drawing.Component.Library {
 
       var properties = <Higherframe.Data.ITextInputProperties>this.model.properties;
       properties.width = properties.width || 160;
-      properties.placeholder = properties.placeholder || 'Text input';
+      properties.placeholder = properties.placeholder || 'Select option';
       properties.fontSize = properties.fontSize || 14;
 
       // Perform the initial draw
@@ -90,9 +90,19 @@ module Higherframe.Drawing.Component.Library {
         fontFamily: 'Myriad Pro'
       });
 
+      // Draw the caret
+      var caret = new paper.Path();
+      caret.add(new paper.Point(properties.x + (properties.width/2 - 14) - 4.5, properties.y - 2));
+      caret.add(new paper.Point(properties.x + (properties.width/2 - 14), properties.y + 3));
+      caret.add(new paper.Point(properties.x + (properties.width/2 - 14) + 4.5, properties.y - 2));
+      caret.strokeColor = '#888';
+      caret.strokeWidth = 2;
+      this.addChild(caret);
+
       // Group the parts as a component
       this.addChild(outer);
       this.addChild(value);
+      this.addChild(caret);
     }
 
     /**
