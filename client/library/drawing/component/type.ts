@@ -5,6 +5,7 @@ module Higherframe.Drawing.Component {
     Rectangle,
     Arrow,
     IPhone,
-    IPhoneTitlebar
+    IPhoneTitlebar,
+    TextInput
   };
 };

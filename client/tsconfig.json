@@ -51,6 +51,7 @@
         "./library/drawing/component/library/iphone-titlebar.ts",
         "./library/drawing/component/library/iphone.ts",
         "./library/drawing/component/library/rectangle.ts",
+        "./library/drawing/component/library/text-input.ts",
         "./library/drawing/component/type.ts",
         "./library/drawing/point.ts",
         "./library/higherframe.ts",

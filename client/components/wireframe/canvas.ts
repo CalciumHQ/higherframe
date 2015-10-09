@@ -228,7 +228,7 @@ module Higherframe.Wireframe {
 
 				angular.forEach(this.selectedItems, (item) => {
 
-					this.moveItem(item, item.position);
+					this.moveItems([item], item.position);
 					this.removeSmartGuides(item);
 					item.mousePositionDelta = null;
 				});
@@ -334,6 +334,7 @@ module Higherframe.Wireframe {
 			else if (this.selectedDragHandle) {
 
 				// The new position
+				console.log(this.selectedDragHandle);
 				var position:paper.Point = event.point.add(this.selectedDragHandle.mouseDownDelta);
 				this.selectedDragHandle.position = this.selectedDragHandle.model.move(position);
 			}
@@ -435,12 +436,12 @@ module Higherframe.Wireframe {
 				if (hitResult.type == 'segment') {
 
 					this.selectedSegment = hitResult.segment;
-					this.selectItems(item);
+					this.selectItems([item]);
 				}
 
 				else if (hitResult.type == 'fill' || hitResult.type == 'stroke') {
 
-					this.selectItems(item);
+					this.selectItems([item]);
 				}
 
 				// Store where the mouse down point is in relation
@@ -593,7 +594,7 @@ module Higherframe.Wireframe {
 		 * State handlers
 		 */
 
-		onItemUpdated(item) {
+		onItemUpdated(item: Higherframe.Drawing.Component.IComponent) {
 
 			item.update();
 			this.updateBoundingBox(item);
@@ -628,7 +629,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('componentsDeselected', this.selectedItems);
 			this.selectedItems = [];
 
-			angular.forEach(this.layerDrawing.children, (item) => {
+			angular.forEach(this.layerDrawing.children, (item: Higherframe.Drawing.Component.IComponent) => {
 
 				this.onItemUpdated(item);
 			});
@@ -672,7 +673,7 @@ module Higherframe.Wireframe {
 			}
 		}
 
-		moveItem(items: Array<Higherframe.Drawing.Component.IComponent>, position) {
+		moveItems(items: Array<Higherframe.Drawing.Component.IComponent>, position) {
 
 			angular.forEach(items, (item) => {
 
@@ -1016,7 +1017,7 @@ module Higherframe.Wireframe {
 			}
 		}
 
-		addDragHandles(item) {
+		addDragHandles(item: Higherframe.Drawing.Component.IComponent) {
 
 			this.layerSelections.activate();
 

@@ -27,4 +27,11 @@ module Higherframe.Data {
   export interface IIPhoneTitlebarProperties extends IComponentProperties {
     time: String
   }
+
+  export interface ITextInputProperties extends IComponentProperties {
+    width: number,
+    placeholder: String,
+    value: String,
+    fontSize: number
+  }
 }

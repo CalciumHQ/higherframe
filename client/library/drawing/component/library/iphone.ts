@@ -9,7 +9,7 @@ module Higherframe.Drawing.Component.Library {
     id = Drawing.Component.Type.IPhone;
     static title = 'iPhone';
     static preview = '/assets/images/components/iphone.svg';
-    static category = 'Mobile';
+    static category = 'Containers';
     tags = [
       'container',
       'apple',
@@ -55,7 +55,8 @@ module Higherframe.Drawing.Component.Library {
       // Draw the outer frame
       var outer = paper.Path.Rectangle(bounds, 20);
       outer.strokeColor = '#888';
-      outer.fillColor = 'white';
+      outer.strokeWidth = 1.5;
+      outer.fillColor = 'rgba(255,255,255,1)';
 
       // Draw the screen
       var screenRectangle = new paper.Rectangle(
@@ -64,11 +65,13 @@ module Higherframe.Drawing.Component.Library {
       );
       var screen = paper.Path.Rectangle(screenRectangle, 2);
       screen.strokeColor = '#888';
+      screen.strokeWidth = 1.5;
 
       // Draw the button
       var buttonposition = new paper.Point(this.model.properties.x, bounds.bottom - 35);
       var button = paper.Path.Circle(buttonposition, 24);
       button.strokeColor = '#888';
+      button.strokeWidth = 1.5;
 
       // Draw the speaker
       var speakerRectangle = new paper.Rectangle(
@@ -77,11 +80,13 @@ module Higherframe.Drawing.Component.Library {
       );
       var speaker = paper.Path.Rectangle(speakerRectangle, 3);
       speaker.strokeColor = '#888';
+      speaker.strokeWidth = 1.5;
 
       // Draw the camera
       var cameraposition = new paper.Point(this.model.properties.x, bounds.top + 18);
       var camera = paper.Path.Circle(cameraposition, 4);
       camera.strokeColor = '#888';
+      camera.strokeWidth = 1.5;
 
       // Group the parts as a component
       this.addChild(outer);

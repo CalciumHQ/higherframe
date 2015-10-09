@@ -77,7 +77,7 @@ module Higherframe.Drawing.Component.Library {
       // Draw the shape
       var shape = paper.Path.Rectangle(bounds, properties.cornerRadius);
       shape.strokeColor = '#888';
-      shape.fillColor = 'white';
+      shape.fillColor = 'rgba(0,0,0,0)';
 
       // Group the parts as a component
       this.addChild(shape);
