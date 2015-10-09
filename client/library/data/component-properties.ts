@@ -8,6 +8,11 @@ module Higherframe.Data {
     index: number
   }
 
+  export interface ILabelProperties extends IComponentProperties {
+    text: String,
+    fontSize: number
+  }
+
   export interface IRectangleProperties extends IComponentProperties {
     width: number,
     height: number,

@@ -6,7 +6,7 @@ module Higherframe.Drawing.Component.Library {
   export class SelectInput extends Drawing.Component.Base implements Drawing.Component.IComponent {
 
     // Implement IDefinition members
-    id = Drawing.Component.Type.TextInput;
+    id = Drawing.Component.Type.SelectInput;
     static title = 'Select control';
     static preview = '/assets/images/components/iphone.svg';
     static category = 'Form';

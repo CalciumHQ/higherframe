@@ -9,7 +9,7 @@ module Higherframe.Drawing.Component.Library {
     id = Drawing.Component.Type.Arrow;
     static title = 'Arrow';
     static preview = '/assets/images/components/arrow.svg';
-    static category = 'Basic shapes';
+    static category = 'Basic';
     tags = [
       'basic',
       'line',
