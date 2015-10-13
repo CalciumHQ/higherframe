@@ -149,8 +149,8 @@ module Higherframe.Drawing.Component.Library {
     getDragHandles(): Array<IDragHandle> {
 
       var properties = <Higherframe.Data.IArrowProperties>this.model.properties;
-
-      return [
+return [];
+      /*return [
         {
           position: properties.start,
           move: (position: paper.Point): paper.Point => {
@@ -171,7 +171,7 @@ module Higherframe.Drawing.Component.Library {
             return position;
           }
         }
-      ];
+      ];*/
     }
   }
 }

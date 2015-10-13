@@ -334,9 +334,11 @@ module Higherframe.Wireframe {
 			else if (this.selectedDragHandle) {
 
 				// The new position
-				console.log(this.selectedDragHandle);
 				var position:paper.Point = event.point.add(this.selectedDragHandle.mouseDownDelta);
-				this.selectedDragHandle.position = this.selectedDragHandle.model.move(position);
+				
+				this.selectedDragHandle.position = this.selectedDragHandle.onMove
+					? this.selectedDragHandle.onMove(position)
+					: position;
 			}
 
 			// If dragging an item
@@ -397,15 +399,18 @@ module Higherframe.Wireframe {
 
 			if (hitResult) {
 
-				var handle = hitResult.item;
+				var handle = this.getDragHandle(hitResult.item);
 
-				this.selectedDragHandle = handle;
+				if (handle) {
 
-				// Store where the mouse down point is in relation
-				// to the position of the handle
-				// This is used to position an handle correctly during
-				// a drag
-				this.selectedDragHandle.mouseDownDelta = this.selectedDragHandle.position.subtract(event.point);
+					this.selectedDragHandle = handle;
+
+					// Store where the mouse down point is in relation
+					// to the position of the handle
+					// This is used to position an handle correctly during
+					// a drag
+					this.selectedDragHandle.mouseDownDelta = this.selectedDragHandle.position.subtract(event.point);
+				}
 
 				return;
 			}
@@ -905,6 +910,32 @@ module Higherframe.Wireframe {
 		};
 
 
+		// Given a paper item, finds the next item in its
+		// hierarchy with a given class name.
+		getDragHandle(item: paper.Item): paper.Item {
+
+			var result = item;
+
+			if (result instanceof Higherframe.Drawing.Component.DragHandle) {
+
+				return result;
+			}
+
+			// Find the top-level group
+			while (result.parent) {
+
+				result = result.parent;
+
+				if (result instanceof Higherframe.Drawing.Component.DragHandle) {
+
+					return result;
+				}
+			}
+
+			return;
+		};
+
+
 		/**
 		 * Bounding box
 		 *
@@ -938,7 +969,7 @@ module Higherframe.Wireframe {
 			}
 		}
 
-		addBoundingBox(item) {
+		addBoundingBox(item: Higherframe.Drawing.Component.IComponent) {
 
 			if (!item.boundingBox) {
 
@@ -949,41 +980,12 @@ module Higherframe.Wireframe {
 				bb.strokeColor = this.colors.hover;
 				bb.strokeWidth = lineWidth;
 
-				var drawHandle = (point) => {
+				item.boundingBox = new paper.Group([bb]);
 
-					var handleSize = 3/paper.view.zoom;
-					var handle = paper.Path.Rectangle(
-						new paper.Point(point.x - handleSize, point.y - handleSize),
-						new paper.Point(point.x + handleSize, point.y + handleSize)
-					);
+				_.forEach(item.getTransformHandles(), (transformHandle) => {
 
-					handle.strokeColor = this.colors.hover;
-					handle.strokeWidth = lineWidth;
-					handle.fillColor = 'white';
-
-					return handle;
-				};
-
-				var topLeft = drawHandle(item.bounds.topLeft);
-				var topCenter = drawHandle(item.bounds.topCenter);
-				var topRight = drawHandle(item.bounds.topRight);
-				var rightCenter = drawHandle(item.bounds.rightCenter);
-				var bottomRight = drawHandle(item.bounds.bottomRight);
-				var bottomCenter = drawHandle(item.bounds.bottomCenter);
-				var bottomLeft = drawHandle(item.bounds.bottomLeft);
-				var leftCenter = drawHandle(item.bounds.leftCenter);
-
-				item.boundingBox = new paper.Group([
-					bb,
-					topLeft,
-					topCenter,
-					topRight,
-					rightCenter,
-					bottomRight,
-					bottomCenter,
-					bottomLeft,
-					leftCenter
-				]);
+					item.boundingBox.addChild(transformHandle);
+				});
 
 				this.layerDrawing.activate();
 			}
@@ -1023,12 +1025,7 @@ module Higherframe.Wireframe {
 
 			var drawHandle = (point) => {
 
-				var handleSize = 3/paper.view.zoom;
-				var handle = paper.Path.Rectangle(
-					new paper.Point(point.x - handleSize, point.y - handleSize),
-					new paper.Point(point.x + handleSize, point.y + handleSize)
-				);
-
+				var handle = new Higherframe.Drawing.Component.DragHandle(point);
 				handle.fillColor = this.colors.dragHandles;
 
 				return handle;

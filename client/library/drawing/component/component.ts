@@ -2,9 +2,40 @@
 
 module Higherframe.Drawing.Component {
 
-  export interface IDragHandle {
-    position: IPoint,
-    move?: (position: paper.Point) => paper.Point
+  export interface IDragHandle extends paper.Group {
+    position: paper.Point,
+    onMove?: (position: paper.Point) => paper.Point
+  }
+
+  export class DragHandle extends paper.Group implements IDragHandle {
+
+    constructor(position: paper.Point) {
+
+      super();
+
+      var lineWidth = 1/paper.view.zoom;
+      var handleSize = 3/paper.view.zoom;
+      var handle = paper.Path.Rectangle(
+        new paper.Point(position.x - handleSize, position.y - handleSize),
+        new paper.Point(position.x + handleSize, position.y + handleSize)
+      );
+
+      handle.strokeColor = '#7ae';
+      handle.strokeWidth = lineWidth;
+      handle.fillColor = 'white';
+
+      this.addChild(handle);
+    }
+
+
+    /**
+     * Derived class should implement
+     */
+
+    onMove(position: paper.Point): paper.Point {
+
+      return position;
+    }
   }
 
   /**
@@ -21,7 +52,6 @@ module Higherframe.Drawing.Component {
     preview?: String,
     category?: String,
     tags: Array<String>,
-    properties: Array<Object>,
     thumbnail: String,
     resizable: Boolean,
     showBounds: Boolean,
@@ -34,7 +64,15 @@ module Higherframe.Drawing.Component {
     update: () => void;
     updateModel: () => void;
     getSnapPoints: () => Array<IPoint>;
-    getDragHandles: () => Array<{ position: IPoint }>;
+    getTransformHandles: () => Array<IDragHandle>;
+    getDragHandles: () => Array<IDragHandle>;
+
+    // Drawing properties
+    parts;
+    collaborator;
+    properties: Array<Object>;
+    displayColor;
+    boundingBox;
 
     setComponentColor: (color) => void;
 
@@ -76,6 +114,10 @@ module Higherframe.Drawing.Component {
     _displayColor: string = '';
     get displayColor(): string { return this._displayColor; }
     set displayColor(value) { this._displayColor = value; }
+
+    _boundingBox: paper.Group;
+    get boundingBox(): paper.Group { return this._boundingBox; }
+    set boundingBox(value) { this._boundingBox = value; }
 
 
     constructor(model: Data.IDrawingModel) {
@@ -133,10 +175,11 @@ module Higherframe.Drawing.Component {
       })(item);
     }
 
-    // Will be obscured by child implementation
+    // Should be implemented by derived class
     update() {};
     updateModel() {};
     getSnapPoints() { return []; }
     getDragHandles() { return []; }
+    getTransformHandles() { return []; }
   }
 };

@@ -36,7 +36,7 @@ module Higherframe.Drawing.Component.Library {
       }
     ];
     resizable = true;
-    showBounds = false;
+    showBounds = true;
 
     model: Data.Component;
 
@@ -91,8 +91,10 @@ module Higherframe.Drawing.Component.Library {
     updateModel() {
 
       var properties = <Higherframe.Data.IRectangleProperties>this.model.properties;
-      this.model.properties.x = this.position.x - properties.width/2;
-      this.model.properties.y = this.position.y - properties.height/2;
+      properties.x = this.bounds.topLeft.x;
+      properties.y = this.bounds.topLeft.y;
+      properties.width = this.bounds.width;
+      properties.height = this.bounds.height;
     }
 
 
@@ -105,12 +107,87 @@ module Higherframe.Drawing.Component.Library {
       var properties = <Higherframe.Data.IRectangleProperties>this.model.properties;
 
       return [
-        new paper.Point(this.position.x - properties.width/2, this.position.y - properties.height/2),
-        new paper.Point(this.position.x + properties.width/2, this.position.y - properties.height/2),
-        new paper.Point(this.position.x + properties.width/2, this.position.y + properties.height/2),
-        new paper.Point(this.position.x - properties.width/2, this.position.y + properties.height/2)
+        this.bounds.leftCenter,
+        this.bounds.topCenter,
+        this.bounds.rightCenter,
+        this.bounds.bottomCenter
       ];
     }
+
+
+    /**
+     * Calculate the transform handles for the component
+     */
+
+    getTransformHandles(): Array<IDragHandle> {
+
+      var topLeft = new DragHandle(this.bounds.topLeft);
+      topLeft.onMove = (position: paper.Point): paper.Point => {
+
+        this.bounds.topLeft = position;
+        return this.bounds.topLeft;
+      };
+
+      var topCenter = new DragHandle(this.bounds.topCenter);
+      topCenter.onMove = (position: paper.Point): paper.Point => {
+
+        this.bounds.topCenter.y = position.y;
+        return this.bounds.topCenter;
+      };
+
+      var topRight = new DragHandle(this.bounds.topRight);
+      topRight.onMove = (position: paper.Point): paper.Point => {
+
+        this.bounds.topRight = position;
+        return this.bounds.topRight;
+      };
+
+      var rightCenter = new DragHandle(this.bounds.rightCenter);
+      rightCenter.onMove = (position: paper.Point): paper.Point => {
+
+        this.bounds.rightCenter.x = position.x;
+        return this.bounds.rightCenter;
+      };
+
+      var bottomRight = new DragHandle(this.bounds.bottomRight);
+      bottomRight.onMove = (position: paper.Point): paper.Point => {
+
+        this.bounds.bottomRight = position;
+        return this.bounds.bottomRight;
+      };
+
+      var bottomCenter = new DragHandle(this.bounds.bottomCenter);
+      bottomCenter.onMove = (position: paper.Point): paper.Point => {
+
+        this.bounds.bottomCenter.y = position.y;
+        return this.bounds.bottomCenter;
+      };
+
+      var bottomLeft = new DragHandle(this.bounds.bottomLeft);
+      bottomLeft.onMove = (position: paper.Point): paper.Point => {
+
+        this.bounds.bottomLeft = position;
+        return this.bounds.bottomLeft;
+      };
+
+      var leftCenter = new DragHandle(this.bounds.leftCenter);
+      leftCenter.onMove = (position: paper.Point): paper.Point => {
+
+        this.bounds.leftCenter.x = position.x;
+        return this.bounds.leftCenter;
+      };
+
+      return [
+        topLeft,
+        topCenter,
+        topRight,
+        rightCenter,
+        bottomRight,
+        bottomCenter,
+        bottomLeft,
+        leftCenter
+      ];
+    };
 
 
     /**
@@ -120,8 +197,8 @@ module Higherframe.Drawing.Component.Library {
     getDragHandles(): Array<IDragHandle> {
 
       var properties = <Higherframe.Data.IRectangleProperties>this.model.properties;
-
-      return [
+return [];
+      /*return [
         {
           position: new paper.Point(this.position.x - properties.width/2 + Number(properties.cornerRadius), this.position.y - properties.height/2),
           move: (position: paper.Point): paper.Point => {
@@ -145,7 +222,7 @@ module Higherframe.Drawing.Component.Library {
             return position;
           }
         }
-      ];
+      ];*/
     }
   }
 }

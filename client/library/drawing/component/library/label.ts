@@ -31,7 +31,7 @@ module Higherframe.Drawing.Component.Library {
       }
     ];
     resizable = false;
-    showBounds = false;
+    showBounds = true;
 
     model: Data.Component;
 
@@ -96,10 +96,10 @@ module Higherframe.Drawing.Component.Library {
       var properties = this.getProperties();
 
       // Corners
-      /*snapPoints.push(this.position.add(new paper.Point({ x: -(width/2), y: -(height/2) })));
-      snapPoints.push(this.position.add(new paper.Point({ x: (width/2), y: -(height/2) })));
-      snapPoints.push(this.position.add(new paper.Point({ x: (width/2), y: (height/2) })));
-      snapPoints.push(this.position.add(new paper.Point({ x: -(width/2), y: (height/2) })));*/
+      snapPoints.push(this.bounds.topLeft);
+      snapPoints.push(this.bounds.topRight);
+      snapPoints.push(this.bounds.bottomLeft);
+      snapPoints.push(this.bounds.bottomRight);
 
       return snapPoints;
     }

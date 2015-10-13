@@ -36,7 +36,7 @@ module Higherframe.Drawing.Component.Library {
       }
     ];
     resizable = true;
-    showBounds = false;
+    showBounds = true;
 
     model: Data.Component;
 
@@ -109,11 +109,40 @@ module Higherframe.Drawing.Component.Library {
      * Update model with the state of the view component
      */
 
-    updateModel() {
+     updateModel() {
 
-      this.model.properties.x = this.position.x;
-      this.model.properties.y = this.position.y;
-    }
+       var properties = this.getProperties();
+       properties.x = this.bounds.center.x;
+       properties.y = this.bounds.center.y;
+       properties.width = this.bounds.width;
+     }
+
+
+    /**
+     * Calculate the transform handles for the component
+     */
+
+    getTransformHandles(): Array<IDragHandle> {
+
+      var rightCenter = new DragHandle(this.bounds.rightCenter);
+      rightCenter.onMove = (position: paper.Point): paper.Point => {
+
+        this.bounds.rightCenter.x = position.x;
+        return this.bounds.rightCenter;
+      };
+
+      var leftCenter = new DragHandle(this.bounds.leftCenter);
+      leftCenter.onMove = (position: paper.Point): paper.Point => {
+
+        this.bounds.leftCenter.x = position.x;
+        return this.bounds.leftCenter;
+      };
+
+      return [
+        rightCenter,
+        leftCenter
+      ];
+    };
 
 
     /**

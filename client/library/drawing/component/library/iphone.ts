@@ -17,7 +17,7 @@ module Higherframe.Drawing.Component.Library {
     ];
     properties = [];
     resizable = false;
-    showBounds = true;
+    showBounds = false;
 
     model: Data.Component;
     parts: any = {};
