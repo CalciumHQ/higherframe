@@ -275,7 +275,22 @@ module Higherframe.Wireframe {
 
 			if (hitResult) {
 
-				this.hoveredDragHandle = hitResult.item;
+				var dragHandle = this.getDragHandle(hitResult.item);
+
+				if (dragHandle) {
+
+					this.hoveredDragHandle = dragHandle;
+				}
+
+				else {
+
+					this.hoveredDragHandle = null;
+				}
+			}
+
+			else {
+
+				this.hoveredDragHandle = null;
 			}
 
 			// Hit test a new item and set hover style
@@ -287,6 +302,17 @@ module Higherframe.Wireframe {
 
 				component.setComponentColor(this.colors.hover);
 				this.hoveredItem = component;
+			}
+
+			// Set the cursor
+			if (this.hoveredDragHandle && this.hoveredDragHandle.cursor) {
+
+				this.element.css('cursor', this.hoveredDragHandle.cursor);
+			}
+
+			else {
+
+				this.element.css('cursor', 'default');
 			}
 		}
 
@@ -335,7 +361,7 @@ module Higherframe.Wireframe {
 
 				// The new position
 				var position:paper.Point = event.point.add(this.selectedDragHandle.mouseDownDelta);
-				
+
 				this.selectedDragHandle.position = this.selectedDragHandle.onMove
 					? this.selectedDragHandle.onMove(position)
 					: position;

@@ -125,16 +125,26 @@ module Higherframe.Drawing.Component.Library {
     getTransformHandles(): Array<IDragHandle> {
 
       var rightCenter = new DragHandle(this.bounds.rightCenter);
+      rightCenter.cursor = Cursors.ResizeHorizontal;
       rightCenter.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.rightCenter.x = position.x;
+
+        this.updateModel();
+        this.update();
+
         return this.bounds.rightCenter;
       };
 
       var leftCenter = new DragHandle(this.bounds.leftCenter);
+      leftCenter.cursor = Cursors.ResizeHorizontal;
       leftCenter.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.leftCenter.x = position.x;
+
+        this.updateModel();
+        this.update();
+
         return this.bounds.leftCenter;
       };
 

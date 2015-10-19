@@ -122,6 +122,7 @@ module Higherframe.Drawing.Component.Library {
     getTransformHandles(): Array<IDragHandle> {
 
       var topLeft = new DragHandle(this.bounds.topLeft);
+      topLeft.cursor = Cursors.ResizeNWSE;
       topLeft.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.topLeft = position;
@@ -129,6 +130,7 @@ module Higherframe.Drawing.Component.Library {
       };
 
       var topCenter = new DragHandle(this.bounds.topCenter);
+      topCenter.cursor = Cursors.ResizeVertical;
       topCenter.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.topCenter.y = position.y;
@@ -136,6 +138,7 @@ module Higherframe.Drawing.Component.Library {
       };
 
       var topRight = new DragHandle(this.bounds.topRight);
+      topRight.cursor = Cursors.ResizeNESW;
       topRight.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.topRight = position;
@@ -143,6 +146,7 @@ module Higherframe.Drawing.Component.Library {
       };
 
       var rightCenter = new DragHandle(this.bounds.rightCenter);
+      rightCenter.cursor = Cursors.ResizeHorizontal;
       rightCenter.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.rightCenter.x = position.x;
@@ -150,6 +154,7 @@ module Higherframe.Drawing.Component.Library {
       };
 
       var bottomRight = new DragHandle(this.bounds.bottomRight);
+      bottomRight.cursor = Cursors.ResizeNWSE;
       bottomRight.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.bottomRight = position;
@@ -157,6 +162,7 @@ module Higherframe.Drawing.Component.Library {
       };
 
       var bottomCenter = new DragHandle(this.bounds.bottomCenter);
+      bottomCenter.cursor = Cursors.ResizeVertical;
       bottomCenter.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.bottomCenter.y = position.y;
@@ -164,6 +170,7 @@ module Higherframe.Drawing.Component.Library {
       };
 
       var bottomLeft = new DragHandle(this.bounds.bottomLeft);
+      bottomLeft.cursor = Cursors.ResizeNESW;
       bottomLeft.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.bottomLeft = position;
@@ -171,6 +178,7 @@ module Higherframe.Drawing.Component.Library {
       };
 
       var leftCenter = new DragHandle(this.bounds.leftCenter);
+      leftCenter.cursor = Cursors.ResizeHorizontal;
       leftCenter.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.leftCenter.x = position.x;

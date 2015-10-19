@@ -56,6 +56,7 @@
         "./library/drawing/component/library/select-input.ts",
         "./library/drawing/component/library/text-input.ts",
         "./library/drawing/component/type.ts",
+        "./library/drawing/cursor.ts",
         "./library/drawing/point.ts",
         "./library/higherframe.ts",
         "./library/ui/helpers/svg-replace.ts",

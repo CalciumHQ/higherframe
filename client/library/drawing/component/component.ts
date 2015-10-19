@@ -4,6 +4,7 @@ module Higherframe.Drawing.Component {
 
   export interface IDragHandle extends paper.Group {
     position: paper.Point,
+    cursor?: Cursor,
     onMove?: (position: paper.Point) => paper.Point
   }
 
@@ -31,6 +32,8 @@ module Higherframe.Drawing.Component {
     /**
      * Derived class should implement
      */
+
+    cursor: Cursor;
 
     onMove(position: paper.Point): paper.Point {
 
