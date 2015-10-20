@@ -69,6 +69,28 @@ module Higherframe.Drawing.Component.Library {
       var properties = this.getProperties();
       let size = 14;
 
+      // Determine palette
+      var theme: Higherframe.UI.ITheme = new Higherframe.UI.DefaultTheme();
+      var foreColor = theme.ComponentDefault;
+      var foreColorDark = new paper.Color('black');
+      var foreColorLight = new paper.Color('#aaa');
+
+      if (this.active) {
+
+        foreColor = theme.ComponentActive;
+      }
+
+      else if (this.focussed) {
+
+        foreColor = theme.ComponentFocus;
+      }
+
+      else if (this.hovered) {
+
+        foreColor = theme.ComponentHover;
+        foreColorDark = theme.ComponentHover;
+      }
+
       // Remove the old parts
       this.removeChildren();
 
@@ -77,7 +99,7 @@ module Higherframe.Drawing.Component.Library {
       var bottomRight = new paper.Point(properties.x + size, properties.y + size);
       var bounds = new paper.Rectangle(topLeft, bottomRight);
       var box = paper.Path.Rectangle(bounds);
-      box.strokeColor = '#888';
+      box.strokeColor = foreColor;
       box.strokeWidth = 1.5;
       box.fillColor = 'rgba(255,255,255,1)';
       this.addChild(box);
@@ -89,7 +111,7 @@ module Higherframe.Drawing.Component.Library {
         check.add(new paper.Point(properties.x + size/2 - 4, properties.y + size/2 - 0));
         check.add(new paper.Point(properties.x + size/2 - 1, properties.y + size/2 + 3));
         check.add(new paper.Point(properties.x + size/2 + 4, properties.y + size/2 - 3));
-        check.strokeColor = '#888';
+        check.strokeColor = foreColor;
         check.strokeWidth = 2;
         this.addChild(check);
       }
@@ -98,7 +120,7 @@ module Higherframe.Drawing.Component.Library {
       var value = new paper.PointText({
         point: new paper.Point(properties.x + size + 7, topLeft.y + size/2 + properties.fontSize/3),
         content: properties.label,
-        fillColor: 'black',
+        fillColor: foreColorDark,
         fontSize: properties.fontSize,
         fontFamily: 'Myriad Pro'
       });

@@ -68,6 +68,28 @@ module Higherframe.Drawing.Component.Library {
       var properties = this.getProperties();
       var HEIGHT = this.getHeight();
 
+      // Determine palette
+      var theme: Higherframe.UI.ITheme = new Higherframe.UI.DefaultTheme();
+      var foreColor = theme.ComponentDefault;
+      var foreColorDark = new paper.Color('black');
+      var foreColorLight = new paper.Color('#aaa');
+
+      if (this.active) {
+
+        foreColor = theme.ComponentActive;
+      }
+
+      else if (this.focussed) {
+
+        foreColor = theme.ComponentFocus;
+      }
+
+      else if (this.hovered) {
+
+        foreColor = theme.ComponentHover;
+        foreColorDark = theme.ComponentHover;
+      }
+
       // Remove the old parts
       this.removeChildren();
 
@@ -77,7 +99,7 @@ module Higherframe.Drawing.Component.Library {
 
       // Draw the outer frame
       var outer = paper.Path.Rectangle(bounds);
-      outer.strokeColor = '#888';
+      outer.strokeColor = foreColor;
       outer.strokeWidth = 1.5;
       outer.fillColor = 'rgba(255,255,255,1)';
 
@@ -85,7 +107,7 @@ module Higherframe.Drawing.Component.Library {
       var value = new paper.PointText({
         point: new paper.Point(topLeft.x + 10, topLeft.y + HEIGHT/2 + properties.fontSize/3+1),
         content: properties.value ? properties.value : properties.placeholder,
-        fillColor: properties.value ? 'black' : '#aaa',
+        fillColor: properties.value ? foreColorDark : foreColorLight,
         fontSize: properties.fontSize,
         fontFamily: 'Myriad Pro'
       });

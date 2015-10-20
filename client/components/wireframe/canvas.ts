@@ -21,13 +21,6 @@ module Higherframe.Wireframe {
  			tolerance: 5
  		};
 
-		colors = {
-			normal: '#888',
-			hover: '#7ae',
-			selected: '#7ae',
-			dragHandles: '#98e001'
-		};
-
 
 		/**
 		 * Member variables
@@ -134,7 +127,7 @@ module Higherframe.Wireframe {
 
 					// Set the color for the user
 					component.collaborator = null;
-					component.setComponentColor(this.colors.normal);
+					component.focussed = false;
 				});
 
 
@@ -256,17 +249,17 @@ module Higherframe.Wireframe {
 
 				if (this.selectedItems.indexOf(this.hoveredItem) !== -1) {
 
-					this.hoveredItem.setComponentColor(this.colors.selected);
+					this.hoveredItem.hovered = false;
 				}
 
 				else if (this.hoveredItem.collaborator) {
 
-					this.hoveredItem.setComponentColor(this.hoveredItem.collaborator.color);
+					this.hoveredItem.hovered = false;
 				}
 
 				else {
 
-					this.hoveredItem.setComponentColor(this.colors.normal);
+					this.hoveredItem.hovered = false;
 				}
 			}
 
@@ -300,7 +293,7 @@ module Higherframe.Wireframe {
 
 				var component = this.getTopmost(hitResult.item);
 
-				component.setComponentColor(this.colors.hover);
+				component.hovered = true;
 				this.hoveredItem = component;
 			}
 
@@ -641,20 +634,7 @@ module Higherframe.Wireframe {
 
 			angular.forEach(this.selectedItems, (item) => {
 
-				if (item == this.hoveredItem) {
-
-					item.setComponentColor(this.colors.hover);
-				}
-
-				else if (item.collaborator) {
-
-					this.hoveredItem.setComponentColor(item.collaborator.color);
-				}
-
-				else {
-
-					this.hoveredItem.setComponentColor(this.colors.normal);
-				}
+				item.focussed = false;
 			});
 
 			this.scope.$emit('componentsDeselected', this.selectedItems);
@@ -672,7 +652,7 @@ module Higherframe.Wireframe {
 
 				if (this.selectedItems.indexOf(item) === -1) {
 
-					item.setComponentColor(this.colors.selected);
+					item.focussed = true;
 					this.selectedItems.push(item);
 					this.onItemUpdated(item);
 					(<any>paper.view).draw();
@@ -1003,7 +983,7 @@ module Higherframe.Wireframe {
 
 				var lineWidth = 1/paper.view.zoom;
 				var bb = paper.Path.Rectangle(item.bounds);
-				bb.strokeColor = this.colors.hover;
+				bb.strokeColor = 'magenta';
 				bb.strokeWidth = lineWidth;
 
 				item.boundingBox = new paper.Group([bb]);
@@ -1052,7 +1032,7 @@ module Higherframe.Wireframe {
 			var drawHandle = (point) => {
 
 				var handle = new Higherframe.Drawing.Component.DragHandle(point);
-				handle.fillColor = this.colors.dragHandles;
+				handle.fillColor = 'magenta';
 
 				return handle;
 			};

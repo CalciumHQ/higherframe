@@ -71,13 +71,14 @@ module Higherframe.Drawing.Component {
     getDragHandles: () => Array<IDragHandle>;
 
     // Drawing properties
+    hovered: Boolean,
+    active: Boolean,
+    focussed: Boolean,
+
     parts;
     collaborator;
     properties: Array<Object>;
-    displayColor;
     boundingBox;
-
-    setComponentColor: (color) => void;
 
     // Provide definitions for paper.Item methods that we need in lieu
     // of a definition file for the interface
@@ -102,6 +103,18 @@ module Higherframe.Drawing.Component {
     model: Data.IDrawingModel;
 
     // Drawing properties
+    _hovered: Boolean = false;
+    get hovered(): Boolean { return this._hovered; }
+    set hovered(value) { this._hovered = value; this.update(); }
+
+    _active: Boolean = false;
+    get active(): Boolean { return this._active; }
+    set active(value) { this._active = value; this.update(); }
+
+    _focussed: Boolean = false;
+    get focussed(): Boolean { return this._focussed; }
+    set focussed(value) { this._focussed = value; this.update(); }
+
     _parts = {};
     get parts() { return this._parts; }
     set parts(value) { this._parts = value; }
@@ -113,10 +126,6 @@ module Higherframe.Drawing.Component {
     _properties: Array<Object> = [];
     get properties(): Array<Object> { return this._properties; }
     set properties(value) { this._properties = value; }
-
-    _displayColor: string = '';
-    get displayColor(): string { return this._displayColor; }
-    set displayColor(value) { this._displayColor = value; }
 
     _boundingBox: paper.Group;
     get boundingBox(): paper.Group { return this._boundingBox; }
@@ -134,48 +143,6 @@ module Higherframe.Drawing.Component {
     serialize(): Data.IDrawingModel {
 
       return this.model;
-    }
-
-    // Drawing methods
-    setComponentColor(color): void {
-
-      var item = this;
-
-      // Set on the item
-      (function loop(item) {
-
-        // A group with children
-        if (item.className == 'Group') {
-
-          angular.forEach(item.children, function (child) {
-
-            loop(child);
-          });
-        }
-
-        // A leaf item
-        else {
-
-          if (item.className == 'PointText') {
-
-            item.fillColor = color;
-          }
-
-          else if (item.strokeWidth) {
-
-            item.strokeColor = color;
-          }
-
-          if (
-            item.fillColor && 							// Has fill
-            item.fillColor.alpha &&					// Not transparent
-            item.fillColor.lightness != 1		// Not white
-          ) {
-
-            item.fillColor = color;
-          }
-        }
-      })(item);
     }
 
     // Should be implemented by derived class

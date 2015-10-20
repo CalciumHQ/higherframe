@@ -36,7 +36,7 @@ module Higherframe.Drawing.Component.Library {
       }
     ];
     resizable = true;
-    showBounds = true;
+    showBounds = false;
 
     model: Data.Component;
 
@@ -67,6 +67,25 @@ module Higherframe.Drawing.Component.Library {
 
       var properties = <Higherframe.Data.IRectangleProperties>this.model.properties;
 
+      // Determine palette
+      var theme: Higherframe.UI.ITheme = new Higherframe.UI.DefaultTheme();
+      var foreColor = theme.ComponentDefault;
+
+      if (this.active) {
+
+        foreColor = theme.ComponentActive;
+      }
+
+      else if (this.focussed) {
+
+        foreColor = theme.ComponentFocus;
+      }
+
+      else if (this.hovered) {
+
+        foreColor = theme.ComponentHover;
+      }
+
       // Remove the old parts
       this.removeChildren();
 
@@ -76,7 +95,7 @@ module Higherframe.Drawing.Component.Library {
 
       // Draw the shape
       var shape = paper.Path.Rectangle(bounds, properties.cornerRadius);
-      shape.strokeColor = '#888';
+      shape.strokeColor = foreColor;
       shape.fillColor = 'rgba(0,0,0,0)';
 
       // Group the parts as a component
