@@ -83,6 +83,7 @@ module Higherframe.Drawing.Component.Library {
       else if (this.focussed) {
 
         foreColor = theme.ComponentFocus;
+        foreColorDark = theme.ComponentHover;
       }
 
       else if (this.hovered) {

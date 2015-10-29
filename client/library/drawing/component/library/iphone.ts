@@ -20,7 +20,6 @@ module Higherframe.Drawing.Component.Library {
     showBounds = false;
 
     model: Data.Component;
-    parts: any = {};
 
 
     /**
@@ -45,6 +44,25 @@ module Higherframe.Drawing.Component.Library {
       var WIDTH = 232;
       var HEIGHT = 464;
 
+      // Determine palette
+      var theme: Higherframe.UI.ITheme = new Higherframe.UI.DefaultTheme();
+      var foreColor = theme.ComponentDefault;
+
+      if (this.active) {
+
+        foreColor = theme.ComponentActive;
+      }
+
+      else if (this.focussed) {
+
+        foreColor = theme.ComponentFocus;
+      }
+
+      else if (this.hovered) {
+
+        foreColor = theme.ComponentHover;
+      }
+
       // Remove the old parts
       this.removeChildren();
 
@@ -54,7 +72,7 @@ module Higherframe.Drawing.Component.Library {
 
       // Draw the outer frame
       var outer = paper.Path.Rectangle(bounds, 20);
-      outer.strokeColor = '#888';
+      outer.strokeColor = foreColor;
       outer.strokeWidth = 1.5;
       outer.fillColor = 'rgba(255,255,255,1)';
 
@@ -64,13 +82,13 @@ module Higherframe.Drawing.Component.Library {
         new paper.Point(bounds.right - 6, bounds.bottom - 70)
       );
       var screen = paper.Path.Rectangle(screenRectangle, 2);
-      screen.strokeColor = '#888';
+      screen.strokeColor = foreColor;
       screen.strokeWidth = 1.5;
 
       // Draw the button
       var buttonposition = new paper.Point(this.model.properties.x, bounds.bottom - 35);
       var button = paper.Path.Circle(buttonposition, 24);
-      button.strokeColor = '#888';
+      button.strokeColor = foreColor;
       button.strokeWidth = 1.5;
 
       // Draw the speaker
@@ -79,13 +97,13 @@ module Higherframe.Drawing.Component.Library {
         new paper.Point(this.model.properties.x + 23, bounds.top + 33)
       );
       var speaker = paper.Path.Rectangle(speakerRectangle, 3);
-      speaker.strokeColor = '#888';
+      speaker.strokeColor = foreColor;
       speaker.strokeWidth = 1.5;
 
       // Draw the camera
       var cameraposition = new paper.Point(this.model.properties.x, bounds.top + 18);
       var camera = paper.Path.Circle(cameraposition, 4);
-      camera.strokeColor = '#888';
+      camera.strokeColor = foreColor;
       camera.strokeWidth = 1.5;
 
       // Group the parts as a component
@@ -94,14 +112,6 @@ module Higherframe.Drawing.Component.Library {
       this.addChild(button);
       this.addChild(camera);
       this.addChild(speaker);
-
-      // Define the component parts
-      this.parts = {};
-      this.parts.outer = outer;
-      this.parts.screen = screen;
-      this.parts.button = button;
-      this.parts.camera = camera;
-      this.parts.speaker = speaker;
     }
 
     /**

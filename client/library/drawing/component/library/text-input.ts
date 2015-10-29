@@ -82,12 +82,15 @@ module Higherframe.Drawing.Component.Library {
       else if (this.focussed) {
 
         foreColor = theme.ComponentFocus;
+        foreColorDark = theme.ComponentFocus;
+        foreColorLight = theme.ComponentFocus;
       }
 
       else if (this.hovered) {
 
         foreColor = theme.ComponentHover;
         foreColorDark = theme.ComponentHover;
+        foreColorLight = theme.ComponentHover;
       }
 
       // Remove the old parts

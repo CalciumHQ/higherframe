@@ -23,7 +23,7 @@ module Higherframe.Drawing.Component.Library {
       }
     ];
     resizable = false;
-    showBounds = true;
+    showBounds = false;
     preview = '/assets/images/components/iphone.svg';
 
     model: Data.Component;
@@ -43,6 +43,25 @@ module Higherframe.Drawing.Component.Library {
 
       var properties = <Data.IIPhoneTitlebarProperties>this.model.properties;
 
+      // Determine palette
+      var theme: Higherframe.UI.ITheme = new Higherframe.UI.DefaultTheme();
+      var foreColor = theme.ComponentDefault;
+
+      if (this.active) {
+
+        foreColor = theme.ComponentActive;
+      }
+
+      else if (this.focussed) {
+
+        foreColor = theme.ComponentFocus;
+      }
+
+      else if (this.hovered) {
+
+        foreColor = theme.ComponentHover;
+      }
+
       var topLeft = new paper.Point(properties.x - WIDTH/2, properties.y - HEIGHT/2);
       var bottomRight = new paper.Point(properties.x + WIDTH/2, properties.y + HEIGHT/2);
       var bounds = new paper.Rectangle(topLeft, bottomRight);
@@ -58,28 +77,28 @@ module Higherframe.Drawing.Component.Library {
       // Draw the mobile area
       var c1 = paper.Path.Circle(new paper.Point(topLeft.x + 6, topLeft.y + HEIGHT/2), 2);
       c1.strokeWidth = 0;
-      c1.fillColor = '#888';
+      c1.fillColor = foreColor;
 
       var c2 = paper.Path.Circle(new paper.Point(topLeft.x + 11, topLeft.y + HEIGHT/2), 2);
       c2.strokeWidth = 0;
-      c2.fillColor = '#888';
+      c2.fillColor = foreColor;
 
       var c3 = paper.Path.Circle(new paper.Point(topLeft.x + 16, topLeft.y + HEIGHT/2), 2);
       c3.strokeWidth = 0;
-      c3.fillColor = '#888';
+      c3.fillColor = foreColor;
 
       var c4 = paper.Path.Circle(new paper.Point(topLeft.x + 21, topLeft.y + HEIGHT/2), 2);
       c4.strokeWidth = 0;
-      c4.fillColor = '#888';
+      c4.fillColor = foreColor;
 
       var c5 = paper.Path.Circle(new paper.Point(topLeft.x + 26, topLeft.y + HEIGHT/2), 2);
       c5.strokeWidth = 0;
-      c5.fillColor = '#888';
+      c5.fillColor = foreColor;
 
       var carrier = new paper.PointText({
         point: new paper.Point(topLeft.x + 32, topLeft.y + HEIGHT/2 + 3),
         content: 'Carrier',
-        fillColor: '#888',
+        fillColor: foreColor,
         fontSize: 9
       });
 
@@ -100,7 +119,7 @@ module Higherframe.Drawing.Component.Library {
 
       var batteryOuter = paper.Path.Rectangle(batteryOuterRect);
       batteryOuter.strokeWidth = 1;
-      batteryOuter.strokeColor = '#888';
+      batteryOuter.strokeColor = foreColor;
 
       var batteryInnerRect = new paper.Rectangle(
         new paper.Point(bottomRight.x - 19, bottomRight.y - 5),
@@ -109,7 +128,7 @@ module Higherframe.Drawing.Component.Library {
 
       var batteryInner = paper.Path.Rectangle(batteryInnerRect);
       batteryInner.strokeWidth = 0;
-      batteryInner.fillColor = '#888';
+      batteryInner.fillColor = foreColor;
 
       var batteryKnobRect = new paper.Rectangle(
       new paper.Point(bottomRight.x - 5, bottomRight.y - 8),
@@ -118,7 +137,7 @@ module Higherframe.Drawing.Component.Library {
 
       var batteryKnob = paper.Path.Rectangle(batteryKnobRect);
       batteryKnob.strokeWidth = 0;
-      batteryKnob.fillColor = '#888';
+      batteryKnob.fillColor = foreColor;
 
       var indicators = new paper.Group([
         batteryOuter,
@@ -129,7 +148,7 @@ module Higherframe.Drawing.Component.Library {
       var time = new paper.PointText({
         point: new paper.Point(topLeft.x + WIDTH/2 - 16, topLeft.y + HEIGHT/2 + 3),
         content: properties.time,
-        fillColor: '#888',
+        fillColor: foreColor,
         fontSize: 9,
         fontWeight: 'bold'
       });

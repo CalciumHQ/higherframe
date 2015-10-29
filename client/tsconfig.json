@@ -45,7 +45,6 @@
         "./library/data/document.ts",
         "./library/data/drawing-model.ts",
         "./library/data/user.ts",
-        "./library/drawing/color.ts",
         "./library/drawing/component/component.ts",
         "./library/drawing/component/factory.ts",
         "./library/drawing/component/library/arrow.ts",
