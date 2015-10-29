@@ -533,9 +533,14 @@ class FrameCtrl {
     };
   };
 
-  private save() {
+  private save(type?: string) {
 
-    this.$http.get('/api/frames/' + this.frame._id + '/export?type=png');
+    if (!type) {
+
+      type = 'png';
+    }
+
+    this.$http.get(`/api/frames/${this.frame._id}/export?type=${type}`);
   };
 
 
@@ -725,6 +730,11 @@ class FrameCtrl {
   onActionbarQuickAddClick() {
 
     this.toggleQuickAdd();
+  }
+
+  onActionbarSaveAsPngClick() {
+console.log('saving');
+    this.save('png');
   }
 
   // When a key is pressed in the quick add input

@@ -2,7 +2,7 @@
 'use strict';
 
 var _ = require('lodash');
-var ComponentFactory = {}; /*require('./../../../client/common/component/factory.js');*/
+var ComponentFactory = require('./../../../.tmp/library/drawing/component/factory.js');
 var paper = require('paper');
 var fs = require('fs');
 var s3 = require('s3');
@@ -99,6 +99,10 @@ var _createExportEntry = function(image, frame) {
 
 exports.export = function (frame, fileName, options) {
 
+  console.log(ComponentFactory);
+  options.error();
+  return;
+
   var fileType = options.fileType || 'png';
   var width = options.width || 2000;
   var height = options.height || 1000;
@@ -120,10 +124,8 @@ exports.export = function (frame, fileName, options) {
   // Draw the components
   frame.components.forEach(function (component) {
 
-    var marker = new paper.Path.Circle(new paper.Point(component.properties.x, component.properties.y), 10);
-    marker.fillColor = 'black';
-
-    ComponentFactory.create(component.componentId, component.properties);
+    /* var marker = new paper.Path.Circle(new paper.Point(component.properties.x, component.properties.y), 10);
+    marker.fillColor = 'black'; */
   });
 
   // Perform the actual drawing to the canvas

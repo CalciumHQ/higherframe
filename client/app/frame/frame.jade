@@ -45,7 +45,7 @@ div.fullscreen-wrapper
 					
 		span.action.action-menu.b3.roboto.semibold(ui-action-menu) Export
 			div.action-menu-items
-				a.action-menu-item
+				a.action-menu-item(ng-click="FrameCtrl.onActionbarSaveAsPngClick()")
 					span.action-menu-item-label Save as PNG
 					span.action-menu-item-shortcut
 						span(ng-bind-html="'ctrl' | symbol")
