@@ -10,6 +10,7 @@ angular
         templateUrl: 'app/frame/frame.html',
         controller: 'FrameCtrl',
 				controllerAs: 'FrameCtrl',
+				authenticate: true,
         resolve: {
           frame: function($stateParams, $http, $q, Auth) {
 

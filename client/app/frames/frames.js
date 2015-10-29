@@ -10,6 +10,7 @@ angular
         templateUrl: 'app/frames/frames.html',
         controller: 'FramesCtrl',
 				controllerAs: 'FramesCtrl',
+				authenticate: true,
         resolve: {
 					organisations: function($stateParams, $http, $q, Auth) {
 

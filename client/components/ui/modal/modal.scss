@@ -20,6 +20,7 @@ $modal-padding: 25px;
   height: 500px;
   margin-left: -340px;
   margin-top: -250px;
+  @include box-shadow(0 0 30px rgba(0,0,0,0.1));
 
   .ui-modal-header {
     @include box-sizing(border-box);

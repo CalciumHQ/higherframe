@@ -18,7 +18,7 @@ $unitPadding: 80px;
 }
 
 .page.underlay-navbar {
-  margin-top: -56px;
+  margin-top: -7*$vu;
 
   .unit:first-child {
     padding-top: $unitPadding + 56px;

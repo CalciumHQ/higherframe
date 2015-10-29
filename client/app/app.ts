@@ -46,6 +46,7 @@ angular.module('siteApp', [
   })
 
   .run(function ($rootScope, $location, Auth) {
+    
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$stateChangeStart', function (event, next) {
       Auth.isLoggedInAsync(function(loggedIn) {
@@ -53,5 +54,10 @@ angular.module('siteApp', [
           $location.path('/login');
         }
       });
+    });
+
+    // Handle errors in routing
+    $rootScope.$on('$stateChangeError', function() {
+
     });
   });

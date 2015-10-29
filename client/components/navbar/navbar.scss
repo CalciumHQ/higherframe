@@ -82,6 +82,14 @@ $logoHeight: 3 * $vu;
 		}
 	}
 
+	&.green {
+		#logo {
+			path {
+	      fill: #1cbcbc;
+	    }
+		}
+	}
+
 	&.dark {
 
 	}
