@@ -110,6 +110,12 @@ h4,
 	@include b3();
 }
 
+.b1 {
+	& + .b1 {
+		margin-top: 2 * $vu;
+	}
+}
+
 .uppercase {
 	text-transform: uppercase;
 }

@@ -67,9 +67,11 @@ $uiFontWeightSmall: 500;
 
 $uiControlHeightMedium: 5*$vu;
 $uiControlHeightSmall: 21px;
-$uiControlPaddingHorizontalMedium: 8px;
-$uiControlBorderRadius: 5px;
+$uiControlPaddingHorizontalMedium: 0;
+$uiControlBorderRadius: 0;
 $uiControlBorderColor: $grey3;
+$uiControlBorderColorHover: $grey2;
+$uiControlBorderColorFocus: $blue;
 $uiControlFontSize: 0.875rem;
 
 // legacy

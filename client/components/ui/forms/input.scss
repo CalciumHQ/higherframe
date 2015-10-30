@@ -3,13 +3,19 @@
   @include box-sizing(border-box);
   padding: 0 $uiControlPaddingHorizontalMedium;
   height: $uiControlHeightMedium;
-  border: 1px solid $uiControlBorderColor;
+  border: 0;
+  border-bottom: 1px solid $uiControlBorderColor;
   border-radius: $uiControlBorderRadius;
-  font-size: 14px;
+  font-size: 18px;
   background: white;
+
+  &:hover {
+    border-bottom-color: $uiControlBorderColorHover;
+  }
 
   &:focus {
     outline: none;
+    border-bottom-color: $uiControlBorderColorFocus;
   }
 }
 

@@ -1,28 +1,39 @@
+div#navbar.row.transparent.green(ng-include='"components/navbar/navbar.html"')
 
+#signup.page.underlay-navbar
 
-form(name="form", ng-submit="login(form)", novalidate="").ui-modal
+form(name="form", ng-submit="register(form)", novalidate="").ui-modal
   .ui-modal-header
     h2 Higherframe is in closed beta
     
   .ui-modal-body
     div.ui-control.block
       p.b1 Thanks for your interest in Higherframe. We want to create the best wireframing tool we can; a piece of software we hope you'll love.
-      p.b1 If you would like to become a beta tester, please provide your details. We would love your help and will contact you soon.
+      p.b1 If you would like to become a beta tester, please provide your details. We appreciate your help and will contact you soon.
       
     div.ui-control.block
-      label.ui-label.b1(for="user") Email address:
-      input.ui-input(name="email", type="text", ng-model="user.email", placeholder="e.g.: don@sterlingcooper.com", required, tabindex="1")
-      p.ui-hint.b3 Not a Higherframe user? 
-        a(href="/signup", tabindex="3") Request access now
+      label.ui-label.b1(for="name") Name:
+      input.ui-input(name="name", type="text", ng-model="user.name", placeholder="e.g.: Don Draper", required)
+      p.ui-error(ng-show='form.name.$error.required && submitted')
+        | A name is required
         
+    div.ui-control.block
+      label.ui-label.b1(for="email") Email address:
+      input.ui-input(name="email", type="email", ng-model="user.email", placeholder="e.g.: don@sterlingcooper.com", required, mongoose-error="")  
+      p.ui-error(ng-show='form.email.$error.email && submitted')
+        | Doesn't look like a valid email.
+      p.ui-error(ng-show='form.email.$error.required && submitted')
+        | What's your email address?
+      p.ui-error(ng-show='form.email.$error.mongoose')
+        | {{ errors.email }}
+          
     div.ui-control.block
       label.ui-label.b1(for="password") Password:
-      input.ui-input(name="password", type="password", ng-model="user.password", required, tabindex="2")
-        
-    div.ui-control.block
-      p.ui-error.b1(ng-show='form.email.$error.required && form.password.$error.required && submitted')
-        | Please enter your email and password.
-      p.ui-error.b1 {{ errors.other }}
+      input.ui-input(name="password", type="password", ng-model="user.password", required, mongoose-error="")
+      p.ui-error(ng-show='(form.password.$error.minlength || form.password.$error.required) && submitted')
+        | Password must be at least 3 characters.
+      p.ui-error(ng-show='form.password.$error.mongoose')
+        | {{ errors.password }}
     
   .ui-modal-footer
     .ui-modal-buttons
@@ -30,4 +41,4 @@ form(name="form", ng-submit="login(form)", novalidate="").ui-modal
         span.b1.medium.loose.uppercase Cancel
         
       button.ui-button.success(type="submit")
-        span.b1.medium.loose.uppercase Login
+        span.b1.medium.loose.uppercase Request access

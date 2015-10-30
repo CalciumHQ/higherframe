@@ -30,9 +30,6 @@ div.container(ng-controller="NavbarCtrl")
     ul#anonymous.navCollection(ng-show="!isLoggedIn()")
       li.navItem
         a(href="/login") Login
-        
-      li.navItem
-        a(href="/signup") Sign up
   
     div#identity.navItem.hasImage(ng-show="isLoggedIn()")
       a
