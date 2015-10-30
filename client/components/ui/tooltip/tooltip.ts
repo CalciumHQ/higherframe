@@ -22,7 +22,7 @@ module Higherframe.UI {
     private registerEvents() {
 
       this.$scope.element.bind('mouseover', () => this.onMouseOver());
-      // this.$scope.element.bind('mouseout', () => this.onMouseOut());
+      this.$scope.element.bind('mouseout', () => this.onMouseOut());
     }
 
     private onMouseOver() {
