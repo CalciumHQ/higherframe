@@ -1,0 +1,23 @@
+
+.uiPlaceholder {
+	position: relative;
+
+	.image {
+		position: absolute;
+		left: 0;
+		width: 100%;
+		top: 0;
+		height: 100%;
+
+		&.real {
+			background-size: cover;
+			background-position: center;
+		}
+	}
+
+	&.user {
+		.image {
+			border-radius: 100px;
+		}
+	}
+}

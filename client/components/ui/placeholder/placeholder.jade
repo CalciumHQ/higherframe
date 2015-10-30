@@ -1,0 +1,3 @@
+div.uiPlaceholder(class="{{ Ctrl.type }}")
+	img.placeholder.image(ng-src="/assets/images/placeholders/{{ Ctrl.type }}.svg")
+	div.real.image(ng-if="Ctrl.src", ng-style="{ 'background-image': 'url(' + Ctrl.src + ')' }")

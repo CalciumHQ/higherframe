@@ -85,6 +85,7 @@ $canvasMargin: 15px;
 		@include clearfix;
 
 		.collaborator {
+			position: relative;
 			float: left;
 
 			& + .collaborator {
@@ -109,11 +110,12 @@ $canvasMargin: 15px;
 				}
 			}
 
-			.image {
+			.avatar {
 				display: block;
 				width: $collaboratorAvatarSize;
 				height: $collaboratorAvatarSize;
 				border-radius: $collaboratorAvatarSize/2;
+				background: white;
 			}
 
 			.indicator {
@@ -133,5 +135,11 @@ $canvasMargin: 15px;
 		top: 0;
 		width: 100%;
 		height: 100%;
+	}
+
+	.bottomRight {
+		position: absolute;
+		bottom: $canvasMargin;
+		right: $canvasMargin;
 	}
 }

@@ -133,5 +133,6 @@ div.fullscreen-wrapper
 		div.bottomRight
 			#collaborators
 					.collaborator(ng-repeat="user in FrameCtrl.collaborators")
-						img.image(ng-if="user.provider == 'facebook'", ng-src="http://graph.facebook.com/{{ user.facebook.id }}/picture?type=large", title="{{ user.name }}")
+						ui-placeholder.avatar(ng-if="user.provider == 'facebook'", type="user", src="'http://graph.facebook.com/' + user.facebook.id + '/picture?type=large'", title="{{ user.name }}")
+						ui-placeholder.avatar(ng-if="user.provider != 'facebook'", type="user", title="{{ user.name }}")
 						div.indicator(ng-style="{ 'background': user.color }")
