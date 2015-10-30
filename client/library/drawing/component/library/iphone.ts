@@ -46,7 +46,7 @@ module Higherframe.Drawing.Component.Library {
 
       // Determine palette
       var theme: Higherframe.UI.ITheme = new Higherframe.UI.DefaultTheme();
-      var foreColor = theme.ComponentDefault;
+      var foreColor = this.collaborator ? new paper.Color(this.collaborator.color) : theme.ComponentDefault;
 
       if (this.active) {
 

@@ -9,6 +9,16 @@ module Higherframe.UI {
     ComponentActive: paper.Color;
     ComponentFocus: paper.Color;
 
+    ComponentDefaultLight: paper.Color;
+    ComponentHoverLight: paper.Color;
+    ComponentActiveLight: paper.Color;
+    ComponentFocusLight: paper.Color;
+
+    ComponentDefaultDark: paper.Color;
+    ComponentHoverDark: paper.Color;
+    ComponentActiveDark: paper.Color;
+    ComponentFocusDark: paper.Color;
+
     DragHandleDefault: paper.Color;
   }
 
@@ -18,6 +28,16 @@ module Higherframe.UI {
     ComponentHover = new paper.Color('#7ae');
     ComponentActive = new paper.Color('#7ae');
     ComponentFocus = new paper.Color('#7ae');
+
+    ComponentDefaultLight = new paper.Color('#aaa');
+    ComponentHoverLight = new paper.Color('#7ae');
+    ComponentActiveLight = new paper.Color('#7ae');
+    ComponentFocusLight = new paper.Color('#7ae');
+
+    ComponentDefaultDark = new paper.Color('#000');
+    ComponentHoverDark = new paper.Color('#7ae');
+    ComponentActiveDark = new paper.Color('#7ae');
+    ComponentFocusDark = new paper.Color('#7ae');
 
     DragHandleDefault = new paper.Color('#98e001');
   };

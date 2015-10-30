@@ -112,9 +112,8 @@ module Higherframe.Wireframe {
 						if (child.model._id == data.component._id) { return true; }
 					});
 
-					// Set the color for the user
+					// Set the user on the component
 					component.collaborator = data.user;
-					component.setComponentColor(data.user.color);
 				});
 
 				scope.$on('component:collaboratorDeselect', (e, data) => {

@@ -71,9 +71,9 @@ module Higherframe.Drawing.Component.Library {
 
       // Determine palette
       var theme: Higherframe.UI.ITheme = new Higherframe.UI.DefaultTheme();
-      var foreColor = theme.ComponentDefault;
-      var foreColorDark = new paper.Color('black');
-      var foreColorLight = new paper.Color('#aaa');
+      var foreColor = this.collaborator ? new paper.Color(this.collaborator.color) : theme.ComponentDefault;
+      var foreColorDark = this.collaborator ? new paper.Color(this.collaborator.color) : theme.ComponentDefaultDark;
+      var foreColorLight = this.collaborator ? new paper.Color(this.collaborator.color) : theme.ComponentDefaultLight;
 
       if (this.active) {
 
@@ -83,13 +83,15 @@ module Higherframe.Drawing.Component.Library {
       else if (this.focussed) {
 
         foreColor = theme.ComponentFocus;
-        foreColorDark = theme.ComponentHover;
+        foreColorDark = theme.ComponentFocusDark;
+        foreColorLight = theme.ComponentFocusLight;
       }
 
       else if (this.hovered) {
 
         foreColor = theme.ComponentHover;
-        foreColorDark = theme.ComponentHover;
+        foreColorDark = theme.ComponentHoverDark;
+        foreColorLight = theme.ComponentHoverLight;
       }
 
       // Remove the old parts
