@@ -34,6 +34,7 @@
         "./components/filters/symbol.ts",
         "./components/root-scope/root-scope.ts",
         "./components/ui/action-bar/menu.ts",
+        "./components/ui/colors/colors.ts",
         "./components/ui/filters/symbol.ts",
         "./components/ui/forms/autocomplete.ts",
         "./components/ui/placeholder/placeholder.ts",

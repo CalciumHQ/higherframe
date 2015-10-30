@@ -121,7 +121,7 @@ class FrameCtrl {
 
   			if (user && !user.color) {
 
-  				user.color = "#" + Math.random().toString(16).slice(2, 8);
+  				user.color = Higherframe.UI.Colors.Random();
   			}
   		});
   	});
