@@ -36,8 +36,6 @@ div#frames
 					div.left
 						span.name.h3.block {{ frame.name }}
 						span.project.b1.block {{ frame.organisation.name }}
-						span.settings(ng-click="FramesCtrl.onFrameSettingsClick($event, frame)")
-							svg-replace(ng-src="/assets/images/settings.svg")
 								
 						ul.users
 							li.user(ng-repeat="user in frame.users", ui-tooltip="'Shared with ' + user.name")

@@ -4,7 +4,7 @@ div.fullscreen-wrapper
 	div#actionbar.row.blue.light.border
 		span.action.action-menu.b3.roboto.semibold(ui-action-menu) File
 			div.action-menu-items
-				a.action-menu-item
+				a.action-menu-item(ng-click="FrameCtrl.onActionbarSettingsClick()")
 					span.action-menu-item-label Settings
 					span.action-menu-item-shortcut 
 						span(ng-bind-html="'ctrl' | symbol")

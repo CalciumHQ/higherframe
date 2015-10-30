@@ -17,18 +17,18 @@ form(name="form", ng-submit="login(form)", novalidate="").ui-modal
   .ui-modal-body
     div.ui-control.block
       label.ui-label.b1(for="user") Email address:
-      input.ui-input(name="email", type="text", ng-model="user.email", placeholder="don@sterlingcooper.com", required, tabindex="1")
-      p.ui-hint.b3 Not part of the Higherframe Beta? 
+      input.ui-input(name="email", type="text", ng-model="user.email", placeholder="e.g.: don@sterlingcooper.com", required, tabindex="1")
+      p.ui-hint.b3 Not a Higherframe user? 
         a(href="/signup", tabindex="3") Request access now
         
     div.ui-control.block
       label.ui-label.b1(for="password") Password:
       input.ui-input(name="password", type="password", ng-model="user.password", required, tabindex="2")
         
-    div.form-group.has-error
-      p.help-block(ng-show='form.email.$error.required && form.password.$error.required && submitted')
+    div.ui-control.block
+      p.ui-error.b1(ng-show='form.email.$error.required && form.password.$error.required && submitted')
         | Please enter your email and password.
-      p.help-block {{ errors.other }}
+      p.ui-error.b1 {{ errors.other }}
     
   .ui-modal-footer
     .ui-modal-buttons

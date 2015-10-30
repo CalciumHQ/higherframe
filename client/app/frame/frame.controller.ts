@@ -722,6 +722,12 @@ class FrameCtrl {
     this.$state.go('frames');
   }
 
+  onActionbarSettingsClick() {
+
+    var modal = new Higherframe.Modals.Frame.Update(this.frame);
+    this.ModalManager.present(modal);
+  }
+
   onActionbarToggleSidebarClick() {
 
     this.toggleSidebar();
@@ -733,7 +739,7 @@ class FrameCtrl {
   }
 
   onActionbarSaveAsPngClick() {
-console.log('saving');
+
     this.save('png');
   }
 
