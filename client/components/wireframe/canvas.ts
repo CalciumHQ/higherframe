@@ -328,35 +328,35 @@ module Higherframe.Wireframe {
 				this.changeCenter(delta.x, delta.y);
 			}
 
-			// Else if dragging a segment
-			else if (this.selectedSegment && (this.selectedItems.length == 1)) {
-
-				var selectedItem = this.selectedItems[0];
-
-				// Check if component definition allows resizing
-				if (!selectedItem.model.resizable) {
-
-					return;
-				}
-
-				var scaleX = 1 + event.delta.x / selectedItem.bounds.width;
-				var scaleY =
-					event.modifiers.shift ?
-					scaleX :
-					1 + event.delta.y / selectedItem.bounds.height;
-
-				selectedItem.scale(scaleX, scaleY);
-			}
-
 			// If dragging a drag handle
 			else if (this.selectedDragHandle) {
+
+				this.selectedItems[0]
 
 				// The new position
 				var position:paper.Point = event.point.add(this.selectedDragHandle.mouseDownDelta);
 
+				// Position the drag handle
 				this.selectedDragHandle.position = this.selectedDragHandle.onMove
 					? this.selectedDragHandle.onMove(position)
 					: position;
+
+				// TODO: Currently supporting only one selected item
+				var item = this.selectedItems[0];
+
+				// Find a snap point
+				var snapAdjustment = this.updateSmartGuides(item);
+
+				// If a snap point was found
+				if (snapAdjustment) {
+
+					position = position.add(snapAdjustment);
+
+					// Reposition the drag handle
+					this.selectedDragHandle.position = this.selectedDragHandle.onMove
+						? this.selectedDragHandle.onMove(position)
+						: position;
+				}
 			}
 
 			// If dragging an item
