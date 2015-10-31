@@ -76,10 +76,17 @@ class FrameCtrl {
     private Session,
     private Auth,
     private TrayManager: Higherframe.UI.Tray.Manager,
-    private ModalManager: Higherframe.UI.Modal.Manager
+    private ModalManager: Higherframe.UI.Modal.Manager,
+    private Activity: Higherframe.Data.IActivityResource
   ) {
 
     var that = this;
+
+    /*var item = new Activity({ type: 'chat', frame: frame._id, user: Auth.getCurrentUser()._id });
+    item.$save();*/
+
+    var activities = Activity.query({ frameId: frame._id });
+    console.log(activities);
 
     // Initialise UI
     this.leftSidebarOpen = localStorageService.get(this.STORAGE_LEFTSIDEBAR_OPEN_KEY);

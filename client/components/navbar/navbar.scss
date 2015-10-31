@@ -265,6 +265,7 @@ $logoHeight: 3 * $vu;
 	}
 
 	.action-menu {
+		$actionMenuBorderRadius: 5px;
 		position: relative;
 
 		&.active {
@@ -280,7 +281,7 @@ $logoHeight: 3 * $vu;
 			min-width: 180px;
 			margin-top: 9px;
 			border: 1px solid $grey3;
-			border-radius: $uiControlBorderRadius;
+			border-radius: $actionMenuBorderRadius;
 
 			&:before {
 				content: '';
@@ -308,13 +309,13 @@ $logoHeight: 3 * $vu;
 				background: white;
 
 				&:first-child {
-					border-top-left-radius: $uiControlBorderRadius - 1;
-					border-top-right-radius: $uiControlBorderRadius - 1;
+					border-top-left-radius: $actionMenuBorderRadius - 1;
+					border-top-right-radius: $actionMenuBorderRadius - 1;
 				}
 
 				&:last-child {
-					border-bottom-left-radius: $uiControlBorderRadius - 1;
-					border-bottom-right-radius: $uiControlBorderRadius - 1;
+					border-bottom-left-radius: $actionMenuBorderRadius - 1;
+					border-bottom-right-radius: $actionMenuBorderRadius - 1;
 				}
 
 				&:hover {
