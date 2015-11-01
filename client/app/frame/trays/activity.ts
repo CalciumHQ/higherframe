@@ -12,7 +12,8 @@ module Higherframe.Controllers.Frame {
       private $scope: ng.IScope,
       private $stateParams,
       private Activity: Higherframe.Data.IActivityResource,
-      private Auth
+      private Auth,
+      private socket
     ) {
 
       if (!$stateParams.id) {
@@ -22,6 +23,9 @@ module Higherframe.Controllers.Frame {
 
       // Fetch the activities for this frame
       this.activities = Activity.query({ frameId: $stateParams.id });
+
+      // Receive socket updates
+  		this.socket.syncUpdates('activity', this.activities);
 
       // Provide the view with access to the current user
       this.getCurrentUser = Auth.getCurrentUser;

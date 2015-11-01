@@ -22,6 +22,7 @@ function onConnect(socket, socketio) {
 	require('../api/organisation/organisation.socket').register(socket, socketio);
 	require('../api/frame/frame.socket').register(socket, socketio);
 	require('../api/component/component.socket').register(socket, socketio);
+  require('../api/activity/activity.socket').register(socket, socketio);
 }
 
 module.exports = function (socketio) {
