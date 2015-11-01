@@ -1,0 +1,10 @@
+
+#activity-list.ui-content
+  .ui-pane
+    div.activity(ng-repeat="activity in TrayController.activities", ng-class="{ isAuthor: TrayController.getCurrentUser()._id == activity.user._id }")
+      ui-placeholder.activity-avatar(ng-if="activity.user.provider == 'facebook'", type="user", src="'http://graph.facebook.com/' + activity.user.facebook.id + '/picture?type=large'", title="{{ activity.user.name }}")
+      ui-placeholder.activity-avatar(ng-if="activity.user.provider != 'facebook'", type="user", title="{{ activity.user.name }}")
+      
+      div.activity-info
+        h5.name.b1.medium {{ activity.user.name }}
+        p.body.b3 {{ activity._id }}

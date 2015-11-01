@@ -1,0 +1,51 @@
+
+#activity-list {
+  .activity {
+    @include display-flex;
+
+    & + .activity {
+      margin-top: 10px;
+    }
+
+    .activity-info {
+      @include order(1);
+      width: 100%;
+      margin-right: 10px;
+
+      .name {
+
+      }
+
+      .body {
+        text-align: left;
+      }
+    }
+
+    .activity-avatar {
+      @include order(2);
+      width: 32px;
+      height: 32px;
+    }
+
+    &.isAuthor {
+
+      .activity-info {
+        @include order(2);
+        margin-left: 10px;
+
+        .name {
+
+        }
+
+        .body {
+
+        }
+      }
+
+      .activity-avatar {
+
+        @include order(1);
+      }
+    }
+  }
+}

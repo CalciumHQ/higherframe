@@ -85,9 +85,6 @@ class FrameCtrl {
     /*var item = new Activity({ type: 'chat', frame: frame._id, user: Auth.getCurrentUser()._id });
     item.$save();*/
 
-    var activities = Activity.query({ frameId: frame._id });
-    console.log(activities);
-
     // Initialise UI
     this.leftSidebarOpen = localStorageService.get(this.STORAGE_LEFTSIDEBAR_OPEN_KEY);
     this.collaborators = frame.collaborators;
@@ -96,12 +93,15 @@ class FrameCtrl {
     var toolboxTray = new Higherframe.Controllers.Frame.ToolboxTray();
     var propertiesTray = new Higherframe.Controllers.Frame.PropertiesTray();
     var viewTray = new Higherframe.Controllers.Frame.ViewTray();
+    var activityTray = new Higherframe.Controllers.Frame.ActivityTray(frame);
     TrayManager.registerTray('toolbox', toolboxTray);
     TrayManager.registerTray('properties', propertiesTray);
     TrayManager.registerTray('view', viewTray);
+    TrayManager.registerTray('activity', activityTray);
     TrayManager.moveTray(toolboxTray, 'left');
     TrayManager.moveTray(propertiesTray, 'right');
     TrayManager.moveTray(viewTray, 'right');
+    TrayManager.moveTray(activityTray, 'right');
 
     $scope.$watchCollection(() => { return this.selection; }, (selection) => {
 
