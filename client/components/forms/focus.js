@@ -20,7 +20,10 @@ angular
         // Set model to false when element blurred
         element.bind('blur', function() {
 
-          $scope.$apply(model.assign($scope, false));
+          if (model.assign) {
+
+            $scope.$apply(model.assign($scope, false));
+          }
         });
       }
     };

@@ -93,6 +93,46 @@ angular.module('siteApp')
       },
 
       /**
+       * Reset password
+       *
+       * @param  {String}   resetId
+       * @param  {String}   newPassword
+       * @param  {Function} callback    - optional
+       * @return {Promise}
+       */
+      resetPassword: function(resetId, newPassword, callback) {
+        var cb = callback || angular.noop;
+
+        return User.resetPassword({}, {
+          resetId: resetId,
+          newPassword: newPassword
+        }, function(result) {
+          return cb(result);
+        }, function(err) {
+          return cb(err);
+        }).$promise;
+      },
+
+      /**
+       * Request to reset password
+       *
+       * @param  {String}   email
+       * @param  {Function} callback    - optional
+       * @return {Promise}
+       */
+      requestResetPassword: function(email, callback) {
+        var cb = callback || angular.noop;
+
+        return User.requestResetPassword({}, {
+          email: email
+        }, function(result) {
+          return cb(result);
+        }, function(err) {
+          return cb(err);
+        }).$promise;
+      },
+
+      /**
        * Gets all available info on authenticated user
        *
        * @return {Object} user

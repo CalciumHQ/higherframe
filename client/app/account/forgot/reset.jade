@@ -1,0 +1,32 @@
+div#navbar.row.transparent.green(ng-include='"components/navbar/navbar.html"')
+
+#login.page.underlay-navbar
+
+form(name="form", ng-submit="submit(form)", novalidate="").ui-modal
+  .ui-modal-header
+    h2 Reset your password
+    
+  .ui-modal-body
+    div.ui-control
+      p.b1 Hi {{ reset.user.name }}, it looks like you're trying to reset your password! Enter a new one below.
+      
+    div.ui-control.block
+      label.ui-label.b1(for="password") New password:
+      input.ui-input(name="password", type="password", ng-model="user.password", required, focus-on="true")
+        
+    div.ui-control.block
+      label.ui-label.b1(for="confirm") Enter it again:
+      input.ui-input(name="confirm", type="password", ng-model="user.confirm", required)
+        
+    div.ui-control.block
+      p.ui-error.b1(ng-show='form.password.$error.required && form.confirm.$error.required && submitted')
+        | Please enter a new password.
+      p.ui-error.b1 {{ errors.other }}
+    
+  .ui-modal-footer
+    .ui-modal-buttons
+      a.ui-button.neutral(ng-click="onCancelButtonClick()")
+        span.b1.medium.loose.uppercase Cancel
+        
+      button.ui-button.success(type="submit")
+        span.b1.medium.loose.uppercase Reset

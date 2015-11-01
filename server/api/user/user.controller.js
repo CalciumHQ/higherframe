@@ -1,9 +1,12 @@
 'use strict';
 
 var User = require('./user.model');
+var Reset = require('./../reset/reset.model');
 var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
+var mandrill = require('mandrill-api/mandrill');
+var uuid = require('node-uuid');
 
 var validationError = function(res, err) {
   return res.json(422, err);
@@ -104,6 +107,93 @@ exports.changePassword = function(req, res, next) {
       });
     } else {
       res.send(403);
+    }
+  });
+};
+
+/**
+ * Requests to reset a users password
+ */
+exports.requestResetPassword = function(req, res, next) {
+
+  var email = req.body.email;
+
+  User.findOne({ email: email }, function (err, user) {
+
+    if (err) return res.send(500, err);
+    if (!user) {
+
+      res.send(200);
+    }
+
+    // Generate a random id
+    var id = uuid.v4();
+    var url = 'http://higherfra.me/reset/' + id;
+
+    // Create the reset request
+    var reset = { uuid: id, user: user._id };
+    Reset.create(reset, function(err, reset) {
+
+      if(err) return res.send(500, err);
+    });
+
+    // Send the reset email
+    var client = new mandrill.Mandrill('bv-j2DeE5F8IZ6_ou9AHgg');
+
+    var message = {
+      html: '<h1>Password reset requested</h1><p>We\'ve received a request to reset the password on your Higherframe account. If you didn\'t initiate this request, feel free to ignore this email.</p><p><a href="' + url + '">Follow this link</a> to a secure page where you can change your password. Note this link will expire after 48 hours.</p>',
+      text: 'We\'ve received a request to reset the password on your Higherframe account. If you didn\'t initiate this request, feel free to ignore this email. Follow this link to a secure page where you can change your password. Note this link will expire after 48 hours.',
+      subject: 'Reset your password',
+      from_email: 'support@higherfra.me',
+      from_name: 'Higherframe',
+      to: [
+        {
+          email: user.email,
+          name: user.name,
+          type: 'to'
+        }
+      ]
+    };
+
+    client.messages.send({
+      message: message,
+      async: true
+    }, function(result) {
+
+      res.send(200);
+    }, function(err) {
+
+      res.send(500, err);
+    });
+  });
+};
+
+/**
+ * Resets a password
+ */
+exports.resetPassword = function(req, res, next) {
+
+  var resetId = req.body.resetId;
+  var newPass = String(req.body.newPassword);
+
+  Reset.findById(resetId)
+    .populate('user')
+    .exec(function (err, reset) {
+
+    if (err) return res.send(500, err);
+    if (reset) {
+
+      reset.user.password = newPass;
+      reset.user.save(function(err) {
+
+        if (err) return validationError(res, err);
+
+        reset.used = true;
+        reset.save(function(err) {
+
+          res.send(200);
+        });
+      });
     }
   });
 };

@@ -1,0 +1,28 @@
+div#navbar.row.transparent.green(ng-include='"components/navbar/navbar.html"')
+
+#login.page.underlay-navbar
+
+form(name="form", ng-submit="submit(form)", novalidate="").ui-modal
+  .ui-modal-header
+    h2 Reset your password
+    
+  .ui-modal-body
+    div.ui-control
+      p.b1 No problem if you've forgotten your password - enter the email address you signed up with below and we'll send you a link you can use to change it.
+      
+    div.ui-control.block
+      label.ui-label.b1(for="user") Email address:
+      input.ui-input(name="email", type="text", ng-model="user.email", placeholder="e.g.: don@sterlingcooper.com", required, tabindex="1")
+        
+    div.ui-control.block
+      p.ui-error.b1(ng-show='form.email.$error.required && form.password.$error.required && submitted')
+        | Please enter your email address.
+      p.ui-error.b1 {{ errors.other }}
+    
+  .ui-modal-footer
+    .ui-modal-buttons
+      a.ui-button.neutral(ng-click="onCancelButtonClick()")
+        span.b1.medium.loose.uppercase Cancel
+        
+      button.ui-button.success(type="submit")
+        span.b1.medium.loose.uppercase Send

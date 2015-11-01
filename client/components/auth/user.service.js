@@ -12,6 +12,18 @@ angular.module('siteApp')
           controller:'password'
         }
       },
+      requestResetPassword: {
+        method: 'POST',
+        params: {
+          controller:'reset'
+        }
+      },
+      resetPassword: {
+        method: 'PUT',
+        params: {
+          controller:'reset'
+        }
+      },
       get: {
         method: 'GET',
         params: {

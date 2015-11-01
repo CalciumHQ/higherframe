@@ -21,6 +21,9 @@
         "!./bower_components/**/*"
     ],
     "files": [
+        "./app/account/account.ts",
+        "./app/account/forgot/forgot.controller.ts",
+        "./app/account/forgot/reset.controller.ts",
         "./app/app.ts",
         "./app/frame/frame.controller.ts",
         "./app/frame/modals/new.ts",
@@ -48,6 +51,7 @@
         "./library/data/component.ts",
         "./library/data/document.ts",
         "./library/data/drawing-model.ts",
+        "./library/data/reset.ts",
         "./library/data/user.ts",
         "./library/drawing/component/component.ts",
         "./library/drawing/component/factory.ts",

@@ -24,6 +24,8 @@ form(name="form", ng-submit="login(form)", novalidate="").ui-modal
     div.ui-control.block
       label.ui-label.b1(for="password") Password:
       input.ui-input(name="password", type="password", ng-model="user.password", required, tabindex="2")
+      p.ui-hint.b3
+        a(href="/forgot", tabindex="4") I forgot my password
         
     div.ui-control.block
       p.ui-error.b1(ng-show='form.email.$error.required && form.password.$error.required && submitted')

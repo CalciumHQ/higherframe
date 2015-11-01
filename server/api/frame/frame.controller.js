@@ -12,7 +12,7 @@
 var _ = require('lodash');
 var Frame = require('./frame.model');
 var Component = require('./../component/component.model');
-var frameExporter = require('./../../components/frame/exporter');
+// var frameExporter = require('./../../components/frame/exporter');
 
 // Get list of frames
 exports.index = function(req, res) {
@@ -168,7 +168,7 @@ exports.deleteComponent = function(req, res) {
 
 exports.export = function (req, res) {
 
-  Frame
+  /*Frame
 		.findById(req.params.id)
 		.populate('components')
 		.exec(function (err, frame) {
@@ -198,7 +198,7 @@ exports.export = function (req, res) {
         success: onSuccess,
         error: onError
       });
-    });
+    });*/
 };
 
 function handleError(res, err) {
