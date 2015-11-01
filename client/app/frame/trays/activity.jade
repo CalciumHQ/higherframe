@@ -1,10 +1,18 @@
 
-#activity-list.ui-content
-  .ui-pane
-    div.activity(ng-repeat="activity in TrayController.activities", ng-class="{ isAuthor: TrayController.getCurrentUser()._id == activity.user._id }")
-      ui-placeholder.activity-avatar(ng-if="activity.user.provider == 'facebook'", type="user", src="'http://graph.facebook.com/' + activity.user.facebook.id + '/picture?type=large'", title="{{ activity.user.name }}")
-      ui-placeholder.activity-avatar(ng-if="activity.user.provider != 'facebook'", type="user", title="{{ activity.user.name }}")
-      
-      div.activity-info
-        h5.name.b1.medium {{ activity.user.name }}
-        p.body.b3 {{ activity._id }}
+#activity-tray
+  #activity-list.ui-content
+    .ui-pane
+      div.activity(ng-repeat="activity in TrayController.activities", ng-class="{ isAuthor: TrayController.getCurrentUser()._id == activity.user._id, isSequence: activity.user._id == TrayController.activities[$index-1].user._id }")
+        div.activity-avatar
+          ui-placeholder.avatar(ng-if="activity.user.provider == 'facebook'", type="user", src="'http://graph.facebook.com/' + activity.user.facebook.id + '/picture?type=large'", title="{{ activity.user.name }}")
+          ui-placeholder.avatar(ng-if="activity.user.provider != 'facebook'", type="user", title="{{ activity.user.name }}")
+        
+        div.activity-info
+          h5.name.b1.medium {{ activity.user.name }}
+          p.body.b3 {{ activity.type == 'chat' ? activity.message : activity._id }}
+          
+  form#activity-form.ui-content(ng-submit="TrayController.onActivityFormSubmit()")
+    .ui-pane
+      input.ui-input(type="text", ng-model="TrayController.newMessage")
+      button.ui-button.success(type="submit")
+        span.h3.strong.loose.uppercase +

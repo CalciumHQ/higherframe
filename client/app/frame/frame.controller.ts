@@ -82,8 +82,8 @@ class FrameCtrl {
 
     var that = this;
 
-    var item = new Activity({ type: 'chat', frame: frame._id, user: Auth.getCurrentUser()._id });
-    item.$save();
+    /*var item = new Activity({ type: 'chat', frame: frame._id, user: Auth.getCurrentUser()._id });
+    item.$save();*/
 
     // Initialise UI
     this.leftSidebarOpen = localStorageService.get(this.STORAGE_LEFTSIDEBAR_OPEN_KEY);

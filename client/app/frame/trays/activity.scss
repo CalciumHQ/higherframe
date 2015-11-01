@@ -1,51 +1,99 @@
 
-#activity-list {
-  .activity {
-    @include display-flex;
+$activityAvatarSize: 32px;
 
-    & + .activity {
-      margin-top: 10px;
-    }
+#activity-tray {
+  @include display-flex;
+  @include flex-direction(column);
+  height: 100%;
 
-    .activity-info {
-      @include order(1);
-      width: 100%;
-      margin-right: 10px;
+  #activity-list {
+    height: 100%;
+    overflow: scroll;
 
-      .name {
+    .activity {
+      @include display-flex;
+      margin-top: 15px;
 
+      & + .activity {
+        margin-top: 20px;
       }
-
-      .body {
-        text-align: left;
-      }
-    }
-
-    .activity-avatar {
-      @include order(2);
-      width: 32px;
-      height: 32px;
-    }
-
-    &.isAuthor {
 
       .activity-info {
         @include order(2);
         margin-left: 10px;
+        width: 100%;
 
         .name {
-
+          margin-top: 5px;
+          margin-bottom: 3px;
         }
 
         .body {
-
+          text-align: left;
         }
       }
 
       .activity-avatar {
-
         @include order(1);
+        @include flex-shrink(0);
+        width: $activityAvatarSize;
+
+        .avatar {
+          width: $activityAvatarSize;
+          height: $activityAvatarSize;
+        }
       }
+
+      &.isSequence {
+        margin-top: 5px;
+
+        .name,
+        .activity-avatar .avatar {
+          display: none;
+        }
+      }
+
+      &.isAuthor {
+
+        .activity-info {
+
+
+          .name {
+
+          }
+
+          .body {
+
+          }
+        }
+
+        .activity-avatar {
+
+        }
+      }
+    }
+  }
+
+  #activity-form {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-top: 1px solid $blue3;
+
+    .ui-pane {
+      @include display-flex;
+    }
+
+    input {
+      width: 100%;
+    }
+
+    .ui-button {
+      height: 5*$vu;
+      padding-left: 15px;
+      padding-right: 15px;
+      padding-top: 0.5*$vu;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
     }
   }
 }
