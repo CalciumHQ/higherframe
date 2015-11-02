@@ -17,8 +17,8 @@ angular.module('siteApp')
           // Reset password, redirect to login
           $state.go('login');
         })
-        .catch( function(err) {
-          $scope.errors.other = err.message;
+        .catch( function(response) {
+          $scope.errors.other = response.data.message;
         });
       }
     };

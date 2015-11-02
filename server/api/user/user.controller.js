@@ -7,6 +7,7 @@ var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
 var mandrill = require('mandrill-api/mandrill');
 var uuid = require('node-uuid');
+var moment = require('moment');
 
 var validationError = function(res, err) {
   return res.json(422, err);
@@ -183,6 +184,21 @@ exports.resetPassword = function(req, res, next) {
     if (err) return res.send(500, err);
     if (reset) {
 
+      // Test request hasn't been used
+      if (reset.used) {
+
+        return res.json(410, { message: 'This reset request has already been used' });
+      }
+
+      // Test request hasn't expired
+      var created = moment(reset.created_at);
+      var twoDaysAgo = moment().subtract(48, 'hours');
+      if (created.isBefore(twoDaysAgo)) {
+
+        return res.json(410, { message: 'This reset request has expired' });
+      }
+
+      // Change password
       reset.user.password = newPass;
       reset.user.save(function(err) {
 
