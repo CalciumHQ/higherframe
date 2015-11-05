@@ -107,11 +107,7 @@ div.fullscreen-wrapper
 					
 		a.action.b3.roboto.semibold(ng-click="FrameCtrl.onActionbarShareClick()") Share
 
-	#frame
-		ui-tray-region(position="left")
-		ui-tray-region(position="right")
-						
-		// Quick add
+	#frame		
 		#quick-add(ng-show="FrameCtrl.quickAdd.open")
 			#quick-add-search
 				svg.search-icon(version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="-510.2 681.1 100.2 100" style="enable-background:new -510.2 681.1 100.2 100;" xml:space="preserve")
@@ -125,11 +121,36 @@ div.fullscreen-wrapper
 
 					.text
 						span.name {{ component.title }}
-
-		// The canvas
-		canvas#canvas(wireframe, data="FrameCtrl.wireframe", resize, keepalive="true")
+			
+		#frame-layout
+			#canvas-area
+				ui-tray-region(position="left")
+				ui-tray-region(position="right")
+					
+				canvas#canvas(wireframe, data="FrameCtrl.wireframe", resize, keepalive="true")
+				
+			#activity-pane.ui-sidebar(ng-controller="ActivityCtrl as ActivityCtrl")
+				
+				.ui-sidebar-toolbar.ui-sidebar-toolbar-top
+				
+				#activity-list.ui-sidebar-content
+					p.activity-time.b4.medium Yesterday 4:23 pm
+					
+					div.activity(ng-repeat="activity in FrameCtrl.activities", ng-class="{ isAuthor: FrameCtrl.getCurrentUser()._id == activity.user._id, isSequence: activity.user._id == FrameCtrl.activities[$index-1].user._id }")
+						div.activity-avatar
+							ui-placeholder.avatar(ng-if="activity.user.provider == 'facebook'", type="user", src="'http://graph.facebook.com/' + activity.user.facebook.id + '/picture?type=large'", title="{{ activity.user.name }}")
+							ui-placeholder.avatar(ng-if="activity.user.provider != 'facebook'", type="user", title="{{ activity.user.name }}")
+						
+						div.activity-info
+							p.body.b3.medium.roboto
+								span.activity-name(ng-hide="activity.user._id == FrameCtrl.activities[$index-1].user._id") {{ activity.user.name }} 
+								| {{ activity.type == 'chat' ? activity.message : activity._id }}
+								
+				form#activity-form.ui-sidebar-toolbar.ui-sidebar-toolbar-bottom(ng-submit="ActivityCtrl.onActivityFormSubmit()")
+					input.ui-input(type="text", ng-model="ActivityCtrl.newMessage")
+					button.ui-button.success(type="submit")
+						span.h3.strong.loose.uppercase +
 		
-		// Bottom right
 		div.bottomRight
 			#collaborators
 					.collaborator(ng-repeat="user in FrameCtrl.collaborators", ui-tooltip="user.name")

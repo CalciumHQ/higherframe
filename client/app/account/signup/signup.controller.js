@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('siteApp')
-  .controller('SignupCtrl', function ($scope, Auth, $location, $window) {
+  .controller('SignupCtrl', function ($scope, Auth, $location, $state, $window) {
     $scope.user = {};
     $scope.errors = {};
 
@@ -33,5 +33,10 @@ angular.module('siteApp')
 
     $scope.loginOauth = function(provider) {
       $window.location.href = '/auth/' + provider;
+    };
+
+    $scope.onCancelButtonClick = function() {
+
+      $state.go('login');
     };
   });

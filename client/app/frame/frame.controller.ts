@@ -39,6 +39,7 @@ class FrameCtrl {
   components:Array<any> = [];
   selection: Array<Higherframe.Drawing.Component.IComponent> = [];
 
+  activities: Array<Higherframe.Data.IActivity> = [];
   collaborators: Array<Object> = [];
 
   // UI variables
@@ -85,6 +86,9 @@ class FrameCtrl {
     /*var item = new Activity({ type: 'chat', frame: frame._id, user: Auth.getCurrentUser()._id });
     item.$save();*/
 
+    // Fetch the activities for this frame
+    this.activities = Activity.query({ frameId: frame._id });
+
     // Initialise UI
     this.leftSidebarOpen = localStorageService.get(this.STORAGE_LEFTSIDEBAR_OPEN_KEY);
     this.collaborators = frame.collaborators;
@@ -93,15 +97,12 @@ class FrameCtrl {
     var toolboxTray = new Higherframe.Controllers.Frame.ToolboxTray();
     var propertiesTray = new Higherframe.Controllers.Frame.PropertiesTray();
     var viewTray = new Higherframe.Controllers.Frame.ViewTray();
-    var activityTray = new Higherframe.Controllers.Frame.ActivityTray(frame);
     TrayManager.registerTray('toolbox', toolboxTray);
     TrayManager.registerTray('properties', propertiesTray);
     TrayManager.registerTray('view', viewTray);
-    TrayManager.registerTray('activity', activityTray);
     TrayManager.moveTray(toolboxTray, 'left');
     TrayManager.moveTray(propertiesTray, 'right');
     TrayManager.moveTray(viewTray, 'right');
-    TrayManager.moveTray(activityTray, 'right');
 
     $scope.$watchCollection(() => { return this.selection; }, (selection) => {
 
@@ -378,9 +379,14 @@ class FrameCtrl {
 			}
 		});
 
+    // Activity updating
+    this.socket.syncUpdates('activity', this.activities);
+
 		this.$scope.$on('$destroy', function () {
 
+      that.socket.unsyncUpdates('collaborator');
 			that.socket.unsyncUpdates('component');
+      that.socket.unsyncUpdates('activity');
 		});
 	};
 

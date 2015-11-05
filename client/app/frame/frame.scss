@@ -15,12 +15,96 @@ $canvasMargin: 15px;
 	z-index: 1;
 	-webkit-font-smoothing: antialiased;
 
-	#canvas {
-		position: relative;
+	#frame-layout {
+		@include display-flex;
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+	}
 
-		&,
-		.inner {
-			height: 100%;
+	#canvas-area {
+		position: relative;
+		@include flex-grow(1);
+		height: 100%;
+
+		#canvas {
+			&,
+			.inner {
+				width: 100%;
+				height: 100%;
+			}
+		}
+	}
+
+	#activity-pane {
+		$gunmetal: #7c8285;
+		$activityAvatarSize: 25px;
+
+		@include flex-grow(0);
+		@include flex-shrink(0);
+
+		.activity-time {
+			margin-top: 35px;
+			padding-bottom: 8px;
+			border-bottom: 1px solid rgba($gunmetal, 0.1);
+		}
+
+		.activity-avatar {
+			position: relative;
+			width: $activityAvatarSize;
+
+			.avatar {
+				position: absolute;
+				top: -2px;
+				width: $activityAvatarSize;
+				height: $activityAvatarSize;
+			}
+		}
+
+		.activity-info {
+			.b3 {
+				line-height: 20px;
+			}
+		}
+
+		.activity-name {
+			color: $gunmetal;
+		}
+	}
+
+	.ui-sidebar {
+		$gunmetal: #7c8285;
+
+		$sidebarDefaultWidth: 265px;
+		$sidebarPadding: 10px;
+		$sidebarBorderColor: #dedede;
+
+		@include display-flex;
+		@include flex-direction(column);
+		@include box-sizing(border-box);
+		width: $sidebarDefaultWidth;
+		border-left: 1px solid $sidebarBorderColor;
+		color: rgba($gunmetal, 0.64);
+
+		.ui-sidebar-content {
+			padding: 0 $sidebarPadding;
+		}
+
+		.ui-sidebar-toolbar {
+			@include box-sizing(border-box);
+			min-height: 34px;
+			padding: $sidebarPadding;
+			background: rgba($gunmetal, 0.1);
+
+			&.ui-sidebar-toolbar-top {
+				border-bottom: 1px solid $sidebarBorderColor;
+			}
+
+			&.ui-sidebar-toolbar-bottom {
+				border-top: 1px solid $sidebarBorderColor;
+			}
 		}
 	}
 
@@ -127,14 +211,6 @@ $canvasMargin: 15px;
 				border-radius: 4px;
 			}
 		}
-	}
-
-	#canvas {
-		position: absolute;
-		left: 0;
-		top: 0;
-		width: 100%;
-		height: 100%;
 	}
 
 	.bottomRight {

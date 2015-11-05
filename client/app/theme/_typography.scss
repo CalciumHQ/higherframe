@@ -44,6 +44,13 @@ $b3-line-height: $b3-line * $b3-lines;
 $b3-margin-top: 1 * $b3-line;
 $b3-margin-bottom: 1 * $b3-line;
 
+$b4-font-size: 0.625rem;
+$b4-line: 2*$vu;
+$b4-lines: 1;
+$b4-line-height: $b3-line * $b3-lines;
+$b4-margin-top: 1 * $b3-line;
+$b4-margin-bottom: 1 * $b3-line;
+
 @mixin h1 {
 	position: relative;
 	font-size: $h1-font-size;
@@ -82,6 +89,12 @@ $b3-margin-bottom: 1 * $b3-line;
 	line-height: $b3-line-height;
 }
 
+@mixin b4 {
+	position: relative;
+	font-size: $b4-font-size;
+	line-height: $b4-line-height;
+}
+
 h1,
 .h1 {
 	@include h1();
@@ -108,6 +121,10 @@ h4,
 
 .b3 {
 	@include b3();
+}
+
+.b4 {
+	@include b4();
 }
 
 .b1 {

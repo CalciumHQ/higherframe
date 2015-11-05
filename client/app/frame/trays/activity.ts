@@ -28,9 +28,6 @@ module Higherframe.Controllers.Frame {
       // Fetch the activities for this frame
       this.activities = Activity.query({ frameId: this.frameId });
 
-      // Receive socket updates
-  		this.socket.syncUpdates('activity', this.activities);
-
       // Provide the view with access to the current user
       this.getCurrentUser = Auth.getCurrentUser;
     }
@@ -54,15 +51,8 @@ module Higherframe.Controllers.Frame {
       this.newMessage = '';
     }
   }
-
-  export class ActivityTray implements Higherframe.UI.ITray {
-
-    label = 'Activity';
-    templateUrl = '/app/frame/trays/activity.html';
-    controller = ActivityTrayController;
-
-    constructor(private frame) {
-
-    }
-  }
 }
+
+angular
+  .module('siteApp')
+  .controller('ActivityCtrl', Higherframe.Controllers.Frame.ActivityTrayController);
