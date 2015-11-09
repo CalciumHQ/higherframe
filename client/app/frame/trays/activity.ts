@@ -42,7 +42,7 @@ module Higherframe.Controllers.Frame {
       var activity = new this.Activity({
         frame:    this.frameId,
         user:     this.Auth.getCurrentUser()._id,
-        message:  this.newMessage,
+        data:     { message: this.newMessage },
         type:     'chat'
       });
 

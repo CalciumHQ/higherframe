@@ -1,10 +1,43 @@
 
-$activityAvatarSize: 32px;
+$gunmetal: #7c8285;
+$activityAvatarSize: 25px;
 
 #activity-pane {
   @include display-flex;
   @include flex-direction(column);
   height: 100%;
+
+  @include flex-grow(0);
+  @include flex-shrink(0);
+
+  .activity-time {
+    margin-top: 35px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba($gunmetal, 0.1);
+    text-transform: capitalize;
+  }
+
+  .activity-avatar {
+    position: relative;
+    width: $activityAvatarSize;
+
+    .avatar {
+      position: absolute;
+      top: -2px;
+      width: $activityAvatarSize;
+      height: $activityAvatarSize;
+    }
+  }
+
+  .activity-info {
+    .b3 {
+      line-height: 20px;
+    }
+  }
+
+  .activity-name {
+    color: $gunmetal;
+  }
 
   #activity-list {
     height: 100%;
@@ -69,6 +102,7 @@ $activityAvatarSize: 32px;
   }
 
   #activity-form {
+    @include display-flex;
     padding-top: 10px;
     padding-bottom: 10px;
 

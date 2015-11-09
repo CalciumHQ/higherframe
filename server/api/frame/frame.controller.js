@@ -12,6 +12,7 @@
 var _ = require('lodash');
 var Frame = require('./frame.model');
 var Component = require('./../component/component.model');
+var Activity = require('./../activity/activity.model');
 // var frameExporter = require('./../../components/frame/exporter');
 
 // Get list of frames
@@ -60,6 +61,13 @@ exports.create = function(req, res) {
     Frame.populate(frame, {path:'organisation'}, function(err, frame) {
 
       if(err) { return handleError(res, err); }
+
+      Activity.create({
+        frame: frame._id,
+        user: req.user._id,
+        type: 'new-frame'
+      });
+
       return res.json(201, frame);
     });
   });
@@ -108,10 +116,18 @@ exports.addUser = function(req, res) {
     { _id: req.params.id },
     { $addToSet: { users: { $each: req.body } }},
     { safe: true, upsert: false },
-    function (err, Frame) {
+    function (err, frame) {
 
       if(err) { return handleError(res, err); }
-      return res.json(201, Frame);
+
+      Activity.create({
+        frame: frame._id,
+        user: req.user._id,
+        type: 'added-user',
+        data: { users: req.body }
+      });
+
+      return res.json(201, frame);
     }
   )
 };

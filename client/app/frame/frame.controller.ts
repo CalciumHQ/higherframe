@@ -796,7 +796,7 @@ class FrameCtrl {
 
   onActionbarShareClick() {
 
-    var modal = new Higherframe.Modals.Frame.Share(this.frame);
+    var modal = new Higherframe.Modals.Frame.Share(this.frame, this.Auth);
     this.ModalManager.present(modal);
   }
 

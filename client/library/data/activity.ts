@@ -3,7 +3,10 @@ module Higherframe.Data {
 
   export interface IActivity extends ng.resource.IResource<IActivity> {
     id: string,
-    type: string
+    type: string,
+    created_at: string,
+    updated_at: string,
+    user: any
   }
 
   export interface IActivityResource extends ng.resource.IResourceClass<IActivity> {

@@ -22,7 +22,7 @@ exports.index = function(req, res) {
 
   Activity
     .find({ frame: req.query.frameId })
-    .populate('user')
+    .populate('user data.users')
     .exec(function (err, activities) {
 
       if(err) { return handleError(res, err); }

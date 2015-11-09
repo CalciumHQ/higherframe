@@ -67,6 +67,8 @@
         "./library/drawing/cursor.ts",
         "./library/drawing/point.ts",
         "./library/higherframe.ts",
+        "./library/ui/filters/activity.ts",
+        "./library/ui/filters/moment.ts",
         "./library/ui/helpers/svg-replace.ts",
         "./library/ui/modal/manager.ts",
         "./library/ui/modal/modal.ts",
@@ -78,6 +80,8 @@
         "./typings/angularjs/angular.d.ts",
         "./typings/jquery/jquery.d.ts",
         "./typings/lodash/lodash.d.ts",
+        "./typings/moment/moment-node.d.ts",
+        "./typings/moment/moment.d.ts",
         "./typings/paper/paper.d.ts"
     ]
 }

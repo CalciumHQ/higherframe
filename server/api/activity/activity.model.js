@@ -24,8 +24,14 @@ var ActivitySchema = new Schema({
     type: String,
     default: 'chat'
   },
-  message: {
-    type: String
+  data: {
+    message: {
+      type: String
+    },
+    users: [{
+      type: Schema.ObjectId,
+      ref: 'User'
+    }]
   }
 });
 

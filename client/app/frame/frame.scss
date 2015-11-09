@@ -6,6 +6,12 @@ $chromeBackground: rgba(255,255,255,0.9);
 
 $canvasMargin: 15px;
 
+$gunmetal: #7c8285;
+
+$sidebarDefaultWidth: 285px;
+$sidebarPadding: 10px;
+$sidebarBorderColor: #dedede;
+
 #frame {
 	$sidebarColumns: 4;
 	$sidebarPadding: 10px;
@@ -38,49 +44,7 @@ $canvasMargin: 15px;
 		}
 	}
 
-	#activity-pane {
-		$gunmetal: #7c8285;
-		$activityAvatarSize: 25px;
-
-		@include flex-grow(0);
-		@include flex-shrink(0);
-
-		.activity-time {
-			margin-top: 35px;
-			padding-bottom: 8px;
-			border-bottom: 1px solid rgba($gunmetal, 0.1);
-		}
-
-		.activity-avatar {
-			position: relative;
-			width: $activityAvatarSize;
-
-			.avatar {
-				position: absolute;
-				top: -2px;
-				width: $activityAvatarSize;
-				height: $activityAvatarSize;
-			}
-		}
-
-		.activity-info {
-			.b3 {
-				line-height: 20px;
-			}
-		}
-
-		.activity-name {
-			color: $gunmetal;
-		}
-	}
-
 	.ui-sidebar {
-		$gunmetal: #7c8285;
-
-		$sidebarDefaultWidth: 265px;
-		$sidebarPadding: 10px;
-		$sidebarBorderColor: #dedede;
-
 		@include display-flex;
 		@include flex-direction(column);
 		@include box-sizing(border-box);
@@ -216,6 +180,6 @@ $canvasMargin: 15px;
 	.bottomRight {
 		position: absolute;
 		bottom: $canvasMargin;
-		right: $canvasMargin;
+		right: $sidebarDefaultWidth + $canvasMargin;
 	}
 }

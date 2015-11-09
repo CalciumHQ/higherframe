@@ -13,7 +13,7 @@ router.put('/:id', controller.update);
 router.patch('/:id', controller.update);
 router.delete('/:id', controller.destroy);
 
-router.post('/:id/users', controller.addUser);
+router.post('/:id/users', auth.isAuthenticated(), controller.addUser);
 
 router.post('/:id/components', controller.createComponent);
 router.delete('/:frameId/components/:componentId', controller.deleteComponent);

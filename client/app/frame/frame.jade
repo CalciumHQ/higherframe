@@ -134,17 +134,24 @@ div.fullscreen-wrapper
 				.ui-sidebar-toolbar.ui-sidebar-toolbar-top
 				
 				#activity-list.ui-sidebar-content
-					p.activity-time.b4.medium Yesterday 4:23 pm
-					
-					div.activity(ng-repeat="activity in FrameCtrl.activities", ng-class="{ isAuthor: FrameCtrl.getCurrentUser()._id == activity.user._id, isSequence: activity.user._id == FrameCtrl.activities[$index-1].user._id }")
-						div.activity-avatar
-							ui-placeholder.avatar(ng-if="activity.user.provider == 'facebook'", type="user", src="'http://graph.facebook.com/' + activity.user.facebook.id + '/picture?type=large'", title="{{ activity.user.name }}")
-							ui-placeholder.avatar(ng-if="activity.user.provider != 'facebook'", type="user", title="{{ activity.user.name }}")
+					div(ng-repeat="activity in FrameCtrl.activities")
+						p.activity-time.b4.medium(ng-show="activity | activityShowHeader:FrameCtrl.activities[$index-1]") {{ activity.created_at | momentCalendar:'d' }}
 						
-						div.activity-info
-							p.body.b3.medium.roboto
-								span.activity-name(ng-hide="activity.user._id == FrameCtrl.activities[$index-1].user._id") {{ activity.user.name }} 
-								| {{ activity.type == 'chat' ? activity.message : activity._id }}
+						div.activity(ng-class="{ isAuthor: FrameCtrl.getCurrentUser()._id == activity.user._id, isSequence: (activity | activityCollapseItem:FrameCtrl.activities[$index-1]) }", title="{{ activity.created_at | momentPattern:'MMM D YYYY h:mm:ss a' }}")
+							div.activity-avatar
+								ui-placeholder.avatar(ng-if="activity.user.provider == 'facebook'", type="user", src="'http://graph.facebook.com/' + activity.user.facebook.id + '/picture?type=large'", title="{{ activity.user.name }}")
+								ui-placeholder.avatar(ng-if="activity.user.provider != 'facebook'", type="user", title="{{ activity.user.name }}")
+							
+							div.activity-info
+								p.body.b3.medium.roboto
+									span.activity-name(ng-hide="activity | activityCollapseItem:FrameCtrl.activities[$index-1]") {{ activity.user.name }} 
+									span(ng-switch="activity.type")
+										span(ng-switch-when="new-frame") created the wireframe
+										
+										span(ng-switch-when="added-user") invited 
+											span.activity-name {{ activity.data.users[0].name }}
+											
+										span(ng-switch-when="chat") {{ activity.data.message }}
 								
 				form#activity-form.ui-sidebar-toolbar.ui-sidebar-toolbar-bottom(ng-submit="ActivityCtrl.onActivityFormSubmit()")
 					input.ui-input(type="text", ng-model="ActivityCtrl.newMessage")

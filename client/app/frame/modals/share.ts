@@ -17,7 +17,7 @@ module Higherframe.Modals.Frame {
     // Models
     users: Array<any> = [];
 
-    constructor(frame: any) {
+    constructor(frame: any, private Auth: any) {
 
       super();
 
@@ -68,7 +68,14 @@ module Higherframe.Modals.Frame {
       var injector = angular.injector(['ng']);
       injector.invoke(($http) => {
 
-        $http.post(`/api/frames/${this.frame._id}/users`, this.users.map(user => user._id));
+        $http({
+          method: 'POST',
+          url: `/api/frames/${this.frame._id}/users`,
+          headers: {
+            'Authorization': 'Bearer ' + this.Auth.getToken()
+          },
+          data: this.users.map(user => user._id)
+        });
       });
 
       this.close();
