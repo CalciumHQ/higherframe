@@ -13,6 +13,9 @@ var _ = require('lodash');
 var Frame = require('./frame.model');
 var Component = require('./../component/component.model');
 var Activity = require('./../activity/activity.model');
+var User = require('./../user/user.model');
+var mandrill = require('mandrill-api/mandrill');
+var config = require('../../config/environment');
 // var frameExporter = require('./../../components/frame/exporter');
 
 // Get list of frames
@@ -125,6 +128,39 @@ exports.addUser = function(req, res) {
         user: req.user._id,
         type: 'added-user',
         data: { users: req.body }
+      });
+
+
+      /*
+       * Send the share email
+       */
+
+      var client = new mandrill.Mandrill(config.mandrill.clientSecret);
+
+      _.forEach(req.body, function(userId) {
+
+        User.findById(userId, function(err, user) {
+
+          var message = {
+            html: '<h1>You have been invited to collaborate on ' + frame.name + '.</h1><p><a href="' + config.domain + '/frame/' + frame._id + '">Go to the document</a></p>',
+            text: 'You have been invited to collaborate on ' + frame.name + '. Visit Higherframe to see this document.',
+            subject: 'You have been added to a wireframe',
+            from_email: 'support@higherfra.me',
+            from_name: 'Higherframe',
+            to: [
+              {
+                email: user.email,
+                name: user.name,
+                type: 'to'
+              }
+            ]
+          };
+
+          client.messages.send({
+            message: message,
+            async: true
+          });
+        });
       });
 
       return res.json(201, frame);

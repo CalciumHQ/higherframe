@@ -18,6 +18,9 @@ var all = {
   // Root path of server
   root: path.normalize(__dirname + '/../../..'),
 
+  // Domain
+  domain: process.env.DOMAIN,
+
   // Server port
   port: process.env.PORT || 9000,
 
@@ -42,8 +45,8 @@ var all = {
   },
 
   facebook: {
-    clientID:     process.env.FACEBOOK_ID || '1577746215823723',
-    clientSecret: process.env.FACEBOOK_SECRET || '7116eb5f7aacfe1b1924aed3ad67aabd',
+    clientID:     process.env.FACEBOOK_ID || 'id',
+    clientSecret: process.env.FACEBOOK_SECRET || 'secret',
     callbackURL:  process.env.DOMAIN + '/auth/facebook/callback'
   },
 
@@ -51,6 +54,10 @@ var all = {
     clientID:     process.env.GOOGLE_ID || 'id',
     clientSecret: process.env.GOOGLE_SECRET || 'secret',
     callbackURL:  process.env.DOMAIN + '/auth/google/callback'
+  },
+
+  mandrill: {
+    clientSecret: process.env.MANDRILL_SECRET
   }
 };
 

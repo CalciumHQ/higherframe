@@ -139,7 +139,7 @@ exports.requestResetPassword = function(req, res, next) {
     });
 
     // Send the reset email
-    var client = new mandrill.Mandrill('bv-j2DeE5F8IZ6_ou9AHgg');
+    var client = new mandrill.Mandrill(config.mandrill.clientSecret);
 
     var message = {
       html: '<h1>Password reset requested</h1><p>We\'ve received a request to reset the password on your Higherframe account. If you didn\'t initiate this request, feel free to ignore this email.</p><p><a href="' + url + '">Follow this link</a> to a secure page where you can change your password. Note this link will expire after 48 hours.</p>',
