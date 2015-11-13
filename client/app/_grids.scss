@@ -11,8 +11,12 @@ $susy: (
   gutter-position: after
 );
 
-.row {
-	@include container;
+@mixin row {
+  @include container;
   padding-left: 2%;
   padding-right: 2%;
+}
+
+.row {
+	@include row;
 }

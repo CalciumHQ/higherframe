@@ -1,0 +1,26 @@
+
+.ui-property-page {
+  @include span(6);
+  margin-left: span(5) + 3*gutter();
+  margin-top: 90px;
+
+  .ui-property {
+    @include display-flex;
+
+    .ui-property-name {
+      @include flex-shrink(0);
+      width: 130px;
+      margin-right: 10px;
+      white-space: nowrap;
+      padding-top: 8px;
+    }
+
+    .ui-property-value {
+      @include flex-grow(1);
+    }
+  }
+
+  .ui-buttons {
+    text-align: right;
+  }
+}
