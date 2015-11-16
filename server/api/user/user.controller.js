@@ -229,6 +229,27 @@ exports.me = function(req, res, next) {
 };
 
 /**
+ * Update my info
+ */
+exports.updateMe = function(req, res, next) {
+
+  if (req.body.password)  { delete req.body.password; }
+  if (req.body.hashedPassword)  { delete req.body.hashedPassword; }
+  if (req.body.salt)  { delete req.body.salt; }
+
+  var userId = req.user._id;
+  User.findOneAndUpdate({
+    _id: userId
+  }, req.body, {
+    select: '-salt -hashedPassword' // don't ever give out the password or salt
+  }, function(err, user) {
+    if (err) return next(err);
+    if (!user) return res.json(401);
+    res.json(user);
+  });
+};
+
+/**
  * Authentication callback
  */
 exports.authCallback = function(req, res, next) {

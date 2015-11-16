@@ -22,5 +22,13 @@
 
   .ui-buttons {
     text-align: right;
+
+    a,
+    .btn {
+      & + a,
+      & + .btn {
+        margin-left: 20px;
+      }
+    }
   }
 }

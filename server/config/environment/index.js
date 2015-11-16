@@ -58,7 +58,13 @@ var all = {
 
   mandrill: {
     clientSecret: process.env.MANDRILL_SECRET
-  }
+  },
+
+  aws: {
+    destination:    './server/tmp',
+    bucket:       process.env.AWS_BUCKET,
+    region:       process.env.AWS_REGION
+  },
 };
 
 // Export the config object based on the NODE_ENV

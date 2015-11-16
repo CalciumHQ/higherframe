@@ -15,6 +15,19 @@ var errorHandler = require('errorhandler');
 var path = require('path');
 var config = require('./environment');
 var passport = require('passport');
+var multer = require('multer');
+
+var storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+
+    cb(null, './server/tmp');
+  },
+  filename: function (req, file, cb) {
+
+    cb(null, Date.now() + '-' + file.fieldname)
+  }
+});
+var upload = multer({ storage: storage });
 
 module.exports = function(app) {
   var env = app.get('env');
@@ -27,6 +40,7 @@ module.exports = function(app) {
   app.use(methodOverride());
   app.use(cookieParser());
   app.use(passport.initialize());
+  app.use(upload.any());
   if ('production' === env) {
     app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));
     app.use(express.static(path.join(config.root, 'public')));

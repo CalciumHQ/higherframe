@@ -1,0 +1,8 @@
+div.ui-image
+  input(type="file", ng-model="Ctrl.file", ui-file-change="Ctrl.onFileChange(files)")
+    
+  ui-placeholder(type="user", src="Ctrl.src")
+  div.ui-image-actions.b3
+    a(ng-if="!Ctrl.src", ng-click="Ctrl.onChangeClick()") Choose file
+    a(ng-if="!!Ctrl.src", ng-click="Ctrl.onChangeClick()") Change
+    a(ng-if="!!Ctrl.src", ng-click="Ctrl.onRemoveClick()") Remove

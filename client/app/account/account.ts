@@ -34,5 +34,11 @@ angular.module('siteApp')
         templateUrl: 'app/account/settings/settings.html',
         controller: 'SettingsCtrl',
         authenticate: true
+      })
+      .state('password', {
+        url: '/settings/password',
+        templateUrl: 'app/account/settings/password.html',
+        controller: 'PasswordCtrl',
+        authenticate: true
       });
   });
