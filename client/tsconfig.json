@@ -54,6 +54,7 @@
         "./library/data/component.ts",
         "./library/data/document.ts",
         "./library/data/drawing-model.ts",
+        "./library/data/frame.ts",
         "./library/data/media.ts",
         "./library/data/reset.ts",
         "./library/data/user.ts",

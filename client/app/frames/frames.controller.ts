@@ -111,15 +111,6 @@ module Higherframe.Controllers {
 			this.$state.go('frame', { id: frame._id })
 		};
 
-    onFrameSettingsClick($event, frame) {
-
-      $event.preventDefault();
-      $event.stopPropagation();
-
-      var modal = new Higherframe.Modals.Frame.Update(frame);
-      this.ModalManager.present(modal);
-    };
-
 		onFrameDeleteClick($event, frame) {
 
 			// Stop the frame from opening

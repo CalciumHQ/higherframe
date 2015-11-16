@@ -84,9 +84,6 @@ class FrameCtrl {
 
     var that = this;
 
-    /*var item = new Activity({ type: 'chat', frame: frame._id, user: Auth.getCurrentUser()._id });
-    item.$save();*/
-
     // Fetch the activities for this frame
     this.activities = Activity.query({ frameId: frame._id });
 
@@ -738,8 +735,7 @@ class FrameCtrl {
 
   onActionbarSettingsClick() {
 
-    var modal = new Higherframe.Modals.Frame.Update(this.frame);
-    this.ModalManager.present(modal);
+    this.$state.go('frameSettings', { id: this.frame._id });
   }
 
   onActionbarToggleSidebarClick() {

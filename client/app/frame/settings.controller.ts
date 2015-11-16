@@ -5,12 +5,24 @@ module Higherframe.Controllers {
   export class FrameSettings {
 
     errors = {};
-    frame: Array<any>;
     organisations: Array<any>;
 
-    constructor(frame, private $scope: ng.IScope, private $http: ng.IHttpService) {
+    // Models
+    name: string;
+    organisation: string;
+    users: Array<any>;
 
-      this.frame = frame;
+    constructor(
+      private frame: Higherframe.Data.IFrame,
+      private $scope: ng.IScope,
+      private $http: ng.IHttpService,
+      private $state,
+      private Frame
+    ) {
+
+      this.name = frame.name;
+      this.organisation = frame.organisation._id;
+      this.users = angular.copy(frame.users);
 
       $http
         .get(`/api/organisations`)
@@ -24,9 +36,26 @@ module Higherframe.Controllers {
 
       if (form.$valid) {
 
+        this.$http.patch(`/api/frames/${this.frame._id}`, {
+          name: this.name,
+          organisation: this.organisation,
+          users: this.users.map(user => user._id)
+        })
+        .then((response) => {
 
+          this.$state.go('frame', { id: this.frame._id });
+        });
       }
-    };
+    }
+
+    onDeleteButtonClick() {
+
+      this.$http.delete(`/api/frames/${this.frame._id}`)
+      .then((response) => {
+
+        this.$state.go('frames');
+      });
+    }
   }
 }
 
