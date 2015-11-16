@@ -29,6 +29,7 @@
         "./app/frame/modals/new.ts",
         "./app/frame/modals/share.ts",
         "./app/frame/modals/update.ts",
+        "./app/frame/settings.controller.ts",
         "./app/frame/trays/activity.ts",
         "./app/frame/trays/properties.ts",
         "./app/frame/trays/toolbox.ts",

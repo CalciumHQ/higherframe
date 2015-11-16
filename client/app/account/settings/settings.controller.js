@@ -9,7 +9,13 @@ angular.module('siteApp')
 
       if (form.$valid) {
 
-        User.update($scope.user);
+        User.update($scope.user)
+        .$promise.then(function() {
+          $scope.message = 'User settings updated.';
+        })
+        .catch(function(error) {
+          $scope.message = error;
+        });;
       }
     };
   });
