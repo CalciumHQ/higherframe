@@ -78,7 +78,8 @@ class FrameCtrl {
     private Auth,
     private TrayManager: Higherframe.UI.Tray.Manager,
     private ModalManager: Higherframe.UI.Modal.Manager,
-    private Activity: Higherframe.Data.IActivityResource
+    private Activity: Higherframe.Data.IActivityResource,
+    private $mixpanel
   ) {
 
     var that = this;
@@ -796,7 +797,7 @@ class FrameCtrl {
 
   onActionbarShareClick() {
 
-    var modal = new Higherframe.Modals.Frame.Share(this.frame, this.Auth);
+    var modal = new Higherframe.Modals.Frame.Share(this.frame, this.Auth, this.$mixpanel);
     this.ModalManager.present(modal);
   }
 

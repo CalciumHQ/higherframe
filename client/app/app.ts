@@ -9,14 +9,17 @@ angular.module('siteApp', [
   'ui.router',
   'ui.router.title',
   'ui.bootstrap',
-  'LocalStorageModule'
+  'LocalStorageModule',
+  'analytics.mixpanel'
 ])
-  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
+  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $mixpanelProvider) {
     $urlRouterProvider
       .otherwise('/');
 
     $locationProvider.html5Mode(true);
     $httpProvider.interceptors.push('authInterceptor');
+
+    $mixpanelProvider.apiKey('af59676d763430037ae39d86282dbaca');
   })
 
   .factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location) {
@@ -46,7 +49,7 @@ angular.module('siteApp', [
   })
 
   .run(function ($rootScope, $location, Auth) {
-    
+
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$stateChangeStart', function (event, next) {
       Auth.isLoggedInAsync(function(loggedIn) {

@@ -17,7 +17,7 @@ module Higherframe.Modals.Frame {
     // Models
     users: Array<any> = [];
 
-    constructor(frame: any, private Auth: any) {
+    constructor(frame: any, private Auth: any, private $mixpanel: any) {
 
       super();
 
@@ -75,6 +75,13 @@ module Higherframe.Modals.Frame {
             'Authorization': 'Bearer ' + this.Auth.getToken()
           },
           data: this.users.map(user => user._id)
+        })
+        .then((response) => {
+
+          this.$mixpanel.track('Wireframe created', {
+            'Frame ID': this.frame._id,
+            'Frame Name': this.frame.name
+          });
         });
       });
 

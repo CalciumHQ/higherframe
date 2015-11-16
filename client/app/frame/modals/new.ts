@@ -19,7 +19,7 @@ module Higherframe.Modals.Frame {
      * Event handlers
      */
 
-    constructor(private Auth) {
+    constructor(private Auth, private $mixpanel) {
 
       super();
     }
@@ -50,6 +50,13 @@ module Higherframe.Modals.Frame {
             name: this.name,
             organisation: this.organisation._id
           }
+        })
+        .then((response) => {
+
+          this.$mixpanel.track('Wireframe created', {
+            'Frame ID': response.data._id,
+            'Frame Name': response.data.name
+          });
         });
       });
 
