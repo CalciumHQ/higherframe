@@ -123,6 +123,18 @@ div.fullscreen-wrapper
 						span.name {{ component.title }}
 			
 		#frame-layout
+			#properties-pane.ui-sidebar(ng-controller="PropertiesCtrl as PropertiesCtrl")
+				
+				.ui-sidebar-toolbar.ui-sidebar-toolbar-top
+
+				.ui-sidebar-content
+					span.ui-tray-message.caption(ng-show="!PropertiesCtrl.selection.length") No component selected
+					span.ui-tray-message.caption(ng-show="PropertiesCtrl.selection.length && !PropertiesCtrl.selection[0].properties.length") No editable properties
+					ul.properties(ng-show="PropertiesCtrl.selection.length && PropertiesCtrl.selection[0].properties.length")
+						li.ui-control.small(ng-repeat="(name, property) in PropertiesCtrl.selection[0].properties")
+							span.ui-label {{ property.label }}:
+							input.ui-input(type="text", ng-model="PropertiesCtrl.selection[0].model.properties[property.model]", ng-focus="PropertiesCtrl.onPropertyFocus(property)", ng-blur="PropertiesCtrl.onPropertyBlur()", ng-change="PropertiesCtrl.onComponentPropertyChange(property.model, PropertiesCtrl.selection[0].model.properties[property.model], PropertiesCtrl.selection[0], property)")
+				
 			#canvas-area
 				ui-tray-region(position="left")
 				ui-tray-region(position="right")

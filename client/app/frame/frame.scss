@@ -28,6 +28,12 @@ $sidebarBorderColor: #dedede;
 		top: 0;
 		width: 100%;
 		height: 100%;
+
+		& > * {
+			& + * {
+				border-left: 1px solid $sidebarBorderColor;
+			}
+		}
 	}
 
 	#canvas-area {
@@ -49,7 +55,6 @@ $sidebarBorderColor: #dedede;
 		@include flex-direction(column);
 		@include box-sizing(border-box);
 		width: $sidebarDefaultWidth;
-		border-left: 1px solid $sidebarBorderColor;
 		color: rgba($gunmetal, 0.64);
 
 		.ui-sidebar-content {

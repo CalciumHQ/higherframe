@@ -93,13 +93,10 @@ class FrameCtrl {
 
     // Create and register trays
     var toolboxTray = new Higherframe.Controllers.Frame.ToolboxTray();
-    var propertiesTray = new Higherframe.Controllers.Frame.PropertiesTray();
     var viewTray = new Higherframe.Controllers.Frame.ViewTray();
     TrayManager.registerTray('toolbox', toolboxTray);
-    TrayManager.registerTray('properties', propertiesTray);
     TrayManager.registerTray('view', viewTray);
     TrayManager.moveTray(toolboxTray, 'left');
-    TrayManager.moveTray(propertiesTray, 'right');
     TrayManager.moveTray(viewTray, 'right');
 
     $scope.$watchCollection(() => { return this.selection; }, (selection) => {
