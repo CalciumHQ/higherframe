@@ -79,7 +79,7 @@ $unitPadding: 80px;
           text-align: center;
 
           &:first-child {
-            margin-left: span(1) + gutter(3);
+            margin-left: span(1) + gutter();
           }
 
           .image {
@@ -95,81 +95,6 @@ $unitPadding: 80px;
             color: $blue;
           }
         }
-      }
-    }
-  }
-}
-
-// Typography
-.display2 {
-  font-size: 48px;
-  font-weight: 600;
-  line-height: 56px;
-}
-
-.title {
-  font-size: 24px;
-  line-height: 30px;
-}
-
-.subhead {
-  font-size: 18px;
-  line-height: 28px;
-}
-
-.body, p {
-  font-size: 14px;
-  line-height: 20px;
-}
-
-.caption {
-  font-size: 12px;
-  line-height: 15px;
-}
-
-.display2 {
-  & + .body,
-  & + p {
-    margin-top: 32px;
-  }
-}
-
-.subhead {
-  & + .body,
-  & + p {
-    margin-top: 8px;
-  }
-}
-
-.semibold {
-  font-weight: 500;
-}
-
-a {
-  color: $blue;
-
-  svg {
-    path {
-      fill: $blue;
-    }
-  }
-
-  &:hover {
-    color: shade($blue, 20);
-
-    svg {
-      path {
-        fill: shade($blue, 20);
-      }
-    }
-  }
-
-  &:active {
-    color: shade($blue, 40);
-
-    svg {
-      path {
-        fill: shade($blue, 40);
       }
     }
   }

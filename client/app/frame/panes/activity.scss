@@ -23,7 +23,7 @@ $activityAvatarSize: 25px;
 
     .avatar {
       position: absolute;
-      top: -2px;
+      top: -($activityAvatarSize - $b2-baseline-height-true) / 2;
       width: $activityAvatarSize;
       height: $activityAvatarSize;
     }
@@ -43,13 +43,43 @@ $activityAvatarSize: 25px;
     height: 100%;
     overflow: scroll;
 
+    .activity-block {
+      & + .activity-block {
+        .activity-time {
+          margin-top: 43px;
+        }
+
+        .activity {
+          margin-top: 27px;
+
+          &.is-sequence {
+            margin-top: $b2-line-height - $b2-baseline-height-true + 1px;
+          }
+        }
+      }
+
+      .activity-time {
+        display: none;
+      }
+
+      &.is-first {
+        .activity-time {
+          display: block;
+        }
+
+        .activity {
+          margin-top: 17px;
+        }
+      }
+
+      &:last-child {
+        margin-bottom: 27px;
+      }
+    }
+
     .activity {
       @include display-flex;
       margin-top: 17px;
-
-      & + .activity {
-        margin-top: 25px;
-      }
 
       .activity-info {
         @include order(2);
@@ -71,16 +101,14 @@ $activityAvatarSize: 25px;
         @include flex-shrink(0);
       }
 
-      &.isSequence {
-        margin-top: 5px;
-
+      &.is-sequence {
         .name,
         .activity-avatar .avatar {
           display: none;
         }
       }
 
-      &.isAuthor {
+      &.is-author {
 
         .activity-info {
 

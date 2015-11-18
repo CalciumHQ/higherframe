@@ -2,97 +2,97 @@ $base-font-size: 1rem;
 $base-line-height: 4*$vu;
 $measure: 760px;
 
-$h1-font-size: 2.7rem;
-$h1-line: 4*$vu;
-$h1-lines: 2;
-$h1-line-height: $h1-line * $h1-lines;
-$h1-margin-top: 2 * $h1-line;
-$h1-margin-bottom: 1 * $h1-line;
+$baseline-ratio: 0.525;
 
-$h2-font-size: 2.2rem;
-$h2-line: 4*$vu;
-$h2-lines: 2;
-$h2-line-height: $h2-line * $h2-lines;
-$h2-margin-top: 2 * $h2-line;
-$h2-margin-bottom: 1 * $h2-line;
+$h1-font-size: 36px;
+$h1-line-height: 54px;
+$h1-artifact: ($baseline-ratio * $h1-line-height / 2);
+$h1-baseline-height: $h1-line-height - ($baseline-ratio * $h1-line-height / 2);
+$h1-baseline-height-true: $baseline-ratio * $h1-line-height;
 
-$h3-font-size: 1.8rem;
-$h3-line: 4*$vu;
-$h3-lines: 1;
-$h3-line-height: $h3-line * $h3-lines;
-$h3-margin-top: 1 * $h3-line;
-$h3-margin-bottom: 1 * $h3-line;
+$h2-font-size: 30px;
+$h2-line-height: 40px;
+$h2-artifact: ($baseline-ratio * $h2-line-height / 2);
+$h2-baseline-height: $h2-line-height - ($baseline-ratio * $h2-line-height / 2);
+$h2-baseline-height-true: $baseline-ratio * $h2-line-height;
 
-$h4-font-size: 1.4rem;
-$h4-line: 4*$vu;
-$h4-lines: 1;
-$h4-line-height: $h4-line * $h4-lines;
-$h4-margin-top: 1 * $h4-line;
-$h4-margin-bottom: 1 * $h4-line;
+$h3-font-size: 24px;
+$h3-line-height: 36px;
+$h3-artifact: ($baseline-ratio * $h3-line-height / 2);
+$h3-baseline-height: $h3-line-height - ($baseline-ratio * $h3-line-height / 2);
+$h3-baseline-height-true: $baseline-ratio * $h3-line-height;
 
-$b1-font-size: 1.4rem;
-$b1-line: 2*$vu;
-$b1-lines: 1;
-$b1-line-height: $b1-line * $b1-lines;
-$b1-margin-top: 1 * $b1-line;
-$b1-margin-bottom: 1 * $b1-line;
+$h4-font-size: 20px;
+$h4-line-height: 30px;
+$h4-artifact: ($baseline-ratio * $h4-line-height / 2);
+$h4-baseline-height: $h4-line-height - ($baseline-ratio * $h4-line-height / 2);
+$h4-baseline-height-true: $baseline-ratio * $h4-line-height;
 
-$b3-font-size: 1.2rem;
-$b3-line: 2*$vu;
-$b3-lines: 1;
-$b3-line-height: $b3-line * $b3-lines;
-$b3-margin-top: 1 * $b3-line;
-$b3-margin-bottom: 1 * $b3-line;
+$b1-font-size: 16px;
+$b1-line-height: 24px;
+$b1-artifact: ($baseline-ratio * $b1-line-height / 2);
+$b1-baseline-height: $b1-line-height - ($baseline-ratio * $b1-line-height / 2);
+$b1-baseline-height-true: $baseline-ratio * $b1-line-height;
 
-$b4-font-size: 1rem;
-$b4-line: 2*$vu;
-$b4-lines: 1;
-$b4-line-height: $b3-line * $b3-lines;
-$b4-margin-top: 1 * $b3-line;
-$b4-margin-bottom: 1 * $b3-line;
+$b2-font-size: 13px;
+$b2-line-height: 20px;
+$b2-artifact: ($baseline-ratio * $b2-line-height / 2);
+$b2-baseline-height: $b2-line-height - ($baseline-ratio * $b2-line-height / 2);
+$b2-baseline-height-true: $baseline-ratio * $b2-line-height;
+
+$b3-font-size: 11px;
+$b3-line-height: 17px;
+$b3-artifact: ($baseline-ratio * $b2-line-height / 2);
+$b3-baseline-height: $b3-line-height - ($baseline-ratio * $b3-line-height / 2);
+$b3-baseline-height-true: $baseline-ratio * $b3-line-height;
 
 @mixin h1 {
-	position: relative;
 	font-size: $h1-font-size;
 	line-height: $h1-line-height;
+	margin-top: -$h1-artifact;
+	margin-bottom: -$h1-artifact;
 }
 
 @mixin h2 {
-	position: relative;
-	top: 2px;
 	font-size: $h2-font-size;
 	line-height: $h2-line-height;
+	margin-top: -$h2-artifact;
+	margin-bottom: -$h2-artifact;
 }
 
 @mixin h3 {
-	position: relative;
 	font-size: $h3-font-size;
 	line-height: $h3-line-height;
+	margin-top: -$h3-artifact;
+	margin-bottom: -$h3-artifact;
 }
 
 @mixin h4 {
-	position: relative;
 	font-size: $h4-font-size;
 	line-height: $h4-line-height;
+	margin-top: -$h4-artifact;
+	margin-bottom: -$h4-artifact;
 }
 
 @mixin b1 {
-	position: relative;
-	top: -1px;
 	font-size: $b1-font-size;
 	line-height: $b1-line-height;
+	margin-top: -$b1-artifact;
+	margin-bottom: -$b1-artifact;
+}
+
+@mixin b2 {
+	font-size: $b2-font-size;
+	line-height: $b2-line-height;
+	margin-top: -$b2-artifact;
+	margin-bottom: -$b2-artifact;
 }
 
 @mixin b3 {
-	position: relative;
 	font-size: $b3-font-size;
 	line-height: $b3-line-height;
-}
-
-@mixin b4 {
-	position: relative;
-	font-size: $b4-font-size;
-	line-height: $b4-line-height;
+	margin-top: -$b3-artifact;
+	margin-bottom: -$b3-artifact;
 }
 
 h1,
@@ -119,17 +119,59 @@ h4,
 	@include b1();
 }
 
+.b2 {
+	@include b2();
+}
+
 .b3 {
 	@include b3();
 }
 
-.b4 {
-	@include b4();
+.h1 {
+	& + .h2 {
+		margin-top: $h1-line-height - $h2-baseline-height;
+	}
+
+	& + .h3 {
+		margin-top: $h1-line-height - $h3-baseline-height;
+	}
+
+	& + .h4 {
+		margin-top: $h1-line-height - $h4-baseline-height;
+	}
+
+	& + .b1 {
+		margin-top: $h1-line-height - $b1-baseline-height;
+	}
+
+	& + .b2 {
+		margin-top: $h1-line-height - $b2-baseline-height;
+	}
+
+	& + .b3 {
+		margin-top: $h1-line-height - $b3-baseline-height;
+	}
+}
+
+.h3 {
+	& + .h3 {
+		margin-top: $h3-line-height - $h3-baseline-height;
+	}
+
+	& + .b1 {
+		margin-top: $h3-line-height - $b1-baseline-height;
+	}
 }
 
 .b1 {
 	& + .b1 {
 		margin-top: 2 * $vu;
+	}
+}
+
+.b2 {
+	& + .b2 {
+		margin-top: (1.5 * $b2-line-height) - $b2-baseline-height;
 	}
 }
 
@@ -139,6 +181,10 @@ h4,
 
 .medium {
 	font-weight: 600;
+}
+
+.snug {
+	letter-spacing: 0.01em;
 }
 
 .loose {
@@ -172,4 +218,42 @@ select {
 
 .lucida {
 	font-family: "Lucida Sans Unicode";
+}
+
+.semibold {
+  font-weight: 500;
+}
+
+.block {
+	display: block;
+}
+
+a {
+  color: $blue;
+
+  svg {
+    path {
+      fill: $blue;
+    }
+  }
+
+  &:hover {
+    color: shade($blue, 20);
+
+    svg {
+      path {
+        fill: shade($blue, 20);
+      }
+    }
+  }
+
+  &:active {
+    color: shade($blue, 40);
+
+    svg {
+      path {
+        fill: shade($blue, 40);
+      }
+    }
+  }
 }

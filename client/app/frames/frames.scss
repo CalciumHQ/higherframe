@@ -43,7 +43,7 @@ $easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
 
 		.content {
 			@include flex-grow(1);
-			padding: 2*$vu;
+			padding: 15px;
 		}
 	}
 }
@@ -95,7 +95,7 @@ $easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
 			.card {
 				position: relative;
 				@include span(4);
-				height: 17*$vu;
+				height: 114px;
 
 				&:nth-child(4n) {
 					margin-right: 0;
@@ -133,7 +133,7 @@ $easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
 				}
 
 				.users {
-					margin-top: 2*$vu;
+					margin-top: 15px;
 
 					.user {
 						float: left;
