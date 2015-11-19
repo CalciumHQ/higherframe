@@ -54,11 +54,13 @@ $sidebarBorderColor: #dedede;
 		@include display-flex;
 		@include flex-direction(column);
 		@include box-sizing(border-box);
+		@include flex-shrink(0);
 		width: $sidebarDefaultWidth;
 		color: rgba($gunmetal, 0.64);
 
 		.ui-sidebar-content {
-			padding: 0 $sidebarPadding;
+			padding-left: $sidebarPadding;
+			padding-right: $sidebarPadding;
 		}
 
 		.ui-sidebar-toolbar {

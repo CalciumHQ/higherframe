@@ -6,6 +6,28 @@ angular.module('siteApp')
       .state('main', {
         url: '/',
         templateUrl: 'app/main/main.html',
-        controller: 'MainCtrl'
+        controller: 'MainCtrl',
+        resolve: {
+          redirect: function($state, $q, $timeout, Auth) {
+
+            return $q(function(resolve, reject) {
+
+              // Redirection requires asynchronous
+              $timeout(function() {
+
+                if (Auth.isLoggedIn()) {
+
+                  $state.go('frames');
+                  reject();
+                }
+
+                else {
+
+                  resolve();
+                }
+              });
+            }).promise;
+          }
+        }
       });
   });

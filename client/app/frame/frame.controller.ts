@@ -459,6 +459,23 @@ class FrameCtrl {
       // Standard cases
       switch(event.key) {
 
+        case 'left':
+        case 'right':
+        case 'up':
+        case 'down':
+          // If in an input, allow event to continue
+          if (event.event.target.tagName == 'INPUT') {}
+
+          // Otherwise cancel and broadcast to wireframe
+          else {
+
+            event.event.preventDefault();
+            event.event.stopPropagation();
+            that.$scope.$broadcast('event:keydown', event);
+          }
+
+          break;
+
         case 'backspace':
           // If in an input, allow event to continue
           if (event.event.target.tagName == 'INPUT') {}

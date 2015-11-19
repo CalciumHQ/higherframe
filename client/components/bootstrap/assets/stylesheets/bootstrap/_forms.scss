@@ -328,6 +328,8 @@ input[type="checkbox"] {
 
 @include input-size('.input-sm', $input-height-small, $padding-small-vertical, $padding-small-horizontal, $font-size-small, $line-height-small, $input-border-radius-small);
 .form-group-sm {
+  margin-bottom: $form-group-small-margin-bottom;
+  
   .form-control {
     height: $input-height-small;
     padding: $padding-small-vertical $padding-small-horizontal;

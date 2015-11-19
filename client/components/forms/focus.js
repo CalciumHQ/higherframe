@@ -13,7 +13,29 @@ angular
 
           if (!!focus) {
 
-            element.focus();
+            // Take outside of $digest loop
+            setTimeout(function () {
+
+              element.focus();
+            }, 1);
+          }
+
+          else {
+
+            // Take outside of $digest loop
+            setTimeout(function () {
+
+              element.blur();
+            }, 1);
+          }
+        });
+
+        // Set model to true when element focussed
+        element.bind('focus', function() {
+
+          if (model.assign) {
+
+            $scope.$apply(model.assign($scope, true));
           }
         });
 
