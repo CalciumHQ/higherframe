@@ -19,21 +19,44 @@ module Higherframe.Drawing.Component.Library {
     properties = [
       {
         label: 'Label',
-        model: 'label',
-        type: String,
-        description: 'Set the label on the checkbox.'
+        controls: [
+          {
+            model: 'label',
+            type: String,
+            description: 'Set the label on the checkbox.'
+          }
+        ]
       },
       {
         label: 'Checked',
-        model: 'value',
-        type: Boolean,
-        description: 'Set the value of the input.'
+        controls: [
+          {
+            model: 'value',
+            type: Boolean,
+            ui: 'select',
+            options: [
+              {
+                label: 'Checked',
+                value: true
+              },
+              {
+                label: 'Unchecked',
+                value: false
+              }
+            ],
+            description: 'Set the value of the input.'
+          }
+        ]
       },
       {
         label: 'Font size',
-        model: 'fontSize',
-        type: Number,
-        description: 'Set the font size of the input.'
+        controls: [
+          {
+            model: 'fontSize',
+            type: Number,
+            description: 'Set the font size of the input.'
+          }
+        ]
       }
     ];
     resizable = false;

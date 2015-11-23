@@ -22,7 +22,8 @@ class FrameCtrl {
 	 * Constants
 	 */
 
-	private STORAGE_LEFTSIDEBAR_OPEN_KEY: string = 'frame.leftSidebar.open';
+	private STORAGE_PROPERTIES_OPEN_KEY: string = 'frame.properties.open';
+  private STORAGE_ACTIVITY_OPEN_KEY: string = 'frame.activity.open';
   private ZOOM_LEVELS: Array<number> = [0.1, 0.15, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 5.0];
 
 
@@ -43,7 +44,8 @@ class FrameCtrl {
   collaborators: Array<Object> = [];
 
   // UI variables
-  leftSidebarOpen: boolean = false;
+  propertiesOpen: boolean = false;
+  activityOpen: boolean = false;
   quickAdd = {
     open: false,
     focus: false,
@@ -88,13 +90,9 @@ class FrameCtrl {
     this.activities = Activity.query({ frameId: frame._id });
 
     // Initialise UI
-    this.leftSidebarOpen = localStorageService.get(this.STORAGE_LEFTSIDEBAR_OPEN_KEY);
+    this.propertiesOpen = localStorageService.get(this.STORAGE_PROPERTIES_OPEN_KEY);
+    this.activityOpen = localStorageService.get(this.STORAGE_ACTIVITY_OPEN_KEY);
     this.collaborators = frame.collaborators;
-
-    // Create and register trays
-    var viewTray = new Higherframe.Controllers.Frame.ViewTray();
-    TrayManager.registerTray('view', viewTray);
-    TrayManager.moveTray(viewTray, 'right');
 
     $scope.$watchCollection(() => { return this.selection; }, (selection) => {
 
@@ -413,9 +411,7 @@ class FrameCtrl {
 
   private initializeTool() {
 
-    var that = this;
-
-    paper.tool.onKeyDown = function (event) {
+    paper.tool.onKeyDown = (event) => {
 
       // Special cases
       // Using the command/control modifier outputs special characters for the
@@ -425,28 +421,48 @@ class FrameCtrl {
 
         switch (event.event.keyCode) {
 
+          case 37:    // left arrow
+
+            if (event.event.target.tagName == 'INPUT')    break;
+            if (event.modifiers.shift) {
+
+              this.$scope.$apply(() => this.onActionbarTogglePropertiesClick());
+            }
+
+            break;
+
+          case 39:    // right arrow
+
+            if (event.event.target.tagName == 'INPUT')    break;
+            if (event.modifiers.shift) {
+
+              this.$scope.$apply(() => this.onActionbarToggleActivityClick());
+            }
+
+            break;
+
           case 187:   // equals (zoom in)
 
-            that.$scope.$apply(function () {
+            this.$scope.$apply(() => {
 
-              var zoomIndex = that.ZOOM_LEVELS.indexOf(that.wireframe.zoom);
-              var zoom = that.ZOOM_LEVELS[zoomIndex < (that.ZOOM_LEVELS.length - 1) ? zoomIndex + 1 : zoomIndex];
+              var zoomIndex = this.ZOOM_LEVELS.indexOf(this.wireframe.zoom);
+              var zoom = this.ZOOM_LEVELS[zoomIndex < (this.ZOOM_LEVELS.length - 1) ? zoomIndex + 1 : zoomIndex];
 
               event.event.preventDefault();
-              that.setZoom(zoom);
+              this.setZoom(zoom);
             });
 
             break;
 
           case 189:   // dash (zoom out)
 
-            that.$scope.$apply(function () {
+            this.$scope.$apply(() => {
 
-              var zoomIndex = that.ZOOM_LEVELS.indexOf(that.wireframe.zoom);
-              var zoom = that.ZOOM_LEVELS[zoomIndex > 0 ? zoomIndex - 1 : zoomIndex];
+              var zoomIndex = this.ZOOM_LEVELS.indexOf(this.wireframe.zoom);
+              var zoom = this.ZOOM_LEVELS[zoomIndex > 0 ? zoomIndex - 1 : zoomIndex];
 
               event.event.preventDefault();
-              that.setZoom(zoom);
+              this.setZoom(zoom);
             });
 
             break;
@@ -468,7 +484,7 @@ class FrameCtrl {
 
             event.event.preventDefault();
             event.event.stopPropagation();
-            that.$scope.$broadcast('event:keydown', event);
+            this.$scope.$broadcast('event:keydown', event);
           }
 
           break;
@@ -482,7 +498,7 @@ class FrameCtrl {
 
             event.event.preventDefault();
             event.event.stopPropagation();
-            that.$scope.$broadcast('event:keydown', event);
+            this.$scope.$broadcast('event:keydown', event);
           }
 
           break;
@@ -494,9 +510,9 @@ class FrameCtrl {
             event.event.preventDefault();
             event.event.stopPropagation();
 
-            that.$scope.$apply(function() {
+            this.$scope.$apply(() => {
 
-              that.toggleQuickAdd();
+              this.toggleQuickAdd();
             });
           }
 
@@ -507,13 +523,13 @@ class FrameCtrl {
 
             event.event.preventDefault();
             event.event.stopPropagation();
-            that.save();
+            this.save();
           }
 
           break;
 
         default:
-          that.$scope.$broadcast('event:keydown', event);
+          this.$scope.$broadcast('event:keydown', event);
       }
     };
   }
@@ -637,12 +653,6 @@ class FrameCtrl {
    * View methods
    */
 
-	private toggleSidebar() {
-
-		this.leftSidebarOpen = !this.leftSidebarOpen;
-		this.localStorageService.set(this.STORAGE_LEFTSIDEBAR_OPEN_KEY, this.leftSidebarOpen);
-	};
-
   private toggleQuickAdd() {
 
     this.quickAdd.query = '';
@@ -749,11 +759,6 @@ class FrameCtrl {
     this.$state.go('frameSettings', { id: this.frame._id });
   }
 
-  onActionbarToggleSidebarClick() {
-
-    this.toggleSidebar();
-  }
-
   onActionbarQuickAddClick() {
 
     this.toggleQuickAdd();
@@ -762,6 +767,18 @@ class FrameCtrl {
   onActionbarSaveAsPngClick() {
 
     this.save('png');
+  }
+
+  onActionbarTogglePropertiesClick() {
+
+    this.propertiesOpen = !this.propertiesOpen;
+    this.localStorageService.set(this.STORAGE_PROPERTIES_OPEN_KEY, this.propertiesOpen);
+  }
+
+  onActionbarToggleActivityClick() {
+
+    this.activityOpen = !this.activityOpen;
+    this.localStorageService.set(this.STORAGE_ACTIVITY_OPEN_KEY, this.activityOpen);
   }
 
   // When a key is pressed in the quick add input

@@ -18,9 +18,32 @@ module Higherframe.Drawing.Component.Library {
     properties = [
       {
         label: 'Direction',
-        model: 'direction',
-        type: String,
-        description: 'Set which ends of the line should have an arrow head.'
+        controls: [
+          {
+            model: 'direction',
+            type: String,
+            ui: 'select',
+            options: [
+              {
+                label: 'None',
+                value: ''
+              },
+              {
+                label: 'Left',
+                value: 'left'
+              },
+              {
+                label: 'Right',
+                value: 'right'
+              },
+              {
+                label: 'Both',
+                value: 'both'
+              }
+            ],
+            description: 'Set which ends of the line should have an arrow head.'
+          }
+        ]
       }
     ];
     resizable = true;

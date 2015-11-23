@@ -125,6 +125,7 @@ module Higherframe.Controllers.Frame {
 
     onPropertyControlChange(control, $event) {
 
+      this.commitControl(control);
     }
   }
 }

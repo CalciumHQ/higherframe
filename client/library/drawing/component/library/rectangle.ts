@@ -17,22 +17,31 @@ module Higherframe.Drawing.Component.Library {
     ];
     properties = [
       {
-        label: 'Width',
-        model: 'width',
-        type: Number,
-        description: 'The width of the rectangle.'
-      },
-      {
-        label: 'Height',
-        model: 'height',
-        type: Number,
-        description: 'The height of the rectangle.'
+        label: 'Dimension',
+        controls: [
+          {
+            model: 'width',
+            placeholder: 'Width',
+            type: Number,
+            description: 'The width of the rectangle.'
+          },
+          {
+            model: 'height',
+            placeholder: 'Height',
+            type: Number,
+            description: 'The height of the rectangle.'
+          }
+        ]
       },
       {
         label: 'Radius',
-        model: 'cornerRadius',
-        type: Number,
-        description: 'The corner radius describes how rounded the corners should be.'
+        controls: [
+          {
+            model: 'cornerRadius',
+            type: Number,
+            description: 'The corner radius describes how rounded the corners should be.'
+          }
+        ]
       }
     ];
     resizable = true;
@@ -94,8 +103,9 @@ module Higherframe.Drawing.Component.Library {
       var bounds = new paper.Rectangle(topLeft, bottomRight);
 
       // Draw the shape
-      var shape = paper.Path.Rectangle(bounds, properties.cornerRadius);
+      var shape = paper.Path.Rectangle(bounds, parseInt('' + properties.cornerRadius));
       shape.strokeColor = foreColor;
+      shape.strokeWidth = 1.5;
       shape.fillColor = 'rgba(0,0,0,0)';
 
       // Group the parts as a component

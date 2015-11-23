@@ -76,16 +76,20 @@ div.fullscreen-wrapper
 					span.action-menu-item-shortcut 
 						span(ng-bind-html="'ctrl' | symbol")
 						| 1-9
-					
-				a.action-menu-item.divider
-					span.action-menu-item-label Show minimap
 						
-				a.action-menu-item
-					span.action-menu-item-label Show properties
+				a.action-menu-item(ng-click="FrameCtrl.onActionbarTogglePropertiesClick()")
+					span.action-menu-item-label {{ FrameCtrl.propertiesOpen ? 'Hide' : 'Show' }} properties
 					span.action-menu-item-shortcut
 						span(ng-bind-html="'shift' | symbol")
 						span(ng-bind-html="'ctrl' | symbol")
-						| P
+						| &#8592;
+						
+				a.action-menu-item(ng-click="FrameCtrl.onActionbarToggleActivityClick()")
+					span.action-menu-item-label {{ FrameCtrl.activityOpen ? 'Hide' : 'Show' }} activity
+					span.action-menu-item-shortcut
+						span(ng-bind-html="'shift' | symbol")
+						span(ng-bind-html="'ctrl' | symbol")
+						| &#8594;
 					
 				a.action-menu-item.divider
 					span.action-menu-item-label Toggle grid
@@ -124,12 +128,11 @@ div.fullscreen-wrapper
 		
 		#frame-wrapper
 			#frame-layout
-				#properties-pane.ui-sidebar(ng-controller="PropertiesCtrl as PropertiesCtrl")
+				#properties-pane.ui-sidebar(ng-controller="PropertiesCtrl as PropertiesCtrl", ng-show="FrameCtrl.propertiesOpen")
 					
 					.ui-sidebar-toolbar.ui-sidebar-toolbar-top
 
 					.ui-sidebar-content.form
-						span.b2.block(ng-if="!PropertiesCtrl.selection.length") No component selected
 						ul.properties(ng-if="PropertiesCtrl.selection.length == 1")
 							li.form-group.form-group-sm(ng-repeat="property in PropertiesCtrl.selection[0].properties")
 								label.form-label.b3.snug.medium.block {{ property.label }}
@@ -163,7 +166,7 @@ div.fullscreen-wrapper
 						
 					canvas#canvas(wireframe, data="FrameCtrl.wireframe", resize, keepalive="true", jqyoui-droppable)
 					
-				#activity-pane.ui-sidebar(ng-controller="ActivityCtrl as ActivityCtrl")
+				#activity-pane.ui-sidebar(ng-controller="ActivityCtrl as ActivityCtrl", ng-show="FrameCtrl.activityOpen")
 					
 					.ui-sidebar-toolbar.ui-sidebar-toolbar-top
 					
