@@ -427,6 +427,7 @@ class FrameCtrl {
             if (event.modifiers.shift) {
 
               this.$scope.$apply(() => this.onActionbarTogglePropertiesClick());
+              return;
             }
 
             break;
@@ -437,6 +438,7 @@ class FrameCtrl {
             if (event.modifiers.shift) {
 
               this.$scope.$apply(() => this.onActionbarToggleActivityClick());
+              return;
             }
 
             break;

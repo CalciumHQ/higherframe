@@ -20,6 +20,8 @@ module Higherframe.UI {
     ComponentFocusDark: paper.Color;
 
     DragHandleDefault: paper.Color;
+
+    ShadingDefault: paper.Color;
   }
 
   export class DefaultTheme implements ITheme {
@@ -40,5 +42,7 @@ module Higherframe.UI {
     ComponentFocusDark = new paper.Color('#7ae');
 
     DragHandleDefault = new paper.Color('#98e001');
+
+    ShadingDefault = new paper.Color('#eee');
   };
 }

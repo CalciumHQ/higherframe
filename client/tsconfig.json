@@ -60,6 +60,7 @@
         "./library/drawing/component/component.ts",
         "./library/drawing/component/factory.ts",
         "./library/drawing/component/library/arrow.ts",
+        "./library/drawing/component/library/button.ts",
         "./library/drawing/component/library/checkbox.ts",
         "./library/drawing/component/library/iphone-titlebar.ts",
         "./library/drawing/component/library/iphone.ts",

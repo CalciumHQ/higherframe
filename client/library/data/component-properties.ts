@@ -45,4 +45,14 @@ module Higherframe.Data {
     value: Boolean,
     fontSize: number
   }
+
+  export interface IButtonProperties extends IComponentProperties {
+    label: string,
+    width: number,
+    height: number,
+    type: string,
+    disabled: boolean,
+    cornerRadius: number,
+    fontSize: number
+  }
 }

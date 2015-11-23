@@ -62,7 +62,7 @@ module Higherframe.UI {
 
           element.bind('mousedown', (event) => {
 
-            this.$scope.$apply(() => onMouseDown(event));
+            $scope.$apply(() => onMouseDown(event));
           });
 
           $scope.$on('ui:draggable:mouseup', onMouseUp);
