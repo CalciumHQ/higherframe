@@ -19,15 +19,23 @@ module Higherframe.Drawing.Component.Library {
     properties = [
       {
         label: 'Text',
-        model: 'text',
-        type: String,
-        description: 'Set the text in the label.'
+        controls: [
+          {
+            model: 'text',
+            type: String,
+            description: 'Set the text in the label.'
+          }
+        ]
       },
       {
-        label: 'Font size',
-        model: 'fontSize',
-        type: Number,
-        description: 'Set the font size of the input.'
+        label: 'Font',
+        controls: [
+          {
+            model: 'fontSize',
+            type: Number,
+            description: 'Set the font size of the input.'
+          }
+        ]
       }
     ];
     resizable = false;

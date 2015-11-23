@@ -69,6 +69,7 @@ module Higherframe.Drawing.Component {
     getSnapPoints: () => Array<IPoint>;
     getTransformHandles: () => Array<IDragHandle>;
     getDragHandles: () => Array<IDragHandle>;
+    setProperty: (string, any) => void;
 
     // Drawing properties
     hovered: Boolean,
@@ -143,6 +144,11 @@ module Higherframe.Drawing.Component {
     serialize(): Data.IDrawingModel {
 
       return this.model;
+    }
+
+    setProperty(name: string, value: any) {
+
+      this.model.properties[name] = value;
     }
 
     // Should be implemented by derived class

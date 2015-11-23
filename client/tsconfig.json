@@ -71,6 +71,7 @@
         "./library/drawing/cursor.ts",
         "./library/drawing/point.ts",
         "./library/higherframe.ts",
+        "./library/ui/dnd/ui-draggable.ts",
         "./library/ui/filters/activity.ts",
         "./library/ui/filters/moment.ts",
         "./library/ui/helpers/svg-replace.ts",

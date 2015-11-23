@@ -121,75 +121,85 @@ div.fullscreen-wrapper
 
 					.text
 						span.name {{ component.title }}
-			
-		#frame-layout
-			#properties-pane.ui-sidebar(ng-controller="PropertiesCtrl as PropertiesCtrl")
-				
-				.ui-sidebar-toolbar.ui-sidebar-toolbar-top
+		
+		#frame-wrapper
+			#frame-layout
+				#properties-pane.ui-sidebar(ng-controller="PropertiesCtrl as PropertiesCtrl")
+					
+					.ui-sidebar-toolbar.ui-sidebar-toolbar-top
 
-				.ui-sidebar-content.form
-					span.b2.block(ng-if="!PropertiesCtrl.selection.length") No component selected
-					ul.properties(ng-if="PropertiesCtrl.selection.length == 1")
-						li.form-group.form-group-sm(ng-repeat="property in PropertiesCtrl.selection[0].properties")
-							label.form-label.b3.snug.medium.block {{ property.label }}
-							
-							div.property-control(ng-repeat="control in property.controls", ng-switch="control.ui")
-								select.form-control(ng-switch-when="select", placeholder="{{ control.placeholder }}", ng-options="o.value as o.label for o in control.options", ng-model="PropertiesCtrl.models[control.model]", ng-change="PropertiesCtrl.onPropertyControlChange(control)")
-								input.form-control(ng-switch-default, type="text", placeholder="{{ control.placeholder }}", focus-on="control.focus", ng-model="PropertiesCtrl.models[control.model]", ng-focus="PropertiesCtrl.onPropertyControlFocus(control)", ng-blur="PropertiesCtrl.onPropertyControlBlur(control)", ng-keydown="PropertiesCtrl.onPropertyControlKeydown(control, $event)")
-					
-					ul.properties(ng-if="PropertiesCtrl.selection.length")			
-						li.form-group.form-group-sm
-							label.form-label.b3.snug.medium.block Position
-							
-							div.property-control
-								input.form-control(type="text", placeholder="Left")
-									
-							div.property-control
-								input.form-control(type="text", placeholder="Top")
-									
-						li.form-group.form-group-sm
-							label.form-label.b3.snug.medium.block Dimension
-							
-							div.property-control
-								input.form-control(type="text", placeholder="Width")
-									
-							div.property-control
-								input.form-control(type="text", placeholder="Height")
-				
-			#canvas-area
-				ui-tray-region(position="left")
-				ui-tray-region(position="right")
-					
-				canvas#canvas(wireframe, data="FrameCtrl.wireframe", resize, keepalive="true")
-				
-			#activity-pane.ui-sidebar(ng-controller="ActivityCtrl as ActivityCtrl")
-				
-				.ui-sidebar-toolbar.ui-sidebar-toolbar-top
-				
-				#activity-list.ui-sidebar-content
-					div.activity-block(ng-repeat="activity in FrameCtrl.activities", ng-class="{ 'is-first': (activity | activityShowHeader:FrameCtrl.activities[$index-1]) }")
-						div.activity-time
-							p.b3.medium.snug {{ activity.created_at | momentCalendar:'d' }}
-						
-						div.activity(ng-class="{ 'is-author': FrameCtrl.getCurrentUser()._id == activity.user._id, 'is-sequence': (activity | activityCollapseItem:FrameCtrl.activities[$index-1]) }", title="{{ activity.created_at | momentPattern:'MMM D YYYY h:mm:ss a' }}")
-							div.activity-avatar
-								ui-placeholder.avatar(type="user", src="activity.user.image", title="{{ activity.user.name }}")
-							
-							div.activity-info
-								p.b2.medium.snug
-									span.activity-name(ng-hide="activity | activityCollapseItem:FrameCtrl.activities[$index-1]") {{ activity.user.name }} 
-									span(ng-switch="activity.type")
-										span(ng-switch-when="new-frame") created the wireframe
-										
-										span(ng-switch-when="added-user") invited 
-											span.activity-name {{ activity.data.users[0].name }}
-											
-										span(ng-switch-when="chat") {{ activity.data.message }}
+					.ui-sidebar-content.form
+						span.b2.block(ng-if="!PropertiesCtrl.selection.length") No component selected
+						ul.properties(ng-if="PropertiesCtrl.selection.length == 1")
+							li.form-group.form-group-sm(ng-repeat="property in PropertiesCtrl.selection[0].properties")
+								label.form-label.b3.snug.medium.block {{ property.label }}
 								
-				form#activity-form.ui-sidebar-toolbar.ui-sidebar-toolbar-bottom(ng-submit="ActivityCtrl.onActivityFormSubmit()")
-					input.ui-input(type="text", ng-model="ActivityCtrl.newMessage")
-					button.ui-button.success(type="submit")
-						span.h3.strong.loose.uppercase +
+								div.property-control(ng-repeat="control in property.controls", ng-switch="control.ui")
+									select.form-control(ng-switch-when="select", placeholder="{{ control.placeholder }}", ng-options="o.value as o.label for o in control.options", ng-model="PropertiesCtrl.models[control.model]", ng-change="PropertiesCtrl.onPropertyControlChange(control)")
+									input.form-control(ng-switch-default, type="text", placeholder="{{ control.placeholder }}", focus-on="control.focus", ng-model="PropertiesCtrl.models[control.model]", ng-focus="PropertiesCtrl.onPropertyControlFocus(control)", ng-blur="PropertiesCtrl.onPropertyControlBlur(control)", ng-keydown="PropertiesCtrl.onPropertyControlKeydown(control, $event)")
+						
+						ul.properties(ng-if="PropertiesCtrl.selection.length")			
+							li.form-group.form-group-sm
+								label.form-label.b3.snug.medium.block Position
+								
+								div.property-control
+									input.form-control(type="text", placeholder="Left")
+										
+								div.property-control
+									input.form-control(type="text", placeholder="Top")
+										
+							li.form-group.form-group-sm
+								label.form-label.b3.snug.medium.block Dimension
+								
+								div.property-control
+									input.form-control(type="text", placeholder="Width")
+										
+								div.property-control
+									input.form-control(type="text", placeholder="Height")
+					
+				#canvas-area
+					ui-tray-region(position="left")
+					ui-tray-region(position="right")
+						
+					canvas#canvas(wireframe, data="FrameCtrl.wireframe", resize, keepalive="true", jqyoui-droppable)
+					
+				#activity-pane.ui-sidebar(ng-controller="ActivityCtrl as ActivityCtrl")
+					
+					.ui-sidebar-toolbar.ui-sidebar-toolbar-top
+					
+					#activity-list.ui-sidebar-content
+						div.activity-block(ng-repeat="activity in FrameCtrl.activities", ng-class="{ 'is-first': (activity | activityShowHeader:FrameCtrl.activities[$index-1]) }")
+							div.activity-time
+								p.b3.medium.snug {{ activity.created_at | momentCalendar:'d' }}
+							
+							div.activity(ng-class="{ 'is-author': FrameCtrl.getCurrentUser()._id == activity.user._id, 'is-sequence': (activity | activityCollapseItem:FrameCtrl.activities[$index-1]) }", title="{{ activity.created_at | momentPattern:'MMM D YYYY h:mm:ss a' }}")
+								div.activity-avatar
+									ui-placeholder.avatar(type="user", src="activity.user.image", title="{{ activity.user.name }}")
+								
+								div.activity-info
+									p.b2.medium.snug
+										span.activity-name(ng-hide="activity | activityCollapseItem:FrameCtrl.activities[$index-1]") {{ activity.user.name }} 
+										span(ng-switch="activity.type")
+											span(ng-switch-when="new-frame") created the wireframe
+											
+											span(ng-switch-when="added-user") invited 
+												span.activity-name {{ activity.data.users[0].name }}
+												
+											span(ng-switch-when="chat") {{ activity.data.message }}
+									
+					form#activity-form.ui-sidebar-toolbar.ui-sidebar-toolbar-bottom(ng-submit="ActivityCtrl.onActivityFormSubmit()")
+						input.ui-input(type="text", ng-model="ActivityCtrl.newMessage")
+						button.ui-button.success(type="submit")
+							span.h3.strong.loose.uppercase +
+						
+		#toolbox(ng-controller="ToolboxController as ToolboxController")
+			div#toolbox-categories.b2.medium.snug
+				span.toolbox-category.active(ng-click="ToolboxController.onAllCategoriesClick()", ng-class="{ active: ToolboxController.all }") All
+				span.toolbox-category(ng-repeat="category in ToolboxController.categories", ng-class="{ active: category.active }", ng-click="ToolboxController.onCategoryClick(category)") {{ category.name }}
+
+			div#toolbox-components
+				div.toolbox-component(ng-repeat="component in ToolboxController.components | filter:ToolboxController.filterPredicate()", ng-click="ToolboxController.onComponentClick(component)", title="{{ component.title }}", ui-draggable, ui-draggable-end="ToolboxController.onComponentDragEnd($event, component)")
+					svg-replace(ng-src="{{ component.preview }}")
 		
 		div.bottomRight
 			#collaborators

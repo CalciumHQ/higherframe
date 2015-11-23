@@ -1,6 +1,63 @@
 
-#toolbox-tray-components {
-  .toolbox-tray-component {
+#toolbox {
+  #toolbox-categories {
+    padding: 10px;
+
+    .toolbox-category {
+      display: inline-block;
+      padding: 0 10px;
+      border-radius: 20px;
+      cursor: pointer;
+
+      &:hover {
+        background: rgba($gunmetal, 0.1);
+      }
+
+      &.active {
+        background: rgba($gunmetal, 0.5);
+        color: white;
+      }
+
+      & + .toolbox-category {
+        margin-left: 10px;
+      }
+    }
+  }
+
+  #toolbox-components {
+    padding: 0 10px;
     
+    .toolbox-component {
+      display: inline-block;
+      padding: 10px;
+      width: 60px;
+      height: 60px;
+      border-radius: 3px;
+
+      &:hover {
+        background: rgba($gunmetal, 0.1);
+      }
+
+      &:active {
+        background: rgba($gunmetal, 0.5);
+      }
+
+      & + .toolbox-component {
+        margin-left: 5px;
+      }
+
+      svg {
+        path {
+          fill: $gunmetal;
+        }
+      }
+
+      &.ui-draggable-dragging {
+        @include transition(border-radius 200ms ease-out, transform 200ms ease-out);
+        @include transform(scale(0.6));
+        border-radius: 30px;
+        pointer-events: none;
+      }
+    }
   }
 }

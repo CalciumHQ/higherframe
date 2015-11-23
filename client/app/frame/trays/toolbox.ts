@@ -13,11 +13,26 @@ module Higherframe.Controllers.Frame {
   export class ToolboxTrayController {
 
     components: Array<IToolboxTrayItem> = [];
-    categories: Array<String> = [];
+    categories: Object = {};
+    all: boolean = true;
 
     constructor(private $scope: ng.IScope) {
 
+      this.registerWatches();
       this.registerComponents();
+    }
+
+    private registerWatches() {
+
+      this.$scope.$watch(() => this.categories, () => {
+
+        let hasFilter = _.find(_.values(this.categories), (category: any) => {
+
+          return category.active;
+        });
+
+        this.all = !hasFilter;
+      }, true);
     }
 
     private registerComponent(type: Higherframe.Drawing.Component.Type) {
@@ -45,23 +60,60 @@ module Higherframe.Controllers.Frame {
       this.registerComponent(Higherframe.Drawing.Component.Type.SelectInput);
       this.registerComponent(Higherframe.Drawing.Component.Type.Checkbox);
 
-      this.categories = _.uniq(this.components.map((component) => {
+      let categoryNames = _.uniq(this.components.map((component) => {
 
         return component.category;
       }));
+
+      categoryNames.forEach((categoryName: string) => {
+
+        this.categories[categoryName] = {
+          name: categoryName,
+          active: false
+        };
+      });
     };
 
-    categoryComparitor(category) {
+    filterPredicate(component) {
 
       return (component) => {
 
-        return component.category == category;
-      }
+        return this.all || this.categories[component.category].active;
+      };
+    }
+
+    onAllCategoriesClick() {
+
+      this.clearCategories();
+      this.all = true;
+    }
+
+    onCategoryClick(category) {
+
+      this.clearCategories()
+      category.active = true;
+      this.all = false;
+    }
+
+    private clearCategories() {
+
+      angular.forEach(this.categories, (c) => {
+
+        c.active = false;
+      });
     }
 
     onComponentClick(component) {
 
-      this.$scope.$emit('tray:component:added', component.id);
+    }
+
+    onComponentDragEnd($event, component) {
+
+      this.$scope.$emit('toolbox:component:added', {
+        id: component.id,
+        x: $event.offsetX,
+        y: $event.offsetY
+      });
     }
   }
 
@@ -72,3 +124,7 @@ module Higherframe.Controllers.Frame {
     controller = ToolboxTrayController;
   }
 }
+
+angular
+  .module('siteApp')
+  .controller('ToolboxController', Higherframe.Controllers.Frame.ToolboxTrayController);

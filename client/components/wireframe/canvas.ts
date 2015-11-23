@@ -647,18 +647,26 @@ module Higherframe.Wireframe {
 
 		selectItems(items: Array<Higherframe.Drawing.Component.IComponent>) {
 
+			var newSelectedItems = [];
+
 			angular.forEach(items, (item) => {
 
-				if (this.selectedItems.indexOf(item) === -1) {
+				var exists = !!_.find(this.selectedItems, (selectedItem) => {
+
+					return selectedItem.id == item.id;
+				});
+
+				if (!exists) {
 
 					item.focussed = true;
 					this.selectedItems.push(item);
 					this.onItemUpdated(item);
 					(<any>paper.view).draw();
+					newSelectedItems.push(item);
 				}
 			});
 
-			this.scope.$emit('componentsSelected', items);
+			this.scope.$emit('componentsSelected', newSelectedItems);
 		}
 
 		removeItems(items: Array<Higherframe.Drawing.Component.IComponent>) {

@@ -92,11 +92,8 @@ class FrameCtrl {
     this.collaborators = frame.collaborators;
 
     // Create and register trays
-    var toolboxTray = new Higherframe.Controllers.Frame.ToolboxTray();
     var viewTray = new Higherframe.Controllers.Frame.ViewTray();
-    TrayManager.registerTray('toolbox', toolboxTray);
     TrayManager.registerTray('view', viewTray);
-    TrayManager.moveTray(toolboxTray, 'left');
     TrayManager.moveTray(viewTray, 'right');
 
     $scope.$watchCollection(() => { return this.selection; }, (selection) => {
@@ -197,17 +194,17 @@ class FrameCtrl {
      * Tray notifications
      */
 
-    $scope.$on('tray:component:added', (e, componentId) => {
+    $scope.$on('toolbox:component:added', (e, params) => {
 
       // Center new component in view
       var properties = {
-        x: paper.view.bounds.x + (paper.view.bounds.width/2),
-        y: paper.view.bounds.y + (paper.view.bounds.height/2),
+        x: paper.view.bounds.x + (params.x / paper.view.zoom) || paper.view.bounds.x + (paper.view.bounds.width/2),
+        y: paper.view.bounds.y + (params.y / paper.view.zoom) || paper.view.bounds.y + (paper.view.bounds.height/2),
         index: paper.project.activeLayer.children.length
       };
 
       // Create the new model
-      var component = new Higherframe.Data.Component(componentId, properties);
+      var component = new Higherframe.Data.Component(params.id, properties);
 
       // Create the instances and save to db
       var instances = this.addComponentsToView(component, null);
