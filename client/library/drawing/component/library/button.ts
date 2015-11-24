@@ -45,6 +45,23 @@ module Higherframe.Drawing.Component.Library {
         ]
       },
       {
+        type: 'Font',
+        controls: [
+          {
+            model: 'fontWeight',
+            type: Number,
+            ui: 'select',
+            options: [
+              { label: 'Light', value: 300 },
+              { label: 'Regular', value: 400 },
+              { label: 'Bold', value: 700 }
+            ],
+            placeholder: 'Font weight',
+            description: 'Set the font weight of the input.'
+          }
+        ]
+      },
+      {
         label: 'Radius',
         controls: [
           {
@@ -56,7 +73,7 @@ module Higherframe.Drawing.Component.Library {
       }
     ];
     resizable = true;
-    showBounds = true;
+    showBounds = false;
 
     model: Data.Component;
 
@@ -75,6 +92,7 @@ module Higherframe.Drawing.Component.Library {
       properties.type = properties.type || 'primary';
       properties.cornerRadius = properties.cornerRadius || 5;
       properties.fontSize = properties.fontSize || 14;
+      properties.fontWeight = properties.fontWeight || 400;
 
       // Perform the initial draw
       this.update();
@@ -91,7 +109,7 @@ module Higherframe.Drawing.Component.Library {
 
       // Determine palette
       var theme: Higherframe.UI.ITheme = new Higherframe.UI.DefaultTheme();
-      var foreColor = theme.ComponentDefault;
+      var foreColor = this.collaborator ? new paper.Color(this.collaborator.color) : theme.ComponentDefault;
       var backColor = theme.ShadingDefault;
 
       if (this.active) {
@@ -137,6 +155,7 @@ module Higherframe.Drawing.Component.Library {
         content: properties.label,
         fillColor: foreColor,
         fontSize: properties.fontSize,
+        fontWeight: properties.fontWeight,
         fontFamily: 'Myriad Pro',
         justification: 'center'
       });

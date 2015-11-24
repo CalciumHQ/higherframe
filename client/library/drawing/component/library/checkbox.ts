@@ -55,6 +55,18 @@ module Higherframe.Drawing.Component.Library {
             model: 'fontSize',
             type: Number,
             description: 'Set the font size of the input.'
+          },
+          {
+            model: 'fontWeight',
+            type: Number,
+            ui: 'select',
+            options: [
+              { label: 'Light', value: 300 },
+              { label: 'Regular', value: 400 },
+              { label: 'Bold', value: 700 }
+            ],
+            placeholder: 'Font weight',
+            description: 'Set the font weight of the input.'
           }
         ]
       }
@@ -77,6 +89,7 @@ module Higherframe.Drawing.Component.Library {
       properties.label = properties.label || 'Label';
       properties.value = properties.value ? true : false;
       properties.fontSize = properties.fontSize || 14;
+      properties.fontWeight = properties.fontWeight || 400;
 
       // Perform the initial draw
       this.update();
@@ -148,6 +161,7 @@ module Higherframe.Drawing.Component.Library {
         content: properties.label,
         fillColor: foreColorDark,
         fontSize: properties.fontSize,
+        fontWeight: properties.fontWeight,
         fontFamily: 'Myriad Pro'
       });
       this.addChild(value);

@@ -105,27 +105,47 @@ module Higherframe.Drawing.Component.Library {
 
     update() {
 
+      // Determine palette
+      var theme: Higherframe.UI.ITheme = new Higherframe.UI.DefaultTheme();
+      var foreColor = this.collaborator ? new paper.Color(this.collaborator.color) : theme.ComponentDefault;
+
+      if (this.active) {
+
+        foreColor = theme.ComponentActive;
+      }
+
+      else if (this.focussed) {
+
+        foreColor = theme.ComponentFocus;
+      }
+
+      else if (this.hovered) {
+
+        foreColor = theme.ComponentHover;
+      }
+
       var properties = <Higherframe.Data.IArrowProperties>this.model.properties;
 
       // Remove the old parts
       this.removeChildren();
 
-      var start = new paper.Point(properties.start.x, properties.start.y);
-      var end = new paper.Point(properties.end.x, properties.end.y);
+      var start = new paper.Point(properties.start);
+      var end = new paper.Point(properties.end);
       var vector = end.subtract(start);
 
       // Draw the line
       var line = new paper.Path();
       line.add(start);
       line.add(end);
-      line.strokeColor = '#888';
+      line.strokeColor = foreColor;
+      line.strokeWidth = 1.5;
       this.addChild(line);
 
       // Draw the heads
       if (properties.direction == 'left' || properties.direction == 'both') {
 
         var startHead = paper.Path.RegularPolygon(start.add(new paper.Point(0,5)), 3, 6);
-        startHead.fillColor = '#888';
+        startHead.fillColor = foreColor;
         startHead.rotate(-90 + vector.angle, start);
         this.addChild(startHead);
       }
@@ -133,7 +153,7 @@ module Higherframe.Drawing.Component.Library {
       if (properties.direction == 'right' || properties.direction == 'both') {
 
         var endHead = paper.Path.RegularPolygon(end.add(new paper.Point(0,5)), 3, 6);
-        endHead.fillColor = '#888';
+        endHead.fillColor = foreColor;
         endHead.rotate(90 + vector.angle, end);
         this.addChild(endHead);
       }
@@ -172,29 +192,28 @@ module Higherframe.Drawing.Component.Library {
     getDragHandles(): Array<IDragHandle> {
 
       var properties = <Higherframe.Data.IArrowProperties>this.model.properties;
-return [];
-      /*return [
-        {
-          position: properties.start,
-          move: (position: paper.Point): paper.Point => {
 
-            properties.start = position;
-            this.update();
+      var start = new DragHandle(new paper.Point(properties.start));
+      start.cursor = Cursors.ResizeNESW;
+      start.onMove = (position: paper.Point): paper.Point => {
 
-            return position;
-          }
-        },
-        {
-          position: properties.end,
-          move: (position: paper.Point): paper.Point => {
+        properties.start = position;
+        this.update();
 
-            properties.end = position;
-            this.update();
+        return position;
+      };
 
-            return position;
-          }
-        }
-      ];*/
+      var end = new DragHandle(new paper.Point(properties.end));
+      end.cursor = Cursors.ResizeNESW;
+      end.onMove = (position: paper.Point): paper.Point => {
+
+        properties.end = position;
+        this.update();
+
+        return position;
+      };
+
+      return [start, end];
     }
   }
 }

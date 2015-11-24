@@ -331,8 +331,6 @@ module Higherframe.Wireframe {
 			// If dragging a drag handle
 			else if (this.selectedDragHandle) {
 
-				this.selectedItems[0]
-
 				// The new position
 				var position:paper.Point = event.point.add(this.selectedDragHandle.mouseDownDelta);
 
@@ -958,11 +956,6 @@ module Higherframe.Wireframe {
 		 */
 		updateBoundingBox(item) {
 
-			if (!item.showBounds) {
-
-				return;
-			}
-
 			var selected = (this.selectedItems.indexOf(item) !== -1);
 
 			if (selected && !item.boundingBox) {
@@ -987,14 +980,19 @@ module Higherframe.Wireframe {
 			if (!item.boundingBox) {
 
 				this.layerSelections.activate();
+				item.boundingBox = new paper.Group();
 
-				var lineWidth = 1/paper.view.zoom;
-				var bb = paper.Path.Rectangle(item.bounds);
-				bb.strokeColor = 'magenta';
-				bb.strokeWidth = lineWidth;
+				// Add a rectangle to indicate component bounds if requested
+				if (item.showBounds) {
 
-				item.boundingBox = new paper.Group([bb]);
+					var lineWidth = 1/paper.view.zoom;
+					var box = paper.Path.Rectangle(item.bounds);
+					box.strokeColor = 'magenta';
+					box.strokeWidth = lineWidth;
+					item.boundingBox.addChild(box);
+				}
 
+				// Add the transform handles
 				_.forEach(item.getTransformHandles(), (transformHandle) => {
 
 					item.boundingBox.addChild(transformHandle);
@@ -1024,10 +1022,20 @@ module Higherframe.Wireframe {
 		updateDragHandles(item) {
 
 			var selected = (this.selectedItems.indexOf(item) !== -1);
-			this.removeDragHandles(item);
 
-			if (selected) {
+			if (selected && !item.dragHandles) {
 
+				this.addDragHandles(item);
+			}
+
+			else if (!selected && item.dragHandles) {
+
+				this.removeDragHandles(item);
+			}
+
+			else if (selected && item.dragHandles) {
+
+				this.removeDragHandles(item);
 				this.addDragHandles(item);
 			}
 		}
@@ -1036,20 +1044,11 @@ module Higherframe.Wireframe {
 
 			this.layerSelections.activate();
 
-			var drawHandle = (point) => {
-
-				var handle = new Higherframe.Drawing.Component.DragHandle(point);
-				handle.fillColor = 'magenta';
-
-				return handle;
-			};
+			item.dragHandles = new paper.Group();
 
 			angular.forEach(item.getDragHandles(), (dh) => {
 
-				var handle = drawHandle(dh.position);
-				(<any>handle).model = dh;
-
-				item.dragHandles.push(handle);
+				item.dragHandles.addChild(dh);
 			});
 
 			this.layerDrawing.activate();
@@ -1057,12 +1056,8 @@ module Higherframe.Wireframe {
 
 		removeDragHandles(item) {
 
-			angular.forEach(item.dragHandles, function (dh) {
-
-				dh.remove();
-			});
-
-			item.dragHandles = [];
+			item.dragHandles.remove();
+			item.dragHandles = null;
 		}
 
 
@@ -1215,7 +1210,7 @@ module Higherframe.Wireframe {
 		 */
 
 		updateGrid() {
-
+return;
 				var gridMajorSize = 100,
 					gridMinorSize = 20,
 					gridMajorColor = 'rgba(0,0,0,0.07)',

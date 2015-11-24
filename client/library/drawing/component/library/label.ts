@@ -34,6 +34,18 @@ module Higherframe.Drawing.Component.Library {
             model: 'fontSize',
             type: Number,
             description: 'Set the font size of the input.'
+          },
+          {
+            model: 'fontWeight',
+            type: Number,
+            ui: 'select',
+            options: [
+              { label: 'Light', value: 300 },
+              { label: 'Regular', value: 400 },
+              { label: 'Bold', value: 700 }
+            ],
+            placeholder: 'Font weight',
+            description: 'Set the font weight of the input.'
           }
         ]
       }
@@ -42,6 +54,7 @@ module Higherframe.Drawing.Component.Library {
     showBounds = false;
 
     model: Data.Component;
+    textItem: paper.PointText;
 
 
     /**
@@ -55,6 +68,7 @@ module Higherframe.Drawing.Component.Library {
       var properties = this.getProperties();
       properties.text = properties.text || 'Label';
       properties.fontSize = properties.fontSize || 14;
+      properties.fontWeight = properties.fontWeight || 400;
 
       // Perform the initial draw
       this.update();
@@ -98,14 +112,15 @@ module Higherframe.Drawing.Component.Library {
       this.removeChildren();
 
       // Draw the text
-      var value = new paper.PointText({
+      this.textItem = new paper.PointText({
         point: new paper.Point(properties.x, properties.y),
         content: properties.text,
         fillColor: foreColorDark,
         fontSize: properties.fontSize,
+        fontWeight: properties.fontWeight,
         fontFamily: 'Myriad Pro'
       });
-      this.addChild(value);
+      this.addChild(this.textItem);
     }
 
     /**
@@ -114,8 +129,8 @@ module Higherframe.Drawing.Component.Library {
 
     updateModel() {
 
-      this.model.properties.x = this.bounds.leftCenter.x;
-      this.model.properties.y = this.bounds.leftCenter.y;
+      this.model.properties.x = this.textItem.point.x;
+      this.model.properties.y = this.textItem.point.y;
     }
 
 

@@ -9,8 +9,9 @@ module Higherframe.Data {
   }
 
   export interface ILabelProperties extends IComponentProperties {
-    text: String,
-    fontSize: number
+    text: string,
+    fontSize: number,
+    fontWeight: number
   }
 
   export interface IRectangleProperties extends IComponentProperties {
@@ -37,13 +38,15 @@ module Higherframe.Data {
     width: number,
     placeholder: String,
     value: String,
-    fontSize: number
+    fontSize: number,
+    fontWeight: number
   }
 
   export interface ICheckboxProperties extends IComponentProperties {
     label: String,
     value: Boolean,
-    fontSize: number
+    fontSize: number,
+    fontWeight: number
   }
 
   export interface IButtonProperties extends IComponentProperties {
@@ -53,6 +56,7 @@ module Higherframe.Data {
     type: string,
     disabled: boolean,
     cornerRadius: number,
-    fontSize: number
+    fontSize: number,
+    fontWeight: number
   }
 }

@@ -58,7 +58,6 @@ module Higherframe.Drawing.Component {
     thumbnail: String,
     resizable: Boolean,
     showBounds: Boolean,
-    dragHandles: Array<IDragHandle>,
     model: Data.IDrawingModel,
 
     // new(options: IOptions)
@@ -79,7 +78,8 @@ module Higherframe.Drawing.Component {
     parts;
     collaborator;
     properties: Array<Object>;
-    boundingBox;
+    boundingBox: paper.Group;
+    dragHandles: paper.Group;
 
     // Provide definitions for paper.Item methods that we need in lieu
     // of a definition file for the interface
@@ -100,7 +100,6 @@ module Higherframe.Drawing.Component {
     thumbnail: String;
     resizable: Boolean;
     showBounds: Boolean;
-    dragHandles: Array<IDragHandle> = [];
     model: Data.IDrawingModel;
 
     // Drawing properties
@@ -131,6 +130,10 @@ module Higherframe.Drawing.Component {
     _boundingBox: paper.Group;
     get boundingBox(): paper.Group { return this._boundingBox; }
     set boundingBox(value) { this._boundingBox = value; }
+
+    _dragHandles: paper.Group;
+    get dragHandles(): paper.Group { return this._dragHandles; }
+    set dragHandles(value) { this._dragHandles = value; }
 
 
     constructor(model: Data.IDrawingModel) {

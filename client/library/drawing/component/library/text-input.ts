@@ -48,12 +48,12 @@ module Higherframe.Drawing.Component.Library {
           },
           {
             model: 'fontWeight',
-            type: String,
+            type: Number,
             ui: 'select',
             options: [
-              { label: 'Light', value: 'light' },
-              { label: 'Regular', value: 'regular' },
-              { label: 'Bold', value: 'bold' }
+              { label: 'Light', value: 300 },
+              { label: 'Regular', value: 400 },
+              { label: 'Bold', value: 700 }
             ],
             placeholder: 'Font weight',
             description: 'Set the font weight of the input.'
@@ -62,7 +62,7 @@ module Higherframe.Drawing.Component.Library {
       }
     ];
     resizable = true;
-    showBounds = true;
+    showBounds = false;
 
     model: Data.Component;
 
@@ -79,6 +79,7 @@ module Higherframe.Drawing.Component.Library {
       properties.width = properties.width || 160;
       properties.placeholder = properties.placeholder || 'Text input';
       properties.fontSize = properties.fontSize || 14;
+      properties.fontWeight = properties.fontWeight || 400;
 
       // Perform the initial draw
       this.update();
@@ -138,6 +139,7 @@ module Higherframe.Drawing.Component.Library {
         content: properties.value ? properties.value : properties.placeholder,
         fillColor: properties.value ? foreColorDark : foreColorLight,
         fontSize: properties.fontSize,
+        fontWeight: properties.fontWeight,
         fontFamily: 'Myriad Pro'
       });
 
