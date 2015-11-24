@@ -209,6 +209,12 @@ class FrameCtrl {
       this.saveComponents(instances);
     });
 
+    $scope.$on('properties:component:updated', (e, params) => {
+
+      this.saveComponents([params.component]);
+      this.$scope.$broadcast('controller:component:updated', { component: params.component });
+    });
+
 
     /*
      * Wireframe notifications

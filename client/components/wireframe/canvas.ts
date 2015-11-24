@@ -80,6 +80,12 @@ module Higherframe.Wireframe {
 					this.changeCenter(center, null);
 				});
 
+				scope.$on('controller:component:updated', (e, data) => {
+
+					let component = <Higherframe.Drawing.Component.IComponent>data.component;
+					component.update();
+				});
+
 				scope.$on('component:added', (e, data) => {
 
 					// Insertion options

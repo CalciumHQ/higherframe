@@ -82,7 +82,7 @@ module Higherframe.Controllers.Frame {
       }
 
       this.selection[0].model.properties[control.model] = this.models[control.model];
-      this.$rootScope.$broadcast('component:propertyChange', { component: this.selection[0] });
+      this.$rootScope.$broadcast('properties:component:updated', { component: this.selection[0] });
     }
 
     resetControl(control) {

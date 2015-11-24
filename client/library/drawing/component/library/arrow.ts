@@ -70,13 +70,9 @@ module Higherframe.Drawing.Component.Library {
                 value: 'angle'
               },
               {
-                label: 'Crank',
-                value: 'crank'
-              },
-              {
-                label: 'Double crank',
-                value: 'dcrank'
-              },
+                label: 'Double angle',
+                value: 'dangle'
+              }
             ]
           }
         ]
@@ -168,42 +164,44 @@ module Higherframe.Drawing.Component.Library {
 
       var start = new paper.Point(properties.start);
       var end = new paper.Point(properties.end);
-      var startRotation: number;
-      var endRotation: number;
+      var startSgm = new paper.Segment(start);
+      var endSgm = new paper.Segment(end);
 
       // Draw the line
       var line = new paper.Path();
-      line.add(start);
+      line.addSegments([startSgm]);
 
       switch(properties.type) {
 
         case 'straight':
-          startRotation = -90 + end.subtract(start).angle;
-          endRotation = 90 + end.subtract(start).angle;
           break;
 
-        case 'crank':
+        case 'curve':
 
-          var mid = new paper.Point(properties.start.x, properties.end.y);
-          line.add(mid);
-          startRotation = 180 + end.subtract(mid).angle;
-          endRotation = 180 + mid.subtract(start).angle;
+          startSgm.handleOut = new paper.Point(-(start.x - end.x) / 8, (end.y - start.y) / 2);
+          endSgm.handleIn = new paper.Point((start.x - end.x) / 2, -(end.y - start.y) / 8);
           break;
 
-        case 'dcrank':
+        case 'angle':
+
+          var mid = new paper.Point(properties.start.x, properties.end.y)
+          var midSgm = new paper.Segment(mid);
+
+          line.addSegments([midSgm]);
+          break;
+
+        case 'dangle':
 
           var midOne = new paper.Point(properties.start.x + 50, properties.start.y);
           var midTwo = new paper.Point(properties.start.x + 50, properties.end.y);
+          var midOneSgm = new paper.Segment(midOne);
+          var midTwoSgm = new paper.Segment(midTwo);
 
-          line.add(midOne);
-          line.add(midTwo);
-
-          startRotation = -90 + end.subtract(midTwo).angle;
-          endRotation = 90 + midOne.subtract(start).angle;
+          line.addSegments([midOneSgm, midTwoSgm]);
           break;
       }
 
-      line.add(end);
+      line.addSegments([endSgm]);
       line.strokeColor = foreColor;
       line.strokeWidth = 1.5;
       this.addChild(line);
@@ -213,7 +211,7 @@ module Higherframe.Drawing.Component.Library {
 
         var startHead = paper.Path.RegularPolygon(start.add(new paper.Point(0,5)), 3, 6);
         startHead.fillColor = foreColor;
-        startHead.rotate(startRotation, start);
+        startHead.rotate(-90 + line.getTangentAt(0).angle, start);
         this.addChild(startHead);
       }
 
@@ -221,7 +219,7 @@ module Higherframe.Drawing.Component.Library {
 
         var endHead = paper.Path.RegularPolygon(end.add(new paper.Point(0,5)), 3, 6);
         endHead.fillColor = foreColor;
-        endHead.rotate(endRotation, end);
+        endHead.rotate(90 + line.getTangentAt(line.length).angle, end);
         this.addChild(endHead);
       }
     }
