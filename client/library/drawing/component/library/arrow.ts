@@ -44,6 +44,42 @@ module Higherframe.Drawing.Component.Library {
             description: 'Set which ends of the line should have an arrow head.'
           }
         ]
+      },
+      {
+        label: 'Type',
+        controls: [
+          {
+            model: 'type',
+            type: String,
+            ui: 'select',
+            options: [
+              {
+                label: 'Straight',
+                value: 'straight'
+              },
+              {
+                label: 'Curve',
+                value: 'curve'
+              },
+              {
+                label: 'Double curve',
+                value: 'dcurve'
+              },
+              {
+                label: 'Angle',
+                value: 'angle'
+              },
+              {
+                label: 'Crank',
+                value: 'crank'
+              },
+              {
+                label: 'Double crank',
+                value: 'dcrank'
+              },
+            ]
+          }
+        ]
       }
     ];
     resizable = true;
@@ -69,6 +105,7 @@ module Higherframe.Drawing.Component.Library {
       properties.start = properties.start || new paper.Point(properties.x - 100, properties.y);
       properties.end = properties.end || new paper.Point(properties.x + 100, properties.y);
       properties.direction = properties.direction || 'right';
+      properties.type = properties.type || 'straight';
 
       // Perform the initial draw
       this.update();
@@ -131,11 +168,41 @@ module Higherframe.Drawing.Component.Library {
 
       var start = new paper.Point(properties.start);
       var end = new paper.Point(properties.end);
-      var vector = end.subtract(start);
+      var startRotation: number;
+      var endRotation: number;
 
       // Draw the line
       var line = new paper.Path();
       line.add(start);
+
+      switch(properties.type) {
+
+        case 'straight':
+          startRotation = -90 + end.subtract(start).angle;
+          endRotation = 90 + end.subtract(start).angle;
+          break;
+
+        case 'crank':
+
+          var mid = new paper.Point(properties.start.x, properties.end.y);
+          line.add(mid);
+          startRotation = 180 + end.subtract(mid).angle;
+          endRotation = 180 + mid.subtract(start).angle;
+          break;
+
+        case 'dcrank':
+
+          var midOne = new paper.Point(properties.start.x + 50, properties.start.y);
+          var midTwo = new paper.Point(properties.start.x + 50, properties.end.y);
+
+          line.add(midOne);
+          line.add(midTwo);
+
+          startRotation = -90 + end.subtract(midTwo).angle;
+          endRotation = 90 + midOne.subtract(start).angle;
+          break;
+      }
+
       line.add(end);
       line.strokeColor = foreColor;
       line.strokeWidth = 1.5;
@@ -146,7 +213,7 @@ module Higherframe.Drawing.Component.Library {
 
         var startHead = paper.Path.RegularPolygon(start.add(new paper.Point(0,5)), 3, 6);
         startHead.fillColor = foreColor;
-        startHead.rotate(-90 + vector.angle, start);
+        startHead.rotate(startRotation, start);
         this.addChild(startHead);
       }
 
@@ -154,7 +221,7 @@ module Higherframe.Drawing.Component.Library {
 
         var endHead = paper.Path.RegularPolygon(end.add(new paper.Point(0,5)), 3, 6);
         endHead.fillColor = foreColor;
-        endHead.rotate(90 + vector.angle, end);
+        endHead.rotate(endRotation, end);
         this.addChild(endHead);
       }
     }

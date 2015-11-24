@@ -23,7 +23,8 @@ module Higherframe.Data {
   export interface IArrowProperties extends IComponentProperties {
     start: Drawing.IPoint,
     end: Drawing.IPoint,
-    direction: string
+    direction: string,
+    type: string
   }
 
   export interface IIPhoneProperties extends IComponentProperties {
