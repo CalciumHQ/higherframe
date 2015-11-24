@@ -54,6 +54,7 @@ module Higherframe.Controllers.Frame {
       this.registerComponent(Higherframe.Drawing.Component.Type.Rectangle);
       this.registerComponent(Higherframe.Drawing.Component.Type.Arrow);
       this.registerComponent(Higherframe.Drawing.Component.Type.Label);
+      this.registerComponent(Higherframe.Drawing.Component.Type.Image);
       this.registerComponent(Higherframe.Drawing.Component.Type.IPhone);
       this.registerComponent(Higherframe.Drawing.Component.Type.IPhoneTitlebar);
       this.registerComponent(Higherframe.Drawing.Component.Type.TextInput);

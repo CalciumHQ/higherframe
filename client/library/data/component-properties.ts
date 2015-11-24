@@ -59,4 +59,12 @@ module Higherframe.Data {
     fontSize: number,
     fontWeight: number
   }
+
+  export interface IImageProperties extends IComponentProperties {
+    url: string,
+    width: number,
+    height: number,
+    disabled: boolean,
+    cornerRadius: number
+  }
 }

@@ -10,6 +10,7 @@ module Higherframe.Drawing.Component {
     SelectInput,
     Checkbox,
     Label,
-    Button
+    Button,
+    Image
   };
 };

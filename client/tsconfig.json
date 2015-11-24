@@ -62,6 +62,7 @@
         "./library/drawing/component/library/arrow.ts",
         "./library/drawing/component/library/button.ts",
         "./library/drawing/component/library/checkbox.ts",
+        "./library/drawing/component/library/image.ts",
         "./library/drawing/component/library/iphone-titlebar.ts",
         "./library/drawing/component/library/iphone.ts",
         "./library/drawing/component/library/label.ts",
