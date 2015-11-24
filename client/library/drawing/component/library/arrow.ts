@@ -62,10 +62,6 @@ module Higherframe.Drawing.Component.Library {
                 value: 'curve'
               },
               {
-                label: 'Double curve',
-                value: 'dcurve'
-              },
-              {
                 label: 'Angle',
                 value: 'angle'
               },

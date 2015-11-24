@@ -5,13 +5,13 @@
 class ClipboardItem {
   type: String;
   id: String;
-  properties;
+  data: any;
 
-  constructor(type: String, id: String, properties: Object) {
+  constructor(type: String, id: String, data: any) {
 
     this.type = type;
     this.id = id;
-    this.properties = properties;
+    this.data = data;
   }
 }
 
@@ -280,7 +280,7 @@ class FrameCtrl {
       });
     });
 
-    $scope.$on('component:copied', function (e, components) {
+    $scope.$on('component:copied', (e, components) => {
 
       if (!angular.isArray(components)) {
 
@@ -293,7 +293,7 @@ class FrameCtrl {
       }
 
       // Reset the clipboard
-      that.clipboard = [];
+      this.clipboard = [];
 
       // Copy representations of the components
       angular.forEach(components, function (component) {
@@ -301,22 +301,30 @@ class FrameCtrl {
         that.clipboard.push(new ClipboardItem(
           'component',
           component.id,
-          angular.copy(component.properties)
+          angular.copy(component.model)
         ));
       });
     });
 
-    $scope.$on('component:pasted', function (e) {
+    $scope.$on('component:pasted', (e) => {
 
-      // Copy representations of the components
-      angular.forEach(that.clipboard, function (entry: ClipboardItem) {
+      // Since only components can be copied at the moment, trust all the
+      // clipboard items are components
+      let components = this.clipboard.map((item) => item.data);
 
-        entry.properties.x += 50;
-        entry.properties.y += 50;
+      // Copy representations of the component
+      components.forEach((component: Higherframe.Data.Component) => {
+
+        delete component._id;
+
+        component.properties.x += 50;
+        component.properties.y += 50;
       });
 
-      // var instances = that.addComponentsToView(that.clipboard);
-      // that.saveComponents(instances);
+      console.log(components);
+
+      let instances = this.addComponentsToView(components);
+      this.saveComponents(instances);
     });
 
     $scope.$on('view:panned', (event, center) => {
