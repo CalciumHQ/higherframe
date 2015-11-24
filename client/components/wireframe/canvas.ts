@@ -888,6 +888,7 @@ module Higherframe.Wireframe {
 
 		updateDragSelection(from, to) {
 
+			let theme: Higherframe.UI.ITheme = new Higherframe.UI.DefaultTheme();
 			this.dragSelectionRectangle = new paper.Rectangle(from, to);
 
 			// Update the overlay indicating the drag region
@@ -898,8 +899,8 @@ module Higherframe.Wireframe {
 
 			this.layerSelections.activate();
 			this.dragSelectionOverlay = paper.Path.Rectangle(this.dragSelectionRectangle);
-			this.dragSelectionOverlay.fillColor = '#4d7cb8';
-			this.dragSelectionOverlay.strokeColor = '#0047a1';
+			this.dragSelectionOverlay.fillColor = theme.ComponentActive;
+			this.dragSelectionOverlay.strokeColor = theme.ComponentActiveDark;
 			this.dragSelectionOverlay.strokeWidth = 2;
 			this.dragSelectionOverlay.opacity = 0.3;
 			this.layerDrawing.activate();

@@ -2,20 +2,6 @@
 /// <reference path="../../typings/paper/paper.d.ts"/>
 /// <reference path="../../typings/lodash/lodash.d.ts"/>
 
-class ClipboardItem {
-  type: String;
-  id: String;
-  data: any;
-
-  constructor(type: String, id: String, data: any) {
-
-    this.type = type;
-    this.id = id;
-    this.data = data;
-  }
-}
-
-
 class FrameCtrl {
 
 	/**
@@ -57,9 +43,6 @@ class FrameCtrl {
   // UI models
   propertyModels = {};
 
-  // Temporarily stores components
-  clipboard:Array<ClipboardItem> = [];
-
 
   /**
    * Constructor
@@ -81,6 +64,7 @@ class FrameCtrl {
     private TrayManager: Higherframe.UI.Tray.Manager,
     private ModalManager: Higherframe.UI.Modal.Manager,
     private Activity: Higherframe.Data.IActivityResource,
+    private Clipboard: Higherframe.Utilities.Clipboard,
     private $mixpanel
   ) {
 
@@ -293,13 +277,13 @@ class FrameCtrl {
       }
 
       // Reset the clipboard
-      this.clipboard = [];
+      this.Clipboard.clear();
 
       // Copy representations of the components
-      angular.forEach(components, function (component) {
+      angular.forEach(components, (component) => {
 
-        that.clipboard.push(new ClipboardItem(
-          'component',
+        this.Clipboard.add(new Higherframe.Utilities.ClipboardItem(
+          Higherframe.Utilities.ClipboardItemType.Component,
           component.id,
           angular.copy(component.model)
         ));
@@ -310,18 +294,26 @@ class FrameCtrl {
 
       // Since only components can be copied at the moment, trust all the
       // clipboard items are components
-      let components = this.clipboard.map((item) => item.data);
+      let components = this.Clipboard.getItems().map((item) => item.data);
+
+      if (!components.length) {
+
+        return;
+      }
+
+      // Calculate the offset required to put the first item in the center
+      // of the canvas
+      let offsetX = paper.view.center.x - components[0].properties.x;
+      let offsetY = paper.view.center.y - components[0].properties.y;
 
       // Copy representations of the component
       components.forEach((component: Higherframe.Data.Component) => {
 
         delete component._id;
 
-        component.properties.x += 50;
-        component.properties.y += 50;
+        component.properties.x += offsetX;
+        component.properties.y += offsetY;
       });
-
-      console.log(components);
 
       let instances = this.addComponentsToView(components);
       this.saveComponents(instances);
