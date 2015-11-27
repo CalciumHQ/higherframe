@@ -139,6 +139,7 @@ div.fullscreen-wrapper
 								
 								div.property-control(ng-repeat="control in property.controls", ng-switch="control.ui")
 									select.form-control(ng-switch-when="select", placeholder="{{ control.placeholder }}", ng-options="o.value as o.label for o in control.options", ng-model="PropertiesCtrl.models[control.model]", ng-change="PropertiesCtrl.onPropertyControlChange(control)")
+									ui-image(ng-switch-when="file", ng-model="PropertiesCtrl.models[control.model]", ui-image-change="PropertiesCtrl.onPropertyControlChange(control, { media: media })")
 									input.form-control(ng-switch-default, type="text", placeholder="{{ control.placeholder }}", focus-on="control.focus", ng-model="PropertiesCtrl.models[control.model]", ng-focus="PropertiesCtrl.onPropertyControlFocus(control)", ng-blur="PropertiesCtrl.onPropertyControlBlur(control)", ng-keydown="PropertiesCtrl.onPropertyControlKeydown(control, $event)")
 						
 						ul.properties(ng-if="PropertiesCtrl.selection.length")			

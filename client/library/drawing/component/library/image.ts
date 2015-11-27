@@ -20,8 +20,9 @@ module Higherframe.Drawing.Component.Library {
         label: 'Image',
         controls: [
           {
-            model: 'url',
+            model: 'media',
             type: String,
+            ui: 'file',
             description: 'The image to be displayed.'
           }
         ],
@@ -97,7 +98,7 @@ module Higherframe.Drawing.Component.Library {
       var bounds = new paper.Rectangle(topLeft, bottomRight);
 
       // Draw the placeholder or the image
-      if (!properties.url) {
+      if (!properties.media || true) {
 
         let shape = paper.Path.Rectangle(bounds, parseInt('' + properties.cornerRadius));
         shape.strokeColor = foreColor;

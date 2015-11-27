@@ -123,8 +123,9 @@ module Higherframe.Controllers.Frame {
       }
     }
 
-    onPropertyControlChange(control, $event) {
+    onPropertyControlChange(control, data) {
 
+      // Save the updated control to database
       this.commitControl(control);
     }
   }

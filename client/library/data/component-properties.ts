@@ -62,7 +62,7 @@ module Higherframe.Data {
   }
 
   export interface IImageProperties extends IComponentProperties {
-    url: string,
+    media: Object,
     width: number,
     height: number,
     disabled: boolean,

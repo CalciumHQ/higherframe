@@ -42,7 +42,21 @@ exports.show = function(req, res) {
 	    if(err) { return handleError(res, err); }
 	    if(!frame) { return res.send(404); }
 
-	    return res.json(frame);
+      var options = {
+        path: 'components.media',
+        model: 'Media'
+      };
+
+      Frame.populate(frame, options, function(err, frame) {
+
+        frame.components.forEach(function(component) {
+
+          component.properties.media = component.media;
+          delete component.media;
+        });
+
+        return res.json(200, frame);
+      });
 	  });
 };
 

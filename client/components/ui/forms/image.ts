@@ -2,36 +2,57 @@
 module Higherframe.UI {
 
   export interface ImageScope extends ng.IScope {
-    ngModel: ng.INgModelController,
-    element: ng.IAugmentedJQuery
+    Ctrl: ImageController
   };
 
   export class ImageController {
 
-    //
+    // Directive
+    element: ng.IAugmentedJQuery;
+    ngModel: ng.INgModelController;
+    attrs: ng.IAttributes;
+
+    // View variables
     src: string;
 
     constructor(
       private $scope: ImageScope,
       private $http: ng.IHttpService,
+      private $parse: ng.IParseService,
       private Media: Higherframe.Data.IMediaResource
-    ) {
+    ) {}
 
-      this.registerWatches();
+    init(element: ng.IAugmentedJQuery, attrs: ng.IAttributes, ngModel: ng.INgModelController) {
+
+      this.initElement(element);
+      this.initModel(ngModel);
+      this.initAttributes(attrs);
     }
 
-    registerWatches() {
+    private initModel(ngModel: ng.INgModelController) {
 
-      this.$scope.$watchCollection(() => this.$scope.ngModel, (ngModel) => {
+      // Initialise the preview with an existing value
+      this.ngModel = ngModel;
 
-        this.initModel(ngModel);
+      this.$scope.$watch(() => this.ngModel.$modelValue, () => {
+
+        if (!this.ngModel.$modelValue) {
+
+          return;
+        }
+        
+        this.src = this.ngModel.$modelValue.original;
       });
     }
 
-    initModel(ngModel) {
+    private initElement(element: ng.IAugmentedJQuery) {
 
-      // Initialise the preview with an existing value
-      this.src = ngModel.$modelValue;
+      this.element = element;
+    }
+
+    private initAttributes(attrs: ng.IAttributes) {
+
+      this.attrs = attrs;
     }
 
 
@@ -41,12 +62,12 @@ module Higherframe.UI {
 
     onRemoveClick() {
 
-      this.$scope.ngModel.$setViewValue(null);
+      this.ngModel.$setViewValue(null);
     }
 
     onChangeClick() {
 
-      var file = this.$scope.element.children().eq(0);
+      let file = this.element.children().eq(0);
 
       file.trigger('click');
     }
@@ -60,7 +81,6 @@ module Higherframe.UI {
 
         this.$scope.$apply(() => {
 
-          // this.$scope.ngModel.$setViewValue((<FileReader>e.target).result);
           this.src = (<FileReader>e.target).result;
 
           // Upload the file
@@ -75,7 +95,11 @@ module Higherframe.UI {
 
     onFileChangeSuccess(media: Higherframe.Data.IMedia) {
 
-      this.$scope.ngModel.$setViewValue(media.original);
+      this.ngModel.$setViewValue(media);
+
+      // Call the provided change handler
+      var attrHandler = this.$parse(this.attrs['uiImageChange']);
+      attrHandler(this.$scope, { media: media });
     }
 
     onFileChangeError(error) {
@@ -87,7 +111,7 @@ module Higherframe.UI {
   export class Image implements ng.IDirective {
 
     // Directive configuration
-    link: (scope: AutocompleteScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes, ngModel: ng.INgModelController) => void;
+    link: (scope: ImageScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes, ngModel: ng.INgModelController) => void;
     restrict = 'E';
     replace = true;
     require = 'ngModel';
@@ -99,8 +123,7 @@ module Higherframe.UI {
 
       Image.prototype.link = (scope: ImageScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes, ngModel: ng.INgModelController) => {
 
-        scope.ngModel = ngModel;
-        scope.element = element;
+        scope.Ctrl.init(element, attrs, ngModel);
       };
     }
 

@@ -25,7 +25,7 @@ module Higherframe.Drawing.Component.Library {
         ],
       },
       {
-        type: 'Type',
+        label: 'Type',
         controls: [
           {
             model: 'type',
@@ -45,7 +45,7 @@ module Higherframe.Drawing.Component.Library {
         ]
       },
       {
-        type: 'Font',
+        label: 'Font',
         controls: [
           {
             model: 'fontWeight',

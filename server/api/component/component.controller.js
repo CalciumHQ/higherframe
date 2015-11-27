@@ -25,12 +25,15 @@ exports.index = function(req, res) {
 // Get a single Component
 exports.show = function(req, res) {
 
-  Component.findById(req.params.id, function (err, Component) {
+  Component
+    .findById(req.params.id)
+    .populate('media')
+    .exec(function (err, Component) {
 
-    if(err) { return handleError(res, err); }
-    if(!Component) { return res.send(404); }
-    return res.json(Component);
-  });
+      if(err) { return handleError(res, err); }
+      if(!Component) { return res.send(404); }
+      return res.json(Component);
+    });
 };
 
 // Creates a new Component in the DB.
@@ -47,11 +50,26 @@ exports.create = function(req, res) {
 exports.update = function(req, res) {
 
   if(req.body._id) { delete req.body._id; }
-  Component.findById(req.params.id, function (err, Component) {
-	  
+  Component.findById(req.params.id, function (err, component) {
+
     if (err) { return handleError(res, err); }
-    if(!Component) { return res.send(404); }
-    var updated = _.merge(Component, req.body);
+    if(!component) { return res.send(404); }
+
+    if (req.body.media) {
+
+      delete req.body.media;
+    }
+
+    var updated = _.merge(component, req.body);
+
+    if (updated.properties.media) {
+
+      updated.media = (typeof updated.properties.media === 'object') ?
+        updated.properties.media._id :
+        updated.properties.media;
+
+      delete updated.properties.media;
+    }
 
 		if (req.body.properties) {
 
@@ -61,7 +79,14 @@ exports.update = function(req, res) {
     updated.save(function (err) {
 
       if (err) { return handleError(res, err); }
-      return res.json(200, Component);
+
+      Component.populate(updated, { path: 'media' }, function(err, component) {
+
+        component.properties.media = component.media;
+        delete component.media;
+
+        return res.json(200, component);
+      });
     });
   });
 };
