@@ -15,6 +15,8 @@ var User = require('./../user/user.model');
 var config = require('../../config/environment');
 var AWS = require('aws-sdk');
 var fs = require('fs');
+var gm = require('gm');
+var Q = require('q');
 
 // Get list of medias
 exports.index = function(req, res) {
@@ -58,27 +60,86 @@ exports.create = function(req, res) {
 
 		var file = req.files[name];
 
-		// Read file into file stream
-		fs.readFile(file.path, function(err, fileBuffer) {
+    // Resize function
+    function resizeAndUpload(file, key, width, height, crop) {
 
-			// Upload image to bucket
-			bucket.upload({ Key: file.filename, Body: fileBuffer, ContentType: file.mimetype }, function (err, data) {
+      var parts = file.path.split('.');
+      var ext = parts.pop();
+      parts.push(key);
+      parts.push(ext);
+      var outpath = parts.join('.');
 
-				// Remove the temporary file
-				fs.unlink(file.path);
+      return Q.Promise(function(resolve, reject) {
 
-				if(err) { return handleError(res, err); }
+        var image = gm(file.path).autoOrient();
 
-        // Save the new media entry with the AWS url
-        var media = _.extend(req.body, { original: data.Location });
+        if (width || height) {
 
-        Media.create(media, function(err, media) {
+          if (crop) {
 
-          if(err) { return handleError(res, err); }
-          return res.json(201, media);
+            image
+              .gravity('Center')
+              .resize(width, height, '^')
+              .crop(width, height);
+          }
+
+          else {
+
+            image.resize(width, height);
+          }
+        }
+
+        image.write(outpath, function(err, data) {
+
+          if (err) { reject(err); }
+
+          // Read file into file stream
+      		fs.readFile(outpath, function(err, fileBuffer) {
+
+      			// Upload image to bucket
+      			bucket.upload({ Key: key + '-' + file.filename, Body: fileBuffer, ContentType: file.mimetype }, function (err, data) {
+
+      				// Remove the temporary file
+      				fs.unlink(outpath);
+
+      				if (err) { reject(err); }
+              resolve(data.Location);
+      			});
+      		});
         });
-			});
-		});
+      });
+    };
+
+    // Perform version generation
+    Q.allSettled([
+      resizeAndUpload(file, 'tn', 64, 64, true),
+      resizeAndUpload(file, 's', 100),
+      resizeAndUpload(file, 'm', 160),
+      resizeAndUpload(file, 'l', 480),
+      resizeAndUpload(file, 'o')
+    ]).then(function(result) {
+
+      // Remove the original temporary file
+      fs.unlink(file.path);
+
+      // Save the new media entry with the AWS urls
+      var media = _.extend(req.body, {
+        thumbnail: result[0].value,
+        small: result[1].value,
+        medium: result[2].value,
+        large: result[3].value,
+        original: result[4].value
+      });
+
+      Media.create(media, function(err, media) {
+
+        if (err) { handleError(res, err); }
+        res.json(201, media);
+      });
+    }).fail(function(err) {
+
+      return handleError(res, err);
+    });
 	});
 };
 

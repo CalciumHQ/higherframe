@@ -40,8 +40,8 @@ module Higherframe.UI {
 
           return;
         }
-        
-        this.src = this.ngModel.$modelValue.original;
+
+        this.src = this.ngModel.$modelValue.thumbnail;
       });
     }
 

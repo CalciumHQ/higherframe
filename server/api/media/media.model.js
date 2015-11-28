@@ -15,6 +15,10 @@ var MediaSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   },
+  thumbnail: String,
+  small: String,
+  medium: String,
+  large: String,
   original: String
 });
 
