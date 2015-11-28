@@ -166,6 +166,9 @@ div.fullscreen-wrapper
 					ui-tray-region(position="right")
 						
 					canvas#canvas(wireframe, data="FrameCtrl.wireframe", resize, keepalive="true", jqyoui-droppable)
+						
+					// Media library
+					img(ng-repeat="media in FrameCtrl.frame.media", ng-src="{{ media.original }}", id="{{ media._id }}", style="display:none")
 					
 				#activity-pane.ui-sidebar(ng-controller="ActivityCtrl as ActivityCtrl", ng-show="FrameCtrl.activityOpen")
 					

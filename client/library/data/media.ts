@@ -2,7 +2,7 @@
 module Higherframe.Data {
 
   export interface IMedia extends ng.resource.IResource<IMedia> {
-    id: string,
+    _id: string,
     created_at: string,
     updated_at: string,
     user: any,

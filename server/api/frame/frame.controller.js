@@ -36,7 +36,7 @@ exports.show = function(req, res) {
 
   Frame
 		.findOne({ _id: req.params.id, users: req.user._id })
-		.populate('organisation components users collaborators')
+		.populate('organisation components users collaborators media')
 		.exec(function (err, frame) {
 
 	    if(err) { return handleError(res, err); }

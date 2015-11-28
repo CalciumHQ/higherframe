@@ -30,7 +30,11 @@ var FrameSchema = new Schema({
   components: [{
 		type: Schema.ObjectId,
 		ref: 'Component'
-	}]
+	}],
+  media: [{
+    type: Schema.ObjectId,
+    ref: 'Media'
+  }]
 });
 
 FrameSchema.pre('update', function (next) {

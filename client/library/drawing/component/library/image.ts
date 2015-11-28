@@ -98,7 +98,7 @@ module Higherframe.Drawing.Component.Library {
       var bounds = new paper.Rectangle(topLeft, bottomRight);
 
       // Draw the placeholder or the image
-      if (!properties.media || true) {
+      if (!properties.media) {
 
         let shape = paper.Path.Rectangle(bounds, parseInt('' + properties.cornerRadius));
         shape.strokeColor = foreColor;
@@ -123,6 +123,16 @@ module Higherframe.Drawing.Component.Library {
 
       else {
 
+        var raster = new paper.Raster((<Higherframe.Data.IMedia>properties.media)._id);
+        raster.position = new paper.Point(bounds.center.x, bounds.center.y);
+        raster.scale(bounds.width / raster.width, bounds.height / raster.height);
+        this.addChild(raster);
+
+        let outline = paper.Path.Rectangle(bounds);
+        outline.strokeColor = this.focussed ? foreColor : 'rgba(0,0,0,0)';
+        outline.strokeWidth = 1.5;
+        outline.fillColor = 'rgba(0,0,0,0)';
+        this.addChild(outline);
       }
     }
 

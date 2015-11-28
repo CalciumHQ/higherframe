@@ -224,18 +224,17 @@ module Higherframe.Wireframe {
 			// If dragging an item
 			if (this.selectedItems.length) {
 
-				angular.forEach(this.selectedItems, (item) => {
+				this.selectedItems.forEach((item) => {
 
 					this.moveItems([item], item.position);
 					this.removeSmartGuides(item);
 					item.mousePositionDelta = null;
+					item.update();
 				});
 			}
 
 			// If dragging a drag handle
-			else if (this.selectedDragHandle) {
-
-			}
+			else if (this.selectedDragHandle) {}
 
 			else {
 

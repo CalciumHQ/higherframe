@@ -17,6 +17,7 @@ class FrameCtrl {
    * Member variables
    */
 
+	frame;
   wireframe = {
     components: [],
     zoom: 1,
@@ -49,7 +50,7 @@ class FrameCtrl {
    */
 
   constructor(
-    private frame,
+    frame,
     private $scope: ng.IScope,
     private $window: ng.IWindowService,
     private $http: ng.IHttpService,
@@ -69,6 +70,8 @@ class FrameCtrl {
   ) {
 
     var that = this;
+
+		this.frame = frame;
 
     // Fetch the activities for this frame
     this.activities = Activity.query({ frameId: frame._id });
