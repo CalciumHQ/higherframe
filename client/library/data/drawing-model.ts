@@ -4,7 +4,7 @@ module Higherframe.Data {
 
   export interface IDrawingModel {
 
-    _id: String,
-    properties: IComponentProperties
+    _id: String;
+    properties: IComponentProperties;
   }
 }

@@ -6,6 +6,10 @@ var mongoose = require('mongoose'),
 var ComponentSchema = new Schema({
   type: String,
 	lastModifiedBy: String,
+  frame: {
+    type: Schema.ObjectId,
+    ref: 'Frame'
+  },
   properties: {},
   media: {
     type: Schema.ObjectId,

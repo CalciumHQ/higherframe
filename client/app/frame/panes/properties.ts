@@ -123,6 +123,18 @@ module Higherframe.Controllers.Frame {
       }
     }
 
+    onMediaPropertyControlChange(control, data) {
+
+      // Inform the controller there is new media
+      this.$rootScope.$broadcast('properties:media:added', { media: data.media });
+
+      // TODO: Resize the control to natural dimensions
+      // this.selection[0].properties.width = data.media.width;
+
+      // Defer to regular handler
+      this.onPropertyControlChange(control, data);
+    }
+
     onPropertyControlChange(control, data) {
 
       // Save the updated control to database

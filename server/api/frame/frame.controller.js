@@ -185,6 +185,9 @@ exports.addUser = function(req, res) {
 // Creates a new component in the DB for this frame.
 exports.createComponent = function(req, res) {
 
+  // Add a reference to the frame
+  req.body.frame = req.params.id;
+
 	// Create the component
 	Component.create(req.body, function(err, Component) {
 

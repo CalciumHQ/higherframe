@@ -8,7 +8,22 @@ var Frame = require('./frame.model');
 
 exports.register = function(socket, socketio) {
 
-	socket.on('collaborator:save', function (data) {
+	socket.on('frame:media:save', function (data) {
+
+		// Add to the frame
+		Frame.findOneAndUpdate(
+			{ _id: data.frame._id },
+			{ $addToSet: { media: data.media._id }},
+			{ safe: true, upsert: false },
+			function (err, frame) {
+
+				// Broadcast to children
+				socketio.sockets.emit('frame:media:save', data.media);
+			}
+		);
+	});
+
+	socket.on('frame:collaborator:save', function (data) {
 
 		// Add to the frame
 		Frame.findOneAndUpdate(
@@ -18,12 +33,12 @@ exports.register = function(socket, socketio) {
 			function (err, frame) {
 
 				// Broadcast to children
-				socketio.sockets.emit('collaborator:save', data.user);
+				socketio.sockets.emit('frame:collaborator:save', data.user);
 			}
 		);
 	});
 
-	socket.on('collaborator:remove', function (data) {
+	socket.on('frame:collaborator:remove', function (data) {
 
 		// Add to the frame
 		Frame.findOneAndUpdate(
@@ -33,14 +48,14 @@ exports.register = function(socket, socketio) {
 			function (err, Frame) {
 
 				// Broadcast to children
-				socketio.sockets.emit('collaborator:remove', data.user);
+				socketio.sockets.emit('frame:collaborator:remove', data.user);
 			}
 		);
 	});
 
   Frame.schema.post('save', function (doc) {
 
-		Frame.populate(doc, {path:'organisation users'}, function(err, frame) {
+		Frame.populate(doc, {path:'organisation users media'}, function(err, frame) {
 
       onSave(socket, frame);
     });
@@ -53,6 +68,8 @@ exports.register = function(socket, socketio) {
 
 function onSave(socket, doc, cb) {
   socket.emit('frame:save', doc);
+	socket.emit('media:save', doc.media);
+	console.log('sent socket message', doc.media);
 }
 
 function onRemove(socket, doc, cb) {

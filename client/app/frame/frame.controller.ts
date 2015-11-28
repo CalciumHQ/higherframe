@@ -28,6 +28,7 @@ class FrameCtrl {
   selection: Array<Higherframe.Drawing.Component.IComponent> = [];
 
   activities: Array<Higherframe.Data.IActivity> = [];
+	media: Array<Higherframe.Data.IMedia> = [];
   collaborators: Array<Object> = [];
 
   // UI variables
@@ -79,6 +80,7 @@ class FrameCtrl {
     // Initialise UI
     this.propertiesOpen = localStorageService.get(this.STORAGE_PROPERTIES_OPEN_KEY);
     this.activityOpen = localStorageService.get(this.STORAGE_ACTIVITY_OPEN_KEY);
+		this.media = frame.media;
     this.collaborators = frame.collaborators;
 
     $scope.$watchCollection(() => { return this.selection; }, (selection) => {
@@ -200,6 +202,14 @@ class FrameCtrl {
 
       this.saveComponents([params.component]);
       this.$scope.$broadcast('controller:component:updated', { component: params.component });
+    });
+
+		$scope.$on('properties:media:added', (e, params) => {
+
+			this.socket.emit('frame:media:save', {
+				media: params.media,
+				frame: this.frame
+			});
     });
 
 
@@ -350,7 +360,8 @@ class FrameCtrl {
     var that = this;
 
 		// Document updating
-		this.socket.syncUpdates('collaborator', this.collaborators);
+		this.socket.syncUpdates('frame:media', this.media);
+		this.socket.syncUpdates('frame:collaborator', this.collaborators);
 
 		// Components updating
 		this.socket.syncUpdates('component', this.wireframe.components, function (event, component, array) {
@@ -383,7 +394,7 @@ class FrameCtrl {
 
 		this.$scope.$on('$destroy', function () {
 
-      that.socket.unsyncUpdates('collaborator');
+      that.socket.unsyncUpdates('frame:collaborator');
 			that.socket.unsyncUpdates('component');
       that.socket.unsyncUpdates('activity');
 		});
@@ -394,7 +405,7 @@ class FrameCtrl {
     var that = this;
 
 		// Broadcast the connected user
-		this.socket.emit('collaborator:save', {
+		this.socket.emit('frame:collaborator:save', {
 			frame: { _id: this.$stateParams.id },
 			user: this.Auth.getCurrentUser()
 		});
@@ -402,7 +413,7 @@ class FrameCtrl {
     // When the user navigates away from the frame
 		this.$scope.$on('$destroy', function () {
 
-			that.socket.emit('collaborator:remove', {
+			that.socket.emit('frame:collaborator:remove', {
 				frame: { _id: that.$stateParams.id },
 				user: that.Auth.getCurrentUser()
 			});
@@ -411,7 +422,7 @@ class FrameCtrl {
     // When the user closes the window/navigates
     this.$window.addEventListener('beforeunload', function (e) {
 
-      that.socket.emit('collaborator:remove', {
+      that.socket.emit('frame:collaborator:remove', {
 				frame: { _id: that.$stateParams.id },
 				user: that.Auth.getCurrentUser()
 			});
@@ -690,7 +701,7 @@ class FrameCtrl {
 
     // Create the components in the view
     var instances = [];
-    angular.forEach(components, function (component) {
+    components.forEach((component) => {
 
       var instance = Higherframe.Drawing.Component.Factory.fromModel(component);
 

@@ -26,16 +26,6 @@ module Higherframe.Drawing.Component.Library {
             description: 'The image to be displayed.'
           }
         ],
-      },
-      {
-        label: 'Radius',
-        controls: [
-          {
-            model: 'cornerRadius',
-            type: Number,
-            description: 'The corner radius describes how rounded the corners should be.'
-          }
-        ]
       }
     ];
     resizable = true;
@@ -129,8 +119,8 @@ module Higherframe.Drawing.Component.Library {
         this.addChild(raster);
 
         let outline = paper.Path.Rectangle(bounds);
-        outline.strokeColor = this.focussed ? foreColor : 'rgba(0,0,0,0)';
-        outline.strokeWidth = 1.5;
+        outline.strokeColor = foreColor;
+        outline.strokeWidth = (!this.active && !this.focussed && !this.hovered) ? 0 : 1.5;
         outline.fillColor = 'rgba(0,0,0,0)';
         this.addChild(outline);
       }

@@ -11,6 +11,7 @@
 
 var _ = require('lodash');
 var Component = require('./component.model');
+var Frame = require('./../frame/frame.model');
 
 // Get list of Components
 exports.index = function(req, res) {
@@ -64,6 +65,8 @@ exports.update = function(req, res) {
 
     if (updated.properties.media) {
 
+      // Since a Media object, we store outside of the properties block in
+      // order to be able to utilise object ref population
       updated.media = (typeof updated.properties.media === 'object') ?
         updated.properties.media._id :
         updated.properties.media;
