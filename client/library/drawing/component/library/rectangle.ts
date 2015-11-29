@@ -131,15 +131,15 @@ module Higherframe.Drawing.Component.Library {
      * Calculate the snap points for the component
      */
 
-    getSnapPoints(): Array<IPoint> {
+    getSnapPoints(): Array<SnapPoint> {
 
       var properties = <Higherframe.Data.IRectangleProperties>this.model.properties;
 
       return [
-        this.bounds.leftCenter,
-        this.bounds.topCenter,
-        this.bounds.rightCenter,
-        this.bounds.bottomCenter
+        new SnapPoint(this.bounds.leftCenter),
+        new SnapPoint(this.bounds.topCenter),
+        new SnapPoint(this.bounds.rightCenter),
+        new SnapPoint(this.bounds.bottomCenter)
       ];
     }
 

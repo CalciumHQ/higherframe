@@ -138,18 +138,14 @@ module Higherframe.Drawing.Component.Library {
      * Calculate the snap points for the component
      */
 
-    getSnapPoints(): Array<IPoint> {
+    getSnapPoints(): Array<SnapPoint> {
 
-      var snapPoints = [];
-      var properties = this.getProperties();
-
-      // Corners
-      snapPoints.push(this.bounds.topLeft);
-      snapPoints.push(this.bounds.topRight);
-      snapPoints.push(this.bounds.bottomLeft);
-      snapPoints.push(this.bounds.bottomRight);
-
-      return snapPoints;
+      return [
+        new SnapPoint(this.bounds.topLeft),
+        new SnapPoint(this.bounds.topRight),
+        new SnapPoint(this.bounds.bottomLeft),
+        new SnapPoint(this.bounds.bottomRight)
+      ];
     }
 
 

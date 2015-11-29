@@ -186,15 +186,14 @@ module Higherframe.Drawing.Component.Library {
      * Calculate the snap points for the component
      */
 
-    getSnapPoints(): Array<IPoint> {
+    getSnapPoints(): Array<SnapPoint> {
 
-      var snapPoints = [];
-
-      snapPoints.push(this.position.add(new paper.Point({ x: -110, y: -7 })));
-      snapPoints.push(this.position.add(new paper.Point({ x: 110, y: -7 })));
-      snapPoints.push(this.position.add(new paper.Point({ x: 110, y: 7 })));
-      snapPoints.push(this.position.add(new paper.Point({ x: -110, y: 7 })));
-      return snapPoints;
+      return [
+        new SnapPoint(this.position.add(new paper.Point({ x: -110, y: -7 }))),
+        new SnapPoint(this.position.add(new paper.Point({ x: 110, y: -7 }))),
+        new SnapPoint(this.position.add(new paper.Point({ x: 110, y: 7 }))),
+        new SnapPoint(this.position.add(new paper.Point({ x: -110, y: 7 })))
+      ];
     }
 
 

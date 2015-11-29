@@ -235,13 +235,13 @@ module Higherframe.Drawing.Component.Library {
      * Calculate the snap points for the component
      */
 
-    getSnapPoints(): Array<IPoint> {
+    getSnapPoints(): Array<SnapPoint> {
 
       var properties = <Higherframe.Data.IArrowProperties>this.model.properties;
 
       return [
-        properties.start,
-        properties.end
+        new SnapPoint(new paper.Point(properties.start)),
+        new SnapPoint(new paper.Point(properties.end))
       ];
     }
 

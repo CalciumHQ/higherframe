@@ -41,6 +41,7 @@ module Higherframe.Drawing.Component {
     }
   }
 
+
   /**
    * Defines the interface for a component which can be drawn on a
    * paperjs canvas
@@ -65,7 +66,7 @@ module Higherframe.Drawing.Component {
     serialize: () => Data.IDrawingModel;
     update: () => void;
     updateModel: () => void;
-    getSnapPoints: () => Array<IPoint>;
+    getSnapPoints: () => Array<SnapPoint>;
     getTransformHandles: () => Array<IDragHandle>;
     getDragHandles: () => Array<IDragHandle>;
     setProperty: (string, any) => void;

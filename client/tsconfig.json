@@ -72,6 +72,8 @@
         "./library/drawing/component/type.ts",
         "./library/drawing/cursor.ts",
         "./library/drawing/point.ts",
+        "./library/drawing/smart-guide.ts",
+        "./library/drawing/snap-point.ts",
         "./library/higherframe.ts",
         "./library/ui/dnd/ui-draggable.ts",
         "./library/ui/filters/activity.ts",

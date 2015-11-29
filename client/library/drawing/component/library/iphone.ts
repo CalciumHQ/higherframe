@@ -129,23 +129,21 @@ module Higherframe.Drawing.Component.Library {
      * Calculate the snap points for the component
      */
 
-    getSnapPoints(): Array<IPoint> {
+    getSnapPoints(): Array<SnapPoint> {
 
-      var snapPoints = [];
+      return [
+        // Screen corners
+        new SnapPoint(this.position.add(new paper.Point({ x: -116, y: -232 }))),
+        new SnapPoint(this.position.add(new paper.Point({ x: 116, y: -232 }))),
+        new SnapPoint(this.position.add(new paper.Point({ x: 116, y: 232 }))),
+        new SnapPoint(this.position.add(new paper.Point({ x: -116, y: 232 }))),
 
-      // Screen corners
-      snapPoints.push(this.position.add(new paper.Point({ x: -116, y: -232 })));
-      snapPoints.push(this.position.add(new paper.Point({ x: 116, y: -232 })));
-      snapPoints.push(this.position.add(new paper.Point({ x: 116, y: 232 })));
-      snapPoints.push(this.position.add(new paper.Point({ x: -116, y: 232 })));
-
-      // Inner screen corners
-      snapPoints.push(this.position.add(new paper.Point({ x: -110, y: -184 })));
-      snapPoints.push(this.position.add(new paper.Point({ x: 110, y: -184 })));
-      snapPoints.push(this.position.add(new paper.Point({ x: 110, y: 162 })));
-      snapPoints.push(this.position.add(new paper.Point({ x: -110, y: 162 })));
-
-      return snapPoints;
+        // Inner screen corners
+        new SnapPoint(this.position.add(new paper.Point({ x: -110, y: -184 })), 0.8),
+        new SnapPoint(this.position.add(new paper.Point({ x: 110, y: -184 })), 0.8),
+        new SnapPoint(this.position.add(new paper.Point({ x: 110, y: 162 })), 0.8),
+        new SnapPoint(this.position.add(new paper.Point({ x: -110, y: 162 })), 0.8)
+      ];
     }
 
 

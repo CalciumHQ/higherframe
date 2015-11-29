@@ -1,4 +1,6 @@
 
+/// <reference path="../../library/higherframe.ts"/>
+
 // Has paper been initialized yet
 var _paperInitialized;
 
@@ -1091,9 +1093,15 @@ module Higherframe.Wireframe {
 
 		addSmartGuides(item) {
 
-			var snaps = [];
-			var snapAdjustment = new paper.Point(0, 0);
-			var guideStrokeWidth = 1/paper.view.zoom;
+			var smartGuideX: Drawing.SmartGuide,
+				smartGuideY: Drawing.SmartGuide,
+				snapAdjustment = new paper.Point(0, 0);
+
+			var majorDeltaWeighting = 1,
+				minorDeltaWeighting = 0.1,
+				snapScoreThreshold = 200,
+				guideStrokeWidth = 1/paper.view.zoom,
+				guideCircleRadius = 3/paper.view.zoom;
 
 			item.smartGuides = [];
 
@@ -1102,7 +1110,7 @@ module Higherframe.Wireframe {
 			// TODO: Whittle down to elements in the nearby area
 
 			// Work through each element
-			angular.forEach(this.layerDrawing.children, (relation) => {
+			this.layerDrawing.children.forEach((relation) => {
 
 				// Don't compare target element with other selected elements
 				if (this.selectedItems.indexOf(relation) !== -1) {
@@ -1113,85 +1121,97 @@ module Higherframe.Wireframe {
 				var relationSnapPoints = (<any>relation).getSnapPoints();
 
 				// Look for alignment in snap points
-				angular.forEach(snapPoints, (snapPoint) => {
+				snapPoints.forEach((snapPoint: Drawing.SnapPoint) => {
 
-					angular.forEach(relationSnapPoints, (relationSnapPoint) => {
+					relationSnapPoints.forEach((relationSnapPoint) => {
 
-						var xDelta = relationSnapPoint.x - snapPoint.x;
-						var yDelta = relationSnapPoint.y - snapPoint.y;
+						var xDelta = relationSnapPoint.point.x - snapPoint.point.x;
+						var yDelta = relationSnapPoint.point.y - snapPoint.point.y;
 
 						// If within the snap threshold
 						if (Math.abs(xDelta) <= 10 || Math.abs(yDelta) <= 10) {
 
 							// Which axis is the snap in?
-							var axis = (Math.abs(xDelta) <= Math.abs(yDelta)) ? 'x' : 'y';
+							var axis: Drawing.SmartGuideAxis =
+								(Math.abs(xDelta) <= Math.abs(yDelta)) ?
+								Drawing.SmartGuideAxis.X :
+								Drawing.SmartGuideAxis.Y;
 
-							// If a snap already exists in this axis with a
-							// smaller delta, don't continue
-							var previous = _.find(snaps, function (snap) {
+							// Establish a score for this snap point
+							var score = 0;
 
-								if (snap.axis != axis) { return false; }
+							if (axis == Drawing.SmartGuideAxis.X) {
 
-								if (snap.axis == 'x') { return snap.delta <= xDelta; }
-								else { return snap.delta <= yDelta; }
-							});
+								score += minorDeltaWeighting * (1/snapPoint.weight) * (1/relationSnapPoint.weight) * Math.abs(xDelta);
+								score += majorDeltaWeighting * (1/snapPoint.weight) * (1/relationSnapPoint.weight) * Math.abs(yDelta);
 
-							if (previous) {
+								// Exclude snaps with a score too high
+								if (score > snapScoreThreshold) { return; }
 
-								return;
+								// If a snap already exists in this axis with a
+								// smaller score, don't continue
+								if (smartGuideX && smartGuideX.score < score) { return; }
 							}
 
-							// Create the new snap
-							var snap = {
-								relation: relationSnapPoint,
-								axis: axis,
-								delta: 0
+							else if (axis == Drawing.SmartGuideAxis.Y) {
+
+								score += minorDeltaWeighting * (1/snapPoint.weight) * (1/relationSnapPoint.weight) * Math.abs(yDelta);
+								score += majorDeltaWeighting * (1/snapPoint.weight) * (1/relationSnapPoint.weight) * Math.abs(xDelta);
+
+								// Exclude snaps with a score too high
+								if (score > snapScoreThreshold) { return; }
+
+								// If a snap already exists in this axis with a
+								// smaller score, don't continue
+								if (smartGuideY && smartGuideY.score < score) { return; }
+							}
+
+							// Create the new smart guide
+							var smartGuide = new Drawing.SmartGuide();
+							smartGuide.origin = snapPoint;
+							smartGuide.relation = relationSnapPoint;
+							smartGuide.axis = axis;
+							smartGuide.score = score;
+							smartGuide.delta = {
+								x: xDelta,
+								y: yDelta
 							};
 
-							if (snap.axis == 'x') {
+							if (smartGuide.axis == Drawing.SmartGuideAxis.X) {
 
-								snap.delta = Math.abs(xDelta);
 								snapAdjustment.x = xDelta;
+								smartGuideX = smartGuide;
 							}
 
 							else {
 
-								snap.delta = Math.abs(yDelta);
 								snapAdjustment.y = yDelta;
+								smartGuideY = smartGuide;
 							}
-
-							snaps.push(snap);
 						}
 					});
 				});
 			});
 
-			angular.forEach(snaps, (snap) => {
+			function drawGuide(smartGuide: Drawing.SmartGuide) {
 
-				// Draw a guide from the adjusted point through the
-				// relation snap point to the extent of the window
-				var from, to;
-				if (snap.axis == 'x') {
+				var guide = new paper.Group();
 
-					from = new paper.Point(snap.relation.x, paper.view.bounds.top);
-					to = new paper.Point(snap.relation.x, paper.view.bounds.bottom);
-				}
+				var line = paper.Path.Line(
+					smartGuide.getAdjustedOriginPoint(),
+					smartGuide.relation.point
+				);
+				line.strokeColor = 'magenta';
+				line.strokeWidth = guideStrokeWidth;
+				guide.addChild(line);
 
-				else {
-
-					from = new paper.Point(paper.view.bounds.left, snap.relation.y);
-					to = new paper.Point(paper.view.bounds.right, snap.relation.y);
-				}
-
-				this.layerGuides.activate();
-
-				var guide = paper.Path.Line(from, to);
-				guide.strokeColor = 'magenta';
-				guide.strokeWidth = guideStrokeWidth;
 				item.smartGuides.push(guide);
+			}
 
-				this.layerDrawing.activate();
-			});
+			this.layerGuides.activate();
+			if (smartGuideX) { drawGuide(smartGuideX); }
+			if (smartGuideY) { drawGuide(smartGuideY); }
+			this.layerDrawing.activate();
 
 			// Return the required adjustment on the item
 			return snapAdjustment;

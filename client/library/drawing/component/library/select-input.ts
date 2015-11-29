@@ -184,20 +184,14 @@ module Higherframe.Drawing.Component.Library {
      * Calculate the snap points for the component
      */
 
-    getSnapPoints(): Array<IPoint> {
+    getSnapPoints(): Array<SnapPoint> {
 
-      var snapPoints = [];
-      var properties = <Higherframe.Data.ITextInputProperties>this.model.properties;
-      var width = properties.width;
-      var height = this.getHeight();
-
-      // Corners
-      snapPoints.push(this.position.add(new paper.Point({ x: -(width/2), y: -(height/2) })));
-      snapPoints.push(this.position.add(new paper.Point({ x: (width/2), y: -(height/2) })));
-      snapPoints.push(this.position.add(new paper.Point({ x: (width/2), y: (height/2) })));
-      snapPoints.push(this.position.add(new paper.Point({ x: -(width/2), y: (height/2) })));
-
-      return snapPoints;
+      return [
+        new SnapPoint(this.bounds.leftCenter),
+        new SnapPoint(this.bounds.topCenter),
+        new SnapPoint(this.bounds.rightCenter),
+        new SnapPoint(this.bounds.bottomCenter)
+      ];
     }
 
 
