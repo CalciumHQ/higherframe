@@ -65,7 +65,13 @@ module Higherframe.Data {
     media: Object,
     width: number,
     height: number,
-    disabled: boolean,
     cornerRadius: number
+  }
+
+  export interface IIconProperties extends IComponentProperties {
+    icon: string,
+    width: number,
+    height: number,
+    fontSize: number
   }
 }

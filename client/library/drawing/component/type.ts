@@ -11,6 +11,7 @@ module Higherframe.Drawing.Component {
     Checkbox,
     Label,
     Button,
-    Image
+    Image,
+    Icon
   };
 };

@@ -61,6 +61,7 @@ module Higherframe.Controllers.Frame {
       this.registerComponent(Higherframe.Drawing.Component.Type.SelectInput);
       this.registerComponent(Higherframe.Drawing.Component.Type.Checkbox);
       this.registerComponent(Higherframe.Drawing.Component.Type.Button);
+      this.registerComponent(Higherframe.Drawing.Component.Type.Icon);
 
       let categoryNames = _.uniq(this.components.map((component) => {
 
