@@ -17,45 +17,42 @@ moment.locale('en', {
   }
 });
 
-module Higherframe.UI {
+module Higherframe.UI.Filters {
 
-  export module Filters {
+  export class MomentPattern {
 
-    export class MomentPattern {
+    constructor() {
 
-      constructor() {
+      return function(input, pattern) {
 
-        return function(input, pattern) {
-
-          var m = moment(input);
-          return m.format(pattern);
-        };
-      }
+        var m = moment(input);
+        return m.format(pattern);
+      };
     }
+  }
 
-    export class MomentCalendar {
+  export class MomentCalendar {
 
-      constructor() {
+    constructor() {
 
-        return function(input) {
+      return function(input) {
 
-          var m = moment(input);
-          return m.calendar();
-        };
-      }
+        var m = moment(input);
+        return m.calendar();
+      };
     }
+  }
 
-    export class MomentDiff {
+  export class MomentDiff {
 
-      constructor() {
+    constructor() {
 
-        return function(input, compare, unit) {
+      return function(input, compare, unit) {
 
-          var m = moment(input);
-          var n = moment(compare);
-          return m.diff(n, unit);
-        };
-      }
+        var m = moment(input);
+        var n = moment(compare);
+        return m.diff(n, unit);
+      };
     }
   }
 }

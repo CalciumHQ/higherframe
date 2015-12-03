@@ -1,0 +1,43 @@
+
+.ui-icon {
+  @include display-flex;
+  @include align-items(center);
+
+  .ui-icon-icon {
+    @include flex-shrink(0);
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 20px;
+    font-family: 'FontAwesome';
+    text-align: center;
+    background: white;
+    border: 1px solid $uiControlBorderColor;
+    border-radius: 3px;
+    cursor: pointer;
+
+    &:hover {
+      border-color: $uiControlBorderColorHover;
+    }
+  }
+
+  .ui-icon-actions {
+    @include flex-grow(1);
+    margin-left: 10px;
+
+    a {
+      display: inline-block;
+      cursor: pointer;
+
+      & + a {
+        margin-left: 6px;
+        padding-left: 7px;
+        border-left: 1px solid #ddd;
+      }
+    }
+  }
+
+  .ui-icon-dropdown-icon {
+    font-family: 'FontAwesome';
+  }
+}

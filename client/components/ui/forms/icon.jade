@@ -1,0 +1,14 @@
+div.ui-icon
+  span.ui-icon-icon(ng-click="Ctrl.onChangeClick($event)") {{ Ctrl.icon | unicode }}
+  
+  div.btn-group(uib-dropdown, is-open="Ctrl.open")
+    ul(class="uib-dropdown-menu", role="menu")
+      li(ng-repeat="icon in Ctrl.icons")
+        a(ng-click="Ctrl.onIconClick(icon)")
+          span.ui-icon-dropdown-icon {{ icon.unicode | unicode }} 
+          | {{ icon.name }}
+        
+  div.ui-icon-actions.b3
+    a(ng-if="!Ctrl.icon", ng-click="Ctrl.onChangeClick($event)") Choose icon
+    a(ng-if="!!Ctrl.icon", ng-click="Ctrl.onChangeClick($event)") Change
+    a(ng-if="!!Ctrl.icon", ng-click="Ctrl.onRemoveClick($event)") Remove

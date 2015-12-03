@@ -115,7 +115,7 @@ module Higherframe.Drawing.Component.Library {
       this.textItem = new paper.PointText({
         point: new paper.Point(properties.x, properties.y),
         content: properties.text,
-        fillColor: foreColorDark,
+        fillColor: foreColor,
         fontSize: properties.fontSize,
         fontWeight: properties.fontWeight,
         fontFamily: 'Myriad Pro'

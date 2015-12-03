@@ -22,7 +22,7 @@ module Higherframe.Drawing.Component.Library {
           {
             model: 'icon',
             type: String,
-            ui: 'select',
+            ui: 'icon',
             options: _.map(Higherframe.UI.FontAwesome.getIcons(), (icon) => {
 
               return {
@@ -152,8 +152,8 @@ module Higherframe.Drawing.Component.Library {
     updateModel() {
 
       var properties = this.getProperties();
-      properties.x = this.icon.point.x;
-      properties.y = this.icon.point.y;
+      properties.x = this.icon ? this.icon.point.x : this.bounds.topLeft.x;
+      properties.y = this.icon ? this.icon.point.y : this.bounds.topLeft.y;
       properties.width = this.bounds.width;
       properties.height = this.bounds.height;
     }
