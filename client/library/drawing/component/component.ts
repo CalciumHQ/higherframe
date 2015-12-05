@@ -3,9 +3,10 @@
 module Higherframe.Drawing.Component {
 
   export interface IDragHandle extends paper.Group {
-    position: paper.Point,
-    cursor?: Cursor,
-    onMove?: (position: paper.Point) => paper.Point
+    position: paper.Point;
+    cursor?: Cursor;
+    getSnapPoints?: (position: paper.Point) => Array<SnapPoint>;
+    onMove?: (position: paper.Point) => paper.Point;
   }
 
   export class DragHandle extends paper.Group implements IDragHandle {
@@ -34,6 +35,11 @@ module Higherframe.Drawing.Component {
      */
 
     cursor: Cursor;
+
+    getSnapPoints(position: paper.Point): Array<SnapPoint> {
+
+      return [];
+    }
 
     onMove(position: paper.Point): paper.Point {
 

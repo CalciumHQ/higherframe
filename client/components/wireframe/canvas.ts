@@ -54,6 +54,8 @@ module Higherframe.Wireframe {
 			y: Array<paper.Path>
 		} = { x: [], y: [] };
 
+		smartGuides: Array<paper.Item> = [];
+
 
 		constructor(private $window: Higherframe.IWindow) {
 
@@ -229,7 +231,7 @@ module Higherframe.Wireframe {
 				this.selectedItems.forEach((item) => {
 
 					this.moveItems([item], item.position);
-					this.removeSmartGuides(item);
+					this.removeSmartGuides();
 					item.mousePositionDelta = null;
 					item.update();
 				});
@@ -350,22 +352,35 @@ module Higherframe.Wireframe {
 				var item = this.selectedItems[0];
 
 				// Find a snap point
-				var snapAdjustment = this.updateSmartGuides(item);
+				var smartGuideResult = this.updateSmartGuides(
+					item,
+					this.selectedDragHandle.getSnapPoints(this.selectedDragHandle.position)
+				);
 
 				// If a snap point was found
-				if (snapAdjustment) {
+				if (smartGuideResult) {
 
-					position = position.add(snapAdjustment);
+					position = smartGuideResult.x ? position.add(smartGuideResult.x.getAdjustment()) : position;
+					position = smartGuideResult.y ? position.add(smartGuideResult.y.getAdjustment()) : position;
 
 					// Reposition the drag handle
 					this.selectedDragHandle.position = this.selectedDragHandle.onMove
 						? this.selectedDragHandle.onMove(position)
 						: position;
 				}
+
+				// Draw smart guides
+				if (smartGuideResult.x) { this.drawGuide(smartGuideResult.x); }
+				if (smartGuideResult.y) { this.drawGuide(smartGuideResult.y); }
 			}
 
 			// If dragging an item
 			else if (this.selectedItems.length) {
+
+				var bestSmartGuideResult: {
+					x?: Drawing.SmartGuide,
+					y?: Drawing.SmartGuide
+				} = {};
 
 				angular.forEach(this.selectedItems, (item) => {
 
@@ -383,24 +398,57 @@ module Higherframe.Wireframe {
 					this.updateDragHandles(item);
 
 					// Find a snap point
-					var snapAdjustment = this.updateSmartGuides(item);
+					var smartGuideResult = this.updateSmartGuides(item);
 
 					// If a snap point was found
-					if (snapAdjustment) {
+					if (smartGuideResult) {
 
-						position = position.add(snapAdjustment);
+						if (smartGuideResult.x) {
 
-						// Reposition the item and its bounding box
-						item.position = position;
+							if (
+								!bestSmartGuideResult.x ||
+								smartGuideResult.x.score < bestSmartGuideResult.x.score
+							) {
 
-						if (item.boundingBox) {
-
-								item.boundingBox.position = position;
+								bestSmartGuideResult.x = smartGuideResult.x;
+							}
 						}
 
-						this.updateDragHandles(item);
+						if (smartGuideResult.y) {
+
+							if (
+								!bestSmartGuideResult.y ||
+								smartGuideResult.y.score < bestSmartGuideResult.y.score
+							) {
+
+								bestSmartGuideResult.y = smartGuideResult.y;
+							}
+						}
 					}
 				});
+
+				// Adjust items according to smart guides
+				angular.forEach(this.selectedItems, (item) => {
+
+					var position = item.position;
+
+					position = bestSmartGuideResult.x ? position.add(bestSmartGuideResult.x.getAdjustment()) : position;
+					position = bestSmartGuideResult.y ? position.add(bestSmartGuideResult.y.getAdjustment()) : position;
+
+					// Reposition the item and its bounding box
+					item.position = position;
+
+					if (item.boundingBox) {
+
+						item.boundingBox.position = position;
+					}
+
+					this.updateDragHandles(item);
+				});
+
+				// Draw smart guides
+				if (bestSmartGuideResult.x) { this.drawGuide(bestSmartGuideResult.x); }
+				if (bestSmartGuideResult.y) { this.drawGuide(bestSmartGuideResult.y); }
 			}
 
 			// If drag selecting
@@ -1073,39 +1121,24 @@ module Higherframe.Wireframe {
 		 * Smart guides
 		 */
 
-		updateSmartGuides(item) {
+		updateSmartGuides(item, sp?: Array<Drawing.SnapPoint>): { x: Drawing.SmartGuide, y: Drawing.SmartGuide } {
 
-			var snapAdjustment;
-
-			if (!item.smartGuides || !item.smartGuides.length) {
-
-				snapAdjustment = this.addSmartGuides(item);
-			}
-
-			else if (item.smartGuides.length) {
-
-				this.removeSmartGuides(item);
-				snapAdjustment = this.addSmartGuides(item);
-			}
-
-			return snapAdjustment;
+			this.removeSmartGuides();
+			return this.addSmartGuides(item, sp);
 		}
 
-		addSmartGuides(item) {
+		addSmartGuides(item, sp?: Array<Drawing.SnapPoint>): { x: Drawing.SmartGuide, y: Drawing.SmartGuide } {
 
 			var smartGuideX: Drawing.SmartGuide,
-				smartGuideY: Drawing.SmartGuide,
-				snapAdjustment = new paper.Point(0, 0);
+				smartGuideY: Drawing.SmartGuide;
 
 			var majorDeltaWeighting = 1,
 				minorDeltaWeighting = 0.1,
-				snapScoreThreshold = 200,
-				guideStrokeWidth = 1/paper.view.zoom,
-				guideCircleRadius = 3/paper.view.zoom;
+				snapScoreThreshold = 200;
 
 			item.smartGuides = [];
 
-			var snapPoints = item.getSnapPoints();
+			var snapPoints = sp ? sp : item.getSnapPoints();
 
 			// TODO: Whittle down to elements in the nearby area
 
@@ -1179,13 +1212,11 @@ module Higherframe.Wireframe {
 
 							if (smartGuide.axis == Drawing.SmartGuideAxis.X) {
 
-								snapAdjustment.x = xDelta;
 								smartGuideX = smartGuide;
 							}
 
 							else {
 
-								snapAdjustment.y = yDelta;
 								smartGuideY = smartGuide;
 							}
 						}
@@ -1193,41 +1224,41 @@ module Higherframe.Wireframe {
 				});
 			});
 
-			function drawGuide(smartGuide: Drawing.SmartGuide) {
-
-				var guide = new paper.Group();
-
-				var line = paper.Path.Line(
-					smartGuide.getAdjustedOriginPoint(),
-					smartGuide.relation.point
-				);
-				line.strokeColor = 'magenta';
-				line.strokeWidth = guideStrokeWidth;
-				guide.addChild(line);
-
-				item.smartGuides.push(guide);
-			}
-
-			this.layerGuides.activate();
-			if (smartGuideX) { drawGuide(smartGuideX); }
-			if (smartGuideY) { drawGuide(smartGuideY); }
-			this.layerDrawing.activate();
-
 			// Return the required adjustment on the item
-			return snapAdjustment;
+			return {
+				x: smartGuideX,
+				y: smartGuideY
+			};
 		}
 
-		removeSmartGuides(item) {
+		drawGuide(smartGuide: Drawing.SmartGuide) {
 
-			if (item.smartGuides) {
+			this.layerGuides.activate();
 
-				angular.forEach(item.smartGuides, function (guide) {
+			var guide = new paper.Group();
+			var guideStrokeWidth = 1/paper.view.zoom
 
-					guide.remove();
-				});
+			var line = paper.Path.Line(
+				smartGuide.getAdjustedOriginPoint(),
+				smartGuide.relation.point
+			);
+			line.strokeColor = 'magenta';
+			line.strokeWidth = guideStrokeWidth;
+			guide.addChild(line);
 
-				item.smartGuides = [];
-			}
+			this.layerDrawing.activate();
+
+			this.smartGuides.push(guide);
+		}
+
+		removeSmartGuides() {
+
+			angular.forEach(this.smartGuides, function (smartGuide) {
+
+				smartGuide.remove();
+			});
+
+			this.smartGuides.splice(0, this.smartGuides.length);
 		}
 
 

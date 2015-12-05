@@ -169,6 +169,10 @@ module Higherframe.Drawing.Component.Library {
 
       var rightCenter = new DragHandle(this.bounds.rightCenter);
       rightCenter.cursor = Cursors.ResizeHorizontal;
+      rightCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
+
+        return [new SnapPoint(position)];
+      };
       rightCenter.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.rightCenter.x = position.x;
@@ -181,6 +185,10 @@ module Higherframe.Drawing.Component.Library {
 
       var leftCenter = new DragHandle(this.bounds.leftCenter);
       leftCenter.cursor = Cursors.ResizeHorizontal;
+      leftCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
+
+        return [new SnapPoint(position)];
+      };
       leftCenter.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.leftCenter.x = position.x;

@@ -133,10 +133,10 @@ module Higherframe.Drawing.Component.Library {
 
       return [
         // Screen corners
-        new SnapPoint(this.position.add(new paper.Point({ x: -116, y: -232 }))),
-        new SnapPoint(this.position.add(new paper.Point({ x: 116, y: -232 }))),
-        new SnapPoint(this.position.add(new paper.Point({ x: 116, y: 232 }))),
-        new SnapPoint(this.position.add(new paper.Point({ x: -116, y: 232 }))),
+        new SnapPoint(this.position.add(new paper.Point({ x: -116, y: -232 })), 1.5),
+        new SnapPoint(this.position.add(new paper.Point({ x: 116, y: -232 })), 1.5),
+        new SnapPoint(this.position.add(new paper.Point({ x: 116, y: 232 })), 1.5),
+        new SnapPoint(this.position.add(new paper.Point({ x: -116, y: 232 })), 1.5),
 
         // Inner screen corners
         new SnapPoint(this.position.add(new paper.Point({ x: -110, y: -184 })), 0.8),

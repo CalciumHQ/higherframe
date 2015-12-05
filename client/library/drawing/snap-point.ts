@@ -8,7 +8,7 @@ module Higherframe.Drawing {
 
     _weight: number = 1;
     get weight(): number { return this._weight; }
-    set weight(value: number) { this._weight = Math.max(0, Math.min(1, value)); }
+    set weight(value: number) { this._weight = Math.max(0, value); }
 
     constructor(point: paper.Point, weight?: number, name?: string) {
 
