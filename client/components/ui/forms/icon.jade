@@ -7,8 +7,8 @@ div.ui-icon
         input.form-control(type="text", placeholder="Search...", focus-on="Ctrl.searchFocus", ng-model="Ctrl.search", ng-click="Ctrl.onDropdownSearchClick($event)")
         
       ul.ui-icon-dropdown-icons
-        li.ui-icon-dropdown-icon(ng-repeat="icon in Ctrl.icons | filter:Ctrl.search")
-          a(ng-click="Ctrl.onIconClick(icon)")
+        li.ui-icon-dropdown-icon(ng-repeat="icon in Ctrl.icons | filter:Ctrl.search track by icon.id")
+          a(ng-click="Ctrl.onIconClick(icon)", title="{{ icon.name }}")
             span.ui-icon-dropdown-icon-glyph {{ icon.unicode | unicode }}
         
   div.ui-icon-actions.b3
