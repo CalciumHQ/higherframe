@@ -94,8 +94,8 @@ module Higherframe.Drawing.Component.Library {
       super(model);
 
       var properties = <Higherframe.Data.IArrowProperties>(model.properties);
-      properties.start = properties.start || new paper.Point(properties.x - 100, properties.y);
-      properties.end = properties.end || new paper.Point(properties.x + 100, properties.y);
+      properties.start = properties.start || new paper.Point(-100, 0);
+      properties.end = properties.end || new paper.Point(100, 0);
       properties.direction = properties.direction || 'right';
       properties.type = properties.type || 'straight';
 
@@ -158,8 +158,9 @@ module Higherframe.Drawing.Component.Library {
       // Remove the old parts
       this.removeChildren();
 
-      var start = new paper.Point(properties.start);
-      var end = new paper.Point(properties.end);
+      var position = new paper.Point(properties.x, properties.y);
+      var start = position.add(new paper.Point(properties.start.x, properties.start.y));
+      var end = position.add(new paper.Point(properties.end.x, properties.end.y));
       var startSgm = new paper.Segment(start);
       var endSgm = new paper.Segment(end);
 
@@ -226,8 +227,13 @@ module Higherframe.Drawing.Component.Library {
 
     updateModel() {
 
-      this.model.properties.x = this.position.x;
-      this.model.properties.y = this.position.y;
+
+    }
+
+    onMove(event: IComponentMoveEvent) {
+
+      this.model.properties.x += event.delta.x;
+      this.model.properties.y += event.delta.y;
     }
 
 
@@ -238,10 +244,11 @@ module Higherframe.Drawing.Component.Library {
     getSnapPoints(): Array<SnapPoint> {
 
       var properties = <Higherframe.Data.IArrowProperties>this.model.properties;
+      var position = new paper.Point(properties.x, properties.y);
 
       return [
-        new SnapPoint(new paper.Point(properties.start)),
-        new SnapPoint(new paper.Point(properties.end))
+        new SnapPoint(position.add(new paper.Point(properties.start))),
+        new SnapPoint(position.add(new paper.Point(properties.end)))
       ];
     }
 
@@ -253,25 +260,28 @@ module Higherframe.Drawing.Component.Library {
     getDragHandles(): Array<IDragHandle> {
 
       var properties = <Higherframe.Data.IArrowProperties>this.model.properties;
+      var position = new paper.Point(properties.x, properties.y);
+      var startPoint = position.add(new paper.Point(properties.start.x, properties.start.y));
+      var endPoint = position.add(new paper.Point(properties.end.x, properties.end.y));
 
-      var start = new DragHandle(new paper.Point(properties.start));
+      var start = new DragHandle(new paper.Point(startPoint));
       start.cursor = Cursors.ResizeNESW;
-      start.onMove = (position: paper.Point): paper.Point => {
+      start.onMove = (pos: paper.Point): paper.Point => {
 
-        properties.start = position;
+        properties.start = pos.subtract(position);
         this.update();
 
-        return position;
+        return pos;
       };
 
-      var end = new DragHandle(new paper.Point(properties.end));
+      var end = new DragHandle(new paper.Point(endPoint));
       end.cursor = Cursors.ResizeNESW;
-      end.onMove = (position: paper.Point): paper.Point => {
+      end.onMove = (pos: paper.Point): paper.Point => {
 
-        properties.end = position;
+        properties.end = pos.subtract(position);
         this.update();
 
-        return position;
+        return pos;
       };
 
       return [start, end];

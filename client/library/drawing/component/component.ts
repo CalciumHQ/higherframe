@@ -47,6 +47,11 @@ module Higherframe.Drawing.Component {
     }
   }
 
+  export interface IComponentMoveEvent {
+    position: paper.Point,
+    delta: paper.Point
+  };
+
 
   /**
    * Defines the interface for a component which can be drawn on a
@@ -67,7 +72,6 @@ module Higherframe.Drawing.Component {
     showBounds: Boolean,
     model: Data.IDrawingModel,
 
-    // new(options: IOptions)
     deserialize?: () => void;
     serialize: () => Data.IDrawingModel;
     update: () => void;
@@ -76,6 +80,7 @@ module Higherframe.Drawing.Component {
     getTransformHandles: () => Array<IDragHandle>;
     getDragHandles: () => Array<IDragHandle>;
     setProperty: (string, any) => void;
+    onMove?: (IComponentMoveEvent) => void;
 
     // Drawing properties
     hovered: Boolean,

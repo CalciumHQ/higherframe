@@ -225,20 +225,24 @@ module Higherframe.Wireframe {
 
 		mouseUp(event) {
 
+			// If dragging a drag handle
+			if (this.selectedDragHandle) {}
+
 			// If dragging an item
-			if (this.selectedItems.length) {
+			else if (this.selectedItems.length) {
 
 				this.selectedItems.forEach((item) => {
 
-					this.moveItems([item], item.position);
+					this.moveItems([item], {
+						position: item.position,
+						delta: event.delta
+					});
+
 					this.removeSmartGuides();
-					item.mousePositionDelta = null;
+					item.mouseDownDelta = null;
 					item.update();
 				});
 			}
-
-			// If dragging a drag handle
-			else if (this.selectedDragHandle) {}
 
 			else {
 
@@ -744,11 +748,14 @@ module Higherframe.Wireframe {
 			}
 		}
 
-		moveItems(items: Array<Higherframe.Drawing.Component.IComponent>, position) {
+		moveItems(items: Array<Higherframe.Drawing.Component.IComponent>, event: Higherframe.Drawing.Component.IComponentMoveEvent) {
 
 			angular.forEach(items, (item) => {
 
-				item.position = position;
+				item.position = event.position;
+
+				if (item.onMove) { item.onMove(event); }
+
 				this.updateBoundingBox(item);
 				this.updateDragHandles(item);
 			});
