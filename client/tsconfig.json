@@ -68,6 +68,7 @@
         "./library/drawing/component/library/iphone-titlebar.ts",
         "./library/drawing/component/library/iphone.ts",
         "./library/drawing/component/library/label.ts",
+        "./library/drawing/component/library/mobile-titlebar.ts",
         "./library/drawing/component/library/rectangle.ts",
         "./library/drawing/component/library/select-input.ts",
         "./library/drawing/component/library/text-input.ts",
@@ -97,5 +98,8 @@
         "./typings/moment/moment-node.d.ts",
         "./typings/moment/moment.d.ts",
         "./typings/paper/paper.d.ts"
-    ]
+    ],
+    "atom": {
+        "rewriteTsconfig": true
+    }
 }

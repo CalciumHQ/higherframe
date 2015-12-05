@@ -23,13 +23,6 @@ module Higherframe.Drawing.Component.Library {
             model: 'icon',
             type: String,
             ui: 'icon',
-            options: _.map(Higherframe.UI.FontAwesome.getIcons(), (icon) => {
-
-              return {
-                label: icon.name,
-                value: icon.unicode
-              };
-            }),
             description: 'The icon to be displayed.'
           }
         ]
@@ -61,8 +54,8 @@ module Higherframe.Drawing.Component.Library {
       super(model);
 
       var properties = this.getProperties();
-      properties.width = properties.width || 64;
-      properties.height = properties.height || 64;
+      properties.width = properties.width || 32;
+      properties.height = properties.height || 32;
       properties.fontSize = properties.fontSize || 32;
 
       // Perform the initial draw
@@ -101,8 +94,8 @@ module Higherframe.Drawing.Component.Library {
       // Remove the old parts
       this.removeChildren();
 
-      var topLeft = new paper.Point(properties.x, properties.y);
-      var bottomRight = new paper.Point(properties.x + properties.width, properties.y + properties.height);
+      var topLeft = new paper.Point(properties.x - properties.width / 2, properties.y - properties.height / 2);
+      var bottomRight = new paper.Point(properties.x + properties.width / 2, properties.y + properties.height / 2);
       var bounds = new paper.Rectangle(topLeft, bottomRight);
 
       // Draw the placeholder or the icon
@@ -133,7 +126,7 @@ module Higherframe.Drawing.Component.Library {
 
         // Draw the text
         this.icon = new paper.PointText({
-          point: new paper.Point(properties.x, properties.y),
+          point: new paper.Point(properties.x, properties.y + properties.fontSize / 3),
           content: String.fromCharCode(parseInt(properties.icon, 16)),
           fillColor: foreColor,
           fontSize: properties.fontSize,
@@ -152,8 +145,8 @@ module Higherframe.Drawing.Component.Library {
     updateModel() {
 
       var properties = this.getProperties();
-      properties.x = this.icon ? this.icon.point.x : this.bounds.topLeft.x;
-      properties.y = this.icon ? this.icon.point.y : this.bounds.topLeft.y;
+      properties.x = this.icon ? this.icon.point.x : this.bounds.center.x;
+      properties.y = this.icon ? this.icon.point.y - properties.fontSize / 3 : this.bounds.center.y;
       properties.width = this.bounds.width;
       properties.height = this.bounds.height;
     }

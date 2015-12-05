@@ -35,6 +35,14 @@ module Higherframe.Data {
     time: String
   }
 
+  export interface IMobileTitlebarProperties extends IComponentProperties {
+    width: number,
+    height: number
+    title: string,
+    leftIcon: string,
+    rightIcon: string
+  }
+
   export interface ITextInputProperties extends IComponentProperties {
     width: number,
     placeholder: String,

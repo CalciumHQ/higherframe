@@ -16,6 +16,8 @@ module Higherframe.UI {
     icon: IFontAwesomeIcon;
     icons: Array<IFontAwesomeIcon> = Higherframe.UI.FontAwesome.getIcons();
     open: Boolean = false;
+    search: String = '';
+    searchFocus: Boolean = false;
 
     constructor(
       private $scope: ImageScope,
@@ -79,6 +81,22 @@ module Higherframe.UI {
       // Call the provided change handler
       var attrHandler = this.$parse(this.attrs['uiIconChange']);
       attrHandler(this.$scope, { icon: this.ngModel.$modelValue });
+    }
+
+    onDropdownToggle(open: Boolean) {
+
+      if (open) {
+
+        this.searchFocus = true;
+      }
+
+      this.search = '';
+    }
+
+    onDropdownSearchClick($event: ng.IAngularEvent) {
+
+      $event.preventDefault();
+      $event.stopPropagation();
     }
   }
 
