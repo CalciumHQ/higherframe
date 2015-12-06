@@ -1,5 +1,5 @@
 $navbarHeight: 7 * $vu;
-$actionbarHeight: 4 * $vu;
+$actionbarHeight: 28px;
 $logoHeight: 3 * $vu;
 
 #navbar,
@@ -140,6 +140,11 @@ $logoHeight: 3 * $vu;
 
 	#identity {
 		white-space: nowrap;
+
+		.dropdown-menu {
+			left: auto;
+			right: 0;
+		}
 	}
 
 	.navCollection {
@@ -149,76 +154,27 @@ $logoHeight: 3 * $vu;
 		.navCollection + .navCollection {
 			margin-left: 20px;
 		}
-
-		.dropdown {
-			display: none;
-		}
 	}
 
 	.navItem {
 		display: inline-block;
 		vertical-align: top;
+		cursor: pointer;
 
-		.text,
-		a {
+		& > .text,
+		& > a {
 			display: inline-block;
 			line-height: 14px;
 			vertical-align: middle;
 		}
 
-		a {
+		& > a {
 			text-decoration: none;
 			font-weight: 600;
 
 			.dropdown-chevron {
 				height: 7px;
 				margin-left: 8px;
-			}
-		}
-
-		.dropdown {
-			display: none;
-			position: absolute;
-			top: $navbarHeight;
-			padding-top: 10px;
-
-			.dropdown-items {
-				position: relative;
-				box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-		    border-radius: 3px;
-				background: white;
-
-				&:before {
-					content: '';
-					position: absolute;
-					left: 50%;
-					bottom: 100%;
-					margin-bottom: -6px;
-					margin-left: -6px;
-					width: 12px;
-					height: 12px;
-					background: white;
-					@include transform(rotateZ(45deg));
-					box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-				}
-
-				li {
-					position: relative;
-					z-index: 1;
-					padding: 15px;
-					line-height: normal;
-					background: white;
-
-					&:first-child {
-						border-top-left-radius: 3px;
-						border-top-right-radius: 3px;
-					}
-
-					&:last-child {
-						border-bottom-left-radius: 3px;
-						border-bottom-right-radius: 3px;
-					}
-				}
 			}
 		}
 
@@ -230,16 +186,19 @@ $logoHeight: 3 * $vu;
 
 		&.hasImage {
 			position: relative;
-			padding-left: 50px;
 
-			.ui-placeholder {
-				position: absolute;
-				left: 0;
-				top: 50%;
-				width: 5 * $vu;
-				height: 5 * $vu;
-				margin-top: -2.5 * $vu;
-				border-radius: 2.5 * $vu;
+			& > a {
+				padding-left: 5 * $vu;
+
+				.ui-placeholder {
+					position: absolute;
+					left: 0;
+					top: 50%;
+					width: 5 * $vu;
+					height: 5 * $vu;
+					margin-top: -2.5 * $vu;
+					border-radius: 2.5 * $vu;
+				}
 			}
 		}
 	}
@@ -254,10 +213,11 @@ $logoHeight: 3 * $vu;
 	height: $actionbarHeight;
 
 	.action {
-		padding: $vu 0;
+		display: inline-block;
+		padding-top: ($actionbarHeight - $b2-baseline-height-true) / 2;
 		cursor: pointer;
 		text-decoration: none;
-		margin: 0;
+		margin-top: -$b2-artifact;
 
 		& + .action {
 			margin-left: 30px;
@@ -268,80 +228,22 @@ $logoHeight: 3 * $vu;
 		$actionMenuBorderRadius: 5px;
 		position: relative;
 
-		&.active {
+		&.open {
 			color: white !important;
 		}
 
-		.action-menu-items {
-			display: none;
-			position: absolute;
-			top: 100%;
-			left: -$vu;
-			z-index: 100;
-			min-width: 180px;
-			margin-top: 9px;
-			border: 1px solid $grey3;
-			border-radius: $actionMenuBorderRadius;
+		.uib-dropdown-menu {
+			& > li {
+				& > a {
+					@include display-flex;
 
-			&:before {
-				content: '';
-				position: absolute;
-				left: 2*$vu;
-				bottom: 100%;
-				margin-bottom: -5px;
-				margin-left: -5px;
-				width: 10px;
-				height: 10px;
-				z-index: 1;
-				border-top: 1px solid $grey3;
-				border-left: 1px solid $grey3;
-				background: white;
-				@include transform(rotateZ(45deg));
-			}
-
-			.action-menu-item {
-				position: relative;
-				@include display-flex;
-				padding: 10px $vu;
-				z-index: 2;
-				text-decoration: none;
-				color: $grey-1;
-				background: white;
-
-				&:first-child {
-					border-top-left-radius: $actionMenuBorderRadius - 1;
-					border-top-right-radius: $actionMenuBorderRadius - 1;
-				}
-
-				&:last-child {
-					border-bottom-left-radius: $actionMenuBorderRadius - 1;
-					border-bottom-right-radius: $actionMenuBorderRadius - 1;
-				}
-
-				&:hover {
-					background: $blue;
-
-					.action-menu-item-label {
-						color: white;
+					& > :first-child {
+						@include flex-grow(1);
 					}
 
-					.action-menu-item-shortcut {
-						color: $blue4;
+					& > :nth-child(2) {
+						margin-left: 20px;
 					}
-				}
-
-				&.divider {
-					border-top: 1px solid $grey3;
-				}
-
-				.action-menu-item-label {
-					@include flex-grow(1);
-					white-space: nowrap;
-				}
-
-				.action-menu-item-shortcut {
-					margin-left: 40px;
-					color: $grey2;
 				}
 			}
 		}

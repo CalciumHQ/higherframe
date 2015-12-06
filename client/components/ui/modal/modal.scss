@@ -24,34 +24,28 @@ $modal-padding: 25px;
 
   .ui-modal-header {
     @include box-sizing(border-box);
-    height: 12*$vu;
-    padding-top: 2*$vu;
-    padding-left: $modal-padding;
-    padding-right: $modal-padding;
+    padding: (2*$vu) $modal-padding;
     background: #f8f8f8;
-    color: $grey-2;
   }
 
   .ui-modal-body {
     @include box-sizing(border-box);
     @include flex-grow(1);
-    padding-top: 4*$vu;
-    padding-bottom: 4*$vu;
-    padding-left: $modal-padding;
-    padding-right: $modal-padding;
+    padding: 4*$vu $modal-padding;
     background: white;
   }
 
   .ui-modal-footer {
     @include box-sizing(border-box);
-    height: 12*$vu;
-    padding-top: 3*$vu;
-    padding-left: $modal-padding;
-    padding-right: $modal-padding;
+    padding: 2*$vu $modal-padding;
     background: #f8f8f8;
 
     .ui-modal-buttons {
       text-align: right;
+
+      .btn {
+        margin-left: 10px;
+      }
     }
   }
 }

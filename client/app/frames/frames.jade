@@ -1,27 +1,34 @@
 div#navbar.row.blue.border-light(ng-include='"components/navbar/navbar.html"')
 div#actionbar.row.blue.light
-	span.action.action-menu.b2.roboto.semibold(ui-action-menu) File
-		div.action-menu-items
-			a.action-menu-item
-				span.action-menu-item-label New wireframe
-				span.action-menu-item-shortcut
-					span(ng-bind-html="'ctrl' | symbol")
-					| N
-				
-			a.action-menu-item 
-				span.action-menu-item-label New organisation
-				span.action-menu-item-shortcut
-					span(ng-bind-html="'shift' | symbol")
-					span(ng-bind-html="'ctrl' | symbol")
-					| N
+	div.action.action-menu(uib-dropdown) 
+		span.b2(uib-dropdown-toggle) File
 		
-	span.action.action-menu.b2.roboto.semibold(ui-action-menu) Settings
-		div.action-menu-items
-			a.action-menu-item 
-				span.action-menu-item-label User settings
-				span.action-menu-item-shortcut
-					span(ng-bind-html="'ctrl' | symbol")
-					| U
+		ul.uib-dropdown-menu
+			li
+				a
+					span New wireframe
+					span.pull-right.text-muted
+						span(ng-bind-html="'ctrl' | symbol")
+						| N
+				
+			li
+				a
+					span New organisation
+					span.pull-right.text-muted
+						span(ng-bind-html="'shift' | symbol")
+						span(ng-bind-html="'ctrl' | symbol")
+						| N
+		
+	div.action.action-menu(uib-dropdown) 
+		span.b2(uib-dropdown-toggle) Settings
+		
+		ul.uib-dropdown-menu
+			li
+				a
+					span User settings
+					span.pull-right.text-muted
+						span(ng-bind-html="'ctrl' | symbol")
+						| U
 		
 div#frames
 	div.group(ng-repeat="group in FramesCtrl.groups")

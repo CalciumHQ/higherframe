@@ -100,6 +100,8 @@ mark,
 .text-uppercase      { text-transform: uppercase; }
 .text-capitalize     { text-transform: capitalize; }
 
+*/
+
 // Contextual colors
 .text-muted {
   color: $text-muted;
@@ -134,6 +136,7 @@ mark,
 @include bg-variant('.bg-danger', $state-danger-bg);
 
 
+/*
 // Page header
 // -------------------------
 
