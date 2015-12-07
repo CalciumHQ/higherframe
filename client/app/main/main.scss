@@ -1,9 +1,61 @@
 $unitPadding: 80px;
 
-#welcome {
-  .title + .button-flat {
-    display: inline-block;
-    margin-top: 32px;
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in {
+  animation-name: fade-in;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-in;
+  animation-fill-mode: both;
+  animation-iteration-count: 1;
+}
+
+.fade-in.one { animation-delay: 0.25s; }
+.fade-in.two { animation-delay: 0.75s; }
+
+#beta-holding {
+  .banner {
+    color: white;
+    background-image: url('/assets/images/forest.jpg');
+    background-size: cover;
+
+    #banner-logo {
+      width: 298px;
+    }
+  }
+}
+
+.page {
+  .banner {
+    @include display-flex;
+    @include align-items(center);
+    @include justify-content(center);
+    height: 100vh;
+    margin-bottom: 0;
+    -webkit-font-smoothing: antialiased;
+
+    .content {
+      @include box-sizing(initial);
+      max-width: 1000px;
+      padding-right: 20%;
+    }
+
+    .h2 {
+      margin-top: 26px;
+      font-weight: 700;
+    }
+
+    .h3 {
+      margin-top: 124px;
+      font-weight: 500;
+    }
+
+    a {
+      color: #ffc000;
+    }
   }
 }
 
@@ -22,94 +74,5 @@ $unitPadding: 80px;
 
   .unit:first-child {
     padding-top: $unitPadding + 56px;
-  }
-}
-
-.page.marketing {
-  .unit {
-    padding: $unitPadding;
-
-    &.image {
-      position: relative;
-      background-position: center;
-      background-size: cover;
-      color: white;
-
-      &:before {
-        content: '';
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        z-index: 1;
-        background: rgba(0,0,0,0.25);
-      }
-
-      .unit-content {
-        position: relative;
-        z-index: 2;
-      }
-    }
-
-    &.blue {
-      background: $blue;
-      color: white;
-    }
-
-    &.light {
-      background: white;
-    }
-
-    &.shade {
-      background: #edeff1;
-    }
-
-    &.center {
-      text-align: center;
-    }
-
-    .unit-content {
-      @include container;
-
-      &.unit-points {
-        .unit-point {
-          @include span(4);
-          margin-left: span(1) + gutter();
-          text-align: center;
-
-          &:first-child {
-            margin-left: span(1) + gutter();
-          }
-
-          .image {
-            display: block;
-            width: 100px;
-            height: 100px;
-            margin: 0 auto 24px;
-            border: none;
-            background: #f0f0f0;
-          }
-
-          .subhead {
-            color: $blue;
-          }
-        }
-      }
-    }
-  }
-}
-
-// Forms
-.button-flat {
-  font-weight: 600;
-  text-decoration: none;
-  color: $yellow;
-}
-
-// Tooltips
-._720kb-tooltip {
-  ._720kb-tooltip-title {
-      @include b3;
   }
 }

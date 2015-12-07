@@ -1,38 +1,9 @@
-div#navbar.row.transparent.light(ng-include='"components/navbar/navbar.html"')
-  
-div#welcome.page.marketing.underlay-navbar
-  div.unit.image.center(style="background-image: url('/assets/images/home-banner-2.jpg')")
-    div.unit-content
-      h2.h1.strong Seamless team wireframing.
-      p.h3 Higherframe lets you collaborate on wireframes in real-time,<br />so you can prototype faster and more efficiently.
-      div.h3(ng-show="!isLoggedIn()") 
-        a.button-flat Try now for free
-        
-      div.h3(ng-show="isLoggedIn()")
-        a.button-flat(ui-sref="frames") View your dashboard
-      
-  div.unit.light
-    div.unit-content.unit-points
-      div.unit-point
-        div.image
-        h4.h3.subhead.semibold Collaborate.
-        p.b1 Work with your team members on the same prototype in real-time. Communicate by chat and add annotations for review.
-        
-      div.unit-point
-        div.image
-        h4.h3.subhead.semibold Integrations.
-        p.b1 Automatically save exported wireframes to Google Drive or Dropbox. Notify collaborators of chat messages and wireframe activity in Slack.
-        
-      div.unit-point
-        div.image
-        h4.h3.subhead.semibold Exports.
-        p.b1 Export as raster JPEG/PNG, or scalable SVG. Create print-ready PDF documents. Automatically export to your cloud storage service.
-  
-  div.unit.shade
-    div.unit-content
-      p.b1 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    
-
-  div.unit.light
-    div.unit-content
-      p.b1 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+div#beta-holding.page.marketing
+  div.banner
+    div.content
+      img#banner-logo.fade-in.one(src="/assets/images/logo-green-yellow.svg")
+      p.h2.fade-in.one Higherframe lets you collaborate on wireframes in real-time,<br />so you can prototype faster and more efficiently.
+      p.h3.fade-in.two
+        | Right now we’re in our early testing phase. We can 
+        a(href="https://twitter.com/higherframe") keep you updated
+        |  with our progress.
