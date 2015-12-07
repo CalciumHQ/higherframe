@@ -173,7 +173,7 @@ module Higherframe.Drawing.Component.Library {
      * Calculate the transform handles for the component
      */
 
-    getTransformHandles(): Array<IDragHandle> {
+    getTransformHandles(theme: Higherframe.UI.ITheme): Array<IDragHandle> {
 
       return [];
     };
@@ -183,7 +183,7 @@ module Higherframe.Drawing.Component.Library {
      * Calculate the drag handles for the component
      */
 
-    getDragHandles(): Array<IDragHandle> {
+    getDragHandles(theme: Higherframe.UI.ITheme): Array<IDragHandle> {
 
       return [];
     }

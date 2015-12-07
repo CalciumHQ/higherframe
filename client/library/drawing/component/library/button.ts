@@ -201,9 +201,9 @@ module Higherframe.Drawing.Component.Library {
      * Calculate the transform handles for the component
      */
 
-    getTransformHandles(): Array<IDragHandle> {
+    getTransformHandles(theme: Higherframe.UI.ITheme): Array<IDragHandle> {
 
-      var topLeft = new DragHandle(this.bounds.topLeft);
+      var topLeft = new DragHandle(this.bounds.topLeft, theme);
       topLeft.cursor = Cursors.ResizeNWSE;
       topLeft.onMove = (position: paper.Point): paper.Point => {
 
@@ -211,7 +211,7 @@ module Higherframe.Drawing.Component.Library {
         return this.bounds.topLeft;
       };
 
-      var topCenter = new DragHandle(this.bounds.topCenter);
+      var topCenter = new DragHandle(this.bounds.topCenter, theme);
       topCenter.cursor = Cursors.ResizeVertical;
       topCenter.onMove = (position: paper.Point): paper.Point => {
 
@@ -219,7 +219,7 @@ module Higherframe.Drawing.Component.Library {
         return this.bounds.topCenter;
       };
 
-      var topRight = new DragHandle(this.bounds.topRight);
+      var topRight = new DragHandle(this.bounds.topRight, theme);
       topRight.cursor = Cursors.ResizeNESW;
       topRight.onMove = (position: paper.Point): paper.Point => {
 
@@ -227,7 +227,7 @@ module Higherframe.Drawing.Component.Library {
         return this.bounds.topRight;
       };
 
-      var rightCenter = new DragHandle(this.bounds.rightCenter);
+      var rightCenter = new DragHandle(this.bounds.rightCenter, theme);
       rightCenter.cursor = Cursors.ResizeHorizontal;
       rightCenter.onMove = (position: paper.Point): paper.Point => {
 
@@ -235,7 +235,7 @@ module Higherframe.Drawing.Component.Library {
         return this.bounds.rightCenter;
       };
 
-      var bottomRight = new DragHandle(this.bounds.bottomRight);
+      var bottomRight = new DragHandle(this.bounds.bottomRight, theme);
       bottomRight.cursor = Cursors.ResizeNWSE;
       bottomRight.onMove = (position: paper.Point): paper.Point => {
 
@@ -243,7 +243,7 @@ module Higherframe.Drawing.Component.Library {
         return this.bounds.bottomRight;
       };
 
-      var bottomCenter = new DragHandle(this.bounds.bottomCenter);
+      var bottomCenter = new DragHandle(this.bounds.bottomCenter, theme);
       bottomCenter.cursor = Cursors.ResizeVertical;
       bottomCenter.onMove = (position: paper.Point): paper.Point => {
 
@@ -251,7 +251,7 @@ module Higherframe.Drawing.Component.Library {
         return this.bounds.bottomCenter;
       };
 
-      var bottomLeft = new DragHandle(this.bounds.bottomLeft);
+      var bottomLeft = new DragHandle(this.bounds.bottomLeft, theme);
       bottomLeft.cursor = Cursors.ResizeNESW;
       bottomLeft.onMove = (position: paper.Point): paper.Point => {
 
@@ -259,7 +259,7 @@ module Higherframe.Drawing.Component.Library {
         return this.bounds.bottomLeft;
       };
 
-      var leftCenter = new DragHandle(this.bounds.leftCenter);
+      var leftCenter = new DragHandle(this.bounds.leftCenter, theme);
       leftCenter.cursor = Cursors.ResizeHorizontal;
       leftCenter.onMove = (position: paper.Point): paper.Point => {
 
@@ -284,7 +284,7 @@ module Higherframe.Drawing.Component.Library {
      * Calculate the drag handles for the component
      */
 
-    getDragHandles(): Array<IDragHandle> {
+    getDragHandles(theme: Higherframe.UI.ITheme): Array<IDragHandle> {
 
       var properties = <Higherframe.Data.IRectangleProperties>this.model.properties;
 return [];

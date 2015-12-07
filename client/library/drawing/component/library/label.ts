@@ -153,7 +153,7 @@ module Higherframe.Drawing.Component.Library {
      * Calculate the drag points for the component
      */
 
-    getDragHandles(): Array<IDragHandle> {
+    getDragHandles(theme: Higherframe.UI.ITheme): Array<IDragHandle> {
 
       return [];
     }

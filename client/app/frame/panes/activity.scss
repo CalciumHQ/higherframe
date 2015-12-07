@@ -130,25 +130,7 @@ $activityAvatarSize: 25px;
   }
 
   #activity-form {
-    @include display-flex;
     padding-top: 10px;
     padding-bottom: 10px;
-
-    .ui-pane {
-      @include display-flex;
-    }
-
-    input {
-      width: 100%;
-    }
-
-    .ui-button {
-      height: 5*$vu;
-      padding-left: 15px;
-      padding-right: 15px;
-      padding-top: 0.5*$vu;
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-    }
   }
 }

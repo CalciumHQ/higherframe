@@ -1,4 +1,4 @@
-$leftSidebarWidth: 270px;
+$leftSidebarWidth: 280px;
 $leftSidebarPaddingVertical: 25px;
 $leftSidebarPaddingHorizontal: 16px;
 
@@ -8,77 +8,122 @@ $canvasMargin: 15px;
 
 $gunmetal: #7c8285;
 
-$sidebarDefaultWidth: 285px;
-$sidebarPadding: 10px;
+$sidebarDefaultWidth: 280px;
+$sidebarPadding: 15px;
 $sidebarBorderColor: #dedede;
 
 #frame {
-	$sidebarColumns: 4;
-	$sidebarPadding: 10px;
-
 	@include display-flex;
-	@include flex-direction(column);
+	@include flex-direction(row);
 	@include flex-grow(1);
+	height: 100%;
 	z-index: 1;
+	background-size: auto 100%;
+	background: url('/assets/images/frame-sidebar-bg.jpg') left top no-repeat;
 	-webkit-font-smoothing: antialiased;
 
-	#frame-wrapper {
+	#frame-sidebar-mode {
+		@include display-flex;
+		@include flex-direction(column);
 		position: relative;
-		@include flex-grow(1);
+		height: 100%;
+		width: 50px;
+		background: rgba(#4a4a4a, 0.64) url('/assets/images/frame-sidebar-bg.jpg') left top no-repeat;
+		background-blend-mode: multiply;
+		z-index: 3;
 
-		#frame-layout {
-			@include display-flex;
+		li {
+			text-align: center;
+
+			&:hover {
+				background: rgba(#202222, 0.8);
+				cursor: pointer;
+			}
+
+			&:active {
+				background: rgba(#101212, 1.0);
+			}
+
+			&.active {
+				@include background-image(linear-gradient(74deg, rgb(164,214,78) 0%, rgb(255,192,0) 100%));
+			}
+
+			&,
+			a {
+				width: 100%;
+				height: 50px;
+				color: #e4e4e4;
+
+				&.active {
+					color: white;
+				}
+			}
+
+			a {
+				display: block;
+				text-decoration: none;
+			}
+
+			.icon {
+				line-height: 50px;
+				font-size: 24px;
+			}
+		}
+	}
+
+	#frame-sidebar {
+		position: absolute;
+		height: 100%;
+		width: $sidebarDefaultWidth;
+		@include transition(all 0.3s ease-in-out);
+		border-right: 1px solid #d9d9d9;
+		background-image: linear-gradient(rgba(#ffffff, 0.85), rgba(#ffffff, 0.85)), url('/assets/images/frame-sidebar-bg.jpg');
+		background-position: left top;
+		background-repeat: no-repeat;
+		background-attachment: local, fixed;
+		background-blend-mode: screen;
+		z-index: 2;
+
+		&.frame-sidebar-collapse {
+			@include transform(translateX(-$sidebarDefaultWidth));
+		}
+
+		.frame-sidebar-pane {
 			position: absolute;
 			left: 0;
 			top: 0;
 			width: 100%;
 			height: 100%;
+			@include display-flex;
+			@include flex-direction(column);
+			@include box-sizing(border-box);
+			@include flex-shrink(0);
 
-			& > * {
-				& + * {
-					border-left: 1px solid $sidebarBorderColor;
+			&.ng-hide-add {
+				@include transition(opacity 0.1s);
+				opacity: 1;
+
+				&.ng-hide-add-active {
+					opacity: 0;
+				}
+			}
+
+			&.ng-hide-remove {
+				@include transition(opacity 0.1s);
+				opacity: 0;
+
+				&.ng-hide-remove-active {
+					opacity: 1;
 				}
 			}
 		}
-	}
 
-	#toolbox {
-		@include flex-shrink(0);
-		height: 100px;
-		border-top: 1px solid $sidebarBorderColor;
-		background: white;
-	}
-
-	#canvas-area {
-		position: relative;
-		@include flex-grow(1);
-		height: 100%;
-
-		#canvas {
-			margin-top: -1px;
-
-			&,
-			.inner {
-				width: 100%;
-				height: 100%;
-			}
-		}
-	}
-
-	.ui-sidebar {
-		@include display-flex;
-		@include flex-direction(column);
-		@include box-sizing(border-box);
-		@include flex-shrink(0);
-		width: $sidebarDefaultWidth;
-		color: rgba($gunmetal, 0.64);
-
-		.ui-sidebar-content {
+		.frame-sidebar-content {
 			padding-left: $sidebarPadding;
 			padding-right: $sidebarPadding;
 		}
 
-		.ui-sidebar-toolbar {
+		.frame-sidebar-toolbar {
 			@include box-sizing(border-box);
 			min-height: 34px;
 			padding: $sidebarPadding;
@@ -94,50 +139,33 @@ $sidebarBorderColor: #dedede;
 		}
 	}
 
-	#quick-add {
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		z-index: 4;
-		background: $chromeBackground;
-		border-bottom: 1px solid #e4e6e9;
-		@include transition(left 200ms);
+	#frame-wrapper {
+		position: relative;
+		@include flex-grow(1);
+		z-index: 1;
 
-		#quick-add-search {
-			@include display-flex();
-			padding: 0 $canvasMargin;
-
-			.search-icon {
-				position: relative;
-				top: $canvasMargin + 1px;
-				width: 20px;
-				height: 20px;
-				margin-right: 10px;
-			}
-
-			input {
-				width: 100%;
-				padding: $canvasMargin 0;
-				border: none;
-				background: none;
-				font-size: 20px;
-
-				&:focus {
-					outline: none;
-				}
-			}
+		#frame-layout {
+			@include display-flex;
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
 		}
+	}
 
-		#quick-add-results {
-			border-top: 1px solid lighten(#dce1e0, 8);
+	#canvas-area {
+		position: relative;
+		@include flex-grow(1);
+		height: 100%;
 
-			.component {
-				padding: $canvasMargin;
+		#canvas {
+			margin-top: -1px;
 
-				&.active {
-					background: #eee;
-				}
+			&,
+			.inner {
+				width: 100%;
+				height: 100%;
 			}
 		}
 	}

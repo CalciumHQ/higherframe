@@ -56,6 +56,8 @@ module Higherframe.Wireframe {
 
 		smartGuides: Array<paper.Item> = [];
 
+		theme: Higherframe.UI.ITheme = new Higherframe.UI.DefaultTheme();
+
 
 		constructor(private $window: Higherframe.IWindow) {
 
@@ -1050,13 +1052,13 @@ module Higherframe.Wireframe {
 
 					var lineWidth = 1/paper.view.zoom;
 					var box = paper.Path.Rectangle(item.bounds);
-					box.strokeColor = 'magenta';
+					box.strokeColor = this.theme.BoundsDefault;
 					box.strokeWidth = lineWidth;
 					item.boundingBox.addChild(box);
 				}
 
 				// Add the transform handles
-				_.forEach(item.getTransformHandles(), (transformHandle) => {
+				_.forEach(item.getTransformHandles(this.theme), (transformHandle) => {
 
 					item.boundingBox.addChild(transformHandle);
 				});
@@ -1109,7 +1111,7 @@ module Higherframe.Wireframe {
 
 			item.dragHandles = new paper.Group();
 
-			angular.forEach(item.getDragHandles(), (dh) => {
+			angular.forEach(item.getDragHandles(this.theme), (dh) => {
 
 				item.dragHandles.addChild(dh);
 			});
@@ -1249,7 +1251,7 @@ module Higherframe.Wireframe {
 				smartGuide.getAdjustedOriginPoint(),
 				smartGuide.relation.point
 			);
-			line.strokeColor = 'magenta';
+			line.strokeColor = this.theme.GuideDefault;
 			line.strokeWidth = guideStrokeWidth;
 			guide.addChild(line);
 

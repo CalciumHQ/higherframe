@@ -11,7 +11,7 @@ module Higherframe.Drawing.Component {
 
   export class DragHandle extends paper.Group implements IDragHandle {
 
-    constructor(position: paper.Point) {
+    constructor(position: paper.Point, theme: Higherframe.UI.ITheme) {
 
       super();
 
@@ -22,7 +22,7 @@ module Higherframe.Drawing.Component {
         new paper.Point(position.x + handleSize, position.y + handleSize)
       );
 
-      handle.strokeColor = '#7ae';
+      handle.strokeColor = theme.BoundsDefault;
       handle.strokeWidth = lineWidth;
       handle.fillColor = 'white';
 
@@ -77,8 +77,8 @@ module Higherframe.Drawing.Component {
     update: () => void;
     updateModel: () => void;
     getSnapPoints: () => Array<SnapPoint>;
-    getTransformHandles: () => Array<IDragHandle>;
-    getDragHandles: () => Array<IDragHandle>;
+    getTransformHandles: (theme: Higherframe.UI.ITheme) => Array<IDragHandle>;
+    getDragHandles: (theme: Higherframe.UI.ITheme) => Array<IDragHandle>;
     setProperty: (string, any) => void;
     onMove?: (IComponentMoveEvent) => void;
 
@@ -170,7 +170,7 @@ module Higherframe.Drawing.Component {
     update() {};
     updateModel() {};
     getSnapPoints() { return []; }
-    getDragHandles() { return []; }
-    getTransformHandles() { return []; }
+    getDragHandles(theme: Higherframe.UI.ITheme) { return []; }
+    getTransformHandles(theme: Higherframe.UI.ITheme) { return []; }
   }
 };

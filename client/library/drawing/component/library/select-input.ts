@@ -147,9 +147,9 @@ module Higherframe.Drawing.Component.Library {
      * Calculate the transform handles for the component
      */
 
-    getTransformHandles(): Array<IDragHandle> {
+    getTransformHandles(theme: Higherframe.UI.ITheme): Array<IDragHandle> {
 
-      var rightCenter = new DragHandle(this.bounds.rightCenter);
+      var rightCenter = new DragHandle(this.bounds.rightCenter, theme);
       rightCenter.cursor = Cursors.ResizeHorizontal;
       rightCenter.onMove = (position: paper.Point): paper.Point => {
 
@@ -161,7 +161,7 @@ module Higherframe.Drawing.Component.Library {
         return this.bounds.rightCenter;
       };
 
-      var leftCenter = new DragHandle(this.bounds.leftCenter);
+      var leftCenter = new DragHandle(this.bounds.leftCenter, theme);
       leftCenter.cursor = Cursors.ResizeHorizontal;
       leftCenter.onMove = (position: paper.Point): paper.Point => {
 
@@ -199,7 +199,7 @@ module Higherframe.Drawing.Component.Library {
      * Calculate the drag points for the component
      */
 
-    getDragHandles(): Array<IDragHandle> {
+    getDragHandles(theme: Higherframe.UI.ITheme): Array<IDragHandle> {
 
       return [];
     }
