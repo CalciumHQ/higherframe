@@ -25,6 +25,10 @@ div.fullscreen-wrapper
 			li(title="Settings", ng-class="{ active: FrameCtrl.sidebarMode == 'settings' }", ng-click="FrameCtrl.onSidebarModeClick('settings')")
 				span.icon.font-awesome 
 				span.sr-only Settings
+				
+			li(title="Export", ng-class="{ active: FrameCtrl.sidebarMode == 'download' }", ng-click="FrameCtrl.onSidebarModeClick('download')")
+				span.icon.font-awesome 
+				span.sr-only Download
 			
 		#frame-sidebar(ng-class="{ 'frame-sidebar-collapse': !FrameCtrl.sidebarMode }")
 			#toolbox.frame-sidebar-pane(ng-controller="ToolboxController as ToolboxController", ng-show="FrameCtrl.sidebarMode == 'toolbox'")
@@ -97,17 +101,45 @@ div.fullscreen-wrapper
 						span.input-group-btn
 							button.btn.btn-xs.btn-success(type="submit")
 								span.h3.strong.loose.uppercase +
+								
+			#download-pane.frame-sidebar-pane(ng-show="FrameCtrl.sidebarMode == 'download'")
+				.frame-sidebar-content
+					div#download-dl
+						button.btn.btn-small.btn-default.btn-block Download SVG
+						button.btn.btn-small.btn-default.btn-block Download PNG
+						button.btn.btn-small.btn-default.btn-block Download PDF
+					
+					div#download-print
+						button.btn.btn-small.btn-success.btn-block 
+							span.font-awesome &#xf02f; 
+							| Print
 									
-		#frame-wrapper
-			#frame-layout
-				#canvas-area
-					ui-tray-region(position="left")
-					ui-tray-region(position="right")
+		#canvas-wrapper
+			#canvas-toolbar(ng-class="{ sidebarOpen: FrameCtrl.sidebarMode }")
+				div.btn-group
+					button.btn.btn-default(uib-tooltip-html="'Copy (' + ('ctrl' | symbol) + 'C)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="500")
+						span.font-awesome &#xf0c5;
 						
-					canvas#canvas(wireframe, data="FrameCtrl.wireframe", resize, keepalive="true", jqyoui-droppable)
+					button.btn.btn-default(uib-tooltip-html="'Cut (' + ('ctrl' | symbol) + 'X)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="500")
+						span.font-awesome &#xf0c4;
 						
-					// Media library
-					img(ng-repeat="media in FrameCtrl.media", ng-src="{{ media.large }}", id="{{ media._id }}", style="display:none")
+					button.btn.btn-default(uib-tooltip-html="'Paste (' + ('ctrl' | symbol) + 'V)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="500")
+						span.font-awesome &#xf0ea;
+						
+				div.btn-group
+					button.btn.btn-default(uib-tooltip="Align items left", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="500")
+						span.font-awesome &#xf036;
+						
+					button.btn.btn-default(uib-tooltip="Align items center", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="500")
+						span.font-awesome &#xf037;
+						
+					button.btn.btn-default(uib-tooltip="Align items right", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="500")
+						span.font-awesome &#xf038;
+				
+			canvas#canvas(wireframe, data="FrameCtrl.wireframe", resize, keepalive="true", jqyoui-droppable)
+				
+			// Media library
+			img(ng-repeat="media in FrameCtrl.media", ng-src="{{ media.large }}", id="{{ media._id }}", style="display:none")
 		
 		div.bottomRight(ng-hide="true")
 			#collaborators

@@ -100,7 +100,7 @@ $sidebarBorderColor: #dedede;
 			@include flex-shrink(0);
 
 			&.ng-hide-add {
-				@include transition(opacity 0.1s);
+				@include transition(opacity 70ms);
 				opacity: 1;
 
 				&.ng-hide-add-active {
@@ -109,7 +109,7 @@ $sidebarBorderColor: #dedede;
 			}
 
 			&.ng-hide-remove {
-				@include transition(opacity 0.1s);
+				@include transition(opacity 70ms);
 				opacity: 0;
 
 				&.ng-hide-remove-active {
@@ -139,40 +139,57 @@ $sidebarBorderColor: #dedede;
 		}
 	}
 
-	#frame-wrapper {
-		position: relative;
-		@include flex-grow(1);
-		z-index: 1;
+	#download-pane {
+		padding-top: $sidebarPadding;
 
-		#frame-layout {
-			@include display-flex;
-			position: absolute;
-			left: 0;
-			top: 0;
-			width: 100%;
-			height: 100%;
+		#download-print {
+			margin-top: $sidebarPadding;
+			padding-top: $sidebarPadding;
+			border-top: 1px solid $sidebarBorderColor;
 		}
 	}
 
-	#canvas-area {
+	#canvas-wrapper {
 		position: relative;
+		@include display-flex;
 		@include flex-grow(1);
+		@include flex-direction(column);
 		height: 100%;
+		z-index: 1;
 
-		#canvas {
-			margin-top: -1px;
+		#canvas-toolbar {
+			$toolbarHeight: 50px;
+			$toolbarPadding: 10px;
 
-			&,
-			.inner {
-				width: 100%;
-				height: 100%;
+			@include display-flex;
+			@include box-sizing(border-box);
+			height: $toolbarHeight;
+			padding: 8px $toolbarPadding 0;
+			background: #f3f3f3;
+
+			&.sidebarOpen {
+				padding-left: $sidebarDefaultWidth + $toolbarPadding;
+			}
+
+			& > .btn-group,
+			& > .btn {
+				& + .btn-group,
+				& + .btn {
+					margin-left: $toolbarPadding;
+				}
+			}
+
+			.btn:focus {
+				outline: 0;
 			}
 		}
-	}
 
-	#canvas {
-		z-index: 1;
-		background: white;
+		#canvas {
+			@include flex-grow(1);
+			width: 100%;
+			z-index: 1;
+			background: white;
+		}
 	}
 
 	#collaborators {
