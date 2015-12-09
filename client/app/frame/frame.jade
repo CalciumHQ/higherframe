@@ -53,8 +53,8 @@ div.fullscreen-wrapper
 								ui-image.h6(ng-switch-when="file", ng-model="PropertiesCtrl.models[control.model]", ui-image-change="PropertiesCtrl.onMediaPropertyControlChange(control, { media: media })")
 								ui-icon.h6(ng-switch-when="icon", ng-model="PropertiesCtrl.models[control.model]", ui-icon-change="PropertiesCtrl.onPropertyControlChange(control)")
 								input.form-control(ng-switch-default, type="text", placeholder="{{ control.placeholder }}", focus-on="control.focus", ng-model="PropertiesCtrl.models[control.model]", ng-focus="PropertiesCtrl.onPropertyControlFocus(control)", ng-blur="PropertiesCtrl.onPropertyControlBlur(control)", ng-keydown="PropertiesCtrl.onPropertyControlKeydown(control, $event)")
-					
-					ul.properties(ng-if="PropertiesCtrl.selection.length")			
+
+					ul.properties(ng-if="PropertiesCtrl.selection.length")
 						li.form-group.form-group-sm
 							label.form-label.h6 Position
 							
@@ -102,6 +102,19 @@ div.fullscreen-wrapper
 							button.btn.btn-xs.btn-success(type="submit")
 								span.h3.strong.loose.uppercase +
 								
+			#view-pane.frame-sidebar-pane(ng-show="FrameCtrl.sidebarMode == 'view'")
+				.frame-sidebar-content.form
+					div.form-group-sm
+						label
+							input(type="checkbox")
+							span.h6  Show grid
+						
+					div.form-group-sm
+						label
+							input(type="checkbox")
+							span.h6  Snap to grid
+					
+								
 			#download-pane.frame-sidebar-pane(ng-show="FrameCtrl.sidebarMode == 'download'")
 				.frame-sidebar-content
 					div#download-dl
@@ -130,16 +143,19 @@ div.fullscreen-wrapper
 						
 					div.uib-dropdown-menu
 						li(ng-repeat="zoom in FrameCtrl.ZOOM_LEVELS")
-							a(ng-click="FrameCtrl.onZoomLevelClick(zoom)", ng-class="{ strong: zoom == FrameCtrl.view.zoom }") {{ zoom * 100 }}%
-						
+							a(ng-click="FrameCtrl.onToolbarZoomLevelClick(zoom)", ng-class="{ strong: zoom == FrameCtrl.view.zoom }") {{ zoom * 100 }}%
+				
+				button.btn.btn-default.btn-sm(uib-tooltip-html="'Full screen (' + ('ctrl' | symbol) + 'F)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800") 
+					span.font-awesome &#xf065;
+							
 				div.btn-group
-					button.btn.btn-default.btn-sm(uib-tooltip-html="'Copy (' + ('ctrl' | symbol) + 'C)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+					button.btn.btn-default.btn-sm(ng-click="FrameCtrl.onToolbarCopyClick()", uib-tooltip-html="'Copy (' + ('ctrl' | symbol) + 'C)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", ng-disabled="!FrameCtrl.selection.length")
 						span.font-awesome &#xf0c5;
 						
-					button.btn.btn-default.btn-sm(uib-tooltip-html="'Cut (' + ('ctrl' | symbol) + 'X)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+					button.btn.btn-default.btn-sm(ng-click="FrameCtrl.onToolbarCutClick()", uib-tooltip-html="'Cut (' + ('ctrl' | symbol) + 'X)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", ng-disabled="!FrameCtrl.selection.length")
 						span.font-awesome &#xf0c4;
 						
-					button.btn.btn-default.btn-sm(uib-tooltip-html="'Paste (' + ('ctrl' | symbol) + 'V)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+					button.btn.btn-default.btn-sm(ng-click="FrameCtrl.onToolbarPasteClick()", uib-tooltip-html="'Paste (' + ('ctrl' | symbol) + 'V)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", ng-disabled="!FrameCtrl.Clipboard.getItems().length")
 						span.font-awesome &#xf0ea;
 						
 				div.divider
