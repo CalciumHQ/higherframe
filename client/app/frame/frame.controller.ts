@@ -10,7 +10,7 @@ class FrameCtrl {
 
 	private STORAGE_PROPERTIES_OPEN_KEY: string = 'frame.properties.open';
   private STORAGE_SIDEBAR_MODE_KEY: string = 'frame.activity.open';
-  private ZOOM_LEVELS: Array<number> = [0.1, 0.15, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 5.0];
+  public ZOOM_LEVELS: Array<number> = [0.15, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 5.0];
 
 
   /**
@@ -18,8 +18,7 @@ class FrameCtrl {
    */
 
 	frame;
-  wireframe = {
-    components: [],
+  view = {
     zoom: 1,
     center: { x: 0, y: 0 }
   };
@@ -86,7 +85,7 @@ class FrameCtrl {
       this.updateUiWithComponents(selection);
     });
 
-    $scope.$watch(() => { return this.wireframe.zoom; }, (zoom) => {
+    $scope.$watch(() => { return this.view.zoom; }, (zoom) => {
 
       $scope.$broadcast('controller:view:zoom', zoom);
     });
@@ -361,7 +360,7 @@ class FrameCtrl {
 		this.socket.syncUpdates('frame:collaborator', this.collaborators);
 
 		// Components updating
-		this.socket.syncUpdates('component', this.wireframe.components, function (event, component, array) {
+		this.socket.syncUpdates('component', this.components, function (event, component, array) {
 
 			// If the event was triggered by this session
 			// don't update
@@ -442,7 +441,7 @@ class FrameCtrl {
 
             this.$scope.$apply(() => {
 
-              var zoomIndex = this.ZOOM_LEVELS.indexOf(this.wireframe.zoom);
+              var zoomIndex = this.ZOOM_LEVELS.indexOf(this.view.zoom);
               var zoom = this.ZOOM_LEVELS[zoomIndex < (this.ZOOM_LEVELS.length - 1) ? zoomIndex + 1 : zoomIndex];
 
               event.event.preventDefault();
@@ -455,7 +454,7 @@ class FrameCtrl {
 
             this.$scope.$apply(() => {
 
-              var zoomIndex = this.ZOOM_LEVELS.indexOf(this.wireframe.zoom);
+              var zoomIndex = this.ZOOM_LEVELS.indexOf(this.view.zoom);
               var zoom = this.ZOOM_LEVELS[zoomIndex > 0 ? zoomIndex - 1 : zoomIndex];
 
               event.event.preventDefault();
@@ -553,7 +552,7 @@ class FrameCtrl {
 
       angular.forEach(document.components, function (component) {
 
-				that.wireframe.components.push(component);
+				that.components.push(component);
         that.addComponentsToView(component, { select: false });
       });
 
@@ -730,14 +729,14 @@ class FrameCtrl {
 
   private setZoom(zoom: number) {
 
-    this.wireframe.zoom = zoom;
-    this.$scope.$broadcast('view:zoom', this.wireframe.zoom);
+    this.view.zoom = zoom;
+    this.$scope.$broadcast('view:zoom', this.view.zoom);
   }
 
   private setCenter(center: Higherframe.Drawing.IPoint) {
 
-    this.wireframe.center = center;
-    this.$scope.$broadcast('view:pan', this.wireframe.center);
+    this.view.center = center;
+    this.$scope.$broadcast('view:pan', this.view.center);
   }
 
 
@@ -755,6 +754,12 @@ class FrameCtrl {
 
 		this.sidebarMode = mode;
 		this.localStorageService.set(this.STORAGE_SIDEBAR_MODE_KEY, this.sidebarMode);
+	}
+
+	// Toolbar
+	onZoomLevelClick(zoom: number) {
+
+		this.setZoom(zoom);
 	}
 
   // Action bar

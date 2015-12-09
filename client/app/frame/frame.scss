@@ -164,7 +164,7 @@ $sidebarBorderColor: #dedede;
 			@include display-flex;
 			@include box-sizing(border-box);
 			height: $toolbarHeight;
-			padding: 8px $toolbarPadding 0;
+			padding: 11px $toolbarPadding;
 			background: #f3f3f3;
 
 			&.sidebarOpen {
@@ -172,15 +172,30 @@ $sidebarBorderColor: #dedede;
 			}
 
 			& > .btn-group,
-			& > .btn {
+			& > .btn,
+			& > .dropdown {
 				& + .btn-group,
-				& + .btn {
+				& + .btn,
+				& + .dropdown {
 					margin-left: $toolbarPadding;
 				}
 			}
 
 			.btn:focus {
 				outline: 0;
+			}
+
+			.btn {
+				.font-awesome.flip {
+					display: inline-block;
+					@include transform(rotateY(180deg));
+				}
+			}
+
+			& > .divider {
+				width: 1px;
+				margin: 0 $toolbarPadding;
+				background: #ccc;
 			}
 		}
 
