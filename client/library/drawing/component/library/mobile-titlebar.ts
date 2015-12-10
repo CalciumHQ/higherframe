@@ -66,6 +66,7 @@ module Higherframe.Drawing.Component.Library {
       var properties = this.getProperties();
       properties.width = properties.width || 220;
       properties.height = properties.height || 40;
+      properties.title = properties.title || 'Title';
 
       // Perform the initial draw
       this.update();

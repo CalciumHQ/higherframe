@@ -1332,7 +1332,7 @@ module Higherframe.Wireframe {
 		 */
 
 		updateGrid() {
-
+return;
 				var gridMajorSize = 100,
 					gridMinorSize = 20,
 					gridMajorColor = 'rgba(0,0,0,0.07)',

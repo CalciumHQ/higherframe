@@ -18,21 +18,33 @@ module Higherframe.Drawing.Component.Library {
     properties = [
       {
         label: 'Placeholder',
-        model: 'placeholder',
-        type: String,
-        description: 'Set the placeholder of the input.'
+        controls: [
+          {
+            model: 'placeholder',
+            type: String,
+            description: 'Set the placeholder of the input.'
+          }
+        ]
       },
       {
         label: 'Value',
-        model: 'value',
-        type: String,
-        description: 'Set the value of the input.'
+        controls: [
+          {
+            model: 'value',
+            type: String,
+            description: 'Set the value of the input.'
+          }
+        ]
       },
       {
         label: 'Font size',
-        model: 'fontSize',
-        type: Number,
-        description: 'Set the font size of the input.'
+        controls: [
+          {
+            model: 'fontSize',
+            type: Number,
+            description: 'Set the font size of the input.'
+          }
+        ]
       }
     ];
     resizable = true;

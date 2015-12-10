@@ -32,7 +32,7 @@ class FrameCtrl {
   collaborators: Array<Object> = [];
 
   // UI variables
-	sidebarMode: string = this.localStorageService.get(this.STORAGE_SIDEBAR_MODE_KEY) || 'properties';
+	sidebarMode: string = this.localStorageService.get(this.STORAGE_SIDEBAR_MODE_KEY) || 'toolbox';
   quickAdd = {
     open: false,
     focus: false,

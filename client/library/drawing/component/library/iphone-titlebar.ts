@@ -37,6 +37,9 @@ module Higherframe.Drawing.Component.Library {
 
       super(model);
 
+      var properties = this.getProperties();
+      properties.time = properties.time || '7:24 am';
+
       // Perform the initial draw
       this.update();
     }
@@ -204,6 +207,16 @@ module Higherframe.Drawing.Component.Library {
     getDragPoints(theme: Higherframe.UI.ITheme): Array<IPoint> {
 
       return [];
+    }
+
+
+    /**
+     * Cast the model properties into the correct type
+     */
+
+    getProperties(): Higherframe.Data.IIPhoneTitlebarProperties {
+
+      return <Higherframe.Data.IIPhoneTitlebarProperties>this.model.properties;
     }
   }
 }
