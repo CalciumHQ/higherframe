@@ -25,6 +25,7 @@ $sidebarBorderColor: #dedede;
 	#frame-sidebar-mode {
 		@include display-flex;
 		@include flex-direction(column);
+		@include flex-shrink(0);
 		position: relative;
 		height: 100%;
 		width: 50px;
@@ -162,6 +163,7 @@ $sidebarBorderColor: #dedede;
 			$toolbarPadding: 10px;
 
 			@include display-flex;
+			@include flex-shrink(0);
 			@include box-sizing(border-box);
 			height: $toolbarHeight;
 			padding: 11px $toolbarPadding;

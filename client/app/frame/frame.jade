@@ -145,7 +145,7 @@ div.fullscreen-wrapper
 						li(ng-repeat="zoom in FrameCtrl.ZOOM_LEVELS")
 							a(ng-click="FrameCtrl.onToolbarZoomLevelClick(zoom)", ng-class="{ strong: zoom == FrameCtrl.view.zoom }") {{ zoom * 100 }}%
 				
-				button.btn.btn-default.btn-sm(uib-tooltip-html="'Full screen (' + ('ctrl' | symbol) + 'F)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800") 
+				button.btn.btn-default.btn-sm(ng-click="FrameCtrl.onToolbarFullscreenClick()", uib-tooltip-html="'Full screen (' + ('ctrl' | symbol) + 'F)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800") 
 					span.font-awesome &#xf065;
 							
 				div.btn-group

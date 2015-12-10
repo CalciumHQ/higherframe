@@ -53,6 +53,7 @@ class FrameCtrl {
     frame,
     private $scope: ng.IScope,
     private $window: ng.IWindowService,
+		private $document: ng.IDocumentService,
     private $http: ng.IHttpService,
     private $filter: ng.IFilterService,
     private $stateParams,
@@ -432,6 +433,42 @@ class FrameCtrl {
         }
       }
 
+			if (!event.modifiers.command && !event.modifiers.control) {
+
+				switch(event.key) {
+
+					case '1':
+					case '2':
+					case '3':
+					case '4':
+					case '5':
+					case '6':
+
+						// If in an input, allow event to continue
+						if (event.event.target.tagName == 'INPUT') {}
+
+						// Otherwise cancel and broadcast to wireframe
+						else {
+
+							event.event.preventDefault();
+
+							this.$scope.$apply(() => {
+
+								switch(event.key) {
+									case '1':	this.setSidebarMode('toolbox'); break;
+									case '2':	this.setSidebarMode('properties'); break;
+									case '3':	this.setSidebarMode('view'); break;
+									case '4':	this.setSidebarMode('activity'); break;
+									case '5':	this.setSidebarMode('settings'); break;
+									case '6':	this.setSidebarMode('download'); break;
+								}
+							});
+						}
+
+						break;
+				}
+			}
+
       // Standard cases
       switch(event.key) {
 
@@ -462,21 +499,6 @@ class FrameCtrl {
             event.event.preventDefault();
             event.event.stopPropagation();
             this.$scope.$broadcast('event:keydown', event);
-          }
-
-          break;
-
-        case 'r':
-
-          if (event.modifiers.command || event.modifiers.control) {
-
-            event.event.preventDefault();
-            event.event.stopPropagation();
-
-            this.$scope.$apply(() => {
-
-              this.toggleQuickAdd();
-            });
           }
 
           break;
@@ -616,6 +638,17 @@ class FrameCtrl {
    * View methods
    */
 
+	private setSidebarMode(mode: string) {
+
+		if (this.sidebarMode == mode) {
+
+			mode = '';
+		}
+
+		this.sidebarMode = mode;
+		this.localStorageService.set(this.STORAGE_SIDEBAR_MODE_KEY, this.sidebarMode);
+	}
+
   private toggleQuickAdd() {
 
     this.quickAdd.query = '';
@@ -696,15 +729,51 @@ class FrameCtrl {
 
   private setZoom(zoom: number) {
 
+		if (!zoom) {
+
+			zoom = 1;
+		}
+
     this.view.zoom = zoom;
     this.$scope.$broadcast('view:zoom', this.view.zoom);
   }
 
   private setCenter(center: Higherframe.Drawing.IPoint) {
 
+		if (!center) {
+
+			center = { x: 0, y: 0 };
+		}
+
     this.view.center = center;
     this.$scope.$broadcast('view:pan', this.view.center);
   }
+
+	private goFullscreen() {
+
+		var document:any = window.document;
+
+		if (
+			document.fullscreenEnabled ||
+			document.webkitFullscreenEnabled ||
+			document.mozFullScreenEnabled ||
+			document.msFullscreenEnabled
+		) {
+
+			var el = document.getElementById('frame');
+
+			// go full-screen
+			if (el.requestFullscreen) {
+				el.requestFullscreen();
+			} else if (el.webkitRequestFullscreen) {
+				el.webkitRequestFullscreen();
+			} else if (el.mozRequestFullScreen) {
+				el.mozRequestFullScreen();
+			} else if (el.msRequestFullscreen) {
+				el.msRequestFullscreen();
+			}
+		}
+	}
 
 	private copy(components: Array<any>) {
 
@@ -759,19 +828,18 @@ class FrameCtrl {
 	// Sidebar
 	onSidebarModeClick(mode: string) {
 
-		if (this.sidebarMode == mode) {
-
-			mode = '';
-		}
-
-		this.sidebarMode = mode;
-		this.localStorageService.set(this.STORAGE_SIDEBAR_MODE_KEY, this.sidebarMode);
+		this.setSidebarMode(mode);
 	}
 
 	// Toolbar
 	onToolbarZoomLevelClick(zoom: number) {
 
 		this.setZoom(zoom);
+	}
+
+	onToolbarFullscreenClick() {
+
+		this.goFullscreen();
 	}
 
 	onToolbarCopyClick() {
