@@ -120,8 +120,34 @@ $sidebarBorderColor: #dedede;
 		}
 
 		.frame-sidebar-content {
+			padding-top: $sidebarPadding;
 			padding-left: $sidebarPadding;
 			padding-right: $sidebarPadding;
+		}
+
+		.form-horizontal {
+			.form-group {
+				@include display-flex;
+	      @include align-items(center);
+				margin-left: 0;
+				margin-right: 0;
+
+				.control-label {
+					@include box-sizing(border-box);
+					@include flex-shrink(0);
+					width: 70px;
+					margin-top: 0;
+					padding-top: 0;
+					text-align: left;
+				}
+
+				.form-control {
+					@include box-sizing(border-box);
+					@include flex-basis(1px);
+	        @include flex-grow(1);
+					margin-left: 8px
+				}
+			}
 		}
 
 		.frame-sidebar-toolbar {

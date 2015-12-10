@@ -1,7 +1,7 @@
 div.fullscreen-wrapper
 	#frame
 		ul#frame-sidebar-mode
-			li(, uib-tooltip-html="'Close (' + ('ctrl' | symbol) + '`)'", tooltip-placement="right", tooltip-append-to-body="true", tooltip-popup-delay="800")
+			li(uib-tooltip-html="'Close (' + ('ctrl' | symbol) + '`)'", tooltip-placement="right", tooltip-append-to-body="true", tooltip-popup-delay="800")
 				a(ui-sref="frames")
 					span.icon.font-awesome 
 					span.sr-only Close
@@ -103,18 +103,33 @@ div.fullscreen-wrapper
 								span.h3.strong.loose.uppercase +
 								
 			#view-pane.frame-sidebar-pane(ng-show="FrameCtrl.sidebarMode == 'view'")
-				.frame-sidebar-content.form
-					div.form-group-sm
-						label
-							input(type="checkbox")
-							span.h6  Show grid
-						
-					div.form-group-sm
-						label
-							input(type="checkbox")
-							span.h6  Snap to grid
-					
+				.frame-sidebar-content.form-horizontal
+					div.form-group(uib-dropdown)
+						label.control-label Zoom
+						button.btn.btn-default.btn-sm(uib-dropdown-toggle) 
+							| {{ FrameCtrl.view.zoom * 100 }}% 
+							span.caret
+							
+						div.uib-dropdown-menu
+							li(ng-repeat="zoom in FrameCtrl.ZOOM_LEVELS")
+								a(ng-click="FrameCtrl.onToolbarZoomLevelClick(zoom)", ng-class="{ strong: zoom == FrameCtrl.view.zoom }") {{ zoom * 100 }}%
 								
+					div.form-group
+						label
+							input(type="checkbox")
+							span.h5  Show grid
+						
+					div.form-group
+						label
+							input(type="checkbox")
+							span.h5  Snap to grid
+	
+			#settings-pane.frame-sidebar-pane(ng-show="FrameCtrl.sidebarMode == 'settings'")
+				.frame-sidebar-content.form-horizontal
+					div.form-group.form-group-sm
+						label.control-label.h6 Name
+						input.form-control
+																
 			#download-pane.frame-sidebar-pane(ng-show="FrameCtrl.sidebarMode == 'download'")
 				.frame-sidebar-content
 					div#download-dl
