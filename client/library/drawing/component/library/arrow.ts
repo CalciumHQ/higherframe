@@ -247,8 +247,8 @@ module Higherframe.Drawing.Component.Library {
       var position = new paper.Point(properties.x, properties.y);
 
       return [
-        new SnapPoint(position.add(new paper.Point(properties.start))),
-        new SnapPoint(position.add(new paper.Point(properties.end)))
+        new SnapPoint(position.add(new paper.Point(properties.start)), 'end', 'end'),
+        new SnapPoint(position.add(new paper.Point(properties.end)), 'end', 'end')
       ];
     }
 

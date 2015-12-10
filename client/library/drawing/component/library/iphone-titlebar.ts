@@ -189,10 +189,10 @@ module Higherframe.Drawing.Component.Library {
     getSnapPoints(): Array<SnapPoint> {
 
       return [
-        new SnapPoint(this.position.add(new paper.Point({ x: -110, y: -7 }))),
-        new SnapPoint(this.position.add(new paper.Point({ x: 110, y: -7 }))),
-        new SnapPoint(this.position.add(new paper.Point({ x: 110, y: 7 }))),
-        new SnapPoint(this.position.add(new paper.Point({ x: -110, y: 7 })))
+        new SnapPoint(this.position.add(new paper.Point({ x: -110, y: -7 })), 'corner', 'corner'),
+        new SnapPoint(this.position.add(new paper.Point({ x: 110, y: -7 })), 'corner', 'corner'),
+        new SnapPoint(this.position.add(new paper.Point({ x: 110, y: 7 })), 'corner', 'corner'),
+        new SnapPoint(this.position.add(new paper.Point({ x: -110, y: 7 })), 'corner', 'corner')
       ];
     }
 

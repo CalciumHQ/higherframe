@@ -150,10 +150,10 @@ module Higherframe.Drawing.Component.Library {
       var properties = this.getProperties();
 
       return [
-        new SnapPoint(this.bounds.leftCenter),
-        new SnapPoint(this.bounds.topCenter),
-        new SnapPoint(this.bounds.rightCenter),
-        new SnapPoint(this.bounds.bottomCenter)
+        new SnapPoint(this.bounds.leftCenter, 'edge', 'center'),
+        new SnapPoint(this.bounds.topCenter, 'center', 'edge'),
+        new SnapPoint(this.bounds.rightCenter, 'edge', 'center'),
+        new SnapPoint(this.bounds.bottomCenter, 'center', 'edge')
       ];
     }
 

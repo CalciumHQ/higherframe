@@ -1255,6 +1255,62 @@ module Higherframe.Wireframe {
 			line.strokeWidth = guideStrokeWidth;
 			guide.addChild(line);
 
+			var crossOneSE = paper.Path.Line(
+				smartGuide.getAdjustedOriginPoint().subtract(new paper.Point(4, 4)),
+				smartGuide.getAdjustedOriginPoint().add(new paper.Point(4, 4))
+			);
+			crossOneSE.strokeColor = this.theme.GuideDefault;
+			crossOneSE.strokeWidth = guideStrokeWidth;
+			guide.addChild(crossOneSE);
+
+			var crossOneNE = paper.Path.Line(
+				smartGuide.getAdjustedOriginPoint().subtract(new paper.Point(4, -4)),
+				smartGuide.getAdjustedOriginPoint().add(new paper.Point(4, -4))
+			);
+			crossOneNE.strokeColor = this.theme.GuideDefault;
+			crossOneNE.strokeWidth = guideStrokeWidth;
+			guide.addChild(crossOneNE);
+
+			var crossTwoSE = paper.Path.Line(
+				smartGuide.relation.point.subtract(new paper.Point(4, 4)),
+				smartGuide.relation.point.add(new paper.Point(4, 4))
+			);
+			crossTwoSE.strokeColor = this.theme.GuideDefault;
+			crossTwoSE.strokeWidth = guideStrokeWidth;
+			guide.addChild(crossTwoSE);
+
+			var crossTwoNE = paper.Path.Line(
+				smartGuide.relation.point.subtract(new paper.Point(4, -4)),
+				smartGuide.relation.point.add(new paper.Point(4, -4))
+			);
+			crossTwoNE.strokeColor = this.theme.GuideDefault;
+			crossTwoNE.strokeWidth = guideStrokeWidth;
+			guide.addChild(crossTwoNE);
+
+			if (smartGuide.axis == Drawing.SmartGuideAxis.X && smartGuide.relation.xName) {
+
+				var snapText = new paper.PointText({
+	        point: smartGuide.relation.point.add(new paper.Point(-10, 13)),
+	        content: smartGuide.relation.xName,
+	        fillColor: this.theme.GuideDefault,
+	        fontSize: 9,
+					justification: 'right'
+	      });
+				guide.addChild(snapText);
+			}
+
+			else if (smartGuide.axis == Drawing.SmartGuideAxis.Y && smartGuide.relation.yName) {
+
+				var snapText = new paper.PointText({
+	        point: smartGuide.relation.point.add(new paper.Point(-10, 13)),
+	        content: smartGuide.relation.yName,
+	        fillColor: this.theme.GuideDefault,
+	        fontSize: 9,
+					justification: 'right'
+	      });
+				guide.addChild(snapText);
+			}
+
 			this.layerDrawing.activate();
 
 			this.smartGuides.push(guide);

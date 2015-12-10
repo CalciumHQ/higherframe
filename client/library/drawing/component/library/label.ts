@@ -141,10 +141,10 @@ module Higherframe.Drawing.Component.Library {
     getSnapPoints(): Array<SnapPoint> {
 
       return [
-        new SnapPoint(this.bounds.topLeft),
-        new SnapPoint(this.bounds.topRight),
-        new SnapPoint(this.bounds.bottomLeft),
-        new SnapPoint(this.bounds.bottomRight)
+        new SnapPoint(this.bounds.topLeft, 'corner', 'corner'),
+        new SnapPoint(this.bounds.topRight, 'corner', 'corner'),
+        new SnapPoint(this.bounds.bottomLeft, 'corner', 'corner'),
+        new SnapPoint(this.bounds.bottomRight, 'corner', 'corner')
       ];
     }
 

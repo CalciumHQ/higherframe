@@ -133,16 +133,16 @@ module Higherframe.Drawing.Component.Library {
 
       return [
         // Screen corners
-        new SnapPoint(this.position.add(new paper.Point({ x: -116, y: -232 })), 1.5),
-        new SnapPoint(this.position.add(new paper.Point({ x: 116, y: -232 })), 1.5),
-        new SnapPoint(this.position.add(new paper.Point({ x: 116, y: 232 })), 1.5),
-        new SnapPoint(this.position.add(new paper.Point({ x: -116, y: 232 })), 1.5),
+        new SnapPoint(this.position.add(new paper.Point({ x: -116, y: -232 })), 'corner', 'corner', 1.5),
+        new SnapPoint(this.position.add(new paper.Point({ x: 116, y: -232 })), 'corner', 'corner', 1.5),
+        new SnapPoint(this.position.add(new paper.Point({ x: 116, y: 232 })), 'corner', 'corner', 1.5),
+        new SnapPoint(this.position.add(new paper.Point({ x: -116, y: 232 })), 'corner', 'corner', 1.5),
 
         // Inner screen corners
-        new SnapPoint(this.position.add(new paper.Point({ x: -110, y: -184 })), 0.8),
-        new SnapPoint(this.position.add(new paper.Point({ x: 110, y: -184 })), 0.8),
-        new SnapPoint(this.position.add(new paper.Point({ x: 110, y: 162 })), 0.8),
-        new SnapPoint(this.position.add(new paper.Point({ x: -110, y: 162 })), 0.8)
+        new SnapPoint(this.position.add(new paper.Point({ x: -110, y: -184 })), 'inner corner', 'inner corner', 0.8),
+        new SnapPoint(this.position.add(new paper.Point({ x: 110, y: -184 })), 'inner corner', 'inner corner', 0.8),
+        new SnapPoint(this.position.add(new paper.Point({ x: 110, y: 162 })), 'inner corner', 'inner corner', 0.8),
+        new SnapPoint(this.position.add(new paper.Point({ x: -110, y: 162 })), 'inner corner', 'inner corner', 0.8)
       ];
     }
 
