@@ -21,10 +21,16 @@ var config = require('../../config/environment');
 // Get list of frames
 exports.index = function(req, res) {
 
-  Frame
+  var query = Frame
     .find({ users: req.user._id })
-    .populate('organisation users')
-    .exec(function (err, frames) {
+    .populate('organisation users');
+
+  if (!req.query.hasOwnProperty('include_deleted')) {
+
+    query.where({ status: 'active' });
+  }
+
+  query.exec(function (err, frames) {
 
     if(err) { return handleError(res, err); }
     return res.json(200, frames);
@@ -34,30 +40,36 @@ exports.index = function(req, res) {
 // Get a single frame
 exports.show = function(req, res) {
 
-  Frame
+  var query = Frame
 		.findOne({ _id: req.params.id, users: req.user._id })
-		.populate('organisation components users collaborators media')
-		.exec(function (err, frame) {
+		.populate('organisation components users collaborators media');
 
-	    if(err) { return handleError(res, err); }
-	    if(!frame) { return res.send(404); }
+  if (!req.query.hasOwnProperty('include_deleted')) {
 
-      var options = {
-        path: 'components.media',
-        model: 'Media'
-      };
+    query.where({ status: 'active' });
+  }
 
-      Frame.populate(frame, options, function(err, frame) {
+  query.exec(function (err, frame) {
 
-        frame.components.forEach(function(component) {
+    if(err) { return handleError(res, err); }
+    if(!frame) { return res.send(404); }
 
-          component.properties.media = component.media;
-          delete component.media;
-        });
+    var options = {
+      path: 'components.media',
+      model: 'Media'
+    };
 
-        return res.json(200, frame);
+    Frame.populate(frame, options, function(err, frame) {
+
+      frame.components.forEach(function(component) {
+
+        component.properties.media = component.media;
+        delete component.media;
       });
-	  });
+
+      return res.json(200, frame);
+    });
+  });
 };
 
 // Creates a new frame in the DB.
@@ -94,12 +106,23 @@ exports.create = function(req, res) {
 exports.update = function(req, res) {
 
   if(req.body._id) { delete req.body._id; }
-  Frame.findById(req.params.id, function (err, frame) {
+  var query = Frame.findById(req.params.id);
+
+  if (!req.query.hasOwnProperty('include_deleted')) {
+
+    query.where({ status: 'active' });
+  }
+
+  query.exec(function (err, frame) {
 
     if (err) { return handleError(res, err); }
     if(!frame) { return res.send(404); }
     var updated = _.merge(frame, req.body);
-    frame.users = req.body.users;
+
+    if (req.body.users) {
+
+      updated.users = req.body.users;
+    }
 
     updated.save(function (err) {
 
@@ -112,12 +135,20 @@ exports.update = function(req, res) {
 // Deletes a frame from the DB.
 exports.destroy = function(req, res) {
 
-  Frame.findById(req.params.id, function (err, frame) {
+  var query = Frame.findById(req.params.id);
+
+  if (!req.query.hasOwnProperty('include_deleted')) {
+
+    query.where({ status: 'active' });
+  }
+
+  query.exec(function (err, frame) {
 
     if(err) { return handleError(res, err); }
     if(!frame) { return res.send(404); }
 
-    frame.remove(function(err) {
+    frame.status = 'deleted';
+    frame.save(function(err) {
 
       if(err) { return handleError(res, err); }
       return res.send(204);
@@ -129,57 +160,63 @@ exports.destroy = function(req, res) {
 exports.addUser = function(req, res) {
 
   // Add to the frame
-  Frame.findOneAndUpdate(
+  var query = Frame.findOneAndUpdate(
     { _id: req.params.id },
     { $addToSet: { users: { $each: req.body } }},
-    { safe: true, upsert: false },
-    function (err, frame) {
+    { safe: true, upsert: false }
+  );
 
-      if(err) { return handleError(res, err); }
+  if (!req.query.hasOwnProperty('include_deleted')) {
 
-      Activity.create({
-        frame: frame._id,
-        user: req.user._id,
-        type: 'added-user',
-        data: { users: req.body }
-      });
+    query.where({ status: 'active' });
+  }
+
+  query.exec(function (err, frame) {
+
+    if(err) { return handleError(res, err); }
+
+    Activity.create({
+      frame: frame._id,
+      user: req.user._id,
+      type: 'added-user',
+      data: { users: req.body }
+    });
 
 
-      /*
-       * Send the share email
-       */
+    /*
+     * Send the share email
+     */
 
-      var client = new mandrill.Mandrill(config.mandrill.clientSecret);
+    var client = new mandrill.Mandrill(config.mandrill.clientSecret);
 
-      _.forEach(req.body, function(userId) {
+    _.forEach(req.body, function(userId) {
 
-        User.findById(userId, function(err, user) {
+      User.findById(userId, function(err, user) {
 
-          var message = {
-            html: '<h1>You have been invited to collaborate on ' + frame.name + '.</h1><p><a href="' + config.domain + '/frame/' + frame._id + '">Go to the document</a></p>',
-            text: 'You have been invited to collaborate on ' + frame.name + '. Visit Higherframe to see this document.',
-            subject: 'You have been added to a wireframe',
-            from_email: 'support@higherfra.me',
-            from_name: 'Higherframe',
-            to: [
-              {
-                email: user.email,
-                name: user.name,
-                type: 'to'
-              }
-            ]
-          };
+        var message = {
+          html: '<h1>You have been invited to collaborate on ' + frame.name + '.</h1><p><a href="' + config.domain + '/frame/' + frame._id + '">Go to the document</a></p>',
+          text: 'You have been invited to collaborate on ' + frame.name + '. Visit Higherframe to see this document.',
+          subject: 'You have been added to a wireframe',
+          from_email: 'support@higherfra.me',
+          from_name: 'Higherframe',
+          to: [
+            {
+              email: user.email,
+              name: user.name,
+              type: 'to'
+            }
+          ]
+        };
 
-          client.messages.send({
-            message: message,
-            async: true
-          });
+        client.messages.send({
+          message: message,
+          async: true
         });
       });
+    });
 
-      return res.json(201, frame);
-    }
-  )
+    return res.json(201, frame);
+  });
 };
 
 // Creates a new component in the DB for this frame.
@@ -194,16 +231,22 @@ exports.createComponent = function(req, res) {
     if(err) { return handleError(res, err); }
 
 		// Add to the frame
-		Frame.findOneAndUpdate(
-			{ _id: req.params.id },
-			{ $push: { components: Component._id }},
-			{ safe: true, upsert: false },
-			function (err, Frame) {
+		var query = Frame.findOneAndUpdate(
+		  { _id: req.params.id },
+		  { $push: { components: Component._id }},
+		  { safe: true, upsert: false }
+    );
 
-				if(err) { return handleError(res, err); }
-				return res.json(201, Component);
-			}
-		)
+    if (!req.query.hasOwnProperty('include_deleted')) {
+
+      query.where({ status: 'active' });
+    }
+
+    query.exec(function (err, Frame) {
+
+			if(err) { return handleError(res, err); }
+			return res.json(201, Component);
+		})
   });
 };
 
@@ -221,16 +264,22 @@ exports.deleteComponent = function(req, res) {
 			if(err) { return handleError(res, err); }
 
 			// Remove from the frame
-			Frame.findOneAndUpdate(
-				{ _id: req.params.frameId },
-				{ $pull: { components: req.params.componentId }},
-				{},
-				function (err, Frame) {
+			var query = Frame.findOneAndUpdate(
+			  { _id: req.params.frameId },
+			  { $pull: { components: req.params.componentId }},
+			  {}
+      );
 
-					if(err) { return handleError(res, err); }
-					return res.json(204);
-				}
-			);
+      if (!req.query.hasOwnProperty('include_deleted')) {
+
+        query.where({ status: 'active' });
+      }
+
+      query.exec(function (err, Frame) {
+
+				if(err) { return handleError(res, err); }
+				return res.json(204);
+			});
 		});
   });
 };

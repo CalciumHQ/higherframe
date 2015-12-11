@@ -15,6 +15,10 @@ var FrameSchema = new Schema({
 	updated_at: {
 		type: Date
 	},
+  status: {
+    type: String,
+    default: 'active'
+  },
   organisation: {
     type: Schema.ObjectId,
     ref: 'Organisation'
