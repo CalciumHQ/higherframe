@@ -9,7 +9,7 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
 @import 'theme/_typography.scss';
 @import 'theme/_animations.scss';
 
-// Component styles are injected through grunt
+// Component styles are injected through grunt task
 // injector
 @import '_grids.scss';
 @import '_helpers.scss';
@@ -113,3 +113,25 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
 @import 'ui/tooltip/tooltip.scss';
 @import 'ui/tray/tray.scss';
 // endinjector
+
+
+#content {
+  z-index: 1;
+}
+
+#alerts {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+
+  .alert {
+    border-radius: 0;
+    margin-bottom: 0;
+
+    .action {
+      cursor: pointer;
+    }
+  }
+}

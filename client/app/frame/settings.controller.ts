@@ -17,7 +17,8 @@ module Higherframe.Controllers {
       private $scope: ng.IScope,
       private $http: ng.IHttpService,
       private $state,
-      private Frame
+      private Frame,
+      private AlertManager: Higherframe.UI.AlertManager
     ) {
 
       this.name = frame.name;
@@ -52,6 +53,10 @@ module Higherframe.Controllers {
 
       this.$http.delete(`/api/frames/${this.frame._id}`)
       .then((response) => {
+
+        var alert = new Higherframe.UI.Alert();
+        alert.text = `<strong>${this.frame.name}</strong> has been deleted`;
+        this.AlertManager.push(alert);
 
         this.$state.go('frames');
       });
