@@ -44,6 +44,11 @@ module Higherframe.Controllers {
         })
         .then((response) => {
 
+          var alert = new Higherframe.UI.Alert();
+          alert.text = `<strong>${this.frame.name}</strong> was updated`;
+          alert.type = 'success';
+          this.AlertManager.add(alert);
+
           this.$state.go('frame', { id: this.frame._id });
         });
       }
@@ -53,15 +58,7 @@ module Higherframe.Controllers {
 
       this.$http
         .patch(`/api/frames/${this.frame._id}?include_deleted`, { status: 'active' })
-        .then((response) => {
-
-          var index = this.AlertManager.alerts.indexOf(alert);
-
-          if (index !== -1) {
-
-            this.AlertManager.alerts.splice(index, 1);
-          }
-        });
+        .then((response) => this.AlertManager.remove(alert));
     }
 
     onDeleteButtonClick() {
@@ -72,13 +69,15 @@ module Higherframe.Controllers {
 
           var alert = new Higherframe.UI.Alert();
           alert.text = `<strong>${this.frame.name}</strong> has been deleted`;
+          alert.type = 'success';
+          alert.lifespan = 0;
 
           var undoAction = new Higherframe.UI.AlertAction();
           undoAction.label = 'Undo this';
           undoAction.action = () => { this.onUndoDeleteClick.call(this, alert); };
           alert.actions = [undoAction];
 
-          this.AlertManager.push(alert);
+          this.AlertManager.add(alert);
 
           this.$state.go('frames');
         });

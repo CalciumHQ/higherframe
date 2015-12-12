@@ -19,6 +19,7 @@ module Higherframe.Controllers {
       private organisations: Array<any>,
       private socket,
       private ModalManager: Higherframe.UI.Modal.Manager,
+      private AlertManager: Higherframe.UI.AlertManager,
       private Auth,
       private $mixpanel
     ) {
@@ -101,7 +102,7 @@ module Higherframe.Controllers {
 
 		onNewFrameClick(organisation) {
 
-      var modal = new Higherframe.Modals.Frame.New(this.Auth, this.$mixpanel);
+      var modal = new Higherframe.Modals.Frame.New(this.Auth, this.$mixpanel, this.AlertManager);
       modal.organisation = organisation;
       this.ModalManager.present(modal);
 		};

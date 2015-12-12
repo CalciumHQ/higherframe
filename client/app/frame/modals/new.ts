@@ -19,7 +19,11 @@ module Higherframe.Modals.Frame {
      * Event handlers
      */
 
-    constructor(private Auth, private $mixpanel) {
+    constructor(
+      private Auth,
+      private $mixpanel,
+      private AlertManager: Higherframe.UI.AlertManager
+    ) {
 
       super();
     }
@@ -53,14 +57,22 @@ module Higherframe.Modals.Frame {
         })
         .then((response) => {
 
+          // Add alert
+          var alert = new Higherframe.UI.Alert();
+          alert.text = `<strong>${response.data.name}</strong> was created`;
+          alert.type = 'success';
+          this.AlertManager.add(alert);
+
+          // Track the event
           this.$mixpanel.track('Wireframe created', {
             'Frame ID': response.data._id,
             'Frame Name': response.data.name
           });
+
+          // Close the modal
+          this.close();
         });
       });
-
-      this.close();
     }
   }
 }
