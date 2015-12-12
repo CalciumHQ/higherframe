@@ -35,8 +35,8 @@
     <div id="alerts" ng-controller="AlertsCtrl as AlertsCtrl">
       <uib-alert ng-repeat="alert in AlertsCtrl.alerts" type="warning">
         <span ng-bind-html="alert.text"></span>
-        <span> | </span>
-        <a class="action">Undo this</a>
+        <span ng-if="alert.actions.length"> | </span>
+        <a ng-repeat="action in alert.actions" class="action" ng-click="action.action($event)">{{ action.label }}</a>
       </uib-alert>
     </div>
 
