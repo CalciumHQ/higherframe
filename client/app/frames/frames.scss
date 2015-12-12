@@ -17,6 +17,8 @@ $easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .cards {
+	@include display-flex;
+	@include flex-wrap(wrap);
 	position: relative;
 	margin-top: -2*$vu;
 
@@ -94,7 +96,6 @@ $easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
 
 			.card {
 				position: relative;
-				@include span(4);
 				height: 114px;
 
 				&:nth-child(4n) {
@@ -155,4 +156,50 @@ $easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
 			}
 		}
 	}
+}
+
+@mixin card-width($columns, $margin) {
+
+	#frames {
+		.cards {
+			.card {
+				width: (100% - ($columns - 1)*$margin) / $columns;
+				margin-left: $margin;
+
+				&:nth-child(#{$columns}n+1) {
+					margin-left: 0;
+				}
+			}
+		}
+	}
+}
+
+@include breakpoint(500px 800px) {
+
+	@include card-width(2, 3%);
+}
+
+@include breakpoint(801px 1200px) {
+
+	@include card-width(3, 2.5%);
+}
+
+@include breakpoint(1201px 1700px) {
+
+	@include card-width(4, 2%);
+}
+
+@include breakpoint(1701px 2000px) {
+
+	@include card-width(5, 1.5%);
+}
+
+@include breakpoint(2001px 2300px) {
+
+	@include card-width(6, 1%);
+}
+
+@include breakpoint(2001px 2300px) {
+
+	@include card-width(7, 0.8%);
 }

@@ -466,7 +466,7 @@ module.exports = function (grunt) {
             '<%= yeoman.client %>/components'
           ],
           compass: true,
-          require: 'susy'
+          require: ['susy', 'breakpoint']
         },
         files: {
           '.tmp/app/app.css' : '<%= yeoman.client %>/app/app.scss'
