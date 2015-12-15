@@ -41,6 +41,7 @@ module Higherframe.Wireframe {
 		hoveredDragHandle;
 		selectedDragHandle;
 
+		layerArtboards: paper.Layer;
 		layerGrid: paper.Layer;
 		layerDrawing: paper.Layer;
 		layerAnnotations: paper.Layer;
@@ -170,6 +171,7 @@ module Higherframe.Wireframe {
 				this.initProject();
 				this.initLayers();
 				this.updateCanvas();
+				this.updateArtboards();
 				this.updateGrid();
 
 				/**
@@ -232,6 +234,7 @@ module Higherframe.Wireframe {
 
  		initLayers() {
 
+			this.layerArtboards = new paper.Layer();
  			this.layerGrid = new paper.Layer();
  			this.layerDrawing = new paper.Layer();
  			this.layerAnnotations = new paper.Layer();
@@ -1410,6 +1413,25 @@ module Higherframe.Wireframe {
 			});
 
 			this.collaboratorLabels.splice(0, this.collaboratorLabels.length);
+		}
+
+
+		/**
+		 * Artboards
+		 */
+
+		updateArtboards() {
+
+			this.layerArtboards.activate();
+
+			var artboard = paper.Path.Rectangle(
+				new paper.Point(-800, -600),
+				new paper.Point(800, 600)
+			);
+
+			artboard.fillColor = 'white';
+
+			this.layerDrawing.activate();
 		}
 
 

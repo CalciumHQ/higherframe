@@ -119,7 +119,7 @@ $toolbarPaddingHorizontal: 10px;
 		height: 100%;
 		width: $sidebarDefaultWidth + $animationExtension;
 		margin-left: -$animationExtension;
-		border-right: 1px solid #d9d9d9;
+		border-right: 1px solid #eee;
 		background: white;
 		z-index: 2;
 
@@ -243,7 +243,8 @@ $toolbarPaddingHorizontal: 10px;
 			@include transition(padding-left 0.3s ease-in-out);
 			height: $toolbarHeight;
 			padding: 0 $toolbarPaddingHorizontal;
-			background: #f3f3f3;
+			border-bottom: 1px solid #eee;
+			background: white;
 
 			&.sidebar-open-add {
 				@include animation(toolbar-sidebar-elastic-entry 0.8s);
@@ -290,7 +291,7 @@ $toolbarPaddingHorizontal: 10px;
 			@include flex-grow(1);
 			width: 100%;
 			z-index: 1;
-			background: white;
+			background: #efefed;
 		}
 	}
 
