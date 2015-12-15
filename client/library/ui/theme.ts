@@ -36,22 +36,22 @@ module Higherframe.UI {
   export class DefaultTheme implements ITheme {
 
     ComponentDefault = new paper.Color('#888');
-    ComponentHover = new paper.Color('#a4d64e');
+    ComponentHover = new paper.Color('#444');
     ComponentActive = new paper.Color('#a4d64e');
     ComponentFocus = new paper.Color('#a4d64e');
 
     ComponentDefaultLight = new paper.Color('#aaa');
-    ComponentHoverLight = new paper.Color('#a4d64e');
+    ComponentHoverLight = new paper.Color('#444');
     ComponentActiveLight = new paper.Color('#a4d64e');
     ComponentFocusLight = new paper.Color('#a4d64e');
 
-    ComponentDefaultDark = new paper.Color('#000');
-    ComponentHoverDark = new paper.Color('#a4d64e');
+    ComponentDefaultDark = new paper.Color('#222');
+    ComponentHoverDark = new paper.Color('#000');
     ComponentActiveDark = new paper.Color('#a4d64e');
     ComponentFocusDark = new paper.Color('#a4d64e');
 
     BorderDefault = new paper.Color('#ddd');
-    BorderHover = new paper.Color('#a4d64e');
+    BorderHover = new paper.Color('#666');
     BorderActive = new paper.Color('#a4d64e');
     BorderFocus = new paper.Color('#a4d64e');
 

@@ -71,8 +71,6 @@ module Higherframe.Drawing.Component.Library {
         ]
       }
     ];
-    resizable = false;
-    showBounds = false;
 
     model: Data.Component;
 

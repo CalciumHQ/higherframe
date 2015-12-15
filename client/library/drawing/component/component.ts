@@ -15,7 +15,7 @@ module Higherframe.Drawing.Component {
 
       super();
 
-      var lineWidth = 1/paper.view.zoom;
+      var lineWidth = 1.5/paper.view.zoom;
       var handleSize = 3/paper.view.zoom;
       var handle = paper.Path.Rectangle(
         new paper.Point(position.x - handleSize, position.y - handleSize),
@@ -68,8 +68,6 @@ module Higherframe.Drawing.Component {
     category?: String,
     tags: Array<String>,
     thumbnail: String,
-    resizable: Boolean,
-    showBounds: Boolean,
     model: Data.IDrawingModel,
 
     deserialize?: () => void;
@@ -91,7 +89,6 @@ module Higherframe.Drawing.Component {
     parts;
     collaborator;
     properties: Array<Object>;
-    boundingBox: paper.Group;
     dragHandles: paper.Group;
 
     // Provide definitions for paper.Item methods that we need in lieu

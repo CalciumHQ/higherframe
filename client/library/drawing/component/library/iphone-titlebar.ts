@@ -27,8 +27,6 @@ module Higherframe.Drawing.Component.Library {
         ]
       }
     ];
-    resizable = false;
-    showBounds = false;
     preview = '/assets/images/components/iphone.svg';
 
     model: Data.Component;

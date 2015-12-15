@@ -16,8 +16,6 @@ module Higherframe.Drawing.Component.Library {
       'phone'
     ];
     properties = [];
-    resizable = false;
-    showBounds = false;
 
     model: Data.Component;
 

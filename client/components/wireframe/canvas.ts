@@ -57,6 +57,7 @@ module Higherframe.Wireframe {
 
 		components: Array<Higherframe.Drawing.Component.IComponent> = [];
 		artboards: Array<paper.Item> = [];
+		boundingBoxes: Array<paper.Item> = [];
 		smartGuides: Array<paper.Item> = [];
 		collaboratorLabels: Array<paper.Item> = [];
 
@@ -125,7 +126,7 @@ module Higherframe.Wireframe {
 				scope.$on('component:propertyChange', (e, data) => {
 
 					data.component.update();
-					this.updateBoundingBox(data.component);
+					this.updateBoundingBoxes();
 					this.updateDragHandles(data.component);
 
 					// Update collaborator labels
@@ -185,12 +186,12 @@ module Higherframe.Wireframe {
 				 * TODO: Find a better way.
 				 */
 
-				var self = this;
+				/*var self = this;
 				(function updateLoop() {
 
 					self.updateCanvas();
 					requestAnimationFrame(updateLoop);
-				})();
+				})();*/
 			};
 		}
 
@@ -703,7 +704,7 @@ module Higherframe.Wireframe {
 		onItemUpdated(item: Higherframe.Drawing.Component.IComponent) {
 
 			item.update();
-			this.updateBoundingBox(item);
+			this.updateBoundingBoxes();
 			this.updateDragHandles(item);
 		}
 
@@ -762,14 +763,19 @@ module Higherframe.Wireframe {
 
 				item.remove();
 
-				var index = this.selectedItems.indexOf(item);
+				var index = this.components.indexOf(item);
+				if (index !== -1) {
 
+					this.components.splice(index, 1);
+				}
+
+				index = this.selectedItems.indexOf(item);
 				if (index !== -1) {
 
 					this.selectedItems.splice(index, 1);
 				}
 
-				this.removeBoundingBox(item);
+				this.updateBoundingBoxes();
 				this.removeDragHandles(item);
 			}
 		}
@@ -782,7 +788,7 @@ module Higherframe.Wireframe {
 
 				if (item.onMove) { item.onMove(event); }
 
-				this.updateBoundingBox(item);
+				this.updateBoundingBoxes();
 				this.updateDragHandles(item);
 			});
 
@@ -795,7 +801,7 @@ module Higherframe.Wireframe {
 
 				var delta = new paper.Point(x, y);
 				item.position = item.position.add(delta);
-				this.updateBoundingBox(item);
+				this.updateBoundingBoxes();
 				this.updateDragHandles(item);
 			});
 
@@ -1041,61 +1047,91 @@ module Higherframe.Wireframe {
 		 * whether it is selected. The bounding box will
 		 * be added/removed/updated as appropriate.
 		 */
-		updateBoundingBox(item) {
+		updateBoundingBoxes() {
 
-			var selected = (this.selectedItems.indexOf(item) !== -1);
-
-			if (selected && !item.boundingBox) {
-
-				this.addBoundingBox(item);
-			}
-
-			else if (!selected && item.boundingBox) {
-
-				this.removeBoundingBox(item);
-			}
-
-			else if (selected && item.boundingBox) {
-
-				this.removeBoundingBox(item);
-				this.addBoundingBox(item);
-			}
+			this.removeBoundingBoxes();
+			this.addBoundingBoxes();
 		}
 
-		addBoundingBox(item: Higherframe.Drawing.Component.IComponent) {
+		addBoundingBoxes() {
 
-			if (!item.boundingBox) {
+			// Get a rectangle containing the selected items
+			var x1 = Infinity,
+					x2 = -x1,
+					y1 = x1,
+					y2 = x2;
 
-				this.layerSelections.activate();
-				item.boundingBox = new paper.Group();
+			this.selectedItems.forEach((item) => {
 
-				// Add a rectangle to indicate component bounds if requested
-				if (item.showBounds) {
+				x1 = Math.min(item.bounds.left, x1);
+				y1 = Math.min(item.bounds.top, y1);
+				x2 = Math.max(item.bounds.right, x2);
+				y2 = Math.max(item.bounds.bottom, y2);
+			});
 
-					var lineWidth = 1/paper.view.zoom;
-					var box = paper.Path.Rectangle(item.bounds);
-					box.strokeColor = this.theme.BoundsDefault;
-					box.strokeWidth = lineWidth;
-					item.boundingBox.addChild(box);
-				}
+			var rect = isFinite(x1)
+				? new paper.Rectangle(x1, y1, x2 - x1, y2 - y1)
+				: null;
+
+			if (!rect) {
+
+				return;
+			}
+
+			// Draw the bounding box
+			this.layerSelections.activate();
+			var boundingBox = new paper.Group();
+
+			// Add a rectangle to indicate component bounds if requested
+			var lineWidth = 1.5/paper.view.zoom;
+			var box = paper.Path.Rectangle(rect);
+			box.strokeColor = this.theme.BoundsDefault;
+			box.strokeWidth = lineWidth;
+			boundingBox.addChild(box);
+
+			// A single component is selected
+			if (this.selectedItems.length == 1) {
+
+				var component: Higherframe.Drawing.Component.IComponent = this.selectedItems[0];
 
 				// Add the transform handles
-				_.forEach(item.getTransformHandles(this.theme), (transformHandle) => {
+				_.forEach(component.getTransformHandles(this.theme), (transformHandle) => {
 
-					item.boundingBox.addChild(transformHandle);
+					boundingBox.addChild(transformHandle);
 				});
-
-				this.layerDrawing.activate();
 			}
+
+			// Multiple components are selected
+			else {
+
+				function addHandle(center: paper.Point, theme: Higherframe.UI.ITheme) {
+
+					var handle = new Drawing.Component.DragHandle(center, theme);
+					boundingBox.addChild(handle);
+				}
+
+				addHandle(rect.topLeft, this.theme);
+				addHandle(rect.topCenter, this.theme);
+				addHandle(rect.topRight, this.theme);
+				addHandle(rect.rightCenter, this.theme);
+				addHandle(rect.bottomRight, this.theme);
+				addHandle(rect.bottomCenter, this.theme);
+				addHandle(rect.bottomLeft, this.theme);
+				addHandle(rect.leftCenter, this.theme);
+			}
+
+			this.boundingBoxes.push(boundingBox);
+			this.layerDrawing.activate();
 		}
 
-		removeBoundingBox(item) {
+		removeBoundingBoxes() {
 
-			if (item.boundingBox) {
+			angular.forEach(this.boundingBoxes, function (boundingBox) {
 
-				item.boundingBox.remove();
-				item.boundingBox = null;
-			}
+				boundingBox.remove();
+			});
+
+			this.boundingBoxes.splice(0, this.boundingBoxes.length);
 		}
 
 
@@ -1428,6 +1464,8 @@ module Higherframe.Wireframe {
 				new paper.Point(800, 600)
 			);
 			artboard.fillColor = 'white';
+			artboard.strokeColor = '#ccc';
+			artboard.strokeWidth = 1 / paper.view.zoom;
 
 			this.artboards.push(artboard);
 

@@ -74,8 +74,6 @@ module Higherframe.Drawing.Component.Library {
         ]
       }
     ];
-    resizable = true;
-    showBounds = false;
     thumbnail = '/assets/images/components/iphone-thumbnail@2x.png';
     snapPoints = [
       { x: -116, y: -232 },		// Bounding box

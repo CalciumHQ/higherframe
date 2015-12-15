@@ -28,8 +28,6 @@ module Higherframe.Drawing.Component.Library {
         ],
       }
     ];
-    resizable = true;
-    showBounds = false;
 
     model: Data.Component;
 
