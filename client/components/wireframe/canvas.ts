@@ -56,6 +56,7 @@ module Higherframe.Wireframe {
 		} = { x: [], y: [] };
 
 		components: Array<Higherframe.Drawing.Component.IComponent> = [];
+		artboards: Array<paper.Item> = [];
 		smartGuides: Array<paper.Item> = [];
 		collaboratorLabels: Array<paper.Item> = [];
 
@@ -899,8 +900,6 @@ module Higherframe.Wireframe {
 				));
 			}
 
-			this.updateGrid();
-
 			this.scope.$emit('view:panned', paper.view.center);
 		};
 
@@ -1428,8 +1427,9 @@ module Higherframe.Wireframe {
 				new paper.Point(-800, -600),
 				new paper.Point(800, 600)
 			);
-
 			artboard.fillColor = 'white';
+
+			this.artboards.push(artboard);
 
 			this.layerDrawing.activate();
 		}
@@ -1440,7 +1440,7 @@ module Higherframe.Wireframe {
 		 */
 
 		updateGrid() {
-return;
+
 				var gridMajorSize = 100,
 					gridMinorSize = 20,
 					gridMajorColor = 'rgba(0,0,0,0.07)',
@@ -1449,91 +1449,88 @@ return;
 
 				this.layerGrid.activate();
 
-				// Establish an origin and line count,
-				// starting just outside the viewport
-				var startX = Math.floor(paper.view.bounds.topLeft.x / gridMajorSize) * gridMajorSize,
-					endX = Math.ceil(paper.view.bounds.bottomRight.x / gridMajorSize) * gridMajorSize,
-					startY = Math.floor(paper.view.bounds.topLeft.y / gridMajorSize) * gridMajorSize,
-					endY = Math.ceil(paper.view.bounds.bottomRight.y / gridMajorSize) * gridMajorSize,
-					countX = (endX - startX) / gridMinorSize,
-					countY = (endY - startY) / gridMinorSize;
+				this.artboards.forEach((artboard) => {
 
-				// Don't display grid beyond a zoom level
-				if (paper.view.zoom < 0.4) {
+					// Establish an origin and line count,
+					// starting just outside the viewport
+					var startX = artboard.bounds.left,
+						endX = Math.floor(artboard.bounds.right / gridMajorSize) * gridMajorSize,
+						startY = artboard.bounds.top,
+						endY = Math.floor(artboard.bounds.bottom / gridMajorSize) * gridMajorSize,
+						countX = (endX - startX) / gridMinorSize,
+						countY = (endY - startY) / gridMinorSize;
 
-					countX = countY = 0;
-				}
+					// Create or remove existing grid lines to match
+					// the required number
+					while(this.gridLines.x.length > countX) {
 
-				// Create or remove existing grid lines to match
-				// the required number
-				while(this.gridLines.x.length > countX) {
-
-					var line: paper.Path = this.gridLines.x.pop();
-					line.remove();
-				}
-
-				while(this.gridLines.y.length > countY) {
-
-					var line: paper.Path = this.gridLines.y.pop();
-					line.remove();
-				}
-
-				while(this.gridLines.x.length < countX) {
-
-					var line: paper.Path = paper.Path.Line(new paper.Point(0, 0), new paper.Point(0, 0));
-					line.strokeWidth = gridStrokeWidth;
-					this.gridLines.x.push(line);
-				}
-
-				while(this.gridLines.y.length < countY) {
-
-					var line: paper.Path = paper.Path.Line(new paper.Point(0, 0), new paper.Point(0, 0));
-					line.strokeWidth = gridStrokeWidth;
-					this.gridLines.y.push(line);
-				}
-
-				// Position the grid lines
-				for (var i = 0; i < countY; i++) {
-
-					var y = i*gridMinorSize;
-
-					var from = new paper.Point(paper.view.bounds.left, startY + y);
-					var to = new paper.Point(paper.view.bounds.right, startY + y);
-
-					var line: paper.Path = this.gridLines.y[i];
-					line.strokeWidth = gridStrokeWidth;
-					line.segments[0].point = from;
-					line.segments[1].point = to;
-
-					if (y % gridMajorSize == 0) {
-
-						line.strokeColor = gridMajorColor;
-					} else {
-
-						line.strokeColor = gridMinorColor;
+						var line: paper.Path = this.gridLines.x.pop();
+						line.remove();
 					}
-				}
 
-				for (var i = 0; i < countX; i++) {
+					while(this.gridLines.y.length > countY) {
 
-					var x = i*gridMinorSize;
-
-					var from = new paper.Point(startX + x, paper.view.bounds.top);
-					var to = new paper.Point(startX + x, paper.view.bounds.bottom);
-
-					var line: paper.Path = this.gridLines.x[i];
-					line.strokeWidth = gridStrokeWidth;
-					line.segments[0].point = from;
-					line.segments[1].point = to;
-
-					if (x % gridMajorSize == 0) {
-
-						line.strokeColor = gridMajorColor;
-					} else {
-
-						line.strokeColor = gridMinorColor;
+						var line: paper.Path = this.gridLines.y.pop();
+						line.remove();
 					}
-				}
+
+					while(this.gridLines.x.length < countX) {
+
+						var line: paper.Path = paper.Path.Line(new paper.Point(0, 0), new paper.Point(0, 0));
+						line.strokeWidth = gridStrokeWidth;
+						this.gridLines.x.push(line);
+					}
+
+					while(this.gridLines.y.length < countY) {
+
+						var line: paper.Path = paper.Path.Line(new paper.Point(0, 0), new paper.Point(0, 0));
+						line.strokeWidth = gridStrokeWidth;
+						this.gridLines.y.push(line);
+					}
+
+					// Position the grid lines
+					for (var i = 0; i < countY; i++) {
+
+						var y = i*gridMinorSize;
+
+						var from = new paper.Point(artboard.bounds.left, startY + y);
+						var to = new paper.Point(artboard.bounds.right, startY + y);
+
+						var line: paper.Path = this.gridLines.y[i];
+						line.strokeWidth = gridStrokeWidth;
+						line.segments[0].point = from;
+						line.segments[1].point = to;
+
+						if (y % gridMajorSize == 0) {
+
+							line.strokeColor = gridMajorColor;
+						} else {
+
+							line.strokeColor = gridMinorColor;
+						}
+					}
+
+					for (var i = 0; i < countX; i++) {
+
+						var x = i*gridMinorSize;
+
+						var from = new paper.Point(startX + x, artboard.bounds.top);
+						var to = new paper.Point(startX + x, artboard.bounds.bottom);
+
+						var line: paper.Path = this.gridLines.x[i];
+						line.strokeWidth = gridStrokeWidth;
+						line.segments[0].point = from;
+						line.segments[1].point = to;
+
+						if (x % gridMajorSize == 0) {
+
+							line.strokeColor = gridMajorColor;
+						} else {
+
+							line.strokeColor = gridMinorColor;
+						}
+					}
+				});
 
 				this.layerDrawing.activate();
 		}
