@@ -255,14 +255,14 @@ module Higherframe.Drawing.Component.Library {
      * Calculate the drag handles for the component
      */
 
-    getDragHandles(theme: Higherframe.UI.ITheme): Array<IDragHandle> {
+    getDragHandles(color: paper.Color): Array<IDragHandle> {
 
       var properties = <Higherframe.Data.IArrowProperties>this.model.properties;
       var position = new paper.Point(properties.x, properties.y);
       var startPoint = position.add(new paper.Point(properties.start.x, properties.start.y));
       var endPoint = position.add(new paper.Point(properties.end.x, properties.end.y));
 
-      var start = new DragHandle(new paper.Point(startPoint), theme);
+      var start = new DragHandle(new paper.Point(startPoint), color);
       start.cursor = Cursors.ResizeNESW;
       start.onMove = (pos: paper.Point): paper.Point => {
 
@@ -272,7 +272,7 @@ module Higherframe.Drawing.Component.Library {
         return pos;
       };
 
-      var end = new DragHandle(new paper.Point(endPoint), theme);
+      var end = new DragHandle(new paper.Point(endPoint), color);
       end.cursor = Cursors.ResizeNESW;
       end.onMove = (pos: paper.Point): paper.Point => {
 

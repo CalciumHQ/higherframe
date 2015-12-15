@@ -194,16 +194,6 @@ module Higherframe.Drawing.Component.Library {
 
 
     /**
-     * Calculate the drag points for the component
-     */
-
-    getDragHandles(theme: Higherframe.UI.ITheme): Array<IDragHandle> {
-
-      return [];
-    }
-
-
-    /**
      * Cast the model properties into the correct type
      */
 

@@ -165,27 +165,7 @@ module Higherframe.Drawing.Component.Library {
         new SnapPoint(this.bounds.bottomCenter, 'center', 'edge')
       ];
     }
-
-
-    /**
-     * Calculate the transform handles for the component
-     */
-
-    getTransformHandles(theme: Higherframe.UI.ITheme): Array<IDragHandle> {
-
-      return [];
-    };
-
-
-    /**
-     * Calculate the drag handles for the component
-     */
-
-    getDragHandles(theme: Higherframe.UI.ITheme): Array<IDragHandle> {
-
-      return [];
-    }
-
+    
 
     /**
      * Cast the model properties into the correct type

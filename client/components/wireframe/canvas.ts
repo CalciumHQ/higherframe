@@ -96,8 +96,8 @@ module Higherframe.Wireframe {
 					let component = <Higherframe.Drawing.Component.IComponent>data.component;
 					component.update();
 
-					// Update collaborator labels
-					this.updateCollaboratorLabels();
+					// Update bounding boxes
+					this.updateBoundingBoxes();
 				});
 
 				scope.$on('component:added', (e, data) => {
@@ -119,8 +119,8 @@ module Higherframe.Wireframe {
 						this.selectItems(data.components);
 					}
 
-					// Update collaborator labels
-					this.updateCollaboratorLabels();
+					// Update bounding boxes
+					this.updateBoundingBoxes();
 				});
 
 				scope.$on('component:propertyChange', (e, data) => {
@@ -128,9 +128,6 @@ module Higherframe.Wireframe {
 					data.component.update();
 					this.updateBoundingBoxes();
 					this.updateDragHandles(data.component);
-
-					// Update collaborator labels
-					this.updateCollaboratorLabels();
 				});
 
 				scope.$on('component:collaboratorSelect', (e, data) => {
@@ -144,8 +141,9 @@ module Higherframe.Wireframe {
 					// Set the user on the component
 					component.collaborator = data.user;
 
-					// Update collaborator labels
-					this.updateCollaboratorLabels();
+					// Update component and  bounding boxes
+					component.update();
+					this.updateBoundingBoxes();
 				});
 
 				scope.$on('component:collaboratorDeselect', (e, data) => {
@@ -160,8 +158,8 @@ module Higherframe.Wireframe {
 					component.collaborator = null;
 					component.focussed = false;
 
-					// Update collaborator labels
-					this.updateCollaboratorLabels();
+					// Update bounding boxes
+					this.updateBoundingBoxes();
 				});
 
 
@@ -933,6 +931,7 @@ module Higherframe.Wireframe {
 			paper.view.center = paper.view.center.add(a);
 
 			this.updateGrid();
+			this.updateBoundingBoxes();
 
 			this.scope.$emit('view:zoomed', paper.view.zoom);
 			this.scope.$emit('view:panned', paper.view.center);
@@ -1050,78 +1049,28 @@ module Higherframe.Wireframe {
 		updateBoundingBoxes() {
 
 			this.removeBoundingBoxes();
+			this.removeCollaboratorLabels();
 			this.addBoundingBoxes();
 		}
 
 		addBoundingBoxes() {
 
-			// Get a rectangle containing the selected items
-			var x1 = Infinity,
-					x2 = -x1,
-					y1 = x1,
-					y2 = x2;
+			// Draw the bounding box for other users' selections
+			var selections = _.groupBy(
+				this.components.filter((component) => !!component.collaborator),
+				(component) => component.collaborator._id
+			);
 
-			this.selectedItems.forEach((item) => {
+			angular.forEach(selections, (selection) => {
 
-				x1 = Math.min(item.bounds.left, x1);
-				y1 = Math.min(item.bounds.top, y1);
-				x2 = Math.max(item.bounds.right, x2);
-				y2 = Math.max(item.bounds.bottom, y2);
+				var collaborator = selection[0].collaborator;
+
+				var boundingBox = this.drawBoundingBox(selection, collaborator.color);
+				this.addCollaboratorLabel(collaborator, boundingBox.bounds.topRight);
 			});
 
-			var rect = isFinite(x1)
-				? new paper.Rectangle(x1, y1, x2 - x1, y2 - y1)
-				: null;
-
-			if (!rect) {
-
-				return;
-			}
-
-			// Draw the bounding box
-			this.layerSelections.activate();
-			var boundingBox = new paper.Group();
-
-			// Add a rectangle to indicate component bounds if requested
-			var lineWidth = 1.5/paper.view.zoom;
-			var box = paper.Path.Rectangle(rect);
-			box.strokeColor = this.theme.BoundsDefault;
-			box.strokeWidth = lineWidth;
-			boundingBox.addChild(box);
-
-			// A single component is selected
-			if (this.selectedItems.length == 1) {
-
-				var component: Higherframe.Drawing.Component.IComponent = this.selectedItems[0];
-
-				// Add the transform handles
-				_.forEach(component.getTransformHandles(this.theme), (transformHandle) => {
-
-					boundingBox.addChild(transformHandle);
-				});
-			}
-
-			// Multiple components are selected
-			else {
-
-				function addHandle(center: paper.Point, theme: Higherframe.UI.ITheme) {
-
-					var handle = new Drawing.Component.DragHandle(center, theme);
-					boundingBox.addChild(handle);
-				}
-
-				addHandle(rect.topLeft, this.theme);
-				addHandle(rect.topCenter, this.theme);
-				addHandle(rect.topRight, this.theme);
-				addHandle(rect.rightCenter, this.theme);
-				addHandle(rect.bottomRight, this.theme);
-				addHandle(rect.bottomCenter, this.theme);
-				addHandle(rect.bottomLeft, this.theme);
-				addHandle(rect.leftCenter, this.theme);
-			}
-
-			this.boundingBoxes.push(boundingBox);
-			this.layerDrawing.activate();
+			// Draw the bounding box for the current user's selection
+			this.drawBoundingBox(this.selectedItems, this.theme.BoundsDefault);
 		}
 
 		removeBoundingBoxes() {
@@ -1132,6 +1081,83 @@ module Higherframe.Wireframe {
 			});
 
 			this.boundingBoxes.splice(0, this.boundingBoxes.length);
+		}
+
+		// Get a rectangle containing the given items
+		private getBounds(items: Array<paper.Item>) {
+
+			var x1 = Infinity,
+					x2 = -x1,
+					y1 = x1,
+					y2 = x2;
+
+			items.forEach((item) => {
+
+				x1 = Math.min(item.bounds.left, x1);
+				y1 = Math.min(item.bounds.top, y1);
+				x2 = Math.max(item.bounds.right, x2);
+				y2 = Math.max(item.bounds.bottom, y2);
+			});
+
+			return isFinite(x1)
+				? new paper.Rectangle(x1, y1, x2 - x1, y2 - y1)
+				: null;
+		}
+
+		private drawBoundingBox(items: Array<Drawing.Component.IComponent>, color: paper.Color): paper.Group {
+
+			var rect = this.getBounds(items);
+
+			if (!rect) {
+
+				return;
+			}
+
+			this.layerSelections.activate();
+
+			var boundingBox = new paper.Group();
+
+			var lineWidth = 1/paper.view.zoom;
+			var box = paper.Path.Rectangle(rect);
+			box.strokeColor = color;
+			box.strokeWidth = lineWidth;
+			boundingBox.addChild(box);
+
+			// A single component is selected
+			if (items.length == 1) {
+
+				var component: Higherframe.Drawing.Component.IComponent = items[0];
+
+				// Add the transform handles
+				_.forEach(component.getTransformHandles(color), (transformHandle) => {
+
+					boundingBox.addChild(transformHandle);
+				});
+			}
+
+			// Multiple components are selected
+			else {
+
+				function addHandle(center: paper.Point) {
+
+					var handle = new Drawing.Component.DragHandle(center, color);
+					boundingBox.addChild(handle);
+				}
+
+				addHandle(rect.topLeft);
+				addHandle(rect.topCenter);
+				addHandle(rect.topRight);
+				addHandle(rect.rightCenter);
+				addHandle(rect.bottomRight);
+				addHandle(rect.bottomCenter);
+				addHandle(rect.bottomLeft);
+				addHandle(rect.leftCenter);
+			}
+
+			this.boundingBoxes.push(boundingBox);
+			this.layerDrawing.activate();
+
+			return boundingBox
 		}
 
 
@@ -1169,7 +1195,7 @@ module Higherframe.Wireframe {
 
 			item.dragHandles = new paper.Group();
 
-			angular.forEach(item.getDragHandles(this.theme), (dh) => {
+			angular.forEach(item.getDragHandles(this.theme.BoundsDefault), (dh) => {
 
 				item.dragHandles.addChild(dh);
 			});
@@ -1389,13 +1415,7 @@ module Higherframe.Wireframe {
 		 * Collaborator label
 		 */
 
-		updateCollaboratorLabels() {
-
-			this.removeCollaboratorLabels();
-			this.addCollaboratorLabels();
-		}
-
-		addCollaboratorLabels() {
+		addCollaboratorLabel(collaborator, anchor: paper.Point) {
 
 			this.layerGuides.activate();
 
@@ -1406,29 +1426,29 @@ module Higherframe.Wireframe {
 					var label = new paper.Group();
 
 					// Draw the collaborator label
-		      var calloutStart = component.getCollaboratorAnchorPoint();
-		      var calloutEnd = calloutStart.add(new paper.Point(10, -10));
+		      var calloutStart = anchor;
+		      var calloutEnd = calloutStart.add(new paper.Point(10 / paper.view.zoom, -10 / paper.view.zoom));
 
 		      var callout = paper.Path.Line(calloutStart, calloutEnd);
-		      callout.strokeColor = component.collaborator.color;
+		      callout.strokeColor = collaborator.color;
 		      callout.strokeWidth = 1;
 					label.addChild(callout);
 
 		      var text = new paper.PointText({
-		        point: calloutEnd.add(new paper.Point(3, -2)),
+		        point: calloutEnd.add(new paper.Point(3 / paper.view.zoom, -2 / paper.view.zoom)),
 		        content: component.collaborator.name,
 		        fillColor: 'white',
-		        fontSize: 9,
+		        fontSize: 9 / paper.view.zoom,
 		        fontWeight: 600,
 		        justification: 'left'
 		      });
 
 		      var bubbleRect = new paper.Rectangle(
-		        new paper.Point(calloutEnd.x - 2, calloutEnd.y - 13),
-		        new paper.Point(calloutEnd.x + text.bounds.width + 8, calloutEnd.y + 2)
+		        new paper.Point(calloutEnd.x - 2 / paper.view.zoom, calloutEnd.y - 13 / paper.view.zoom),
+		        new paper.Point(calloutEnd.x + text.bounds.width + 8 / paper.view.zoom, calloutEnd.y + 2 / paper.view.zoom)
 		      );
 
-		      var bubble = paper.Path.Rectangle(bubbleRect, 6);
+		      var bubble = paper.Path.Rectangle(bubbleRect, 6 / paper.view.zoom);
 		      bubble.fillColor = component.collaborator.color;
 
 					label.addChild(bubble);

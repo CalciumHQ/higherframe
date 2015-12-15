@@ -163,9 +163,9 @@ module Higherframe.Drawing.Component.Library {
      * Calculate the transform handles for the component
      */
 
-    getTransformHandles(theme: Higherframe.UI.ITheme): Array<IDragHandle> {
+    getTransformHandles(color: paper.Color): Array<IDragHandle> {
 
-      var rightCenter = new DragHandle(this.bounds.rightCenter, theme);
+      var rightCenter = new DragHandle(this.bounds.rightCenter, color);
       rightCenter.cursor = Cursors.ResizeHorizontal;
       rightCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 
@@ -181,7 +181,7 @@ module Higherframe.Drawing.Component.Library {
         return this.bounds.rightCenter;
       };
 
-      var leftCenter = new DragHandle(this.bounds.leftCenter, theme);
+      var leftCenter = new DragHandle(this.bounds.leftCenter, color);
       leftCenter.cursor = Cursors.ResizeHorizontal;
       leftCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 
@@ -216,16 +216,6 @@ module Higherframe.Drawing.Component.Library {
         new SnapPoint(this.bounds.rightCenter, 'edge', 'center'),
         new SnapPoint(this.bounds.bottomCenter, 'center', 'edge')
       ];
-    }
-
-
-    /**
-     * Calculate the drag points for the component
-     */
-
-    getDragHandles(theme: Higherframe.UI.ITheme): Array<IDragHandle> {
-
-      return [];
     }
 
 

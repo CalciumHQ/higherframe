@@ -199,9 +199,9 @@ module Higherframe.Drawing.Component.Library {
      * Calculate the transform handles for the component
      */
 
-    getTransformHandles(theme: Higherframe.UI.ITheme): Array<IDragHandle> {
+    getTransformHandles(color: paper.Color): Array<IDragHandle> {
 
-      var topLeft = new DragHandle(this.bounds.topLeft, theme);
+      var topLeft = new DragHandle(this.bounds.topLeft, color);
       topLeft.cursor = Cursors.ResizeNWSE;
       topLeft.onMove = (position: paper.Point): paper.Point => {
 
@@ -209,7 +209,7 @@ module Higherframe.Drawing.Component.Library {
         return this.bounds.topLeft;
       };
 
-      var topCenter = new DragHandle(this.bounds.topCenter, theme);
+      var topCenter = new DragHandle(this.bounds.topCenter, color);
       topCenter.cursor = Cursors.ResizeVertical;
       topCenter.onMove = (position: paper.Point): paper.Point => {
 
@@ -217,7 +217,7 @@ module Higherframe.Drawing.Component.Library {
         return this.bounds.topCenter;
       };
 
-      var topRight = new DragHandle(this.bounds.topRight, theme);
+      var topRight = new DragHandle(this.bounds.topRight, color);
       topRight.cursor = Cursors.ResizeNESW;
       topRight.onMove = (position: paper.Point): paper.Point => {
 
@@ -225,7 +225,7 @@ module Higherframe.Drawing.Component.Library {
         return this.bounds.topRight;
       };
 
-      var rightCenter = new DragHandle(this.bounds.rightCenter, theme);
+      var rightCenter = new DragHandle(this.bounds.rightCenter, color);
       rightCenter.cursor = Cursors.ResizeHorizontal;
       rightCenter.onMove = (position: paper.Point): paper.Point => {
 
@@ -233,7 +233,7 @@ module Higherframe.Drawing.Component.Library {
         return this.bounds.rightCenter;
       };
 
-      var bottomRight = new DragHandle(this.bounds.bottomRight, theme);
+      var bottomRight = new DragHandle(this.bounds.bottomRight, color);
       bottomRight.cursor = Cursors.ResizeNWSE;
       bottomRight.onMove = (position: paper.Point): paper.Point => {
 
@@ -241,7 +241,7 @@ module Higherframe.Drawing.Component.Library {
         return this.bounds.bottomRight;
       };
 
-      var bottomCenter = new DragHandle(this.bounds.bottomCenter, theme);
+      var bottomCenter = new DragHandle(this.bounds.bottomCenter, color);
       bottomCenter.cursor = Cursors.ResizeVertical;
       bottomCenter.onMove = (position: paper.Point): paper.Point => {
 
@@ -249,7 +249,7 @@ module Higherframe.Drawing.Component.Library {
         return this.bounds.bottomCenter;
       };
 
-      var bottomLeft = new DragHandle(this.bounds.bottomLeft, theme);
+      var bottomLeft = new DragHandle(this.bounds.bottomLeft, color);
       bottomLeft.cursor = Cursors.ResizeNESW;
       bottomLeft.onMove = (position: paper.Point): paper.Point => {
 
@@ -257,7 +257,7 @@ module Higherframe.Drawing.Component.Library {
         return this.bounds.bottomLeft;
       };
 
-      var leftCenter = new DragHandle(this.bounds.leftCenter, theme);
+      var leftCenter = new DragHandle(this.bounds.leftCenter, color);
       leftCenter.cursor = Cursors.ResizeHorizontal;
       leftCenter.onMove = (position: paper.Point): paper.Point => {
 
@@ -276,42 +276,6 @@ module Higherframe.Drawing.Component.Library {
         leftCenter
       ];
     };
-
-
-    /**
-     * Calculate the drag handles for the component
-     */
-
-    getDragHandles(theme: Higherframe.UI.ITheme): Array<IDragHandle> {
-
-      var properties = <Higherframe.Data.IRectangleProperties>this.model.properties;
-return [];
-      /*return [
-        {
-          position: new paper.Point(this.position.x - properties.width/2 + Number(properties.cornerRadius), this.position.y - properties.height/2),
-          move: (position: paper.Point): paper.Point => {
-
-            // The distance from the top-left corner
-            var distance = position.x - (this.position.x - properties.width/2);
-
-            // Only allow the drag handle to move horizontally
-            position.y = this.position.y - properties.height/2;
-
-            // Only allow positive radius
-            distance = Math.max(0, distance);
-
-            // Only allow up to half the width
-            distance = Math.min(properties.width/2, distance);
-
-            position.x = distance + (this.position.x - properties.width/2);
-            properties.cornerRadius = distance;
-            this.update();
-
-            return position;
-          }
-        }
-      ];*/
-    }
 
 
     /**
