@@ -1,3 +1,5 @@
+@import "bootstrap/assets/stylesheets/bootstrap/_variables";
+
 $leftSidebarWidth: 280px;
 $leftSidebarPaddingVertical: 25px;
 $leftSidebarPaddingHorizontal: 16px;
@@ -6,11 +8,48 @@ $chromeBackground: rgba(255,255,255,0.9);
 
 $canvasMargin: 15px;
 
-$gunmetal: #7c8285;
-
 $sidebarDefaultWidth: 280px;
 $sidebarPadding: 15px;
 $sidebarBorderColor: #dedede;
+
+$toolbarHeight: 50px;
+$toolbarPaddingHorizontal: 10px;
+
+@keyframes sidebar-elastic-entry {
+	0% {
+		@include transform(translateX(-1 * $sidebarDefaultWidth));
+	}
+	20% {
+		@include transform(translateX(0.1 * $sidebarDefaultWidth));
+	}
+	40% {
+		@include transform(translateX(-0.025 * $sidebarDefaultWidth));
+	}
+	60% {
+		@include transform(translateX(0 * $sidebarDefaultWidth));
+	}
+	100% {
+		@include transform(translateX(0 * $sidebarDefaultWidth));
+	}
+}
+
+@keyframes toolbar-sidebar-elastic-entry {
+	0% {
+		padding-left: $toolbarPaddingHorizontal + 0 * $sidebarDefaultWidth;
+	}
+	20% {
+		padding-left: $toolbarPaddingHorizontal + 1.1 * $sidebarDefaultWidth;
+	}
+	40% {
+		padding-left: $toolbarPaddingHorizontal + 0.975 * $sidebarDefaultWidth;
+	}
+	60% {
+		padding-left: $toolbarPaddingHorizontal + 1 * $sidebarDefaultWidth;
+	}
+	100% {
+		padding-left: $toolbarPaddingHorizontal + 1 * $sidebarDefaultWidth;
+	}
+}
 
 #frame {
 	@include display-flex;
@@ -73,20 +112,27 @@ $sidebarBorderColor: #dedede;
 	}
 
 	#frame-sidebar {
+		$animationExtension: 100px;		// show/hide animation needs extra width so
+																	// gap doesn't appear on the left
+
 		position: absolute;
 		height: 100%;
-		width: $sidebarDefaultWidth;
-		@include transition(all 0.3s ease-in-out);
+		width: $sidebarDefaultWidth + $animationExtension;
+		margin-left: -$animationExtension;
 		border-right: 1px solid #d9d9d9;
-		background-image: linear-gradient(rgba(#ffffff, 0.85), rgba(#ffffff, 0.85)), url('/assets/images/frame-sidebar-bg.jpg');
-		background-position: left top;
-		background-repeat: no-repeat;
-		background-attachment: local, fixed;
-		background-blend-mode: screen;
+		background: white;
 		z-index: 2;
 
+		&.frame-sidebar-collapse-add {
+			@include transition(transform 0.16s ease-in);
+		}
+
 		&.frame-sidebar-collapse {
-			@include transform(translateX(-$sidebarDefaultWidth));
+			@include transform(translateX(-100%));
+		}
+
+		&.frame-sidebar-collapse-remove {
+			@include animation(sidebar-elastic-entry 0.8s);
 		}
 
 		.frame-sidebar-pane {
@@ -95,6 +141,8 @@ $sidebarBorderColor: #dedede;
 			top: 0;
 			width: 100%;
 			height: 100%;
+			padding-left: $animationExtension;
+			color: $text-color;
 			@include display-flex;
 			@include flex-direction(column);
 			@include box-sizing(border-box);
@@ -132,6 +180,10 @@ $sidebarBorderColor: #dedede;
 				margin-left: 0;
 				margin-right: 0;
 
+				label {
+					color: $text-color;
+				}
+
 				.control-label {
 					@include box-sizing(border-box);
 					@include flex-shrink(0);
@@ -154,7 +206,6 @@ $sidebarBorderColor: #dedede;
 			@include box-sizing(border-box);
 			min-height: 34px;
 			padding: $sidebarPadding;
-			background: rgba($gunmetal, 0.1);
 
 			&.ui-sidebar-toolbar-top {
 				border-bottom: 1px solid $sidebarBorderColor;
@@ -185,27 +236,35 @@ $sidebarBorderColor: #dedede;
 		z-index: 1;
 
 		#canvas-toolbar {
-			$toolbarHeight: 50px;
-			$toolbarPadding: 10px;
-
 			@include display-flex;
 			@include flex-shrink(0);
+			@include align-items(center);
 			@include box-sizing(border-box);
+			@include transition(padding-left 0.3s ease-in-out);
 			height: $toolbarHeight;
-			padding: 11px $toolbarPadding;
+			padding: 0 $toolbarPaddingHorizontal;
 			background: #f3f3f3;
 
-			&.sidebarOpen {
-				padding-left: $sidebarDefaultWidth + $toolbarPadding;
+			&.sidebar-open-add {
+				@include animation(toolbar-sidebar-elastic-entry 0.8s);
 			}
 
-			& > .btn-group,
-			& > .btn,
-			& > .dropdown {
-				& + .btn-group,
-				& + .btn,
-				& + .dropdown {
-					margin-left: $toolbarPadding;
+			&.sidebar-open {
+				padding-left: $sidebarDefaultWidth + $toolbarPaddingHorizontal;
+			}
+
+			&.sidebar-open-remove {
+				@include transition(padding-left 0.16s ease-in);
+			}
+
+			& > .toolbar-item {
+				& + .toolbar-item {
+					margin-left: $toolbarPaddingHorizontal;
+				}
+
+				&.right,
+				& + .toolbar-item.right {
+					margin-left: auto;
 				}
 			}
 
@@ -222,7 +281,7 @@ $sidebarBorderColor: #dedede;
 
 			& > .divider {
 				width: 1px;
-				margin: 0 $toolbarPadding;
+				margin: 0 $toolbarPaddingHorizontal;
 				background: #ccc;
 			}
 		}
@@ -236,15 +295,18 @@ $sidebarBorderColor: #dedede;
 	}
 
 	#collaborators {
-		$collaboratorAvatarSize: 40px;
+		$collaboratorAvatarSize: 32px;
 
 		position: relative;
+		height: $toolbarHeight;
 		z-index: 2;
+		overflow: hidden;
 		@include clearfix;
 
 		.collaborator {
 			position: relative;
 			float: left;
+			margin-top: ($toolbarHeight - $collaboratorAvatarSize)/2;
 
 			& + .collaborator {
 				margin-left: 5px;
@@ -285,11 +347,5 @@ $sidebarBorderColor: #dedede;
 				border-radius: 4px;
 			}
 		}
-	}
-
-	.bottomRight {
-		position: absolute;
-		bottom: $canvasMargin;
-		right: $sidebarDefaultWidth + $canvasMargin;
 	}
 }

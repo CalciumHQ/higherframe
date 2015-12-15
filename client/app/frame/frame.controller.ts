@@ -862,6 +862,12 @@ class FrameCtrl {
 		this.paste();
 	}
 
+	onToolbarShareClick() {
+
+    var modal = new Higherframe.Modals.Frame.Share(this.frame, this.Auth, this.$mixpanel);
+    this.ModalManager.present(modal);
+  }
+
   // Action bar
   onActionbarCloseClick() {
 
@@ -919,12 +925,6 @@ class FrameCtrl {
 
     // Hide the quick add
     this.toggleQuickAdd();
-  }
-
-  onActionbarShareClick() {
-
-    var modal = new Higherframe.Modals.Frame.Share(this.frame, this.Auth, this.$mixpanel);
-    this.ModalManager.present(modal);
   }
 
   onComponentPropertyChange(key, value, component, property) {

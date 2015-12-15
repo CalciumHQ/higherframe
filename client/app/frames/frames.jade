@@ -1,39 +1,9 @@
 div#navbar.row.blue.border-light(ng-include='"components/navbar/navbar.html"')
-div#actionbar.row.blue.light
-	div.action.action-menu(uib-dropdown) 
-		span.b2(uib-dropdown-toggle) File
-		
-		ul.uib-dropdown-menu
-			li
-				a
-					span New wireframe
-					span.pull-right.text-muted
-						span(ng-bind-html="'ctrl' | symbol")
-						| N
-				
-			li
-				a
-					span New organisation
-					span.pull-right.text-muted
-						span(ng-bind-html="'shift' | symbol")
-						span(ng-bind-html="'ctrl' | symbol")
-						| N
-		
-	div.action.action-menu(uib-dropdown) 
-		span.b2(uib-dropdown-toggle) Settings
-		
-		ul.uib-dropdown-menu
-			li
-				a
-					span User settings
-					span.pull-right.text-muted
-						span(ng-bind-html="'ctrl' | symbol")
-						| U
 		
 div#frames
 	div.group(ng-repeat="group in FramesCtrl.groups")
 		div.organisation.row
-			div.name.b3.uppercase.strong.airy {{ group.organisation.name }}
+			div.name.b3.uppercase.airy {{ group.organisation.name }}
 				div.settings(ng-click="FramesCtrl.onOrganisationSettingsClick($event, group.organisation)")
 					svg-replace(ng-src="/assets/images/settings.svg")
 			
@@ -41,7 +11,7 @@ div#frames
 			a.card(ng-repeat="frame in group.frames | orderBy:'-created_at'", ng-click="FramesCtrl.onFrameClick($event, frame)")
 				div.content
 					div.left
-						span.name.h3.block {{ frame.name }}
+						span.name.h4.block {{ frame.name }}
 						span.project.b1.block {{ frame.organisation.name }}
 								
 						ul.users

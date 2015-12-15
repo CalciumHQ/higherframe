@@ -117,12 +117,17 @@ div.fullscreen-wrapper
 					div.form-group
 						label
 							input(type="checkbox")
-							span.h5  Show grid
+							span.h5  Grid
 						
 					div.form-group
 						label
 							input(type="checkbox")
 							span.h5  Snap to grid
+							
+					div.form-group
+						label
+							input(type="checkbox")
+							span.h5  Guides
 	
 			#settings-pane.frame-sidebar-pane(ng-show="FrameCtrl.sidebarMode == 'settings'")
 				.frame-sidebar-content.form-horizontal
@@ -143,15 +148,15 @@ div.fullscreen-wrapper
 							| Print
 									
 		#canvas-wrapper
-			#canvas-toolbar(ng-class="{ sidebarOpen: FrameCtrl.sidebarMode }")
-				div.btn-group
+			#canvas-toolbar(ng-class="{ 'sidebar-open': FrameCtrl.sidebarMode }")
+				div.btn-group.toolbar-item
 					button.btn.btn-default.btn-sm(uib-tooltip-html="'Undo (' + ('ctrl' | symbol) + 'Z)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
 						span.font-awesome &#xf0e2;
 						
 					button.btn.btn-default.btn-sm(uib-tooltip-html="'Redo (' + ('shift' | symbol) + ('ctrl' | symbol) + 'Z)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", disabled)
 						span.font-awesome.flip &#xf0e2;
 						
-				div(uib-dropdown)
+				div.toolbar-item(uib-dropdown)
 					button.btn.btn-default.btn-sm(uib-dropdown-toggle) 
 						| {{ FrameCtrl.view.zoom * 100 }}% 
 						span.caret
@@ -160,10 +165,10 @@ div.fullscreen-wrapper
 						li(ng-repeat="zoom in FrameCtrl.ZOOM_LEVELS")
 							a(ng-click="FrameCtrl.onToolbarZoomLevelClick(zoom)", ng-class="{ strong: zoom == FrameCtrl.view.zoom }") {{ zoom * 100 }}%
 				
-				button.btn.btn-default.btn-sm(ng-click="FrameCtrl.onToolbarFullscreenClick()", uib-tooltip-html="'Full screen (' + ('ctrl' | symbol) + 'F)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800") 
+				button.btn.btn-default.btn-sm.toolbar-item(ng-click="FrameCtrl.onToolbarFullscreenClick()", uib-tooltip-html="'Full screen (' + ('ctrl' | symbol) + 'F)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800") 
 					span.font-awesome &#xf065;
 							
-				div.btn-group
+				div.btn-group.toolbar-item
 					button.btn.btn-default.btn-sm(ng-click="FrameCtrl.onToolbarCopyClick()", uib-tooltip-html="'Copy (' + ('ctrl' | symbol) + 'C)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", ng-disabled="!FrameCtrl.selection.length")
 						span.font-awesome &#xf0c5;
 						
@@ -175,7 +180,7 @@ div.fullscreen-wrapper
 						
 				div.divider
 						
-				div.btn-group
+				div.btn-group.toolbar-item
 					button.btn.btn-default.btn-sm(ng-model="FrameCtrl.alignment", uib-btn-radio="'Left'", uib-tooltip="Align items left", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
 						span.font-awesome &#xf036;
 						
@@ -184,14 +189,17 @@ div.fullscreen-wrapper
 						
 					button.btn.btn-default.btn-sm(ng-model="FrameCtrl.alignment", uib-btn-radio="'Right'", uib-tooltip="Align items right", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
 						span.font-awesome &#xf038;
+						
+				div#collaborators.toolbar-item.right
+					div.collaborator(ng-repeat="user in FrameCtrl.collaborators", uib-tooltip="{{ user.name }}", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+						ui-placeholder.avatar(type="user", src="user.image", alt="{{ user.name }}")
+						div.indicator(ng-style="{ 'background': user.color }")
+					
+				button.btn.btn-primary.btn-sm.toolbar-item(ng-click="FrameCtrl.onToolbarShareClick()")
+					span.font-awesome &#xf1e0;
+					|  Share	
 				
 			canvas#canvas(wireframe, data="FrameCtrl.wireframe", resize, keepalive="true", jqyoui-droppable)
 				
 			// Media library
 			img(ng-repeat="media in FrameCtrl.media", ng-src="{{ media.large }}", id="{{ media._id }}", style="display:none")
-		
-		div.bottomRight(ng-hide="true")
-			#collaborators
-					.collaborator(ng-repeat="user in FrameCtrl.collaborators", ui-tooltip="user.name")
-						ui-placeholder.avatar(type="user", src="user.image", title="{{ user.name }}")
-						div.indicator(ng-style="{ 'background': user.color }")
