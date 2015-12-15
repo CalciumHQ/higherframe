@@ -297,16 +297,15 @@ $toolbarPaddingHorizontal: 10px;
 	#collaborators {
 		$collaboratorAvatarSize: 32px;
 
+		@include display-flex;
+		@include align-items(center);
 		position: relative;
 		height: $toolbarHeight;
 		z-index: 2;
 		overflow: hidden;
-		@include clearfix;
 
 		.collaborator {
 			position: relative;
-			float: left;
-			margin-top: ($toolbarHeight - $collaboratorAvatarSize)/2;
 
 			& + .collaborator {
 				margin-left: 5px;

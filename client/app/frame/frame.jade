@@ -191,6 +191,7 @@ div.fullscreen-wrapper
 						span.font-awesome &#xf038;
 						
 				div#collaborators.toolbar-item.right
+					span.text-muted(ng-show="!FrameCtrl.collaborators.length") No collaborators
 					div.collaborator(ng-repeat="user in FrameCtrl.collaborators", uib-tooltip="{{ user.name }}", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
 						ui-placeholder.avatar(type="user", src="user.image", alt="{{ user.name }}")
 						div.indicator(ng-style="{ 'background': user.color }")

@@ -126,6 +126,17 @@ module Higherframe.Drawing.Component.Library {
 
 
     /**
+     * Get the anchor point for displaying a collaborator label
+     */
+
+    getCollaboratorAnchorPoint(): paper.Point {
+
+      // Midpoint of corner radius
+      return this.bounds.topRight.subtract(new paper.Point(5.858, -5.858));
+    }
+
+
+    /**
      * Calculate the snap points for the component
      */
 

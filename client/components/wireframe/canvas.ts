@@ -54,7 +54,9 @@ module Higherframe.Wireframe {
 			y: Array<paper.Path>
 		} = { x: [], y: [] };
 
+		components: Array<Higherframe.Drawing.Component.IComponent> = [];
 		smartGuides: Array<paper.Item> = [];
+		collaboratorLabels: Array<paper.Item> = [];
 
 		theme: Higherframe.UI.ITheme = new Higherframe.UI.DefaultTheme();
 
@@ -90,23 +92,32 @@ module Higherframe.Wireframe {
 
 					let component = <Higherframe.Drawing.Component.IComponent>data.component;
 					component.update();
+
+					// Update collaborator labels
+					this.updateCollaboratorLabels();
 				});
 
 				scope.$on('component:added', (e, data) => {
 
 					// Insertion options
 					var defaults = {
-							select: true
+						select: true
 					};
 
 					var options = angular.extend(defaults, data.options || {});
 
+					// Add to list of components
+					data.components.forEach((component) => this.components.push(component));
+
 					// Select new components if requested
 					if (options.select) {
 
-							this.clearSelection();
-							this.selectItems(data.components);
+						this.clearSelection();
+						this.selectItems(data.components);
 					}
+
+					// Update collaborator labels
+					this.updateCollaboratorLabels();
 				});
 
 				scope.$on('component:propertyChange', (e, data) => {
@@ -114,6 +125,9 @@ module Higherframe.Wireframe {
 					data.component.update();
 					this.updateBoundingBox(data.component);
 					this.updateDragHandles(data.component);
+
+					// Update collaborator labels
+					this.updateCollaboratorLabels();
 				});
 
 				scope.$on('component:collaboratorSelect', (e, data) => {
@@ -126,6 +140,9 @@ module Higherframe.Wireframe {
 
 					// Set the user on the component
 					component.collaborator = data.user;
+
+					// Update collaborator labels
+					this.updateCollaboratorLabels();
 				});
 
 				scope.$on('component:collaboratorDeselect', (e, data) => {
@@ -139,6 +156,9 @@ module Higherframe.Wireframe {
 					// Set the color for the user
 					component.collaborator = null;
 					component.focussed = false;
+
+					// Update collaborator labels
+					this.updateCollaboratorLabels();
 				});
 
 
@@ -1324,6 +1344,72 @@ module Higherframe.Wireframe {
 			});
 
 			this.smartGuides.splice(0, this.smartGuides.length);
+		}
+
+
+		/**
+		 * Collaborator label
+		 */
+
+		updateCollaboratorLabels() {
+
+			this.removeCollaboratorLabels();
+			this.addCollaboratorLabels();
+		}
+
+		addCollaboratorLabels() {
+
+			this.layerGuides.activate();
+
+			this.components
+				.filter((component) => !!component.collaborator)
+				.forEach((component) => {
+
+					var label = new paper.Group();
+
+					// Draw the collaborator label
+		      var calloutStart = component.getCollaboratorAnchorPoint();
+		      var calloutEnd = calloutStart.add(new paper.Point(10, -10));
+
+		      var callout = paper.Path.Line(calloutStart, calloutEnd);
+		      callout.strokeColor = component.collaborator.color;
+		      callout.strokeWidth = 1;
+					label.addChild(callout);
+
+		      var text = new paper.PointText({
+		        point: calloutEnd.add(new paper.Point(3, -2)),
+		        content: component.collaborator.name,
+		        fillColor: 'white',
+		        fontSize: 9,
+		        fontWeight: 600,
+		        justification: 'left'
+		      });
+
+		      var bubbleRect = new paper.Rectangle(
+		        new paper.Point(calloutEnd.x - 2, calloutEnd.y - 13),
+		        new paper.Point(calloutEnd.x + text.bounds.width + 8, calloutEnd.y + 2)
+		      );
+
+		      var bubble = paper.Path.Rectangle(bubbleRect, 6);
+		      bubble.fillColor = component.collaborator.color;
+
+					label.addChild(bubble);
+					label.addChild(text);
+
+					this.collaboratorLabels.push(label);
+				});
+
+			this.layerDrawing.activate();
+		}
+
+		removeCollaboratorLabels() {
+
+			this.collaboratorLabels.forEach((label) => {
+
+				label.remove();
+			});
+
+			this.collaboratorLabels.splice(0, this.collaboratorLabels.length);
 		}
 
 

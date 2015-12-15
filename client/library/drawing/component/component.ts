@@ -79,6 +79,7 @@ module Higherframe.Drawing.Component {
     getSnapPoints: () => Array<SnapPoint>;
     getTransformHandles: (theme: Higherframe.UI.ITheme) => Array<IDragHandle>;
     getDragHandles: (theme: Higherframe.UI.ITheme) => Array<IDragHandle>;
+    getCollaboratorAnchorPoint: () => paper.Point;
     setProperty: (string, any) => void;
     onMove?: (IComponentMoveEvent) => void;
 
@@ -159,6 +160,11 @@ module Higherframe.Drawing.Component {
     serialize(): Data.IDrawingModel {
 
       return this.model;
+    }
+
+    getCollaboratorAnchorPoint(): paper.Point {
+
+      return this.bounds.topRight;
     }
 
     setProperty(name: string, value: any) {
