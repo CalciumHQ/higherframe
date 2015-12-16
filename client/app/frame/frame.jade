@@ -41,38 +41,69 @@ div.fullscreen-wrapper
 						div.toolbox-component(ng-repeat="component in ToolboxController.components | filter:ToolboxController.filterPredicate()", ng-click="ToolboxController.onComponentClick(component)", title="{{ component.title }}", ui-draggable, ui-draggable-end="ToolboxController.onComponentDragEnd($event, component)")
 							svg-replace(ng-src="{{ component.preview }}")
 							
+							
 			#properties-pane.frame-sidebar-pane(ng-controller="PropertiesCtrl as PropertiesCtrl", ng-show="FrameCtrl.sidebarMode == 'properties'")
 				.frame-sidebar-content.form
-					p.text-center.text-muted(ng-if="PropertiesCtrl.selection.length == 0") No selection
-					ul.properties(ng-if="PropertiesCtrl.selection.length == 1")
-						li.form-group.form-group-sm(ng-repeat="property in PropertiesCtrl.selection[0].properties")
-							label.form-label.h6 {{ property.label }}
+					div.text-center(ng-if="PropertiesCtrl.selection.length == 0")
+						div.h3.text-muted
+							i.font-awesome &#xf05e;
 							
-							div.property-control(ng-repeat="control in property.controls", ng-switch="control.ui")
-								select.form-control(ng-switch-when="select", placeholder="{{ control.placeholder }}", ng-options="o.value as o.label for o in control.options", ng-model="PropertiesCtrl.models[control.model]", ng-change="PropertiesCtrl.onPropertyControlChange(control)")
-								ui-image.h6(ng-switch-when="file", ng-model="PropertiesCtrl.models[control.model]", ui-image-change="PropertiesCtrl.onMediaPropertyControlChange(control, { media: media })")
-								ui-icon.h6(ng-switch-when="icon", ng-model="PropertiesCtrl.models[control.model]", ui-icon-change="PropertiesCtrl.onPropertyControlChange(control)")
-								input.form-control(ng-switch-default, type="text", placeholder="{{ control.placeholder }}", focus-on="control.focus", ng-model="PropertiesCtrl.models[control.model]", ng-focus="PropertiesCtrl.onPropertyControlFocus(control)", ng-blur="PropertiesCtrl.onPropertyControlBlur(control)", ng-keydown="PropertiesCtrl.onPropertyControlKeydown(control, $event)")
-
-					ul.properties(ng-if="PropertiesCtrl.selection.length")
-						li.form-group.form-group-sm
-							label.form-label.h6 Position
+						p.h5.text-muted No component selected
+					
+					div(ng-if="PropertiesCtrl.selection.length == 1")
+						.frame-sidebar-panel-header
+							h5.medium.loose.text-muted Properties
 							
-							div.property-control
-								input.form-control(type="text", placeholder="Left")
-									
-							div.property-control
-								input.form-control(type="text", placeholder="Top")
-									
-						li.form-group.form-group-sm
-							label.form-label.h6 Dimension
+						.frame-sidebar-panel
+							p.frame-sidebar-panel-placeholder.h5.text-muted(ng-if="!PropertiesCtrl.selection[0].properties.length") No editable properties
 							
-							div.property-control
-								input.form-control(type="text", placeholder="Width")
+							ul.properties(ng-if="PropertiesCtrl.selection[0].properties.length")
+								li.form-group.form-group-sm(ng-repeat="property in PropertiesCtrl.selection[0].properties")
+									label.form-label.h5.text-muted {{ property.label }}
 									
-							div.property-control
-								input.form-control(type="text", placeholder="Height")
+									div.property-controls
+										div.property-control(ng-repeat="control in property.controls")
+											div(ng-class="{ 'input-group': control.unit, 'input-group-sm': control.unit }")
+												select.form-control(ng-if="control.ui == 'select'", placeholder="{{ control.placeholder }}", ng-options="o.value as o.label for o in control.options", ng-model="PropertiesCtrl.models[control.model]", ng-change="PropertiesCtrl.onPropertyControlChange(control)")
+												ui-image.h6(ng-if="control.ui == 'file'", ng-model="PropertiesCtrl.models[control.model]", ui-image-change="PropertiesCtrl.onMediaPropertyControlChange(control, { media: media })")
+												ui-icon.h6(ng-if="control.ui == 'icon'", ng-model="PropertiesCtrl.models[control.model]", ui-icon-change="PropertiesCtrl.onPropertyControlChange(control)")
+												input.form-control(ng-if="!control.ui || control.ui == 'text'", type="text", placeholder="{{ control.placeholder }}", focus-on="control.focus", ng-model="PropertiesCtrl.models[control.model]", ng-focus="PropertiesCtrl.onPropertyControlFocus(control)", ng-blur="PropertiesCtrl.onPropertyControlBlur(control)", ng-keydown="PropertiesCtrl.onPropertyControlKeydown(control, $event)")
+											
+												span.input-group-addon(ng-if="control.unit") {{ control.unit }}
+												
+						.frame-sidebar-panel-header
+							h5.medium.loose.text-muted Layout
+							
+						.frame-sidebar-panel
+							ul.properties(ng-if="PropertiesCtrl.selection.length")
+								li.form-group.form-group-sm
+									label.form-label.h5.text-muted Position
 									
+									div.property-controls
+										div.property-control
+											div.input-group.input-group-sm
+												input.form-control(type="text", placeholder="Left")
+												span.input-group-addon px
+												
+										div.property-control
+											div.input-group.input-group-sm
+												input.form-control(type="text", placeholder="Top")
+												span.input-group-addon px
+											
+								li.form-group
+									label.form-label.h5.text-muted Dimensions
+									
+									div.property-controls
+										div.property-control
+											div.input-group.input-group-sm
+												input.form-control(type="text", placeholder="Width")
+												span.input-group-addon px
+												
+										div.property-control
+											div.input-group.input-group-sm
+												input.form-control(type="text", placeholder="Height")
+												span.input-group-addon px
+										
 			
 			#activity-pane.frame-sidebar-pane(ng-controller="ActivityCtrl as ActivityCtrl", ng-show="FrameCtrl.sidebarMode == 'activity'")
 				#activity-list.frame-sidebar-content
@@ -103,31 +134,41 @@ div.fullscreen-wrapper
 								span.h3.strong.loose.uppercase +
 								
 			#view-pane.frame-sidebar-pane(ng-show="FrameCtrl.sidebarMode == 'view'")
-				.frame-sidebar-content.form-horizontal
-					div.form-group(uib-dropdown)
-						label.control-label Zoom
-						button.btn.btn-default.btn-sm(uib-dropdown-toggle) 
-							| {{ FrameCtrl.view.zoom * 100 }}% 
-							span.caret
-							
-						div.uib-dropdown-menu
-							li(ng-repeat="zoom in FrameCtrl.ZOOM_LEVELS")
-								a(ng-click="FrameCtrl.onToolbarZoomLevelClick(zoom)", ng-class="{ strong: zoom == FrameCtrl.view.zoom }") {{ zoom * 100 }}%
-								
-					div.form-group
-						label
-							input(type="checkbox")
-							span.h5  Grid
+				.frame-sidebar-content
+					.frame-sidebar-panel-header
+						h5.medium.loose.text-muted Viewport
 						
-					div.form-group
-						label
-							input(type="checkbox")
-							span.h5  Snap to grid
+					.frame-sidebar-panel
+						ul.properties
+							li.property.form-group.form-group-sm(uib-dropdown)
+								label.form-label.h5.text-muted Zoom
+								
+								div.property-controls
+									div.property-control
+										button.btn.btn-default.btn-sm(uib-dropdown-toggle) 
+											| {{ FrameCtrl.view.zoom * 100 }}% 
+											span.caret
+										
+										ul.uib-dropdown-menu
+											li(ng-repeat="zoom in FrameCtrl.ZOOM_LEVELS")
+												a(ng-click="FrameCtrl.onToolbarZoomLevelClick(zoom)", ng-class="{ strong: zoom == FrameCtrl.view.zoom }") {{ zoom * 100 }}%
 							
-					div.form-group
-						label
-							input(type="checkbox")
-							span.h5  Guides
+							li.property.form-group.form-group-sm			
+								label.form-label.h5.text-muted Options
+									
+								div.property-controls
+									div.property-control.checkbox-group
+										label
+											input(type="checkbox")
+											span.h6  Grid
+									
+										label
+											input(type="checkbox")
+											span.h6  Snap to grid
+											
+										label
+											input(type="checkbox")
+											span.h6  Guides
 	
 			#settings-pane.frame-sidebar-pane(ng-show="FrameCtrl.sidebarMode == 'settings'")
 				.frame-sidebar-content.form-horizontal

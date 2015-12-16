@@ -8,8 +8,8 @@ $chromeBackground: rgba(255,255,255,0.9);
 
 $canvasMargin: 15px;
 
-$sidebarDefaultWidth: 280px;
-$sidebarPadding: 15px;
+$sidebarDefaultWidth: 275px;
+$sidebarPadding: 25px;
 $sidebarBorderColor: #dedede;
 
 $toolbarHeight: 50px;
@@ -73,6 +73,7 @@ $toolbarPaddingHorizontal: 10px;
 		z-index: 3;
 
 		li {
+			position: relative;
 			text-align: center;
 
 			&:hover {
@@ -86,6 +87,19 @@ $toolbarPaddingHorizontal: 10px;
 
 			&.active {
 				@include background-image(linear-gradient(74deg, rgb(164,214,78) 0%, rgb(255,192,0) 100%));
+
+				&:after {
+					content: '';
+					position: absolute;
+					right: 0;
+					top: 50%;
+					height: 0;
+					width: 0;
+					margin-top: -6px;
+					border-right: 6px solid white;
+					border-top: 6px solid transparent;
+					border-bottom: 6px solid transparent;
+				}
 			}
 
 			&,
@@ -168,39 +182,59 @@ $toolbarPaddingHorizontal: 10px;
 		}
 
 		.frame-sidebar-content {
-			padding-top: $sidebarPadding;
-			padding-left: $sidebarPadding;
-			padding-right: $sidebarPadding;
-		}
+			.frame-sidebar-panel-header {
+				height: 50px;
+				border-top: 1px solid #eee;
+				border-bottom: 1px solid #eee;
+				padding: 0 $sidebarPadding;
 
-		.form-horizontal {
-			.form-group {
-				@include display-flex;
-	      @include align-items(center);
-				margin-left: 0;
-				margin-right: 0;
-
-				label {
-					color: $text-color;
-				}
-
-				.control-label {
-					@include box-sizing(border-box);
-					@include flex-shrink(0);
-					width: 70px;
+				h5 {
 					margin-top: 0;
-					padding-top: 0;
-					text-align: left;
-				}
-
-				.form-control {
-					@include box-sizing(border-box);
-					@include flex-basis(1px);
-	        @include flex-grow(1);
-					margin-left: 8px
+					margin-bottom: 0;
+					line-height: 50px;
 				}
 			}
+
+			.frame-sidebar-panel {
+				padding: 0 $sidebarPadding 45px;
+			}
 		}
+
+		.frame-sidebar-panel-placeholder {
+			margin-top: 21px;
+		}
+
+		.properties {
+      li {
+        margin-bottom: 0;
+      }
+
+			.form-label {
+	      margin-top: 21px;
+	      margin-bottom: 0;
+	    }
+
+	    .property-controls {
+	      @include display-flex;
+	      @include align-items(center);
+	      margin-top: 9px;
+
+	      .property-control {
+	        @include flex-basis(1px);
+	        @include flex-grow(1);
+
+	        & + .property-control {
+	          margin-left: 25px;
+	        }
+	      }
+	    }
+
+	    .checkbox-group {
+	      label {
+	        display: block;
+	      }
+	    }
+    }
 
 		.frame-sidebar-toolbar {
 			@include box-sizing(border-box);
@@ -291,7 +325,7 @@ $toolbarPaddingHorizontal: 10px;
 			@include flex-grow(1);
 			width: 100%;
 			z-index: 1;
-			background: #efefed;
+			background: #cdcdcd;
 		}
 	}
 

@@ -62,11 +62,12 @@ module Higherframe.Drawing.Component.Library {
         ]
       },
       {
-        label: 'Radius',
+        label: 'Corner radius',
         controls: [
           {
             model: 'cornerRadius',
             type: Number,
+            unit: 'px',
             description: 'The corner radius describes how rounded the corners should be.'
           }
         ]

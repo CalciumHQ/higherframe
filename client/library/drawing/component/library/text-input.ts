@@ -44,6 +44,7 @@ module Higherframe.Drawing.Component.Library {
             model: 'fontSize',
             type: Number,
             placeholder: 'Font size',
+            unit: 'px',
             description: 'Set the font size of the input.'
           },
           {

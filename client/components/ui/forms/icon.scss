@@ -2,6 +2,8 @@
 .ui-icon {
   @include display-flex;
   @include align-items(center);
+  margin-top: 0;
+  margin-bottom: 0;
 
   .ui-icon-icon {
     @include flex-shrink(0);

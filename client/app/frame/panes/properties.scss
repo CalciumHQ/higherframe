@@ -1,35 +1,7 @@
 
 #properties-pane {
   .frame-sidebar-content {
-    padding-top: 17px;
-    padding-bottom: 17px;
 
-    .properties {
-      & + .properties {
-        padding-top: 16px;
-        border-top: 1px solid rgba($gunmetal, 0.1);
-      }
-    }
-
-    .form-group-sm {
-      @include display-flex;
-      @include align-items(center);
-
-      .form-label {
-        @include flex-shrink(0);
-        width: 70px;
-        color: $gunmetal;
-      }
-
-      .property-control {
-        @include flex-basis(1px);
-        @include flex-grow(1);
-        margin-left: 8px;
-
-        & + .property-control {
-          margin-left: 14px;
-        }
-      }
-    }
+    
   }
 }
