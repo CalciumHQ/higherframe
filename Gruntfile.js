@@ -87,7 +87,7 @@ module.exports = function (grunt) {
       sass: {
         files: [
           '<%= yeoman.client %>/{app,components}/**/*.{scss,sass}'],
-        tasks: ['sass', 'autoprefixer']
+        tasks: ['sass:server', 'autoprefixer']
       },
       jade: {
         files: [
@@ -470,6 +470,18 @@ module.exports = function (grunt) {
         },
         files: {
           '.tmp/app/app.css' : '<%= yeoman.client %>/app/app.scss'
+        }
+      },
+      bootstrap: {
+        options: {
+          loadPath: [
+            '<%= yeoman.client %>/library/bootstrap/assets/stylesheets'
+          ],
+          compass: false,
+          require: []
+        },
+        files: {
+          '.tmp/library/bootstrap.css' : '<%= yeoman.client %>/library/bootstrap/assets/stylesheets/bootstrap.scss'
         }
       }
     },

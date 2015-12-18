@@ -1,28 +1,26 @@
-div#navbar.row.transparent.green(ng-include='"components/navbar/navbar.html"')
+#forgot.page.micro-form
 
-#login.page.underlay-navbar
-
-form(name="form", ng-submit="submit(form)", novalidate="").ui-modal
-  .ui-modal-header
-    h2 Reset your password
-    
-  .ui-modal-body
-    div.ui-control
-      p.b1 No problem if you've forgotten your password - enter the email address you signed up with below and we'll send you a link you can use to change it.
-      
-    div.ui-control.block
-      label.ui-label.b1(for="user") Email address:
-      input.ui-input(name="email", type="text", ng-model="user.email", placeholder="e.g.: don@sterlingcooper.com", required, tabindex="1")
+  div.content
+    form(name="form", ng-submit="submit(form)", novalidate="")
+      div.micro-form-intro
+        img(src="/assets/images/icon-forgot.svg", height="60")
+        p.micro-form-note.h4 Forgotten your password? Enter the email address you signed up with below and we'll send you a link you can use to change it.
+        p.micro-form-note.h4
+          | For more help, send us an email at 
+          a(href="mailto:support@higherfra.me") support@higherfra.me
+          | .
         
-    div.ui-control.block
-      p.ui-error.b1(ng-show='form.email.$error.required && form.password.$error.required && submitted')
-        | Please enter your email address.
-      p.ui-error.b1 {{ errors.other }}
-    
-  .ui-modal-footer
-    .ui-modal-buttons
-      a.ui-button.neutral(ng-click="onCancelButtonClick()")
-        span.b1.medium.loose.uppercase Cancel
+      div.input-group.input-group-lg
+        span.input-group-addon.font-awesome &#xf007;
+        input.form-control(name="email", type="text", ng-model="user.email", placeholder="Your email address", required, tabindex="1")
+          
+      div.ui-control.block
+        p.ui-error.b1(ng-show='form.email.$error.required && form.password.$error.required && submitted')
+          | Please enter your email address.
+        p.ui-error.b1 {{ errors.other }}
+          
+      div.micro-form-buttons
+        button.btn.btn-lg.btn-primary(type="submit") Send
         
-      button.ui-button.success(type="submit")
-        span.b1.medium.loose.uppercase Send
+      p.micro-form-bottom-link.h5.text-center
+        a.medium(ui-sref="login") Back to login  
