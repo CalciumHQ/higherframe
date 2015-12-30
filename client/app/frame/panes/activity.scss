@@ -1,6 +1,6 @@
 
 $gunmetal: #7c8285;
-$activityAvatarSize: 25px;
+$activityAvatarSize: 32px;
 
 #activity-pane {
   @include display-flex;
@@ -10,33 +10,20 @@ $activityAvatarSize: 25px;
   @include flex-grow(0);
   @include flex-shrink(0);
 
-  .activity-time {
-    margin-top: 35px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid rgba($gunmetal, 0.1);
-    text-transform: capitalize;
-  }
-
-  .activity-avatar {
-    position: relative;
-    width: $activityAvatarSize;
-
-    .avatar {
-      position: absolute;
-      top: -($activityAvatarSize - $b2-baseline-height-true) / 2;
+  .activity-author {
+    .activity-avatar {
+      position: relative;
       width: $activityAvatarSize;
-      height: $activityAvatarSize;
-    }
-  }
 
-  .activity-info {
-    .b3 {
-      line-height: 20px;
+      .avatar {
+        width: $activityAvatarSize;
+        height: $activityAvatarSize;
+      }
     }
-  }
 
-  .activity-name {
-    color: $gunmetal;
+    .activity-info {
+
+    }
   }
 
   #activity-list {
@@ -44,31 +31,13 @@ $activityAvatarSize: 25px;
     overflow: scroll;
 
     .activity-block {
-      & + .activity-block {
-        .activity-time {
-          margin-top: 43px;
-        }
-
-        .activity {
-          margin-top: 27px;
-
-          &.is-sequence {
-            margin-top: $b2-line-height - $b2-baseline-height-true + 1px;
-          }
-        }
-      }
-
-      .activity-time {
-        display: none;
-      }
-
       &.is-first {
         .activity-time {
           display: block;
         }
 
         .activity {
-          margin-top: 17px;
+          margin-top: 35px;
         }
       }
 
@@ -78,52 +47,43 @@ $activityAvatarSize: 25px;
     }
 
     .activity {
-      @include display-flex;
-      margin-top: 17px;
-
-      .activity-info {
-        @include order(2);
-        margin-left: 10px;
-        width: 100%;
-
-        .name {
-          margin-top: 5px;
-          margin-bottom: 3px;
-        }
-
-        .body {
-          text-align: left;
-        }
-      }
-
-      .activity-avatar {
-        @include order(1);
-        @include flex-shrink(0);
-      }
-
-      &.is-sequence {
-        .name,
-        .activity-avatar .avatar {
-          display: none;
-        }
-      }
-
-      &.is-author {
+      .activity-author {
+        @include display-flex;
 
         .activity-info {
+          @include order(2);
+          margin-left: 10px;
+          width: 100%;
 
-
-          .name {
-
+          .activity-name {
+            display: block;
+            margin-top: -1px;
+            margin-bottom: 0;
           }
 
-          .body {
-
+          .activity-time {
+            display: block;
+            margin-top: -3px;
+            margin-bottom: -3px;
           }
         }
 
         .activity-avatar {
+          @include order(1);
+          @include flex-shrink(0);
+        }
+      }
 
+      .activity-content {
+        margin-top: 10px;
+        line-height: 27px;
+      }
+
+      &.is-sequence {
+        margin-top: 25px;
+
+        .activity-author {
+          display: none;
         }
       }
     }

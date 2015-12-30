@@ -20,6 +20,13 @@ module Higherframe.UI.Filters {
           return true;
         }
 
+        // Show the header if a different author for the previous activity
+        if (input.user._id != previous.user._id) {
+
+          return true;
+        }
+
+        // Hide the header if within five minutes of the previous activity
         var m = moment(input.created_at);
         var p = moment(previous.created_at);
         return m.diff(p, 'minutes') > 5;
