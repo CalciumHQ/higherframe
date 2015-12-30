@@ -48,7 +48,7 @@ angular.module('siteApp', [
     };
   })
 
-  .run(function ($rootScope, $location, Auth) {
+  .run(function ($rootScope, $location, $document, $timeout, Auth) {
 
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$stateChangeStart', function (event, next) {
@@ -62,5 +62,43 @@ angular.module('siteApp', [
     // Handle errors in routing
     $rootScope.$on('$stateChangeError', function() {
 
+    });
+
+    // Page transition class
+    $rootScope.$on('$stateChangeStart', function (event, next, foo, prev) {
+
+      var body = angular.element($document[0].body);
+
+      if (next) {
+
+        var ui = next.ui || 'default';
+        body.addClass(`page-transition-${ ui }-enter`);
+      }
+
+      if (prev) {
+
+        var ui = prev.ui || 'default';
+        body.addClass(`page-transition-${ ui }-leave`);
+      }
+    });
+
+    $rootScope.$on('$stateChangeSuccess', function() {
+
+      var body = $document[0].body;
+      var $body = angular.element(body);
+      var classes = body.className.split(/\s+/);
+
+      $timeout(() => {
+
+        classes
+          .filter((cl) => {
+
+            return cl.match(/^page-transition-/);
+          })
+          .forEach((cl) => {
+
+            $body.removeClass(cl);
+          });
+      }, 700);
     });
   });

@@ -6,7 +6,8 @@ angular.module('siteApp')
       .state('login', {
         url: '/login',
         templateUrl: 'app/account/login/login.html',
-        controller: 'LoginCtrl'
+        controller: 'LoginCtrl',
+        ui: 'microForm'
       })
       .state('signup', {
         url: '/signup',
@@ -16,7 +17,8 @@ angular.module('siteApp')
       .state('forgot', {
         url: '/forgot',
         templateUrl: 'app/account/forgot/forgot.html',
-        controller: 'ForgotCtrl'
+        controller: 'ForgotCtrl',
+        ui: 'microForm'
       })
       .state('reset', {
         url: '/reset/:id',

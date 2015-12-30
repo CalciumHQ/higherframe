@@ -155,6 +155,12 @@ $unitPadding: 80px;
     padding-left: 0;
   }
 
+  .form-control {
+    &:focus {
+      @include box-shadow(none);
+    }
+  }
+
   .btn {
     display: block;
     width: 100%;
@@ -167,25 +173,90 @@ $unitPadding: 80px;
  * Page transitions
  */
 
-[ui-view].ng-enter,
-[ui-view].ng-leave {
-  position: absolute;
-  width: 100%;
-  @include transition(opacity 0.5s);
+// Microform entry and intermediate transitions
+body.page-transition-microForm-enter {
+
+  [ui-view].ng-enter,
+  [ui-view].ng-leave {
+    position: absolute;
+    width: 100%;
+    @include transition(opacity 0.3s);
+  }
+
+  [ui-view].ng-enter {
+    opacity: 0;
+  }
+
+  [ui-view].ng-enter-active {
+    opacity: 1;
+  }
+
+  [ui-view].ng-leave {
+    z-index: 0 !important;
+  }
+
+  [ui-view].ng-leave-active {
+
+  }
 }
 
-[ui-view].ng-enter {
-  opacity: 0;
+// Microform entry transition
+body.page-transition-microForm-enter:not(.page-transition-microForm-leave) {
+
+  [ui-view].ng-enter {
+    .micro-form {
+      & > .content {
+        @include transition(transform 0.3s ease-out);
+        @include transform(scale(0.95));
+      }
+    }
+  }
+
+  [ui-view].ng-enter-active {
+    .micro-form {
+      & > .content {
+        @include transform(scale(1.0));
+      }
+    }
+  }
 }
 
-[ui-view].ng-enter-active {
-  opacity: 1;
-}
+// Microform leave transition
+body.page-transition-microForm-leave:not(.page-transition-microForm-enter) {
 
-[ui-view].ng-leave {
-  z-index: 0 !important;
-}
+  [ui-view].ng-enter,
+  [ui-view].ng-leave {
+    position: absolute;
+    width: 100%;
+    @include transition(opacity 0.3s);
+  }
 
-[ui-view].ng-leave-active {
+  [ui-view].ng-leave {
+    opacity: 1;
 
+    .micro-form {
+      & > .content {
+        @include transition(transform 0.3s ease-in);
+        @include transform(scale(1.0)); 
+      }
+    }
+  }
+
+  [ui-view].ng-leave-active {
+    opacity: 0;
+
+    .micro-form {
+      & > .content {
+        @include transform(scale(0.95));
+      }
+    }
+  }
+
+  [ui-view].ng-enter {
+    z-index: 0 !important;
+  }
+
+  [ui-view].ng-enter-active {
+
+  }
 }
