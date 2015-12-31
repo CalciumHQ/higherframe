@@ -108,8 +108,8 @@ div.fullscreen-wrapper
 			#activity-pane.frame-sidebar-pane(ng-controller="ActivityCtrl as ActivityCtrl", ng-show="FrameCtrl.sidebarMode == 'activity'")
 				#activity-list.frame-sidebar-content
 					div.frame-sidebar-panel
-						div.activity-block(ng-repeat="activity in FrameCtrl.activities", ng-class="{ 'is-first': (activity | activityShowHeader:FrameCtrl.activities[$index-1]) }")
-							div.activity(ng-class="{ 'is-author': FrameCtrl.getCurrentUser()._id == activity.user._id, 'is-sequence': (activity | activityCollapseItem:FrameCtrl.activities[$index-1]) }", title="{{ activity.created_at | momentPattern:'MMM D YYYY h:mm:ss a' }}")
+						div.activity-block(ng-repeat="activity in FrameCtrl.activities", ng-class="{ 'is-first': (activity | activityShowHeader:FrameCtrl.activities[$index-1]), 'is-sequence': (activity | activityCollapseItem:FrameCtrl.activities[$index-1]) }")
+							div.activity(ng-class="{ 'is-author': FrameCtrl.getCurrentUser()._id == activity.user._id }", title="{{ activity.created_at | momentPattern:'MMM D YYYY h:mm:ss a' }}")
 								div.activity-author
 									div.activity-avatar
 										ui-placeholder.avatar(type="user", src="activity.user.image", title="{{ activity.user.name }}")

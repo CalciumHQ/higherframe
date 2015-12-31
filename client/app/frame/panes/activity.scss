@@ -30,19 +30,45 @@ $activityAvatarSize: 32px;
     height: 100%;
     overflow: scroll;
 
+    &.frame-sidebar-content {
+      .frame-sidebar-panel {
+        padding-bottom: 27px;
+      }
+    }
+
     .activity-block {
       &.is-first {
+        margin-top: 35px;
+
         .activity-time {
           display: block;
         }
+      }
 
-        .activity {
-          margin-top: 35px;
+      &.is-sequence {
+        margin-top: 25px;
+
+        .activity-author {
+          display: none;
         }
       }
 
-      &:last-child {
-        margin-bottom: 27px;
+      &.inserting {
+        opacity: 0;
+      }
+
+      &.measuring {
+        position: absolute;
+        width: 224px;
+      }
+
+      &.revealing {
+        @include transition(height 0.8s ease-in-out, opacity 0.5s);
+        height: 0;
+
+        &.fade-in {
+          opacity: 1;
+        }
       }
     }
 
@@ -77,14 +103,6 @@ $activityAvatarSize: 32px;
       .activity-content {
         margin-top: 10px;
         line-height: 27px;
-      }
-
-      &.is-sequence {
-        margin-top: 25px;
-
-        .activity-author {
-          display: none;
-        }
       }
     }
   }

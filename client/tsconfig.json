@@ -29,6 +29,7 @@
         "./app/frame/frame.controller.ts",
         "./app/frame/modals/new.ts",
         "./app/frame/modals/share.ts",
+        "./app/frame/panes/activity-animation.ts",
         "./app/frame/panes/activity.ts",
         "./app/frame/panes/properties.ts",
         "./app/frame/settings.controller.ts",
