@@ -930,6 +930,7 @@ module Higherframe.Wireframe {
 			paper.view.zoom = newZoom;
 			paper.view.center = paper.view.center.add(a);
 
+			this.updateArtboards();
 			this.updateGrid();
 			this.updateBoundingBoxes();
 
@@ -1479,13 +1480,34 @@ module Higherframe.Wireframe {
 
 			this.layerArtboards.activate();
 
-			var artboard = paper.Path.Rectangle(
+			// Remove old artboards
+			this.artboards.forEach((artboard) => {
+
+				artboard.remove();
+			});
+			this.artboards = [];
+
+			var artboard = new paper.Group();
+
+			// The canvas
+			var canvas = paper.Path.Rectangle(
 				new paper.Point(-800, -600),
 				new paper.Point(800, 600)
 			);
-			artboard.fillColor = 'white';
-			artboard.strokeColor = '#ccc';
-			artboard.strokeWidth = 1 / paper.view.zoom;
+			canvas.fillColor = 'white';
+			canvas.strokeColor = '#ccc';
+			canvas.strokeWidth = 1 / paper.view.zoom;
+			artboard.addChild(canvas);
+
+			// The artboard label
+			var label = new paper.PointText({
+				point: canvas.bounds.topLeft.subtract(new paper.Point(0, 10 / paper.view.zoom)),
+				content: 'Artboard 1',
+				fillColor: 'black',
+				fontSize: 12 / paper.view.zoom,
+				fontFamily: 'Myriad Pro'
+			});
+			artboard.addChild(label);
 
 			this.artboards.push(artboard);
 
