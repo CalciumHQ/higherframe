@@ -55,6 +55,7 @@ $activityAvatarSize: 32px;
 
       &.inserting {
         opacity: 0;
+        overflow: hidden;
       }
 
       &.measuring {
@@ -63,11 +64,20 @@ $activityAvatarSize: 32px;
       }
 
       &.revealing {
-        @include transition(height 0.8s ease-in-out, opacity 0.5s);
         height: 0;
+        margin-top: 0;
 
         &.fade-in {
           opacity: 1;
+        }
+      }
+
+      &.revealing-active {
+        @include transition(height 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), margin-top 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.2s linear);
+        margin-top: 35px;
+
+        &.is-sequence {
+          margin-top: 25px;
         }
       }
     }

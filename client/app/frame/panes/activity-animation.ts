@@ -23,12 +23,13 @@ module Higherframe.Controllers.Frame {
           $timeout(() => {
 
             element.css('height', bounds.height);
+            element.addClass('revealing-active');
           });
 
           $timeout(() => {
 
             element.addClass('fade-in');
-          }, 800);
+          }, 200);
 
           $timeout(() => {
 
@@ -37,7 +38,7 @@ module Higherframe.Controllers.Frame {
               .removeClass('revealing')
               .removeClass('inserting')
               .css('height', 'auto');
-          }, 1100);
+          }, 500);
         }
       };
     }

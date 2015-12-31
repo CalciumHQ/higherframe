@@ -86,6 +86,7 @@
         "./library/ui/filters/moment.ts",
         "./library/ui/filters/unicode.ts",
         "./library/ui/font-awesome.ts",
+        "./library/ui/helpers/scroll-lock.ts",
         "./library/ui/helpers/svg-replace.ts",
         "./library/ui/modal/manager.ts",
         "./library/ui/modal/modal.ts",
