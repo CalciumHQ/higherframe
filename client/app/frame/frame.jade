@@ -110,7 +110,7 @@ div.fullscreen-wrapper
 					div.frame-sidebar-panel
 						div.activity-block(ng-repeat="activity in FrameCtrl.activities", ng-class="{ 'is-first': (activity | activityShowHeader:FrameCtrl.activities[$index-1]), 'is-sequence': (activity | activityCollapseItem:FrameCtrl.activities[$index-1]) }")
 							div.activity(ng-class="{ 'is-author': FrameCtrl.getCurrentUser()._id == activity.user._id }", title="{{ activity.created_at | momentPattern:'MMM D YYYY h:mm:ss a' }}")
-								div.activity-author
+								div.activity-author(ng-if="activity.type == 'chat'")
 									div.activity-avatar
 										ui-placeholder.avatar(type="user", src="activity.user.image", title="{{ activity.user.name }}")
 									
@@ -120,10 +120,15 @@ div.fullscreen-wrapper
 											
 								div.activity-content
 									span(ng-switch="activity.type")
-										span(ng-switch-when="new-frame") created the wireframe
+										span.text-muted(ng-switch-when="new-frame")
+											span.medium {{ activity.user.name }} 
+											| created the wireframe
 										
-										span(ng-switch-when="added-user") invited 
-											span {{ activity.data.users[0].name }}
+										span.text-muted(ng-switch-when="added-user")
+											span.medium {{ activity.user.name }} 
+											| added 
+											span {{ activity.data.users[0].name }} 
+											| to the wireframe
 											
 										span(ng-switch-when="chat") {{ activity.data.message }}
 								
