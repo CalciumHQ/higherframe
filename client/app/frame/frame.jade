@@ -33,13 +33,14 @@ div.fullscreen-wrapper
 		#frame-sidebar(ng-class="{ 'frame-sidebar-collapse': !FrameCtrl.sidebarMode }")
 			#toolbox.frame-sidebar-pane(ng-controller="ToolboxController as ToolboxController", ng-show="FrameCtrl.sidebarMode == 'toolbox'")
 				.frame-sidebar-content
-					div#toolbox-categories.h6
-						span.toolbox-category.medium.active(ng-click="ToolboxController.onAllCategoriesClick()", ng-class="{ active: ToolboxController.all }") All
-						span.toolbox-category.medium(ng-repeat="category in ToolboxController.categories", ng-class="{ active: category.active }", ng-click="ToolboxController.onCategoryClick(category)") {{ category.name }}
-
-					div#toolbox-components
-						div.toolbox-component(ng-repeat="component in ToolboxController.components | filter:ToolboxController.filterPredicate()", ng-click="ToolboxController.onComponentClick(component)", title="{{ component.title }}", ui-draggable, ui-draggable-end="ToolboxController.onComponentDragEnd($event, component)")
-							svg-replace(ng-src="{{ component.preview }}")
+					div(ng-repeat="category in ToolboxController.categories")
+						.frame-sidebar-panel-header
+							h5.medium.loose.text-muted {{ category.name }}
+						
+						.frame-sidebar-panel
+							div#toolbox-components
+								div.toolbox-component(ng-repeat="component in ToolboxController.components | filter:{ category: category.name }", ng-click="ToolboxController.onComponentClick(component)", title="{{ component.title }}", ui-draggable, ui-draggable-end="ToolboxController.onComponentDragEnd($event, component)")
+									svg-replace(ng-src="{{ component.preview }}")
 							
 							
 			#properties-pane.frame-sidebar-pane(ng-controller="PropertiesCtrl as PropertiesCtrl", ng-show="FrameCtrl.sidebarMode == 'properties'")
