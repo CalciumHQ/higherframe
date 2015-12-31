@@ -132,12 +132,8 @@ div.fullscreen-wrapper
 											
 										span(ng-switch-when="chat") {{ activity.data.message }}
 								
-				form#activity-form.frame-sidebar-toolbar.ui-sidebar-toolbar-bottom(ng-submit="ActivityCtrl.onActivityFormSubmit()")
-					div.input-group
-						input.form-control(type="text", ng-model="ActivityCtrl.newMessage")
-						span.input-group-btn
-							button.btn.btn-xs.btn-success(type="submit")
-								span.h3.strong.loose.uppercase +
+				form#activity-form.frame-sidebar-toolbar.frame-sidebar-toolbar-bottom(ng-submit="ActivityCtrl.onActivityFormSubmit()")
+					textarea.form-control(msd-elastic, ng-model="ActivityCtrl.newMessage", ng-keydown="ActivityCtrl.onActivityChatKeyDown($event)", placeholder="Type a message...")
 								
 			#view-pane.frame-sidebar-pane(ng-show="FrameCtrl.sidebarMode == 'view'")
 				.frame-sidebar-content

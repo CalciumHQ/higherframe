@@ -183,6 +183,8 @@ $toolbarPaddingHorizontal: 10px;
 		}
 
 		.frame-sidebar-content {
+			@include flex-shrink(1);
+
 			.frame-sidebar-panel-header {
 				height: 50px;
 				border-top: 1px solid #eee;
@@ -238,15 +240,16 @@ $toolbarPaddingHorizontal: 10px;
     }
 
 		.frame-sidebar-toolbar {
+			@include flex-shrink(0);
 			@include box-sizing(border-box);
 			min-height: 34px;
-			padding: $sidebarPadding;
+			padding: 10px $sidebarPadding;
 
-			&.ui-sidebar-toolbar-top {
+			&.frame-sidebar-toolbar-top {
 				border-bottom: 1px solid $sidebarBorderColor;
 			}
 
-			&.ui-sidebar-toolbar-bottom {
+			&.frame-sidebar-toolbar-bottom {
 				border-top: 1px solid $sidebarBorderColor;
 			}
 		}

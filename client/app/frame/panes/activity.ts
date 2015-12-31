@@ -32,6 +32,17 @@ module Higherframe.Controllers.Frame {
       this.getCurrentUser = Auth.getCurrentUser;
     }
 
+    onActivityChatKeyDown(event) {
+
+      if (event.keyCode == 13) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        this.onActivityFormSubmit();
+      }
+    }
+
     onActivityFormSubmit() {
 
       if (!this.newMessage) {

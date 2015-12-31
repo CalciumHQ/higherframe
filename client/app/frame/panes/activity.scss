@@ -66,6 +66,12 @@ $activityAvatarSize: 32px;
         }
       }
 
+
+      /*
+       * New activity animation
+       * See `/app/frame/panes/activity-animation.ts` for more info
+       */
+
       &.inserting {
         opacity: 0;
         overflow: hidden;

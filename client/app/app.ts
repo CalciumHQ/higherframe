@@ -10,7 +10,8 @@ angular.module('siteApp', [
   'ui.router.title',
   'ui.bootstrap',
   'LocalStorageModule',
-  'analytics.mixpanel'
+  'analytics.mixpanel',
+  'monospaced.elastic'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $mixpanelProvider) {
     $urlRouterProvider

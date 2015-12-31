@@ -445,7 +445,7 @@ class FrameCtrl {
 					case '6':
 
 						// If in an input, allow event to continue
-						if (event.event.target.tagName == 'INPUT') {}
+						if (event.event.target.tagName == 'INPUT' || event.event.target.tagName == 'TEXTAREA') {}
 
 						// Otherwise cancel and broadcast to wireframe
 						else {
@@ -477,7 +477,7 @@ class FrameCtrl {
         case 'up':
         case 'down':
           // If in an input, allow event to continue
-          if (event.event.target.tagName == 'INPUT') {}
+          if (event.event.target.tagName == 'INPUT' || event.event.target.tagName == 'TEXTAREA') {}
 
           // Otherwise cancel and broadcast to wireframe
           else {
@@ -491,7 +491,7 @@ class FrameCtrl {
 
         case 'backspace':
           // If in an input, allow event to continue
-          if (event.event.target.tagName == 'INPUT') {}
+          if (event.event.target.tagName == 'INPUT' || event.event.target.tagName == 'TEXTAREA') {}
 
           // Otherwise cancel and broadcast to wireframe
           else {
