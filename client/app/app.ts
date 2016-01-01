@@ -13,7 +13,15 @@ angular.module('siteApp', [
   'analytics.mixpanel',
   'monospaced.elastic'
 ])
-  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $mixpanelProvider) {
+  .config(function (
+    $stateProvider,
+    $urlRouterProvider,
+    $locationProvider,
+    $httpProvider,
+    $mixpanelProvider,
+    ComponentLibraryProvider: Higherframe.Drawing.Component.Library.ServiceProvider
+  ) {
+    
     $urlRouterProvider
       .otherwise('/');
 
@@ -21,6 +29,20 @@ angular.module('siteApp', [
     $httpProvider.interceptors.push('authInterceptor');
 
     $mixpanelProvider.apiKey('af59676d763430037ae39d86282dbaca');
+
+    // Register components
+    ComponentLibraryProvider.registerComponent(Higherframe.Drawing.Component.Type.Rectangle);
+    ComponentLibraryProvider.registerComponent(Higherframe.Drawing.Component.Type.Arrow);
+    ComponentLibraryProvider.registerComponent(Higherframe.Drawing.Component.Type.Label);
+    ComponentLibraryProvider.registerComponent(Higherframe.Drawing.Component.Type.Image);
+    ComponentLibraryProvider.registerComponent(Higherframe.Drawing.Component.Type.IPhone);
+    ComponentLibraryProvider.registerComponent(Higherframe.Drawing.Component.Type.IPhoneTitlebar);
+    ComponentLibraryProvider.registerComponent(Higherframe.Drawing.Component.Type.MobileTitlebar);
+    ComponentLibraryProvider.registerComponent(Higherframe.Drawing.Component.Type.TextInput);
+    ComponentLibraryProvider.registerComponent(Higherframe.Drawing.Component.Type.SelectInput);
+    ComponentLibraryProvider.registerComponent(Higherframe.Drawing.Component.Type.Checkbox);
+    ComponentLibraryProvider.registerComponent(Higherframe.Drawing.Component.Type.Button);
+    ComponentLibraryProvider.registerComponent(Higherframe.Drawing.Component.Type.Icon);
   })
 
   .factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location) {

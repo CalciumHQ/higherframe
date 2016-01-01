@@ -67,6 +67,7 @@ class FrameCtrl {
     private ModalManager: Higherframe.UI.Modal.Manager,
     private Activity: Higherframe.Data.IActivityResource,
     Clipboard: Higherframe.Utilities.Clipboard,
+		ComponentLibrary: Higherframe.Drawing.Component.Library.IService,
     private $mixpanel
   ) {
 

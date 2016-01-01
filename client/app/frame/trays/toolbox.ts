@@ -3,21 +3,15 @@
 
 module Higherframe.Controllers.Frame {
 
-  export interface IToolboxTrayItem {
-    id: String,
-    category: String,
-    title: String,
-    preview: String
-  }
-
   export class ToolboxTrayController {
 
-    components: Array<IToolboxTrayItem> = [];
+    components: Array<Higherframe.Drawing.Component.Library.ILibraryItem> = [];
     categories: Object = {};
     all: boolean = true;
 
-    constructor(private $scope: ng.IScope) {
+    constructor(private $scope: ng.IScope, private ComponentLibrary: Higherframe.Drawing.Component.Library.IService) {
 
+      this.components = this.ComponentLibrary.getItems();
       this.registerWatches();
       this.registerComponents();
     }
@@ -35,34 +29,7 @@ module Higherframe.Controllers.Frame {
       }, true);
     }
 
-    private registerComponent(type: Higherframe.Drawing.Component.Type) {
-
-      var id = Higherframe.Drawing.Component.Type[type];
-
-      var toolboxTrayItem = {
-        id: id,
-        category: Higherframe.Drawing.Component.Library[id].category,
-        title: Higherframe.Drawing.Component.Library[id].title,
-        preview: Higherframe.Drawing.Component.Library[id].preview
-      };
-
-      this.components.push(toolboxTrayItem);
-    }
-
     private registerComponents() {
-
-      this.registerComponent(Higherframe.Drawing.Component.Type.Rectangle);
-      this.registerComponent(Higherframe.Drawing.Component.Type.Arrow);
-      this.registerComponent(Higherframe.Drawing.Component.Type.Label);
-      this.registerComponent(Higherframe.Drawing.Component.Type.Image);
-      this.registerComponent(Higherframe.Drawing.Component.Type.IPhone);
-      this.registerComponent(Higherframe.Drawing.Component.Type.IPhoneTitlebar);
-      this.registerComponent(Higherframe.Drawing.Component.Type.MobileTitlebar);
-      this.registerComponent(Higherframe.Drawing.Component.Type.TextInput);
-      this.registerComponent(Higherframe.Drawing.Component.Type.SelectInput);
-      this.registerComponent(Higherframe.Drawing.Component.Type.Checkbox);
-      this.registerComponent(Higherframe.Drawing.Component.Type.Button);
-      this.registerComponent(Higherframe.Drawing.Component.Type.Icon);
 
       let categoryNames = _.uniq(this.components.map((component) => {
 
@@ -120,15 +87,8 @@ module Higherframe.Controllers.Frame {
       });
     }
   }
-
-  export class ToolboxTray implements Higherframe.UI.ITray {
-
-    label = 'Toolbox';
-    templateUrl = '/app/frame/trays/toolbox.html';
-    controller = ToolboxTrayController;
-  }
 }
 
 angular
   .module('siteApp')
-  .controller('ToolboxController', Higherframe.Controllers.Frame.ToolboxTrayController);
+  .controller('ToolboxCtrl', Higherframe.Controllers.Frame.ToolboxTrayController);

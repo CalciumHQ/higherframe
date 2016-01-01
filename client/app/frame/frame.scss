@@ -323,6 +323,17 @@ $toolbarPaddingHorizontal: 10px;
 				margin: 0 $toolbarPaddingHorizontal;
 				background: #ccc;
 			}
+
+			#canvas-mode {
+				.dropdown-menu {
+					h5 { margin-bottom: 0; }
+					.h6 { margin-top: 0; }
+				}
+			}
+
+			#quick-add {
+				width: 180px;
+			}
 		}
 
 		#canvas {

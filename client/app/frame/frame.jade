@@ -31,15 +31,15 @@ div.fullscreen-wrapper
 				span.sr-only Download
 			
 		#frame-sidebar(ng-class="{ 'frame-sidebar-collapse': !FrameCtrl.sidebarMode }")
-			#toolbox.frame-sidebar-pane(ng-controller="ToolboxController as ToolboxController", ng-show="FrameCtrl.sidebarMode == 'toolbox'")
+			#toolbox.frame-sidebar-pane(ng-controller="ToolboxCtrl as ToolboxCtrl", ng-show="FrameCtrl.sidebarMode == 'toolbox'")
 				.frame-sidebar-content
-					div(ng-repeat="category in ToolboxController.categories")
+					div(ng-repeat="category in ToolboxCtrl.categories")
 						.frame-sidebar-panel-header
 							h5.medium.loose.text-muted {{ category.name }}
 						
 						.frame-sidebar-panel
 							div#toolbox-components
-								div.toolbox-component(ng-repeat="component in ToolboxController.components | filter:{ category: category.name }", ng-click="ToolboxController.onComponentClick(component)", title="{{ component.title }}", ui-draggable, ui-draggable-end="ToolboxController.onComponentDragEnd($event, component)")
+								div.toolbox-component(ng-repeat="component in ToolboxCtrl.components | filter:{ category: category.name }", ng-click="ToolboxCtrl.onComponentClick(component)", title="{{ component.title }}", ui-draggable, ui-draggable-end="ToolboxCtrl.onComponentDragEnd($event, component)")
 									svg-replace(ng-src="{{ component.preview }}")
 							
 							
@@ -192,7 +192,30 @@ div.fullscreen-wrapper
 							| Print
 									
 		#canvas-wrapper
-			#canvas-toolbar(ng-class="{ 'sidebar-open': FrameCtrl.sidebarMode }")
+			#canvas-toolbar(ng-controller="ToolbarCtrl as ToolbarCtrl", ng-class="{ 'sidebar-open': FrameCtrl.sidebarMode }")
+				div#canvas-mode.toolbar-item(uib-dropdown)
+					button.btn.btn-default.btn-sm(uib-dropdown-toggle)
+						| Draw 
+						span.caret
+						
+					div.uib-dropdown-menu
+						li
+							a 
+								h5.medium Draw
+								p.h6 Add components to your wireframe
+							
+						li
+							a
+								h5.medium Artboards
+								p.h6 Manage your wireframe workspaces
+							
+						li
+							a
+								h5.medium Annotate
+								p.h6 Review and discuss your team's work
+				
+				div.divider
+						
 				div.btn-group.toolbar-item
 					button.btn.btn-default.btn-sm(uib-tooltip-html="'Undo (' + ('ctrl' | symbol) + 'Z)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
 						span.font-awesome &#xf0e2;
@@ -223,6 +246,12 @@ div.fullscreen-wrapper
 						span.font-awesome &#xf0ea;
 						
 				div.divider
+				
+				div#quick-add.input-group.input-group-sm.toolbar-item(uib-dropdown)
+					span.input-group-addon
+						span.font-awesome &#xf0e7;
+							
+					input.form-control.input-sm(ng-model="ToolbarCtrl.quickAdd", uib-typeahead="component.title for component in ToolbarCtrl.components | filter:{ title: $viewValue }", typeahead-on-select="ToolbarCtrl.onQuickAddSelect($item)", typeahead-append-to-body="true", placeholder="Quick add...")
 						
 				div.btn-group.toolbar-item
 					button.btn.btn-default.btn-sm(ng-model="FrameCtrl.alignment", uib-btn-radio="'Left'", uib-tooltip="Align items left", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")

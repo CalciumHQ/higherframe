@@ -14,11 +14,4 @@ module Higherframe.Controllers.Frame {
       });
     }
   }
-
-  export class ViewTray implements Higherframe.UI.ITray {
-
-    label = 'View';
-    templateUrl = '/app/frame/trays/view.html';
-    controller = ViewTrayController;
-  }
 }
