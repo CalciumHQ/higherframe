@@ -8,8 +8,8 @@ class FrameCtrl {
 	 * Constants
 	 */
 
-	private STORAGE_PROPERTIES_OPEN_KEY: string = 'frame.properties.open';
-  private STORAGE_SIDEBAR_MODE_KEY: string = 'frame.activity.open';
+	private STORAGE_ACTIVITY_OPEN_KEY: string = 'frame.activity.open';
+  private STORAGE_EDIT_MODE_KEY: string = 'frame.edit.mode';
   public ZOOM_LEVELS: Array<number> = [0.15, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 5.0];
 
 
@@ -32,7 +32,11 @@ class FrameCtrl {
   collaborators: Array<Object> = [];
 
   // UI variables
-	sidebarMode: string = this.localStorageService.get(this.STORAGE_SIDEBAR_MODE_KEY) || 'toolbox';
+	activityOpen: boolean = (typeof this.localStorageService.get(this.STORAGE_ACTIVITY_OPEN_KEY) !== 'undefined'
+		? this.localStorageService.get(this.STORAGE_ACTIVITY_OPEN_KEY)
+		: true);
+
+	editMode: string = this.localStorageService.get(this.STORAGE_EDIT_MODE_KEY) || 'toolbox';
   quickAdd = {
     open: false,
     focus: false,
@@ -93,6 +97,8 @@ class FrameCtrl {
 
       $scope.$broadcast('controller:view:zoom', zoom);
     });
+
+		$scope.$watch(() => { return this.activityOpen; }, (open) => this.setActivityOpen.call(this, open));
 
     $scope.$watchCollection(() => { return this.collaborators }, (c) => {
 
@@ -441,9 +447,6 @@ class FrameCtrl {
 					case '1':
 					case '2':
 					case '3':
-					case '4':
-					case '5':
-					case '6':
 
 						// If in an input, allow event to continue
 						if (event.event.target.tagName == 'INPUT' || event.event.target.tagName == 'TEXTAREA') {}
@@ -456,12 +459,9 @@ class FrameCtrl {
 							this.$scope.$apply(() => {
 
 								switch(event.key) {
-									case '1':	this.setSidebarMode('toolbox'); break;
-									case '2':	this.setSidebarMode('properties'); break;
-									case '3':	this.setSidebarMode('view'); break;
-									case '4':	this.setSidebarMode('activity'); break;
-									case '5':	this.setSidebarMode('settings'); break;
-									case '6':	this.setSidebarMode('download'); break;
+									case '1':	this.setEditMode('draw'); break;
+									case '2':	this.setEditMode('artboard'); break;
+									case '3':	this.setEditMode('annotate'); break;
 								}
 							});
 						}
@@ -639,15 +639,21 @@ class FrameCtrl {
    * View methods
    */
 
-	private setSidebarMode(mode: string) {
+	private setActivityOpen(open: boolean) {
 
-		if (this.sidebarMode == mode) {
+		this.activityOpen = open;
+		this.localStorageService.set(this.STORAGE_ACTIVITY_OPEN_KEY, this.activityOpen);
+	}
+
+	private setEditMode(mode: string) {
+
+		if (this.editMode == mode) {
 
 			mode = '';
 		}
 
-		this.sidebarMode = mode;
-		this.localStorageService.set(this.STORAGE_SIDEBAR_MODE_KEY, this.sidebarMode);
+		this.editMode = mode;
+		this.localStorageService.set(this.STORAGE_EDIT_MODE_KEY, this.editMode);
 	}
 
   private toggleQuickAdd() {
@@ -826,13 +832,12 @@ class FrameCtrl {
    * Event handlers
    */
 
-	// Sidebar
-	onSidebarModeClick(mode: string) {
+	// Toolbar
+	onEditModeClick(mode: string) {
 
-		this.setSidebarMode(mode);
+		this.setEditMode(mode);
 	}
 
-	// Toolbar
 	onToolbarZoomLevelClick(zoom: number) {
 
 		this.setZoom(zoom);

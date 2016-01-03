@@ -1,37 +1,113 @@
 div.fullscreen-wrapper
-	#frame
-		ul#frame-sidebar-mode
-			li(uib-tooltip-html="'Close (' + ('ctrl' | symbol) + '`)'", tooltip-placement="right", tooltip-append-to-body="true", tooltip-popup-delay="800")
-				a(ui-sref="frames")
-					span.icon.font-awesome 
-					span.sr-only Close
-				
-			li(ng-class="{ active: FrameCtrl.sidebarMode == 'toolbox' }", ng-click="FrameCtrl.onSidebarModeClick('toolbox')", uib-tooltip-html="'Toolbox (1)'", tooltip-placement="right", tooltip-append-to-body="true", tooltip-popup-delay="800")
-				span.icon.font-awesome 
-				span.sr-only Toolbox
-				
-			li(ng-class="{ active: FrameCtrl.sidebarMode == 'properties' }", ng-click="FrameCtrl.onSidebarModeClick('properties')", uib-tooltip-html="'Properties (2)'", tooltip-placement="right", tooltip-append-to-body="true", tooltip-popup-delay="800")
-				span.icon.font-awesome 
-				span.sr-only Properties
-				
-			li(ng-class="{ active: FrameCtrl.sidebarMode == 'view' }", ng-click="FrameCtrl.onSidebarModeClick('view')", uib-tooltip-html="'View (3)'", tooltip-placement="right", tooltip-append-to-body="true", tooltip-popup-delay="800")
-				span.icon.font-awesome 
-				span.sr-only View
-				
-			li(ng-class="{ active: FrameCtrl.sidebarMode == 'activity' }", ng-click="FrameCtrl.onSidebarModeClick('activity')", uib-tooltip-html="'Activity (4)'", tooltip-placement="right", tooltip-append-to-body="true", tooltip-popup-delay="800")
-				span.icon.font-awesome 
-				span.sr-only Activity
-				
-			li(ng-class="{ active: FrameCtrl.sidebarMode == 'settings' }", ng-click="FrameCtrl.onSidebarModeClick('settings')", uib-tooltip-html="'Settings (5)'", tooltip-placement="right", tooltip-append-to-body="true", tooltip-popup-delay="800")
-				span.icon.font-awesome 
-				span.sr-only Settings
-				
-			li(ng-class="{ active: FrameCtrl.sidebarMode == 'download' }", ng-click="FrameCtrl.onSidebarModeClick('download')", uib-tooltip-html="'Download (6)'", tooltip-placement="right", tooltip-append-to-body="true", tooltip-popup-delay="800")
-				span.icon.font-awesome 
-				span.sr-only Download
+	div#frame-titlebar
+		a.left(ui-sref="frames")
+			span.font-awesome &#xf053;
+			span &nbsp; All wireframes
 			
-		#frame-sidebar(ng-class="{ 'frame-sidebar-collapse': !FrameCtrl.sidebarMode }")
-			#toolbox.frame-sidebar-pane(ng-controller="ToolboxCtrl as ToolboxCtrl", ng-show="FrameCtrl.sidebarMode == 'toolbox'")
+		h2.h4.medium.snug 
+			| {{ FrameCtrl.frame.name }}
+			a(ui-sref="frameSettings({ id: FrameCtrl.frame._id })")
+				span.font-awesome &#xf013;
+		
+		div.right
+			button.btn.btn-primary.btn-sm(ng-click="FrameCtrl.onToolbarShareClick()")
+				span.font-awesome &#xf1e0;
+				|  Share
+			
+	#frame-toolbar(ng-controller="ToolbarCtrl as ToolbarCtrl", ng-class="{ 'sidebar-open': FrameCtrl.sidebarMode }")
+		div#frame-edit-mode.toolbar-item(uib-dropdown)
+			button.btn.btn-default.btn-sm(uib-dropdown-toggle)
+				span(ng-switch="FrameCtrl.editMode")
+					span(ng-switch-default) Draw
+					span(ng-switch-when="artboards") Artboards
+					span(ng-switch-when="annotate") Annotate
+				| &nbsp;	
+				span.caret
+				
+			div.uib-dropdown-menu
+				li
+					a(ng-click="FrameCtrl.onEditModeClick('draw')")
+						h5.medium Draw
+						p.h6 Add components to your wireframe
+					
+				li
+					a(ng-click="FrameCtrl.onEditModeClick('artboards')")
+						h5.medium Artboards
+						p.h6 Manage your wireframe workspaces
+					
+				li
+					a(ng-click="FrameCtrl.onEditModeClick('annotate')")
+						h5.medium Annotate
+						p.h6 Review and discuss your team's work
+		
+		div.divider
+				
+		div.btn-group.toolbar-item
+			button.btn.btn-default.btn-sm(uib-tooltip-html="'Undo (' + ('ctrl' | symbol) + 'Z)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+				span.font-awesome &#xf0e2;
+				
+			button.btn.btn-default.btn-sm(uib-tooltip-html="'Redo (' + ('shift' | symbol) + ('ctrl' | symbol) + 'Z)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", disabled)
+				span.font-awesome.flip &#xf0e2;
+				
+		div.toolbar-item(uib-dropdown)
+			button.btn.btn-default.btn-sm(uib-dropdown-toggle) 
+				| {{ FrameCtrl.view.zoom * 100 }}% 
+				span.caret
+				
+			div.uib-dropdown-menu
+				li(ng-repeat="zoom in FrameCtrl.ZOOM_LEVELS")
+					a(ng-click="FrameCtrl.onToolbarZoomLevelClick(zoom)", ng-class="{ strong: zoom == FrameCtrl.view.zoom }") {{ zoom * 100 }}%
+		
+		button.btn.btn-default.btn-sm.toolbar-item(ng-click="FrameCtrl.onToolbarFullscreenClick()", uib-tooltip-html="'Full screen (' + ('ctrl' | symbol) + 'F)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800") 
+			span.font-awesome &#xf065;
+					
+		div.btn-group.toolbar-item
+			button.btn.btn-default.btn-sm(ng-click="FrameCtrl.onToolbarCopyClick()", uib-tooltip-html="'Copy (' + ('ctrl' | symbol) + 'C)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", ng-disabled="!FrameCtrl.selection.length")
+				span.font-awesome &#xf0c5;
+				
+			button.btn.btn-default.btn-sm(ng-click="FrameCtrl.onToolbarCutClick()", uib-tooltip-html="'Cut (' + ('ctrl' | symbol) + 'X)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", ng-disabled="!FrameCtrl.selection.length")
+				span.font-awesome &#xf0c4;
+				
+			button.btn.btn-default.btn-sm(ng-click="FrameCtrl.onToolbarPasteClick()", uib-tooltip-html="'Paste (' + ('ctrl' | symbol) + 'V)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", ng-disabled="!FrameCtrl.Clipboard.getItems().length")
+				span.font-awesome &#xf0ea;
+				
+		div.divider
+		
+		div.toolbar-group(ng-if="FrameCtrl.editMode == 'draw'")
+			div#quick-add.input-group.input-group-sm.toolbar-item(uib-dropdown)
+				span.input-group-addon
+					span.font-awesome &#xf0e7;
+						
+				input.form-control.input-sm(ng-model="ToolbarCtrl.quickAdd", uib-typeahead="component.title for component in ToolbarCtrl.components | filter:{ title: $viewValue }", typeahead-on-select="ToolbarCtrl.onQuickAddSelect($item)", typeahead-append-to-body="true", placeholder="Quick add...")
+					
+			div.btn-group.toolbar-item
+				button.btn.btn-default.btn-sm(ng-model="FrameCtrl.alignment", uib-btn-radio="'Left'", uib-tooltip="Align items left", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+					span.font-awesome &#xf036;
+					
+				button.btn.btn-default.btn-sm(ng-model="FrameCtrl.alignment", uib-btn-radio="'Center'", uib-tooltip="Align items center", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+					span.font-awesome &#xf037;
+					
+				button.btn.btn-default.btn-sm(ng-model="FrameCtrl.alignment", uib-btn-radio="'Right'", uib-tooltip="Align items right", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+					span.font-awesome &#xf038;
+				
+		div#collaborators.toolbar-item.right
+			span.text-muted(ng-show="!FrameCtrl.collaborators.length") No collaborators
+			div.collaborator(ng-repeat="user in FrameCtrl.collaborators", uib-tooltip="{{ user.name }}", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+				ui-placeholder.avatar(type="user", src="user.image", alt="{{ user.name }}")
+				div.indicator(ng-style="{ 'background': user.color }")
+					
+		button#activity-toggle.btn.btn-sm.btn-default.toolbar-item(ng-model="FrameCtrl.activityOpen", uib-btn-checkbox)
+			span.font-awesome &#xf0c0;
+		
+	#frame
+		#canvas-wrapper
+			canvas#canvas(wireframe, data="FrameCtrl.wireframe", resize, keepalive="true", jqyoui-droppable)
+				
+			// Media library
+			img(ng-repeat="media in FrameCtrl.media", ng-src="{{ media.large }}", id="{{ media._id }}", style="display:none")
+
+		#frame-sidebar(ng-class="{ 'frame-sidebar-collapse': !FrameCtrl.activityOpen }")
+			#toolbox.frame-sidebar-pane(ng-controller="ToolboxCtrl as ToolboxCtrl", ng-show="false")
 				.frame-sidebar-content
 					div(ng-repeat="category in ToolboxCtrl.categories")
 						.frame-sidebar-panel-header
@@ -43,7 +119,7 @@ div.fullscreen-wrapper
 									svg-replace(ng-src="{{ component.preview }}")
 							
 							
-			#properties-pane.frame-sidebar-pane(ng-controller="PropertiesCtrl as PropertiesCtrl", ng-show="FrameCtrl.sidebarMode == 'properties'")
+			#properties-pane.frame-sidebar-pane(ng-controller="PropertiesCtrl as PropertiesCtrl", ng-show="false")
 				.frame-sidebar-content.form
 					div.text-center(ng-if="PropertiesCtrl.selection.length == 0")
 						div.h3.text-muted
@@ -106,7 +182,7 @@ div.fullscreen-wrapper
 												span.input-group-addon px
 										
 			
-			#activity-pane.frame-sidebar-pane(ng-controller="ActivityCtrl as ActivityCtrl", ng-show="FrameCtrl.sidebarMode == 'activity'")
+			#activity-pane.frame-sidebar-pane(ng-controller="ActivityCtrl as ActivityCtrl")
 				#activity-list.frame-sidebar-content(scroll-lock)
 					div.frame-sidebar-panel
 						div.activity-block(ng-repeat="activity in FrameCtrl.activities", ng-class="{ 'is-first': (activity | activityShowHeader:FrameCtrl.activities[$index-1]), 'is-sequence': (activity | activityCollapseItem:FrameCtrl.activities[$index-1]) }")
@@ -136,7 +212,7 @@ div.fullscreen-wrapper
 				form#activity-form.frame-sidebar-toolbar.frame-sidebar-toolbar-bottom(ng-submit="ActivityCtrl.onActivityFormSubmit()")
 					textarea.form-control(msd-elastic, ng-model="ActivityCtrl.newMessage", ng-keydown="ActivityCtrl.onActivityChatKeyDown($event)", placeholder="Type a message...")
 								
-			#view-pane.frame-sidebar-pane(ng-show="FrameCtrl.sidebarMode == 'view'")
+			#view-pane.frame-sidebar-pane(ng-show="false")
 				.frame-sidebar-content
 					.frame-sidebar-panel-header
 						h5.medium.loose.text-muted Viewport
@@ -173,13 +249,13 @@ div.fullscreen-wrapper
 											input(type="checkbox")
 											span.h6  Guides
 	
-			#settings-pane.frame-sidebar-pane(ng-show="FrameCtrl.sidebarMode == 'settings'")
+			#settings-pane.frame-sidebar-pane(ng-show="false")
 				.frame-sidebar-content.form-horizontal
 					div.form-group.form-group-sm
 						label.control-label.h6 Name
 						input.form-control
 																
-			#download-pane.frame-sidebar-pane(ng-show="FrameCtrl.sidebarMode == 'download'")
+			#download-pane.frame-sidebar-pane(ng-show="false")
 				.frame-sidebar-content
 					div#download-dl
 						button.btn.btn-small.btn-default.btn-block Download SVG
@@ -190,90 +266,3 @@ div.fullscreen-wrapper
 						button.btn.btn-small.btn-success.btn-block 
 							span.font-awesome &#xf02f; 
 							| Print
-									
-		#canvas-wrapper
-			#canvas-toolbar(ng-controller="ToolbarCtrl as ToolbarCtrl", ng-class="{ 'sidebar-open': FrameCtrl.sidebarMode }")
-				div#canvas-mode.toolbar-item(uib-dropdown)
-					button.btn.btn-default.btn-sm(uib-dropdown-toggle)
-						| Draw 
-						span.caret
-						
-					div.uib-dropdown-menu
-						li
-							a 
-								h5.medium Draw
-								p.h6 Add components to your wireframe
-							
-						li
-							a
-								h5.medium Artboards
-								p.h6 Manage your wireframe workspaces
-							
-						li
-							a
-								h5.medium Annotate
-								p.h6 Review and discuss your team's work
-				
-				div.divider
-						
-				div.btn-group.toolbar-item
-					button.btn.btn-default.btn-sm(uib-tooltip-html="'Undo (' + ('ctrl' | symbol) + 'Z)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
-						span.font-awesome &#xf0e2;
-						
-					button.btn.btn-default.btn-sm(uib-tooltip-html="'Redo (' + ('shift' | symbol) + ('ctrl' | symbol) + 'Z)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", disabled)
-						span.font-awesome.flip &#xf0e2;
-						
-				div.toolbar-item(uib-dropdown)
-					button.btn.btn-default.btn-sm(uib-dropdown-toggle) 
-						| {{ FrameCtrl.view.zoom * 100 }}% 
-						span.caret
-						
-					div.uib-dropdown-menu
-						li(ng-repeat="zoom in FrameCtrl.ZOOM_LEVELS")
-							a(ng-click="FrameCtrl.onToolbarZoomLevelClick(zoom)", ng-class="{ strong: zoom == FrameCtrl.view.zoom }") {{ zoom * 100 }}%
-				
-				button.btn.btn-default.btn-sm.toolbar-item(ng-click="FrameCtrl.onToolbarFullscreenClick()", uib-tooltip-html="'Full screen (' + ('ctrl' | symbol) + 'F)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800") 
-					span.font-awesome &#xf065;
-							
-				div.btn-group.toolbar-item
-					button.btn.btn-default.btn-sm(ng-click="FrameCtrl.onToolbarCopyClick()", uib-tooltip-html="'Copy (' + ('ctrl' | symbol) + 'C)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", ng-disabled="!FrameCtrl.selection.length")
-						span.font-awesome &#xf0c5;
-						
-					button.btn.btn-default.btn-sm(ng-click="FrameCtrl.onToolbarCutClick()", uib-tooltip-html="'Cut (' + ('ctrl' | symbol) + 'X)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", ng-disabled="!FrameCtrl.selection.length")
-						span.font-awesome &#xf0c4;
-						
-					button.btn.btn-default.btn-sm(ng-click="FrameCtrl.onToolbarPasteClick()", uib-tooltip-html="'Paste (' + ('ctrl' | symbol) + 'V)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", ng-disabled="!FrameCtrl.Clipboard.getItems().length")
-						span.font-awesome &#xf0ea;
-						
-				div.divider
-				
-				div#quick-add.input-group.input-group-sm.toolbar-item(uib-dropdown)
-					span.input-group-addon
-						span.font-awesome &#xf0e7;
-							
-					input.form-control.input-sm(ng-model="ToolbarCtrl.quickAdd", uib-typeahead="component.title for component in ToolbarCtrl.components | filter:{ title: $viewValue }", typeahead-on-select="ToolbarCtrl.onQuickAddSelect($item)", typeahead-append-to-body="true", placeholder="Quick add...")
-						
-				div.btn-group.toolbar-item
-					button.btn.btn-default.btn-sm(ng-model="FrameCtrl.alignment", uib-btn-radio="'Left'", uib-tooltip="Align items left", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
-						span.font-awesome &#xf036;
-						
-					button.btn.btn-default.btn-sm(ng-model="FrameCtrl.alignment", uib-btn-radio="'Center'", uib-tooltip="Align items center", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
-						span.font-awesome &#xf037;
-						
-					button.btn.btn-default.btn-sm(ng-model="FrameCtrl.alignment", uib-btn-radio="'Right'", uib-tooltip="Align items right", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
-						span.font-awesome &#xf038;
-						
-				div#collaborators.toolbar-item.right
-					span.text-muted(ng-show="!FrameCtrl.collaborators.length") No collaborators
-					div.collaborator(ng-repeat="user in FrameCtrl.collaborators", uib-tooltip="{{ user.name }}", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
-						ui-placeholder.avatar(type="user", src="user.image", alt="{{ user.name }}")
-						div.indicator(ng-style="{ 'background': user.color }")
-					
-				button.btn.btn-primary.btn-sm.toolbar-item(ng-click="FrameCtrl.onToolbarShareClick()")
-					span.font-awesome &#xf1e0;
-					|  Share	
-				
-			canvas#canvas(wireframe, data="FrameCtrl.wireframe", resize, keepalive="true", jqyoui-droppable)
-				
-			// Media library
-			img(ng-repeat="media in FrameCtrl.media", ng-src="{{ media.large }}", id="{{ media._id }}", style="display:none")
