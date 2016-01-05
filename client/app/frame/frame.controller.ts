@@ -36,7 +36,7 @@ class FrameCtrl {
 		? this.localStorageService.get(this.STORAGE_ACTIVITY_OPEN_KEY)
 		: true);
 
-	editMode: string = this.localStorageService.get(this.STORAGE_EDIT_MODE_KEY) || 'toolbox';
+	editMode: Higherframe.Wireframe.EditMode = this.localStorageService.get(this.STORAGE_EDIT_MODE_KEY) || Higherframe.Wireframe.EditMode.Draw;
   quickAdd = {
     open: false,
     focus: false,
@@ -45,8 +45,27 @@ class FrameCtrl {
     index: 0
   };
 
-  // UI models
-  propertyModels = {};
+	toolbarConfig = {
+		editMode: {
+			options: [
+				{
+					title: 'Draw',
+					description: 'Add components to your wireframe',
+					value: Higherframe.Wireframe.EditMode.Draw
+				},
+				{
+					title: 'Artboards',
+					description: 'Manage your wireframe workspaces',
+					value: Higherframe.Wireframe.EditMode.Artboards
+				},
+				{
+					title: 'Annotate',
+					description: 'Review and discuss your team\'s work',
+					value: Higherframe.Wireframe.EditMode.Annotate
+				}
+			]
+		}
+	}
 
 
   /**
@@ -137,6 +156,7 @@ class FrameCtrl {
 
       this.setCenter(this.localStorageService.get(`frame.${ this.frame._id }.view.center`));
       this.setZoom(this.localStorageService.get(`frame.${ this.frame._id }.view.zoom`));
+			this.setEditMode(this.editMode);
     });
 
 
@@ -465,9 +485,9 @@ class FrameCtrl {
 							this.$scope.$apply(() => {
 
 								switch(event.key) {
-									case '1':	this.setEditMode('draw'); break;
-									case '2':	this.setEditMode('artboard'); break;
-									case '3':	this.setEditMode('annotate'); break;
+									case '1':	this.setEditMode(Higherframe.Wireframe.EditMode.Draw); break;
+									case '2':	this.setEditMode(Higherframe.Wireframe.EditMode.Artboards); break;
+									case '3':	this.setEditMode(Higherframe.Wireframe.EditMode.Annotate); break;
 								}
 							});
 						}
@@ -651,15 +671,12 @@ class FrameCtrl {
 		this.localStorageService.set(this.STORAGE_ACTIVITY_OPEN_KEY, this.activityOpen);
 	}
 
-	private setEditMode(mode: string) {
-
-		if (this.editMode == mode) {
-
-			mode = '';
-		}
+	private setEditMode(mode: Higherframe.Wireframe.EditMode) {
 
 		this.editMode = mode;
 		this.localStorageService.set(this.STORAGE_EDIT_MODE_KEY, this.editMode);
+
+		this.$scope.$broadcast('editMode:set', this.editMode);
 	}
 
   private toggleQuickAdd() {
@@ -839,7 +856,7 @@ class FrameCtrl {
    */
 
 	// Toolbar
-	onEditModeClick(mode: string) {
+	onEditModeClick(mode: Higherframe.Wireframe.EditMode) {
 
 		this.setEditMode(mode);
 	}

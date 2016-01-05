@@ -19,26 +19,16 @@ div.fullscreen-wrapper
 			button.btn.btn-default.btn-sm(uib-dropdown-toggle)
 				span(ng-switch="FrameCtrl.editMode")
 					span(ng-switch-default) Draw
-					span(ng-switch-when="artboards") Artboards
-					span(ng-switch-when="annotate") Annotate
+					span(ng-switch-when="1") Artboards
+					span(ng-switch-when="2") Annotate
 				| &nbsp;	
 				span.caret
 				
 			div.uib-dropdown-menu
-				li
-					a(ng-click="FrameCtrl.onEditModeClick('draw')")
-						h5.medium Draw
-						p.h6 Add components to your wireframe
-					
-				li
-					a(ng-click="FrameCtrl.onEditModeClick('artboards')")
-						h5.medium Artboards
-						p.h6 Manage your wireframe workspaces
-					
-				li
-					a(ng-click="FrameCtrl.onEditModeClick('annotate')")
-						h5.medium Annotate
-						p.h6 Review and discuss your team's work
+				li(ng-repeat="mode in FrameCtrl.toolbarConfig.editMode.options")
+					a(ng-click="FrameCtrl.onEditModeClick(mode.value)")
+						h5.medium {{ mode.title }}
+						p.h6 {{ mode.description }}
 		
 		div.divider
 				
@@ -73,7 +63,7 @@ div.fullscreen-wrapper
 				
 		div.divider
 		
-		div.toolbar-group(ng-if="FrameCtrl.editMode == 'draw'")
+		div.toolbar-group(ng-if="FrameCtrl.editMode == 0")
 			div#quick-add.input-group.input-group-sm.toolbar-item(uib-dropdown)
 				span.input-group-addon
 					span.font-awesome &#xf0e7;

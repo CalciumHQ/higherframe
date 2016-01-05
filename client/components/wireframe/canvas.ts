@@ -6,6 +6,12 @@ var _paperInitialized;
 
 module Higherframe.Wireframe {
 
+	export enum EditMode {
+		Draw,
+		Artboards,
+		Annotate
+	}
+
 	export class Canvas implements ng.IDirective {
 
 		link: (scope: ng.IScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes, ngModel: ng.INgModelController) => void;
@@ -62,6 +68,7 @@ module Higherframe.Wireframe {
 		collaboratorLabels: Array<paper.Item> = [];
 
 		theme: Higherframe.UI.ITheme = new Higherframe.UI.DefaultTheme();
+		editMode: EditMode = EditMode.Draw;
 
 
 		constructor(private $window: Higherframe.IWindow) {
@@ -79,6 +86,11 @@ module Higherframe.Wireframe {
 				scope.$on('event:keydown', (e, keyEvent) => {
 
 					this.keyDown(keyEvent);
+				});
+
+				scope.$on('editMode:set', (e, mode) => {
+
+					this.setEditMode(mode);
 				});
 
 				scope.$on('view:zoom', (e, zoom) => {
@@ -173,23 +185,6 @@ module Higherframe.Wireframe {
 				this.updateCanvas();
 				this.updateArtboards();
 				this.updateGrid();
-
-				/**
-				 * Keep canvas size updated.
-				 *
-				 * Not good using a loop for this. Using window.resize would be better
-				 * but this doesn't account for changes in layout without the window
-				 * resizing.
-				 *
-				 * TODO: Find a better way.
-				 */
-
-				/*var self = this;
-				(function updateLoop() {
-
-					self.updateCanvas();
-					requestAnimationFrame(updateLoop);
-				})();*/
 			};
 		}
 
@@ -873,6 +868,25 @@ module Higherframe.Wireframe {
 		 * View methods
 		 */
 
+		setEditMode(mode: EditMode) {
+
+			this.editMode = mode;
+			this.updateArtboards();
+
+			switch (mode) {
+
+				case EditMode.Draw:
+
+					this.layerDrawing.opacity = 1;
+					break;
+
+				case EditMode.Artboards:
+
+					this.layerDrawing.opacity = 0.3;
+					break;
+			}
+		}
+
 		updateCanvas() {
 
 			var w = this.element.width();
@@ -1495,7 +1509,17 @@ module Higherframe.Wireframe {
 				new paper.Point(800, 600)
 			);
 			canvas.fillColor = 'white';
-			canvas.strokeColor = '#ccc';
+
+			if (this.editMode == EditMode.Artboards) {
+
+				canvas.strokeColor = '#888';
+			}
+
+			else {
+
+				canvas.strokeColor = '#ccc';
+			}
+
 			canvas.strokeWidth = 1 / paper.view.zoom;
 			artboard.addChild(canvas);
 
