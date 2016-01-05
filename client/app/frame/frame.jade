@@ -197,10 +197,12 @@ div.fullscreen-wrapper
 								div.activity-content
 									span(ng-switch="activity.type")
 										span.text-muted(ng-switch-when="new-frame")
+											span.activity-time.h6.text-muted {{ activity.created_at | momentCalendar:'d' }}
 											span.medium {{ activity.user.name }} 
 											| created the wireframe
 										
 										span.text-muted(ng-switch-when="added-user")
+											span.activity-time.h6.text-muted {{ activity.created_at | momentCalendar:'d' }}
 											span.medium {{ activity.user.name }} 
 											| added 
 											span {{ activity.data.users[0].name }} 
