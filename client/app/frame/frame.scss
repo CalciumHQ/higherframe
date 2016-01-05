@@ -162,6 +162,7 @@ $toolbarPaddingHorizontal: 10px;
 	@include display-flex;
 	@include flex-direction(row);
 	@include flex-grow(1);
+	@include flex-basis(100%);
 	position: relative;
 	z-index: 1;
 	-webkit-font-smoothing: antialiased;
@@ -306,20 +307,11 @@ $toolbarPaddingHorizontal: 10px;
 		}
 	}
 
-	#canvas-wrapper {
-		position: relative;
-		@include display-flex;
+	#canvas {
 		@include flex-grow(1);
-		@include flex-direction(column);
-		height: 100%;
+		width: 100%;
 		z-index: 1;
-
-		#canvas {
-			@include flex-grow(1);
-			width: 100%;
-			z-index: 1;
-			background: #cdcdcd;
-		}
+		background: #cdcdcd;
 	}
 
 	#collaborators {

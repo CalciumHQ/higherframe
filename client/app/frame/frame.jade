@@ -100,11 +100,10 @@ div.fullscreen-wrapper
 			span.font-awesome &#xf0c0;
 		
 	#frame
-		#canvas-wrapper
-			canvas#canvas(wireframe, data="FrameCtrl.wireframe", resize, keepalive="true", jqyoui-droppable)
+		canvas#canvas(wireframe, data="FrameCtrl.wireframe", resize, keepalive="true", jqyoui-droppable)
 				
-			// Media library
-			img(ng-repeat="media in FrameCtrl.media", ng-src="{{ media.large }}", id="{{ media._id }}", style="display:none")
+		// Media library
+		img(ng-repeat="media in FrameCtrl.media", ng-src="{{ media.large }}", id="{{ media._id }}", style="display:none")
 
 		#frame-sidebar(ng-class="{ 'frame-sidebar-collapse': !FrameCtrl.activityOpen }")
 			#toolbox.frame-sidebar-pane(ng-controller="ToolboxCtrl as ToolboxCtrl", ng-show="false")
