@@ -6,6 +6,19 @@
 
 var component = require('./component.model');
 
+exports.init = function(socketio) {
+
+	component.schema.post('save', function (doc) {
+
+    onSave(socketio, doc);
+  });
+
+  component.schema.post('remove', function (doc) {
+
+    onRemove(socketio, doc);
+  });
+}
+
 exports.register = function(socket, socketio) {
 
 	socket.on('component:select', function (data) {
@@ -17,23 +30,18 @@ exports.register = function(socket, socketio) {
 
 		socketio.sockets.emit('component:deselect', data);
 	});
-
-  component.schema.post('save', function (doc) {
-
-    onSave(socket, doc);
-  });
-
-  component.schema.post('remove', function (doc) {
-
-    onRemove(socket, doc);
-  });
 }
 
-function onSave(socket, doc, cb) {
-  socket.emit('component:save', doc);
+function onSave(socketio, doc, cb) {
+
+  socketio.sockets
+		.in('frame:' + doc.frame)
+		.emit('component:save', doc);
 }
 
-function onRemove(socket, doc, cb) {
-	console.log(doc);
-  socket.emit('component:remove', doc);
+function onRemove(socketio, doc, cb) {
+
+  socketio.sockets
+		.in('frame:' + doc.frame)
+		.emit('component:remove', doc);
 }

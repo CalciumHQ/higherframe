@@ -22,7 +22,6 @@ function onConnect(socket, socketio) {
 	require('../api/organisation/organisation.socket').register(socket, socketio);
 	require('../api/frame/frame.socket').register(socket, socketio);
 	require('../api/component/component.socket').register(socket, socketio);
-  require('../api/activity/activity.socket').register(socket, socketio);
 }
 
 module.exports = function (socketio) {
@@ -42,6 +41,7 @@ module.exports = function (socketio) {
   // }));
 
   socketio.on('connection', function (socket) {
+
     socket.address = socket.handshake.address !== null ?
             socket.handshake.address.address + ':' + socket.handshake.address.port :
             process.env.DOMAIN;
@@ -50,6 +50,7 @@ module.exports = function (socketio) {
 
     // Call onDisconnect.
     socket.on('disconnect', function () {
+
       onDisconnect(socket);
       console.info('[%s] DISCONNECTED', socket.address);
     });
@@ -58,4 +59,8 @@ module.exports = function (socketio) {
     onConnect(socket, socketio);
     console.info('[%s] CONNECTED', socket.address);
   });
+
+  require('../api/frame/frame.socket').init(socketio);
+  require('../api/component/component.socket').init(socketio);
+  require('../api/activity/activity.socket').init(socketio);
 };

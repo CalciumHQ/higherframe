@@ -6,9 +6,37 @@
 
 var Frame = require('./frame.model');
 
+exports.init = function(socketio) {
+
+	Frame.schema.post('save', function(doc) {
+
+		Frame.populate(doc, {path:'organisation users media'}, function(err, frame) {
+
+      onSave(socketio, frame);
+    });
+  });
+
+  Frame.schema.post('remove', function (doc) {
+
+    onRemove(socketio, doc);
+  });
+}
+
 exports.register = function(socket, socketio) {
 
-	socket.on('frame:media:save', function (data) {
+	socket.on('frame:subscribe', function(id) {
+
+		console.info('[%s] SUBSCRIBE frame:%s', socket.address, id);
+		socket.join('frame:' + id);
+	});
+
+	socket.on('frame:unsubscribe', function(id) {
+
+		console.info('[%s] UNSUBSCRIBE frame:%s', socket.address, id);
+		socket.leave('frame:' + id);
+	});
+
+	socket.on('frame:media:save', function(data) {
 
 		// Add to the frame
 		Frame.findOneAndUpdate(
@@ -23,7 +51,7 @@ exports.register = function(socket, socketio) {
 		);
 	});
 
-	socket.on('frame:collaborator:save', function (data) {
+	socket.on('frame:collaborator:save', function(data) {
 
 		// Add to the frame
 		Frame.findOneAndUpdate(
@@ -38,7 +66,7 @@ exports.register = function(socket, socketio) {
 		);
 	});
 
-	socket.on('frame:collaborator:remove', function (data) {
+	socket.on('frame:collaborator:remove', function(data) {
 
 		// Add to the frame
 		Frame.findOneAndUpdate(
@@ -52,26 +80,19 @@ exports.register = function(socket, socketio) {
 			}
 		);
 	});
-
-  Frame.schema.post('save', function (doc) {
-
-		Frame.populate(doc, {path:'organisation users media'}, function(err, frame) {
-
-      onSave(socket, frame);
-    });
-  });
-
-  Frame.schema.post('remove', function (doc) {
-    onRemove(socket, doc);
-  });
 }
 
-function onSave(socket, doc, cb) {
-  socket.emit('frame:save', doc);
-	socket.emit('media:save', doc.media);
-	console.log('sent socket message', doc.media);
+function onSave(socketio, doc, cb) {
+
+  socketio.sockets
+		.in('frame:' + doc._id)
+		.emit('frame:save', doc)
+		.emit('media:save', doc.media);
 }
 
-function onRemove(socket, doc, cb) {
-  socket.emit('frame:remove', doc);
+function onRemove(socketio, doc, cb) {
+
+  socketio.sockets
+		.in('frame:' + doc._id)
+		.emit('frame:remove', doc);
 }

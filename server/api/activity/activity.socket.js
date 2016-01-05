@@ -6,25 +6,32 @@
 
 var Activity = require('./activity.model');
 
-exports.register = function(socket, socketio) {
+exports.init = function(socketio) {
 
   Activity.schema.post('save', function (doc) {
 
 		Activity.populate(doc, {path:'frame user'}, function(err, activity) {
 
-      onSave(socket, activity);
+      onSave(socketio, activity);
     });
   });
 
   Activity.schema.post('remove', function (doc) {
-    onRemove(socket, doc);
+
+    onRemove(socketio, doc);
   });
 }
 
-function onSave(socket, doc, cb) {
-  socket.emit('activity:save', doc);
+function onSave(socketio, doc, cb) {
+
+  socketio.sockets
+    .in('frame:' + doc.frame._id)
+    .emit('activity:save', doc);
 }
 
-function onRemove(socket, doc, cb) {
-  socket.emit('activity:remove', doc);
+function onRemove(socketio, doc, cb) {
+  
+  socketio.sockets
+    .in('frame:' + doc.frame)
+    .emit('activity:remove', doc);
 }

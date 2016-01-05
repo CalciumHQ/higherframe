@@ -330,6 +330,9 @@ class FrameCtrl {
 
     var that = this;
 
+		// Register to receive updates to this frame and its related models
+		this.socket.emit('frame:subscribe', this.frame._id);
+
 		// Document updating
 		this.socket.syncUpdates('frame:media', this.media);
 		this.socket.syncUpdates('frame:collaborator', this.collaborators);
@@ -363,11 +366,14 @@ class FrameCtrl {
     // Activity updating
     this.socket.syncUpdates('activity', this.activities);
 
-		this.$scope.$on('$destroy', function () {
+		this.$scope.$on('$destroy', () => {
 
-      that.socket.unsyncUpdates('frame:collaborator');
-			that.socket.unsyncUpdates('component');
-      that.socket.unsyncUpdates('activity');
+			// Deregister from receiving updates to this frame and its related models
+			this.socket.emit('frame:unsubscribe', this.frame._id);
+
+      this.socket.unsyncUpdates('frame:collaborator');
+			this.socket.unsyncUpdates('component');
+      this.socket.unsyncUpdates('activity');
 		});
 	};
 
