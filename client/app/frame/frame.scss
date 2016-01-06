@@ -56,12 +56,23 @@ $toolbarPaddingHorizontal: 10px;
 	@include flex-shrink(0);
 	@include display-flex;
 	@include align-items(center);
-	height: 50px;
+	height: 40px;
 	background: #3c3e3a;
 
 	&,
 	a {
 		color: #868981;
+	}
+
+	a {
+		&:hover {
+			text-decoration: none;
+			color: lighten(#868981, 20);
+		}
+
+		&:active {
+			color: white;
+		}
 	}
 
 	.left,

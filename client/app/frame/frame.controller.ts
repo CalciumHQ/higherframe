@@ -145,12 +145,6 @@ class FrameCtrl {
       that.quickAdd.index = 0;
     });
 
-    // Set up the tool if not already initialised
-    if (!paper.tool) {
-
-      paper.tool = new paper.Tool();
-    }
-
     // Set the zoom and pan
     $timeout(() => {
 
@@ -428,7 +422,9 @@ class FrameCtrl {
 
   private initializeTool() {
 
-    paper.tool.onKeyDown = (event) => {
+		var tool = Higherframe.Wireframe.Tools.Draw.get();
+
+    tool.onKeyDown = (event) => {
 
       // Special cases
       // Using the command/control modifier outputs special characters for the

@@ -62,7 +62,7 @@ module Higherframe.Wireframe {
 		} = { x: [], y: [] };
 
 		components: Array<Higherframe.Drawing.Component.IComponent> = [];
-		artboards: Array<paper.Item> = [];
+		artboards: Array<Higherframe.Drawing.Artboard> = [];
 		boundingBoxes: Array<paper.Item> = [];
 		smartGuides: Array<paper.Item> = [];
 		collaboratorLabels: Array<paper.Item> = [];
@@ -85,7 +85,7 @@ module Higherframe.Wireframe {
 
 				scope.$on('event:keydown', (e, keyEvent) => {
 
-					this.keyDown(keyEvent);
+					this.onDrawKeyDown(keyEvent);
 				});
 
 				scope.$on('editMode:set', (e, mode) => {
@@ -185,6 +185,24 @@ module Higherframe.Wireframe {
 				this.updateCanvas();
 				this.updateArtboards();
 				this.updateGrid();
+
+
+				/**
+				 * Keep canvas size updated.
+				 *
+				 * Not good using a loop for this. Using window.resize would be better
+				 * but this doesn't account for changes in layout without the window
+				 * resizing.
+				 *
+				 * TODO: Find a better way.
+				 */
+
+				var self = this;
+				(function updateLoop() {
+
+					self.updateCanvas();
+					requestAnimationFrame(updateLoop);
+				})();
 			};
 		}
 
@@ -211,20 +229,27 @@ module Higherframe.Wireframe {
  			paper.setup(<HTMLCanvasElement>this.element[0]);
  			paper.view.onFrame = function () {};
 
- 			// Tool may have already been created by controller
- 			// We don't want multiple tools since only one can be active
- 			// at once and the controller one capture key events
- 			if (!this.$window.tool) {
+			// Configure tools
+			// These tools are singletons so may be already configured from a
+			// previous session, but no matter doing it again.
+			var drawTool = Wireframe.Tools.Draw.get();
 
- 				this.$window.tool = new paper.Tool();
- 			}
+			drawTool.bind({
+				onMouseUp: this.onDrawMouseUp,
+				onMouseDown: this.onDrawMouseDown,
+				onMouseMove: this.onDrawMouseMove,
+				onMouseDrag: this.onDrawMouseDrag,
+				onMouseWheel: this.onDrawMouseWheel
+			}, this);
 
- 			this.$window.tool.onMouseDown = (event) => this.mouseDown.call(this, event);
- 			this.$window.tool.onMouseUp = (event) => this.mouseUp.call(this, event);
- 			this.$window.tool.onMouseMove = (event) => this.mouseMove.call(this, event);
- 			this.$window.tool.onMouseDrag = (event) => this.mouseDrag.call(this, event);
+			var artboardsTool = Wireframe.Tools.Artboards.get();
 
- 			(<any>$(this.element)).mousewheel((event) => this.mouseWheel.call(this, event));
+			artboardsTool.bind({
+				onMouseUp: this.onArtboardsMouseUp,
+				onMouseDown: this.onArtboardsMouseDown,
+				onMouseMove: this.onArtboardsMouseMove,
+				onMouseDrag: this.onArtboardsMouseDrag
+			}, this);
  		}
 
  		initLayers() {
@@ -237,13 +262,19 @@ module Higherframe.Wireframe {
  			this.layerGuides = new paper.Layer();
 
  			this.layerDrawing.activate();
+
+			this.layerArtboards.activate();
+			var artboard = new Higherframe.Drawing.Artboard('Artboard 1');
+			this.artboards.push(artboard);
+			this.layerDrawing.activate();
+			this.updateArtboards();
  		}
 
 		/**
 		 * Event handlers
 		 */
 
-		mouseUp(event) {
+		onDrawMouseUp(event) {
 
 			// If dragging a drag handle
 			if (this.selectedDragHandle) {}
@@ -274,7 +305,7 @@ module Higherframe.Wireframe {
 			this.selectedSegment = null;
 		}
 
-		mouseMove(event) {
+		onDrawMouseMove(event) {
 
 			// Return the last hovered item to default state
 			if (this.hoveredItem) {
@@ -341,7 +372,7 @@ module Higherframe.Wireframe {
 			}
 		}
 
-		mouseDrag(event) {
+		onDrawMouseDrag(event) {
 
 			// Pan when space bar is held
 			if (event.modifiers.space) {
@@ -482,7 +513,7 @@ module Higherframe.Wireframe {
 			}
 		}
 
-		mouseDown(event) {
+		onDrawMouseDown(event) {
 
 			this.lastMousePosition = new paper.Point(
 				event.event.screenX,
@@ -560,7 +591,7 @@ module Higherframe.Wireframe {
 			this.startDragSelection(event.downPoint);
 		}
 
-		mouseWheel(event) {
+		onDrawMouseWheel(event) {
 
 			event.preventDefault();
 
@@ -568,7 +599,7 @@ module Higherframe.Wireframe {
 			this.changeCenter(-event.deltaX, event.deltaY);
 		}
 
-		keyDown(event) {
+		onDrawKeyDown(event) {
 
 			switch (event.key) {
 				case 'backspace':
@@ -687,6 +718,57 @@ module Higherframe.Wireframe {
 
 						break;
 			}
+		}
+
+
+		onArtboardsMouseDown(event) {
+
+			// Clear old artboard focussed states
+			this.artboards.forEach((artboard) => {
+
+				artboard.focussed = false;
+			});
+
+			// Look for a clicked artboard
+			var hitResult = this.layerArtboards.hitTest(event.point, this.hitOptions);
+
+			if (hitResult) {
+
+				var artboard: Higherframe.Drawing.Artboard = this.getTopmost(hitResult.item);
+				artboard.focussed = true;
+			}
+
+			// Update artboards
+			this.updateArtboards();
+		}
+
+		onArtboardsMouseUp() {
+
+		}
+
+		onArtboardsMouseMove(event) {
+
+			// Clear old artboard hover states
+			this.artboards.forEach((artboard) => {
+
+				artboard.hovered = false;
+			});
+
+			// Look for a hovered artboard
+			var hitResult = this.layerArtboards.hitTest(event.point, this.hitOptions);
+
+			if (hitResult) {
+
+				var artboard: Higherframe.Drawing.Artboard = this.getTopmost(hitResult.item);
+				artboard.hovered = true;
+			}
+
+			// Update artboards
+			this.updateArtboards();
+		}
+
+		onArtboardsMouseDrag() {
+
 		}
 
 
@@ -877,11 +959,27 @@ module Higherframe.Wireframe {
 
 				case EditMode.Draw:
 
+					Wireframe.Tools.Draw.get().activate();
+
+					// Clean up
+					this.artboards.forEach((artboard) => {
+
+						artboard.hovered = false;
+						artboard.focussed = false;
+					});
+
+					this.updateArtboards();
+
+					// Style the canvas
 					this.layerDrawing.opacity = 1;
+
 					break;
 
 				case EditMode.Artboards:
 
+					Wireframe.Tools.Artboards.get().activate();
+
+					// Style the canvas
 					this.layerDrawing.opacity = 0.3;
 					break;
 			}
@@ -1012,7 +1110,7 @@ module Higherframe.Wireframe {
 		 */
 
 		// Given a paper item, finds the top-most item in its
-		// hierarchy. This is typically a component.
+		// hierarchy. This is typically a component or artboard.
 		getTopmost(item) {
 
 			var result = item;
@@ -1492,50 +1590,10 @@ module Higherframe.Wireframe {
 
 		updateArtboards() {
 
-			this.layerArtboards.activate();
-
-			// Remove old artboards
 			this.artboards.forEach((artboard) => {
 
-				artboard.remove();
+				artboard.update(this);
 			});
-			this.artboards = [];
-
-			var artboard = new paper.Group();
-
-			// The canvas
-			var canvas = paper.Path.Rectangle(
-				new paper.Point(-800, -600),
-				new paper.Point(800, 600)
-			);
-			canvas.fillColor = 'white';
-
-			if (this.editMode == EditMode.Artboards) {
-
-				canvas.strokeColor = '#888';
-			}
-
-			else {
-
-				canvas.strokeColor = '#ccc';
-			}
-
-			canvas.strokeWidth = 1 / paper.view.zoom;
-			artboard.addChild(canvas);
-
-			// The artboard label
-			var label = new paper.PointText({
-				point: canvas.bounds.topLeft.subtract(new paper.Point(0, 10 / paper.view.zoom)),
-				content: 'Artboard 1',
-				fillColor: 'black',
-				fontSize: 12 / paper.view.zoom,
-				fontFamily: 'Myriad Pro'
-			});
-			artboard.addChild(label);
-
-			this.artboards.push(artboard);
-
-			this.layerDrawing.activate();
 		}
 
 

@@ -1,34 +1,12 @@
-$navbarHeight: 7 * $vu;
-$actionbarHeight: 28px;
-$logoHeight: 3 * $vu;
+$navbarHeight: 40px;
+$logoHeight: 20px;
 
-#navbar,
-#actionbar {
+#navbar {
 	@include box-sizing(border-box);
 	width: 100%;
 
-	&.border {
-		border-bottom: 1px solid #dce1e0;
-	}
-
-	&.border-light {
-		border-bottom: 1px solid lighten(#dce1e0, 8);
-	}
-
-	&.white {
-		background: white;
-	}
-
 	&.blue {
-		background: $blue;
-
-		&.border {
-			border-bottom: 1px solid #dce1e0;
-		}
-
-		&.border-light {
-			border-bottom: 1px solid $blue1;
-		}
+		background: #3c3e3a;
 	}
 
 	&.transparent {
@@ -120,7 +98,7 @@ $logoHeight: 3 * $vu;
 		float: left;
 		top: 2px;
 		height: $logoHeight;
-		margin-top: 2 * $vu;
+		margin-top: ($navbarHeight - $logoHeight) / 2;
 		margin-right: 30px;
 
 		svg {
@@ -205,53 +183,5 @@ $logoHeight: 3 * $vu;
 
 	.navItem + .navItem {
 		margin-left: 30px;
-	}
-}
-
-#actionbar {
-	@include display-flex;
-	height: $actionbarHeight;
-
-	.action {
-		display: inline-block;
-		padding-top: ($actionbarHeight - $b2-baseline-height-true) / 2;
-		cursor: pointer;
-		text-decoration: none;
-		margin-top: -$b2-artifact;
-
-		& + .action {
-			margin-left: 30px;
-		}
-	}
-
-	.action-menu {
-		$actionMenuBorderRadius: 5px;
-		position: relative;
-
-		&.open {
-			color: white !important;
-		}
-
-		.uib-dropdown-menu {
-			& > li {
-				& > a {
-					@include display-flex;
-
-					& > :first-child {
-						@include flex-grow(1);
-					}
-
-					& > :nth-child(2) {
-						margin-left: 20px;
-					}
-				}
-			}
-		}
-	}
-
-	&.light {
-		.action {
-			color: $blue3;
-		}
 	}
 }
