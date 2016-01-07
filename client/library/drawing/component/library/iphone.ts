@@ -72,7 +72,7 @@ module Higherframe.Drawing.Component.Library {
       var outer = paper.Path.Rectangle(bounds, 20);
       outer.strokeColor = foreColor;
       outer.strokeWidth = 1.5;
-      outer.fillColor = 'rgba(255,255,255,1)';
+      outer.fillColor = 'rgba(255,255,255,0)';
 
       // Draw the screen
       var screenRectangle = new paper.Rectangle(

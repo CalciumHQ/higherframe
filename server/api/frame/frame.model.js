@@ -35,6 +35,10 @@ var FrameSchema = new Schema({
 		type: Schema.ObjectId,
 		ref: 'Component'
 	}],
+  artboards: [{
+		type: Schema.ObjectId,
+		ref: 'Artboard'
+	}],
   media: [{
     type: Schema.ObjectId,
     ref: 'Media'

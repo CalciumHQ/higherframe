@@ -103,6 +103,19 @@ module Higherframe.Wireframe {
 					this.changeCenter(center, null);
 				});
 
+				scope.$on('artboard:added', (e, data) => {
+
+					data.artboards.forEach((artboard: Higherframe.Drawing.Artboard) => {
+
+						this.artboards.push(artboard);
+
+						// Ensure the artboard is on the artboards layer
+						this.layerArtboards.addChild(artboard);
+						
+						artboard.update(this);
+					});
+				});
+
 				scope.$on('controller:component:updated', (e, data) => {
 
 					let component = <Higherframe.Drawing.Component.IComponent>data.component;
@@ -262,12 +275,6 @@ module Higherframe.Wireframe {
  			this.layerGuides = new paper.Layer();
 
  			this.layerDrawing.activate();
-
-			this.layerArtboards.activate();
-			var artboard = new Higherframe.Drawing.Artboard('Artboard 1');
-			this.artboards.push(artboard);
-			this.layerDrawing.activate();
-			this.updateArtboards();
  		}
 
 		/**

@@ -12,6 +12,7 @@
 var _ = require('lodash');
 var Frame = require('./frame.model');
 var Component = require('./../component/component.model');
+var Artboard = require('./../artboard/artboard.model');
 var Activity = require('./../activity/activity.model');
 var User = require('./../user/user.model');
 var mandrill = require('mandrill-api/mandrill');
@@ -42,7 +43,7 @@ exports.show = function(req, res) {
 
   var query = Frame
 		.findOne({ _id: req.params.id, users: req.user._id })
-		.populate('organisation components users collaborators media');
+		.populate('organisation components artboards users collaborators media');
 
   if (!req.query.hasOwnProperty('include_deleted')) {
 
@@ -83,21 +84,28 @@ exports.create = function(req, res) {
     req.body.users.push(req.user);
   }
 
-  Frame.create(req.body, function(err, frame) {
+  // First create an artboard for the new frame
+  Artboard.create({ name: 'Artboard 1' }, function(err, artboard) {
 
-    if(err) { return handleError(res, err); }
+    req.body.artboards = [artboard._id];
 
-    Frame.populate(frame, {path:'organisation'}, function(err, frame) {
+    // Now create the frame
+    Frame.create(req.body, function(err, frame) {
 
       if(err) { return handleError(res, err); }
 
-      Activity.create({
-        frame: frame._id,
-        user: req.user._id,
-        type: 'new-frame'
-      });
+      Frame.populate(frame, {path:'organisation artboards'}, function(err, frame) {
 
-      return res.json(201, frame);
+        if(err) { return handleError(res, err); }
+
+        Activity.create({
+          frame: frame._id,
+          user: req.user._id,
+          type: 'new-frame'
+        });
+
+        return res.json(201, frame);
+      });
     });
   });
 };

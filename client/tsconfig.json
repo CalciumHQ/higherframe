@@ -53,6 +53,7 @@
         "./components/wireframe/canvas.ts",
         "./components/wireframe/tools.ts",
         "./library/data/activity.ts",
+        "./library/data/artboard.ts",
         "./library/data/component-properties.ts",
         "./library/data/component.ts",
         "./library/data/document.ts",

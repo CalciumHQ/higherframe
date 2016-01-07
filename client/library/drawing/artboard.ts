@@ -4,15 +4,24 @@ module Higherframe.Drawing {
   export class Artboard extends paper.Group {
 
     name: string;
+    width: number;
+    height: number;
+    left: number;
+    top: number;
+
     hovered: boolean = false;
     active: boolean = false;
     focussed: boolean = false;
 
-    constructor(name: string) {
+    constructor(model: Higherframe.Data.IArtboard) {
 
       super();
 
-      this.name = name;
+      this.name = model.name;
+      this.width = model.width;
+      this.height = model.height;
+      this.left = model.left;
+      this.top = model.top;
     }
 
     update(canvas: Higherframe.Wireframe.Canvas) {
@@ -41,8 +50,8 @@ module Higherframe.Drawing {
 
       // The background
 			var background = paper.Path.Rectangle(
-				new paper.Point(-800, -600),
-				new paper.Point(800, 600)
+				new paper.Point(this.left, this.top),
+				new paper.Point(this.width, this.height)
 			);
 			background.fillColor = 'white';
 

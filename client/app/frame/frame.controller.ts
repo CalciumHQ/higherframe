@@ -549,23 +549,26 @@ class FrameCtrl {
 
   private deserialize(document: Higherframe.Data.Document) {
 
-    var that = this;
-
-    setTimeout(function () {
+    setTimeout(() => {
 
 			// Add components in order of z index
 			document.components = _.sortBy(
 				document.components,
-				function (component) {
+				(component) => {
 
           return component.properties.index;
         }
       );
 
-      angular.forEach(document.components, function (component) {
+      document.components.forEach((component) => {
 
-				that.components.push(component);
-        that.addComponentsToView(component, { select: false });
+				this.components.push(component);
+        this.addComponentsToView(component, { select: false });
+      });
+
+			document.artboards.forEach((artboard) => {
+
+        this.addArtboardsToView(artboard, { select: false });
       });
 
     }, 200);
@@ -675,17 +678,35 @@ class FrameCtrl {
 		this.$scope.$broadcast('editMode:set', this.editMode);
 	}
 
-  private toggleQuickAdd() {
+	private addArtboardsToView(artboards, options?) {
 
-    this.quickAdd.query = '';
-    this.quickAdd.open = !this.quickAdd.open;
+		if (!angular.isArray(artboards)) {
 
-    if (this.quickAdd.open) {
-
-      var that = this;
-      this.$timeout(function () { that.quickAdd.focus = true; });
+      artboards = [artboards];
     }
-  };
+
+    if (!artboards.length) {
+
+      return;
+    }
+
+		// Create the artboards in the view
+    var instances = [];
+    artboards.forEach((artboard: Higherframe.Data.IArtboard) => {
+
+      var instance = new Higherframe.Drawing.Artboard(artboard);
+      instances.push(instance);
+    });
+
+    // Tell the view new components have been added
+    this.$scope.$broadcast('artboard:added', {
+      artboards: instances,
+      options: options
+    });
+
+		return instances;
+	}
+
 
   private addComponentsToView(components, options?) {
 
@@ -904,11 +925,6 @@ class FrameCtrl {
     this.$state.go('frameSettings', { id: this.frame._id });
   }
 
-  onActionbarQuickAddClick() {
-
-    this.toggleQuickAdd();
-  }
-
   onActionbarSaveAsPngClick() {
 
     this.save('png');
@@ -947,9 +963,6 @@ class FrameCtrl {
     // Create the instances and save to db
     var instances = this.addComponentsToView(component, null);
     this.saveComponents(instances);
-
-    // Hide the quick add
-    this.toggleQuickAdd();
   }
 
   onComponentPropertyChange(key, value, component, property) {

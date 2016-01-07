@@ -5,5 +5,6 @@ module Higherframe.Data {
   export class Document {
 
     components: Array<Component>;
+    artboards: Array<IArtboard>;
   }
 }
