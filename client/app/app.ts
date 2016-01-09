@@ -124,3 +124,10 @@ angular.module('siteApp', [
       }, 700);
     });
   });
+
+
+// Register common classes
+angular
+  .module('siteApp')
+  .factory('Artboard', Common.Data.ArtboardResource)
+  .factory('Media', Common.Data.MediaResource);

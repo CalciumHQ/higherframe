@@ -24,7 +24,3 @@ module Common.Data {
     return <IArtboardResource>$resource('/api/artboards/:id', { id: '@id' }, { update: updateAction });
   }
 }
-
-angular
-  .module('siteApp')
-  .factory('Artboard', Common.Data.ArtboardResource);

@@ -416,17 +416,28 @@ module.exports = function (grunt) {
 
       server: {
         src: [
-          'common/**/*.ts',
+          'common/library/**/*.ts',
           '!common/typings/**/*.ts'
         ],
-        dest: '.tmp',
+        dest: '.tmp-server/javascript',
         options: {
           module: 'commonjs',
           target: 'es5',
-          basePath: '<%= yeoman.client %>',
+          basePath: 'common',
           keepDirectoryHierarchy: true,
           sourceMap: true,
           declaration: true
+        }
+      }
+    },
+
+    concat: {
+      server: {
+        src: [ '.tmp-server/javascript/**/*.js' ],
+        dest: '.tmp-server/common.js',
+        options: {
+          banner: 'var paper = require(\'paper\');\n\n',
+          footer: '\nmodule.exports = Common;'
         }
       }
     },
@@ -639,6 +650,7 @@ module.exports = function (grunt) {
       'concurrent:server',
       'typescript:client',
       'typescript:common',
+      'typescript:server',
       'injector',
       'bowerInstall',
       'autoprefixer',
@@ -702,6 +714,7 @@ module.exports = function (grunt) {
     'concurrent:dist',
     'typescript:client',
     'typescript:common',
+    'typescript:server',
     'injector',
     'bowerInstall',
     'useminPrepare',

@@ -37,7 +37,3 @@ module Common.Data {
     return MediaResource;
   }
 }
-
-angular
-  .module('siteApp')
-  .factory('Media', Common.Data.MediaResource);

@@ -2,8 +2,8 @@
 'use strict';
 
 var _ = require('lodash');
-// var ComponentFactory = require('./../../../.tmp/library/drawing/component/factory.js');
 var paper = require('paper');
+var Common = require('./../../../.tmp-server/common.js')
 var fs = require('fs');
 var s3 = require('s3');
 var Promise = require('promise');
@@ -98,8 +98,7 @@ var _createExportEntry = function(image, frame) {
  */
 
 exports.export = function (frame, fileName, options) {
-options.error();
-return;
+
   var fileType = options.fileType || 'png';
 
   frame.artboards.forEach(function(artboard) {
@@ -113,7 +112,7 @@ return;
 
     // Draw a white background
     var bg = new paper.Path.Rectangle(new paper.Rectangle(
-      new paper.Point(0, 0),
+      new paper.Point(artboard.left, artboard.top),
       new paper.Point(artboard.width, artboard.height)
     ));
     bg.fillColor = 'white';
@@ -121,12 +120,11 @@ return;
     // Draw the components
     frame.components.forEach(function (component) {
 
-      var marker = new paper.Path.Circle(
-        new paper.Point(component.properties.x - artboard.left, component.properties.y - artboard.top),
-        10);
-
-      marker.fillColor = 'black';
+      var component = Common.Drawing.Component.Factory.get(Common.Drawing.Component.Type[component.type], component);
     });
+
+    // Translate contents relative to artboard position
+    layer.translate(new paper.Point(-artboard.left, -artboard.top));
 
     // Perform the actual drawing to the canvas
     paper.view.update();
