@@ -19,7 +19,7 @@ module Higherframe.UI {
       private $scope: ImageScope,
       private $http: ng.IHttpService,
       private $parse: ng.IParseService,
-      private Media: Higherframe.Data.IMediaResource
+      private Media: Common.Data.IMediaResource
     ) {}
 
     init(element: ng.IAugmentedJQuery, attrs: ng.IAttributes, ngModel: ng.INgModelController) {
@@ -93,7 +93,7 @@ module Higherframe.UI {
       reader.readAsDataURL(file);
     }
 
-    onFileChangeSuccess(media: Higherframe.Data.IMedia) {
+    onFileChangeSuccess(media: Common.Data.IMedia) {
 
       this.ngModel.$setViewValue(media);
 

@@ -1,6 +1,6 @@
 
-/// <reference path="../typings/angularjs/angular.d.ts"/>
-/// <reference path="../typings/angularjs/angular-resource.d.ts"/>
+/// <reference path="../typings/lodash/lodash.d.ts"/>
+/// <reference path="../typings/higherframe/common.d.ts"/>
 
 /**
  * The Higherframe module

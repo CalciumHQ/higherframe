@@ -17,7 +17,7 @@ var Activity = require('./../activity/activity.model');
 var User = require('./../user/user.model');
 var mandrill = require('mandrill-api/mandrill');
 var config = require('../../config/environment');
-// var frameExporter = require('./../../components/frame/exporter');
+var exporter = require('./../../components/frame/exporter');
 
 // Get list of frames
 exports.index = function(req, res) {
@@ -294,9 +294,9 @@ exports.deleteComponent = function(req, res) {
 
 exports.export = function (req, res) {
 
-  /*Frame
+  Frame
 		.findById(req.params.id)
-		.populate('components')
+		.populate('components artboards')
 		.exec(function (err, frame) {
 
 	    if(err) { return handleError(res, err); }
@@ -319,12 +319,12 @@ exports.export = function (req, res) {
       }
 
       // Perform the export
-      frameExporter.export(frame, fileName, {
+      exporter.export(frame, fileName, {
         fileType: fileType,
         success: onSuccess,
         error: onError
       });
-    });*/
+    });
 };
 
 function handleError(res, err) {

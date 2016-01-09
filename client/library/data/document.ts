@@ -1,10 +1,9 @@
-/// <reference path="../higherframe.ts"/>
 
 module Higherframe.Data {
 
   export class Document {
 
-    components: Array<Component>;
-    artboards: Array<IArtboard>;
+    components: Array<Common.Data.Component>;
+    artboards: Array<Common.Data.IArtboard>;
   }
 }

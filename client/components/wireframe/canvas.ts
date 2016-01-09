@@ -6,12 +6,6 @@ var _paperInitialized;
 
 module Higherframe.Wireframe {
 
-	export enum EditMode {
-		Draw,
-		Artboards,
-		Annotate
-	}
-
 	export class Canvas implements ng.IDirective {
 
 		link: (scope: ng.IScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes, ngModel: ng.INgModelController) => void;
@@ -61,14 +55,14 @@ module Higherframe.Wireframe {
 			y: Array<paper.Path>
 		} = { x: [], y: [] };
 
-		components: Array<Higherframe.Drawing.Component.IComponent> = [];
+		components: Array<Common.Drawing.Component.IComponent> = [];
 		artboards: Array<Higherframe.Drawing.Artboard> = [];
 		boundingBoxes: Array<paper.Item> = [];
 		smartGuides: Array<paper.Item> = [];
 		collaboratorLabels: Array<paper.Item> = [];
 
-		theme: Higherframe.UI.ITheme = new Higherframe.UI.DefaultTheme();
-		editMode: EditMode = EditMode.Draw;
+		theme: Common.UI.ITheme = new Common.UI.DefaultTheme();
+		editMode: Common.Drawing.EditMode = Common.Drawing.EditMode.Draw;
 
 
 		constructor(private $window: Higherframe.IWindow) {
@@ -111,14 +105,14 @@ module Higherframe.Wireframe {
 
 						// Ensure the artboard is on the artboards layer
 						this.layerArtboards.addChild(artboard);
-						
+
 						artboard.update(this);
 					});
 				});
 
 				scope.$on('controller:component:updated', (e, data) => {
 
-					let component = <Higherframe.Drawing.Component.IComponent>data.component;
+					let component = <Common.Drawing.Component.IComponent>data.component;
 					component.update();
 
 					// Update bounding boxes
@@ -440,8 +434,8 @@ module Higherframe.Wireframe {
 			else if (this.selectedItems.length) {
 
 				var bestSmartGuideResult: {
-					x?: Drawing.SmartGuide,
-					y?: Drawing.SmartGuide
+					x?: Common.Drawing.SmartGuide,
+					y?: Common.Drawing.SmartGuide
 				} = {};
 
 				angular.forEach(this.selectedItems, (item) => {
@@ -783,7 +777,7 @@ module Higherframe.Wireframe {
 		 * State handlers
 		 */
 
-		onItemUpdated(item: Higherframe.Drawing.Component.IComponent) {
+		onItemUpdated(item: Common.Drawing.Component.IComponent) {
 
 			item.update();
 			this.updateBoundingBoxes();
@@ -805,13 +799,13 @@ module Higherframe.Wireframe {
 			this.scope.$emit('componentsDeselected', this.selectedItems);
 			this.selectedItems = [];
 
-			angular.forEach(this.layerDrawing.children, (item: Higherframe.Drawing.Component.IComponent) => {
+			angular.forEach(this.layerDrawing.children, (item: Common.Drawing.Component.IComponent) => {
 
 				this.onItemUpdated(item);
 			});
 		}
 
-		selectItems(items: Array<Higherframe.Drawing.Component.IComponent>) {
+		selectItems(items: Array<Common.Drawing.Component.IComponent>) {
 
 			var newSelectedItems = [];
 
@@ -835,7 +829,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('componentsSelected', newSelectedItems);
 		}
 
-		removeItems(items: Array<Higherframe.Drawing.Component.IComponent>) {
+		removeItems(items: Array<Common.Drawing.Component.IComponent>) {
 
 			this.scope.$emit('componentsDeleted', items);
 
@@ -862,7 +856,7 @@ module Higherframe.Wireframe {
 			}
 		}
 
-		moveItems(items: Array<Higherframe.Drawing.Component.IComponent>, event: Higherframe.Drawing.Component.IComponentMoveEvent) {
+		moveItems(items: Array<Common.Drawing.Component.IComponent>, event: Common.Drawing.Component.IComponentMoveEvent) {
 
 			angular.forEach(items, (item) => {
 
@@ -877,7 +871,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('componentsMoved', items);
 		}
 
-		nudge(items: Array<Higherframe.Drawing.Component.IComponent>, x, y) {
+		nudge(items: Array<Common.Drawing.Component.IComponent>, x, y) {
 
 			angular.forEach(items, (item) => {
 
@@ -890,7 +884,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('componentsMoved', items);
 		}
 
-		moveForward(items: Array<Higherframe.Drawing.Component.IComponent>) {
+		moveForward(items: Array<Common.Drawing.Component.IComponent>) {
 
 			angular.forEach(items, (item) => {
 
@@ -911,7 +905,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('componentsIndexModified', items);
 		}
 
-		moveToFront(items: Array<Higherframe.Drawing.Component.IComponent>) {
+		moveToFront(items: Array<Common.Drawing.Component.IComponent>) {
 
 			angular.forEach(items, (item) => {
 
@@ -921,7 +915,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('componentsIndexModified', items);
 		}
 
-		moveBackward(items: Array<Higherframe.Drawing.Component.IComponent>) {
+		moveBackward(items: Array<Common.Drawing.Component.IComponent>) {
 
 			angular.forEach(items, (item) => {
 
@@ -942,7 +936,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('componentsIndexModified', items);
 		}
 
-		moveToBack(items: Array<Higherframe.Drawing.Component.IComponent>) {
+		moveToBack(items: Array<Common.Drawing.Component.IComponent>) {
 
 			angular.forEach(items, (item) => {
 
@@ -957,14 +951,14 @@ module Higherframe.Wireframe {
 		 * View methods
 		 */
 
-		setEditMode(mode: EditMode) {
+		setEditMode(mode: Common.Drawing.EditMode) {
 
 			this.editMode = mode;
 			this.updateArtboards();
 
 			switch (mode) {
 
-				case EditMode.Draw:
+				case Common.Drawing.EditMode.Draw:
 
 					Wireframe.Tools.Draw.get().activate();
 
@@ -982,7 +976,7 @@ module Higherframe.Wireframe {
 
 					break;
 
-				case EditMode.Artboards:
+				case Common.Drawing.EditMode.Artboards:
 
 					Wireframe.Tools.Artboards.get().activate();
 
@@ -1076,7 +1070,7 @@ module Higherframe.Wireframe {
 					this.selectedItems.indexOf(item) === -1
 				) {
 
-					this.selectItems([<Higherframe.Drawing.Component.Base>item]);
+					this.selectItems([<Common.Drawing.Component.Base>item]);
 				}
 			});
 
@@ -1093,7 +1087,7 @@ module Higherframe.Wireframe {
 
 		updateDragSelection(from, to) {
 
-			let theme: Higherframe.UI.ITheme = new Higherframe.UI.DefaultTheme();
+			let theme: Common.UI.ITheme = new Common.UI.DefaultTheme();
 			this.dragSelectionRectangle = new paper.Rectangle(from, to);
 
 			// Update the overlay indicating the drag region
@@ -1139,7 +1133,7 @@ module Higherframe.Wireframe {
 
 			var result = item;
 
-			if (result instanceof Higherframe.Drawing.Component.DragHandle) {
+			if (result instanceof Common.Drawing.Component.DragHandle) {
 
 				return result;
 			}
@@ -1149,7 +1143,7 @@ module Higherframe.Wireframe {
 
 				result = result.parent;
 
-				if (result instanceof Higherframe.Drawing.Component.DragHandle) {
+				if (result instanceof Common.Drawing.Component.DragHandle) {
 
 					return result;
 				}
@@ -1224,7 +1218,7 @@ module Higherframe.Wireframe {
 				: null;
 		}
 
-		private drawBoundingBox(items: Array<Drawing.Component.IComponent>, color: paper.Color): paper.Group {
+		private drawBoundingBox(items: Array<Common.Drawing.Component.IComponent>, color: paper.Color): paper.Group {
 
 			var rect = this.getBounds(items);
 
@@ -1246,7 +1240,7 @@ module Higherframe.Wireframe {
 			// A single component is selected
 			if (items.length == 1) {
 
-				var component: Higherframe.Drawing.Component.IComponent = items[0];
+				var component: Common.Drawing.Component.IComponent = items[0];
 
 				// Add the transform handles
 				_.forEach(component.getTransformHandles(color), (transformHandle) => {
@@ -1260,7 +1254,7 @@ module Higherframe.Wireframe {
 
 				function addHandle(center: paper.Point) {
 
-					var handle = new Drawing.Component.DragHandle(center, color);
+					var handle = new Common.Drawing.Component.DragHandle(center, color);
 					boundingBox.addChild(handle);
 				}
 
@@ -1309,7 +1303,7 @@ module Higherframe.Wireframe {
 			}
 		}
 
-		addDragHandles(item: Higherframe.Drawing.Component.IComponent) {
+		addDragHandles(item: Common.Drawing.Component.IComponent) {
 
 			this.layerSelections.activate();
 
@@ -1334,16 +1328,16 @@ module Higherframe.Wireframe {
 		 * Smart guides
 		 */
 
-		updateSmartGuides(item, sp?: Array<Drawing.SnapPoint>): { x: Drawing.SmartGuide, y: Drawing.SmartGuide } {
+		updateSmartGuides(item, sp?: Array<Common.Drawing.SnapPoint>): { x: Common.Drawing.SmartGuide, y: Common.Drawing.SmartGuide } {
 
 			this.removeSmartGuides();
 			return this.addSmartGuides(item, sp);
 		}
 
-		addSmartGuides(item, sp?: Array<Drawing.SnapPoint>): { x: Drawing.SmartGuide, y: Drawing.SmartGuide } {
+		addSmartGuides(item, sp?: Array<Common.Drawing.SnapPoint>): { x: Common.Drawing.SmartGuide, y: Common.Drawing.SmartGuide } {
 
-			var smartGuideX: Drawing.SmartGuide,
-				smartGuideY: Drawing.SmartGuide;
+			var smartGuideX: Common.Drawing.SmartGuide,
+				smartGuideY: Common.Drawing.SmartGuide;
 
 			var majorDeltaWeighting = 1,
 				minorDeltaWeighting = 0.1,
@@ -1367,7 +1361,7 @@ module Higherframe.Wireframe {
 				var relationSnapPoints = (<any>relation).getSnapPoints();
 
 				// Look for alignment in snap points
-				snapPoints.forEach((snapPoint: Drawing.SnapPoint) => {
+				snapPoints.forEach((snapPoint: Common.Drawing.SnapPoint) => {
 
 					relationSnapPoints.forEach((relationSnapPoint) => {
 
@@ -1378,15 +1372,15 @@ module Higherframe.Wireframe {
 						if (Math.abs(xDelta) <= 10 || Math.abs(yDelta) <= 10) {
 
 							// Which axis is the snap in?
-							var axis: Drawing.SmartGuideAxis =
+							var axis: Common.Drawing.SmartGuideAxis =
 								(Math.abs(xDelta) <= Math.abs(yDelta)) ?
-								Drawing.SmartGuideAxis.X :
-								Drawing.SmartGuideAxis.Y;
+								Common.Drawing.SmartGuideAxis.X :
+								Common.Drawing.SmartGuideAxis.Y;
 
 							// Establish a score for this snap point
 							var score = 0;
 
-							if (axis == Drawing.SmartGuideAxis.X) {
+							if (axis == Common.Drawing.SmartGuideAxis.X) {
 
 								score += minorDeltaWeighting * (1/snapPoint.weight) * (1/relationSnapPoint.weight) * Math.abs(xDelta);
 								score += majorDeltaWeighting * (1/snapPoint.weight) * (1/relationSnapPoint.weight) * Math.abs(yDelta);
@@ -1399,7 +1393,7 @@ module Higherframe.Wireframe {
 								if (smartGuideX && smartGuideX.score < score) { return; }
 							}
 
-							else if (axis == Drawing.SmartGuideAxis.Y) {
+							else if (axis == Common.Drawing.SmartGuideAxis.Y) {
 
 								score += minorDeltaWeighting * (1/snapPoint.weight) * (1/relationSnapPoint.weight) * Math.abs(yDelta);
 								score += majorDeltaWeighting * (1/snapPoint.weight) * (1/relationSnapPoint.weight) * Math.abs(xDelta);
@@ -1413,7 +1407,7 @@ module Higherframe.Wireframe {
 							}
 
 							// Create the new smart guide
-							var smartGuide = new Drawing.SmartGuide();
+							var smartGuide = new Common.Drawing.SmartGuide();
 							smartGuide.origin = snapPoint;
 							smartGuide.relation = relationSnapPoint;
 							smartGuide.axis = axis;
@@ -1423,7 +1417,7 @@ module Higherframe.Wireframe {
 								y: yDelta
 							};
 
-							if (smartGuide.axis == Drawing.SmartGuideAxis.X) {
+							if (smartGuide.axis == Common.Drawing.SmartGuideAxis.X) {
 
 								smartGuideX = smartGuide;
 							}
@@ -1444,7 +1438,7 @@ module Higherframe.Wireframe {
 			};
 		}
 
-		drawGuide(smartGuide: Drawing.SmartGuide) {
+		drawGuide(smartGuide: Common.Drawing.SmartGuide) {
 
 			this.layerGuides.activate();
 
@@ -1491,7 +1485,7 @@ module Higherframe.Wireframe {
 			crossTwoNE.strokeWidth = guideStrokeWidth;
 			guide.addChild(crossTwoNE);
 
-			if (smartGuide.axis == Drawing.SmartGuideAxis.X && smartGuide.relation.xName) {
+			if (smartGuide.axis == Common.Drawing.SmartGuideAxis.X && smartGuide.relation.xName) {
 
 				var snapText = new paper.PointText({
 	        point: smartGuide.relation.point.add(new paper.Point(-10, 13)),
@@ -1503,7 +1497,7 @@ module Higherframe.Wireframe {
 				guide.addChild(snapText);
 			}
 
-			else if (smartGuide.axis == Drawing.SmartGuideAxis.Y && smartGuide.relation.yName) {
+			else if (smartGuide.axis == Common.Drawing.SmartGuideAxis.Y && smartGuide.relation.yName) {
 
 				var snapText = new paper.PointText({
 	        point: smartGuide.relation.point.add(new paper.Point(-10, 13)),

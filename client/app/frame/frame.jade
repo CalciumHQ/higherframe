@@ -61,6 +61,21 @@ div.fullscreen-wrapper
 			button.btn.btn-default.btn-sm(ng-click="FrameCtrl.onToolbarPasteClick()", uib-tooltip-html="'Paste (' + ('ctrl' | symbol) + 'V)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", ng-disabled="!FrameCtrl.Clipboard.getItems().length")
 				span.font-awesome &#xf0ea;
 				
+		div.toolbar-item(uib-dropdown)
+			button.btn.btn-default.btn-sm(uib-dropdown-toggle)
+				span.font-awesome &#xf019; 
+				span.caret
+					
+			div.uib-dropdown-menu
+				li
+					a PNG
+				
+				li
+					a JPG
+					
+				li
+					a PDF
+				
 		div.divider
 		
 		div.toolbar-group(ng-if="FrameCtrl.editMode == 0")

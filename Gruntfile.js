@@ -16,7 +16,8 @@ module.exports = function (grunt) {
     cdnify: 'grunt-google-cdn',
     protractor: 'grunt-protractor-runner',
     injector: 'grunt-asset-injector',
-    buildcontrol: 'grunt-build-control'
+    buildcontrol: 'grunt-build-control',
+    dtsGenerator: 'dts-generator'
   });
 
   // Time how long tasks take. Can help when optimizing build times
@@ -380,11 +381,11 @@ module.exports = function (grunt) {
 
     // Typescript
     typescript: {
-      base: {
+      client: {
         src: [
           '<%= yeoman.client %>/**/*.ts',
           '!<%= yeoman.client %>/bower_components/**/*.ts',
-          '!<%= yeoman.client %>/typings/**/*.ts',
+          '!<%= yeoman.client %>/typings/**/*.ts'
         ],
         dest: '.tmp',
         options: {
@@ -395,6 +396,52 @@ module.exports = function (grunt) {
           sourceMap: true,
           declaration: true
         }
+      },
+
+      common: {
+        src: [
+          'common/library/**/*.ts',
+          '!common/typings/**/*.ts'
+        ],
+        dest: '.tmp',
+        options: {
+          module: 'commonjs',
+          target: 'es5',
+          basePath: 'common',
+          keepDirectoryHierarchy: true,
+          sourceMap: true,
+          declaration: true
+        }
+      },
+
+      server: {
+        src: [
+          'common/**/*.ts',
+          '!common/typings/**/*.ts'
+        ],
+        dest: '.tmp',
+        options: {
+          module: 'commonjs',
+          target: 'es5',
+          basePath: '<%= yeoman.client %>',
+          keepDirectoryHierarchy: true,
+          sourceMap: true,
+          declaration: true
+        }
+      }
+    },
+
+    // Typescript definitions
+    dtsGenerator: {
+      options: {
+          name: 'higherframe-common',
+          baseDir: 'common',
+          out: '<%= yeoman.client %>/typings/higherframe/common.d.ts',
+      },
+      common: {
+          src: [
+            'common/library/**/*.ts'
+          ]
       }
     },
 
@@ -590,7 +637,8 @@ module.exports = function (grunt) {
       'env:all',
       'injector:sass',
       'concurrent:server',
-      'typescript',
+      'typescript:client',
+      'typescript:common',
       'injector',
       'bowerInstall',
       'autoprefixer',
@@ -652,7 +700,8 @@ module.exports = function (grunt) {
     'clean:dist',
     'injector:sass',
     'concurrent:dist',
-    'typescript',
+    'typescript:client',
+    'typescript:common',
     'injector',
     'bowerInstall',
     'useminPrepare',

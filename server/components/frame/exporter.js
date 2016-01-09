@@ -2,7 +2,7 @@
 'use strict';
 
 var _ = require('lodash');
-var ComponentFactory = require('./../../../.tmp/library/drawing/component/factory.js');
+// var ComponentFactory = require('./../../../.tmp/library/drawing/component/factory.js');
 var paper = require('paper');
 var fs = require('fs');
 var s3 = require('s3');
@@ -98,85 +98,46 @@ var _createExportEntry = function(image, frame) {
  */
 
 exports.export = function (frame, fileName, options) {
-
-  console.log(ComponentFactory);
-  options.error();
-  return;
-
+options.error();
+return;
   var fileType = options.fileType || 'png';
-  var width = options.width || 2000;
-  var height = options.height || 1000;
 
-  // Set up a canvas to draw on
-  var canvas = new paper.Canvas(width, height);
-  paper.setup(canvas);
+  frame.artboards.forEach(function(artboard) {
 
-  // Get a layer to draw on
-  var layer = paper.project.activeLayer;
+    // Set up a canvas to draw on
+    var canvas = new paper.Canvas(artboard.width, artboard.height);
+    paper.setup(canvas);
 
-  // Draw a white background
-  var bg = new paper.Path.Rectangle(new paper.Rectangle(
-    new paper.Point(0,0),
-    new paper.Point(width, height)
-  ));
-  bg.fillColor = 'white';
+    // Get a layer to draw on
+    var layer = paper.project.activeLayer;
 
-  // Draw the components
-  frame.components.forEach(function (component) {
+    // Draw a white background
+    var bg = new paper.Path.Rectangle(new paper.Rectangle(
+      new paper.Point(0, 0),
+      new paper.Point(artboard.width, artboard.height)
+    ));
+    bg.fillColor = 'white';
 
-    /* var marker = new paper.Path.Circle(new paper.Point(component.properties.x, component.properties.y), 10);
-    marker.fillColor = 'black'; */
-  });
+    // Draw the components
+    frame.components.forEach(function (component) {
 
-  // Perform the actual drawing to the canvas
-  paper.view.update();
+      var marker = new paper.Path.Circle(
+        new paper.Point(component.properties.x - artboard.left, component.properties.y - artboard.top),
+        10);
 
-  // Output to an svg using paperjs svg export
-  if (fileType == 'svg') {
-
-    var path = 'tmp/' + fileName + '.svg';
-    var out = fs.createWriteStream(__dirname + '/../../' + path);
-    var svg = paper.project.exportSVG({ asString:true });
-    out.write(svg);
-
-    var paths = {
-      thumbnail: path,
-      small: path,
-      medium: path,
-      large: path
-    };
-
-    return _saveImagesToS3(paths)
-      .then(function(urls) { _createImageEntry(urls); })
-      .then(function(image) { return _createExportEntry(image, frame); })
-      .then(options.success)
-      .catch(options.error);
-  }
-
-  // Output to another file type using a stream
-  else {
-
-    var out, stream, path;
-
-    // Output to a png
-    if (fileType == 'png') {
-
-      path = 'tmp/' + fileName + '.png';
-      out = fs.createWriteStream(__dirname + '/../../' + path);
-      stream = canvas.pngStream();
-    }
-
-    else {
-
-      return options.error('Invalid filetype', 400);
-    }
-
-    stream.on('data', function(chunk) {
-
-      out.write(chunk);
+      marker.fillColor = 'black';
     });
 
-    stream.on('end', function() {
+    // Perform the actual drawing to the canvas
+    paper.view.update();
+
+    // Output to an svg using paperjs svg export
+    if (fileType == 'svg') {
+
+      var path = 'tmp/' + fileName + '.svg';
+      var out = fs.createWriteStream(__dirname + '/../../' + path);
+      var svg = paper.project.exportSVG({ asString:true });
+      out.write(svg);
 
       var paths = {
         thumbnail: path,
@@ -186,10 +147,50 @@ exports.export = function (frame, fileName, options) {
       };
 
       return _saveImagesToS3(paths)
-        .then(function(urls) { return _createImageEntry(urls); })
+        .then(function(urls) { _createImageEntry(urls); })
         .then(function(image) { return _createExportEntry(image, frame); })
         .then(options.success)
         .catch(options.error);
-    });
-  }
+    }
+
+    // Output to another file type using a stream
+    else {
+
+      var out, stream, path;
+
+      // Output to a png
+      if (fileType == 'png') {
+
+        path = 'tmp/' + fileName + '.png';
+        out = fs.createWriteStream(__dirname + '/../../' + path);
+        stream = canvas.pngStream();
+      }
+
+      else {
+
+        return options.error('Invalid filetype', 400);
+      }
+
+      stream.on('data', function(chunk) {
+
+        out.write(chunk);
+      });
+
+      stream.on('end', function() {
+
+        var paths = {
+          thumbnail: path,
+          small: path,
+          medium: path,
+          large: path
+        };
+
+        return _saveImagesToS3(paths)
+          .then(function(urls) { return _createImageEntry(urls); })
+          .then(function(image) { return _createExportEntry(image, frame); })
+          .then(options.success)
+          .catch(options.error);
+      });
+    }
+  });
 };

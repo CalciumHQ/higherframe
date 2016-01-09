@@ -1,6 +1,3 @@
-/// <reference path="../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../typings/paper/paper.d.ts"/>
-/// <reference path="../../typings/lodash/lodash.d.ts"/>
 
 module Higherframe.Controllers {
 

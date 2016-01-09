@@ -16,17 +16,17 @@ module Higherframe.Drawing.Component.Library {
 
     private items: Array<ILibraryItem> = [];
 
-    public registerComponent(type: Higherframe.Drawing.Component.Type) {
+    public registerComponent(type: Common.Drawing.Component.Type) {
 
       // Get a string representation of the component type enum
-      var id = Higherframe.Drawing.Component.Type[type];
+      var id = Common.Drawing.Component.Type[type];
 
       // Create a library item for the component
       var libraryItem: ILibraryItem = {
         id: id,
-        category: Higherframe.Drawing.Component.Library[id].category,
-        title: Higherframe.Drawing.Component.Library[id].title,
-        preview: Higherframe.Drawing.Component.Library[id].preview
+        category: Common.Drawing.Component.Library[id].category,
+        title: Common.Drawing.Component.Library[id].title,
+        preview: Common.Drawing.Component.Library[id].preview
       };
 
       // Add to the list

@@ -1,6 +1,3 @@
-/// <reference path="../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../typings/paper/paper.d.ts"/>
-/// <reference path="../../typings/lodash/lodash.d.ts"/>
 
 class FrameCtrl {
 
@@ -25,10 +22,10 @@ class FrameCtrl {
   };
 
   components:Array<any> = [];
-  selection: Array<Higherframe.Drawing.Component.IComponent> = [];
+  selection: Array<Common.Drawing.Component.IComponent> = [];
 
   activities: Array<Higherframe.Data.IActivity> = [];
-	media: Array<Higherframe.Data.IMedia> = [];
+	media: Array<Common.Data.IMedia> = [];
   collaborators: Array<Object> = [];
 
   // UI variables
@@ -36,7 +33,7 @@ class FrameCtrl {
 		? this.localStorageService.get(this.STORAGE_ACTIVITY_OPEN_KEY)
 		: true);
 
-	editMode: Higherframe.Wireframe.EditMode = this.localStorageService.get(this.STORAGE_EDIT_MODE_KEY) || Higherframe.Wireframe.EditMode.Draw;
+	editMode: Common.Drawing.EditMode = this.localStorageService.get(this.STORAGE_EDIT_MODE_KEY) || Common.Drawing.EditMode.Draw;
   quickAdd = {
     open: false,
     focus: false,
@@ -51,17 +48,17 @@ class FrameCtrl {
 				{
 					title: 'Draw',
 					description: 'Add components to your wireframe',
-					value: Higherframe.Wireframe.EditMode.Draw
+					value: Common.Drawing.EditMode.Draw
 				},
 				{
 					title: 'Artboards',
 					description: 'Manage your wireframe workspaces',
-					value: Higherframe.Wireframe.EditMode.Artboards
+					value: Common.Drawing.EditMode.Artboards
 				},
 				{
 					title: 'Annotate',
 					description: 'Review and discuss your team\'s work',
-					value: Higherframe.Wireframe.EditMode.Annotate
+					value: Common.Drawing.EditMode.Annotate
 				}
 			]
 		}
@@ -129,7 +126,7 @@ class FrameCtrl {
   		}
 
   		// Assign a colour to each user
-  		angular.forEach(that.collaborators, function (user: Higherframe.Data.IUser) {
+  		angular.forEach(that.collaborators, function (user: Common.Data.IUser) {
 
   			if (user && !user.color) {
 
@@ -161,7 +158,7 @@ class FrameCtrl {
   	socket.on('component:select', function (data) {
 
   		// Find the collaborator who selected
-  		var user = _.find(that.collaborators, function (user: Higherframe.Data.IUser) {
+  		var user = _.find(that.collaborators, function (user: Common.Data.IUser) {
 
   			if (user._id == data.user._id) { return true; }
   		});
@@ -180,7 +177,7 @@ class FrameCtrl {
   	socket.on('component:deselect', function (data) {
 
   		// Find the collaborator who deselected
-  		var user = _.find(that.collaborators, function (user: Higherframe.Data.IUser) {
+  		var user = _.find(that.collaborators, function (user: Common.Data.IUser) {
 
   			if (user._id == data.user._id) { return true; }
   		});
@@ -211,7 +208,7 @@ class FrameCtrl {
       };
 
       // Create the new model
-      var component = new Higherframe.Data.Component(params.id, properties);
+      var component = new Common.Data.Component(params.id, properties);
 
       // Create the instances and save to db
       var instances = this.addComponentsToView(component, null);
@@ -481,9 +478,9 @@ class FrameCtrl {
 							this.$scope.$apply(() => {
 
 								switch(event.key) {
-									case '1':	this.setEditMode(Higherframe.Wireframe.EditMode.Draw); break;
-									case '2':	this.setEditMode(Higherframe.Wireframe.EditMode.Artboards); break;
-									case '3':	this.setEditMode(Higherframe.Wireframe.EditMode.Annotate); break;
+									case '1':	this.setEditMode(Common.Drawing.EditMode.Draw); break;
+									case '2':	this.setEditMode(Common.Drawing.EditMode.Artboards); break;
+									case '3':	this.setEditMode(Common.Drawing.EditMode.Annotate); break;
 								}
 							});
 						}
@@ -612,7 +609,7 @@ class FrameCtrl {
     }
 
     // Save components and set _id when saved
-    angular.forEach(components, function (component: Higherframe.Drawing.Component.IComponent) {
+    angular.forEach(components, function (component: Common.Drawing.Component.IComponent) {
 
       // We will first serialize the data in the component's model.
       // If an _id key is found on the model, we know this component has already
@@ -620,7 +617,7 @@ class FrameCtrl {
       // If no _id is found, we know it is a new component and do a post. When
       // the post is completed, we will assign the returned _id to the original
       // component model, since the serialized version is a throwaway copy.
-      var serialized = <Higherframe.Data.Component>component.serialize();
+      var serialized = <Common.Data.Component>component.serialize();
 
       serialized.lastModifiedBy = that.Session.getSessionId();
 
@@ -670,7 +667,7 @@ class FrameCtrl {
 		this.localStorageService.set(this.STORAGE_ACTIVITY_OPEN_KEY, this.activityOpen);
 	}
 
-	private setEditMode(mode: Higherframe.Wireframe.EditMode) {
+	private setEditMode(mode: Common.Drawing.EditMode) {
 
 		this.editMode = mode;
 		this.localStorageService.set(this.STORAGE_EDIT_MODE_KEY, this.editMode);
@@ -692,7 +689,7 @@ class FrameCtrl {
 
 		// Create the artboards in the view
     var instances = [];
-    artboards.forEach((artboard: Higherframe.Data.IArtboard) => {
+    artboards.forEach((artboard: Common.Data.IArtboard) => {
 
       var instance = new Higherframe.Drawing.Artboard(artboard);
       instances.push(instance);
@@ -724,7 +721,7 @@ class FrameCtrl {
     var instances = [];
     components.forEach((component) => {
 
-      var instance = Higherframe.Drawing.Component.Factory.fromModel(component);
+			var instance = Common.Drawing.Component.Factory.fromModel(component);
 
       instances.push(instance);
     });
@@ -738,7 +735,7 @@ class FrameCtrl {
 		return instances;
   };
 
-	private updateUiWithComponents(components: Array<Higherframe.Drawing.Component.IComponent>) {
+	private updateUiWithComponents(components: Array<Common.Drawing.Component.IComponent>) {
 
     this.$scope.$broadcast('controller:component:selected', components);
 	};
@@ -746,7 +743,7 @@ class FrameCtrl {
 	private removeComponentFromView(component) {
 
 		// Find the component with this _id
-		angular.forEach(paper.project.activeLayer.children, function (item: Higherframe.Drawing.Component.IComponent) {
+		angular.forEach(paper.project.activeLayer.children, function (item: Common.Drawing.Component.IComponent) {
 
 			if (item.model._id == component._id) {
 
@@ -758,7 +755,7 @@ class FrameCtrl {
 	private updateComponentInView(component) {
 
 		// Find the component with this _id
-		angular.forEach(paper.project.activeLayer.children, function (item: Higherframe.Drawing.Component.IComponent) {
+		angular.forEach(paper.project.activeLayer.children, function (item: Common.Drawing.Component.IComponent) {
 
 			if (item.model._id == component._id) {
 
@@ -785,7 +782,7 @@ class FrameCtrl {
     this.$scope.$broadcast('view:zoom', this.view.zoom);
   }
 
-  private setCenter(center: Higherframe.Drawing.IPoint) {
+  private setCenter(center: Common.Drawing.IPoint) {
 
 		if (!center) {
 
@@ -855,7 +852,7 @@ class FrameCtrl {
 		let offsetY = paper.view.center.y - components[0].properties.y;
 
 		// Copy representations of the component
-		components.forEach((component: Higherframe.Data.Component) => {
+		components.forEach((component: Common.Data.Component) => {
 
 			delete component._id;
 
@@ -873,7 +870,7 @@ class FrameCtrl {
    */
 
 	// Toolbar
-	onEditModeClick(mode: Higherframe.Wireframe.EditMode) {
+	onEditModeClick(mode: Common.Drawing.EditMode) {
 
 		this.setEditMode(mode);
 	}
@@ -958,7 +955,7 @@ class FrameCtrl {
     };
 
     // Create the new model
-    var component = new Higherframe.Data.Component(definition.id, properties);
+    var component = new Common.Data.Component(definition.id, properties);
 
     // Create the instances and save to db
     var instances = this.addComponentsToView(component, null);

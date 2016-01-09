@@ -6,7 +6,7 @@ module Higherframe.Controllers.Frame {
   export class PropertiesPaneController {
 
     // Member variables
-    public selection: Array<Higherframe.Drawing.Component.IComponent>;
+    public selection: Array<Common.Drawing.Component.IComponent>;
     public models: Object;
     private isPreventingCommit: Boolean = false;
 
@@ -18,7 +18,7 @@ module Higherframe.Controllers.Frame {
       });
     }
 
-    setSelection(selection: Array<Higherframe.Drawing.Component.IComponent>) {
+    setSelection(selection: Array<Common.Drawing.Component.IComponent>) {
 
       // Ensure a focussed control is committed before changing the selection
       // This is important for filling out a control, then clicking in the
