@@ -254,9 +254,23 @@ body,
 	letter-spacing: 0.07em;
 }
 
+@keyframes fa-spin {
+	from 	{ @include transform(rotate(0)); }
+	to 		{ @include transform(rotate(360deg)); }
+}
+
 .font-awesome {
 	font-family: 'FontAwesome';
 	font-size: 0.95em;
+
+	.fa-spin {
+		@include animation(fa-spin 500ms);
+	}
+
+	.fa-fw {
+		display: inline-block;
+		width: 1.216em;
+	}
 }
 
 

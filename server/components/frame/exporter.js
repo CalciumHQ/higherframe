@@ -3,35 +3,53 @@
 
 var _ = require('lodash');
 var paper = require('paper');
+var config = require('../../config/environment');
 var Common = require('./../../../.tmp-server/common.js')
 var fs = require('fs');
-var s3 = require('s3');
 var Promise = require('promise');
 var Readable = require('stream').Readable
 var Image = require('./../../api/image/image.model');
 var Export = require('./../../api/export/export.model');
+var AWS = require('aws-sdk');
 
 /**
  * Save the images to S3
  */
 
-var _saveImagesToS3 = function(paths) {
+var _saveImagesToS3 = function(paths, mimetype) {
 
   var urls = {},
     promises = [];
 
+  // Configure AWS SDK
+	AWS.config.region = config.aws.region;
+
+	// Create S3 bucket interface
+	var bucket = new AWS.S3({ params: { Bucket: config.aws.bucket } });
+
   // For each of the paths that make up the different sizes of this image
   _.forEach(paths, function(path, key) {
 
+    var parts = path.split('/');
+    var filename = parts.pop();
+
     var p = new Promise(function (resolve, reject) {
 
-      // Send to S3
-      s3.send(path, function () {
+      // Read file into file stream
+      fs.readFile(path, function(err, fileBuffer) {
 
-        var url = 'something';
+        // Upload image to bucket
+        bucket.upload({ Key: key + '-' + filename, Body: fileBuffer, ContentType: mimetype }, function (err, data) {
 
-        urls[key] = url;
-        resolve(url);
+          // Remove the temporary file
+          fs.unlink(path);
+
+          if (err) { reject(err); }
+
+          var url = data.Location;
+          urls[key] = url;
+          resolve(url);
+        });
       });
     });
 
@@ -59,15 +77,12 @@ var _createImageEntry = function(urls) {
   return new Promise(function (resolve, reject) {
 
     Image.create({
-      thumbnail: urls.thumbnail,
-      small: urls.small,
-      medium: urls.medium,
-      large: urls.large
-    }, function (err, Image) {
+      original: urls.o
+    }, function (err, image) {
 
       if (err) { return reject('Error saving image', 400); }
 
-      return resolve(Image);
+      return resolve(image);
     });
   });
 };
@@ -82,12 +97,18 @@ var _createExportEntry = function(image, frame) {
   return new Promise(function (resolve, reject) {
 
     Export.create({
-      image: image,
+      image: image._id,
       frame: frame
-    }, function (err, Export) {
+    }, function (err, exp) {
 
       if (err) { return reject('Error saving export', 400); }
-      return resolve(Export);
+
+      // We already have the image so no need to populate
+      Export.populate(exp, 'image', function(err, exp) {
+
+        if (err) { reject('Error populating export', 400); }
+        return resolve(exp);
+      });
     });
   });
 };
@@ -132,20 +153,17 @@ exports.export = function (frame, fileName, options) {
     // Output to an svg using paperjs svg export
     if (fileType == 'svg') {
 
-      var path = 'tmp/' + fileName + '.svg';
-      var out = fs.createWriteStream(__dirname + '/../../' + path);
+      var path = __dirname + '/../../tmp/' + fileName + '.svg';
+      var out = fs.createWriteStream(path);
       var svg = paper.project.exportSVG({ asString:true });
       out.write(svg);
 
       var paths = {
-        thumbnail: path,
-        small: path,
-        medium: path,
-        large: path
+        o: path
       };
 
-      return _saveImagesToS3(paths)
-        .then(function(urls) { _createImageEntry(urls); })
+      return _saveImagesToS3(paths, 'image/svg+xml')
+        .then(function(urls) { return _createImageEntry(urls); })
         .then(function(image) { return _createExportEntry(image, frame); })
         .then(options.success)
         .catch(options.error);
@@ -159,8 +177,8 @@ exports.export = function (frame, fileName, options) {
       // Output to a png
       if (fileType == 'png') {
 
-        path = 'tmp/' + fileName + '.png';
-        out = fs.createWriteStream(__dirname + '/../../' + path);
+        var path = __dirname + '/../../tmp/' + fileName + '.png';
+        out = fs.createWriteStream(path);
         stream = canvas.pngStream();
       }
 
@@ -177,13 +195,10 @@ exports.export = function (frame, fileName, options) {
       stream.on('end', function() {
 
         var paths = {
-          thumbnail: path,
-          small: path,
-          medium: path,
-          large: path
+          o: path
         };
 
-        return _saveImagesToS3(paths)
+        return _saveImagesToS3(paths, 'image/png')
           .then(function(urls) { return _createImageEntry(urls); })
           .then(function(image) { return _createExportEntry(image, frame); })
           .then(options.success)

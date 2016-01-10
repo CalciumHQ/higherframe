@@ -62,19 +62,20 @@ div.fullscreen-wrapper
 				span.font-awesome &#xf0ea;
 				
 		div.toolbar-item(uib-dropdown)
-			button.btn.btn-default.btn-sm(uib-dropdown-toggle)
-				span.font-awesome &#xf019; 
+			button.btn.btn-default.btn-sm(uib-dropdown-toggle, uib-tooltip="Download image", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+				span.font-awesome.fa-fw(ng-show="!ToolbarCtrl.generateImageWorking") &#xf019;
+				span(ng-show="ToolbarCtrl.generateImageWorking")
+					span.font-awesome.fa-fw.fa-spin &#xf1ce;
+					
+				|   
 				span.caret
 					
 			div.uib-dropdown-menu
 				li
-					a PNG
+					a(ng-click="ToolbarCtrl.onGenerateImageClick(FrameCtrl.frame, 'png')") PNG
 				
 				li
-					a JPG
-					
-				li
-					a PDF
+					a(ng-click="ToolbarCtrl.onGenerateImageClick(FrameCtrl.frame, 'svg')") SVG
 				
 		div.divider
 		

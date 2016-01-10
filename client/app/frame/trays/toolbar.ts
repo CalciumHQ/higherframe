@@ -8,7 +8,9 @@ module Higherframe.Controllers.Frame {
     quickAdd: string = '';
     components: Array<Higherframe.Drawing.Component.Library.ILibraryItem> = [];
 
-    constructor(private $scope: ng.IScope, private ComponentLibrary: Higherframe.Drawing.Component.Library.IService) {
+    generateImageWorking: boolean = false;
+
+    constructor(private $scope: ng.IScope, private $http: ng.IHttpService, private ComponentLibrary: Higherframe.Drawing.Component.Library.IService) {
 
       this.components = this.ComponentLibrary.getItems();
       this.registerWatches();
@@ -25,6 +27,30 @@ module Higherframe.Controllers.Frame {
 
       // Clear the quick add input
       this.quickAdd = '';
+    }
+
+    onGenerateImageClick(frame: Higherframe.Data.IFrame, type: string) {
+
+      this.generateImageWorking = true;
+
+      this.$http
+        .get(`/api/frames/${ frame._id }/export?type=${ type }`)
+        .success((response: any) => {
+
+          this.generateImageWorking = false;
+
+          var el = angular.element('<a />')
+            .attr('href', response.image.original)
+            .attr('download', `download.${ type }`)
+            .get(0)
+
+          el.click();
+        })
+        .error((error: any) => {
+
+          console.log(error);
+          this.generateImageWorking = false;
+        });
     }
   }
 }

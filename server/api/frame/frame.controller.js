@@ -307,9 +307,9 @@ exports.export = function (req, res) {
       var fileType = req.query.type;
 
       // When export is complete
-      function onSuccess(image) {
+      function onSuccess(exp) {
 
-        res.json(image);
+        res.json(exp);
       }
 
       // When export fails
@@ -319,11 +319,12 @@ exports.export = function (req, res) {
       }
 
       // Perform the export
-      exporter.export(frame, fileName, {
-        fileType: fileType,
-        success: onSuccess,
-        error: onError
-      });
+      exporter
+        .export(frame, fileName, {
+          fileType: fileType,
+          success: onSuccess,
+          error: onError
+        });
     });
 };
 

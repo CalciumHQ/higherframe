@@ -4,10 +4,7 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var ImageSchema = new Schema({
-  thumbnail: String,
-  small: String,
-	medium: String,
-  large: String
+  original: String
 });
 
 if (mongoose.models.Image) {
