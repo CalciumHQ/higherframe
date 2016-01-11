@@ -33,6 +33,9 @@ var _saveImagesToS3 = function(paths, mimetype) {
     var parts = path.split('/');
     var filename = parts.pop();
 
+    var stats = fs.statSync(path);
+    var fileSizeInBytes = stats["size"];
+
     var p = new Promise(function (resolve, reject) {
 
       // Read file into file stream
@@ -172,14 +175,24 @@ exports.export = function (frame, fileName, options) {
     // Output to another file type using a stream
     else {
 
-      var out, stream, path;
+      var out, stream,
+        path = __dirname + '/../../tmp/' + fileName + '.' + fileType;
 
       // Output to a png
       if (fileType == 'png') {
 
-        var path = __dirname + '/../../tmp/' + fileName + '.png';
         out = fs.createWriteStream(path);
         stream = canvas.pngStream();
+      }
+
+      else if (fileType == 'jpeg') {
+
+        out = fs.createWriteStream(path);
+        stream = canvas.jpegStream({
+            bufsize: 4096,      // output buffer size in bytes, default: 4096
+            quality: 75,        // JPEG quality (0-100) default: 75
+            progressive: false  // true for progressive compression, default: false
+        });
       }
 
       else {
@@ -198,7 +211,7 @@ exports.export = function (frame, fileName, options) {
           o: path
         };
 
-        return _saveImagesToS3(paths, 'image/png')
+        return _saveImagesToS3(paths, 'image/' + fileType)
           .then(function(urls) { return _createImageEntry(urls); })
           .then(function(image) { return _createExportEntry(image, frame); })
           .then(options.success)
