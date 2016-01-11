@@ -20,7 +20,7 @@
     "mandrill-api": "^1.0.45",
     "method-override": "~1.0.0",
     "moment": "^2.10.6",
-    "mongoose": "~3.8.8",
+    "mongoose": "~4.0.6",
     "morgan": "~1.0.0",
     "multer": "^1.1.0",
     "node-uuid": "^1.4.3",
@@ -101,6 +101,9 @@
     "start": "node server/app.js",
     "test": "grunt test",
     "update-webdriver": "node node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update"
+  },
+  "config": {
+    "unsafe-perm": true
   },
   "private": true
 }

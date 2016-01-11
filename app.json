@@ -1,0 +1,8 @@
+{
+  "name": "Higherframe",
+  "description": "Higherframe",
+  "image": "heroku/nodejs",
+  "addons": [
+    "mongolab:sandbox"
+  ]
+}

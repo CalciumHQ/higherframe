@@ -232,7 +232,7 @@ module.exports = function (grunt) {
             '<%= yeoman.dist %>/public/{,*/}*.js',
             '<%= yeoman.dist %>/public/{,*/}*.css',
             '<%= yeoman.dist %>/public/assets/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-            '<%= yeoman.dist %>/public/assets/fonts/*'
+            '<%= yeoman.dist %>/public/assets/fonts/{,*/}*.{eot,ttf,woff}'
           ]
         }
       }
@@ -327,7 +327,7 @@ module.exports = function (grunt) {
             '.htaccess',
             'bower_components/**/*',
             'assets/images/**/*.{jpg,png,svg}',
-            'assets/fonts/**/*',
+            'assets/fonts/**/*.{eot,ttf,woff}',
             'index.html'
           ]
         }, {

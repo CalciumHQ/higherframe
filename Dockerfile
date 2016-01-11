@@ -1,32 +1,39 @@
-#
-# NodeJS environment for Higherframe web server
-#
+# FROM heroku/nodejs
 
-# Pull base image.
-FROM node:latest
+# Inherit from Heroku's stack
+FROM heroku/cedar:14
 
-# Get around proxy
-RUN git config --global url."https://".insteadOf git://
+# Internally, we arbitrarily use port 3000
+ENV PORT 3000
+# Which version of node?
+ENV NODE_ENGINE 5.4.0
+# Locate our binaries
+ENV PATH /app/heroku/node/bin/:/app/user/node_modules/.bin:$PATH
 
-# Install Ruby and Compass
-RUN \
-  apt-get update && \
-  apt-get install -y ruby ruby-dev libcairo2-dev libjpeg62-turbo-dev libpango1.0-dev libgif-dev build-essential g++ && \
-  gem update --system && \
-  gem install compass bundler --no-ri --no-rdoc && \
-  rm -rf /var/lib/apt/lists/*
+# Create some needed directories
+RUN mkdir -p /app/heroku/node /app/.profile.d
+WORKDIR /app/user
 
-# Copy git repo into docker container
-COPY . /src
+# Install node
+RUN curl -s https://s3pository.heroku.com/node/v$NODE_ENGINE/node-v$NODE_ENGINE-linux-x64.tar.gz | tar --strip-components=1 -xz -C /app/heroku/node
 
-# Install Bower & Grunt
-RUN npm install -g bower grunt-cli
+# Export the node path in .profile.d
+RUN echo "export PATH=\"/app/heroku/node/bin:/app/user/node_modules/.bin:\$PATH\"" > /app/.profile.d/nodejs.sh
 
 # Install dependencies
-RUN cd /src; npm install; bundle install; bower install --allow-root; grunt build:dist
+RUN \
+  apt-get update && \
+  apt-get install -y ruby ruby-dev libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++ && \
+  gem install compass bundler --no-ri --no-rdoc
 
-# Expose the 8081 port
-EXPOSE 8081
+# Install bower and grunt
+RUN npm install -g bower grunt-cli
 
-# Start the runtime
-CMD ["node", "/src/dist/server/app.js"]
+# Add application files
+ADD . /app/user/
+
+# Install managed dependancies
+RUN npm install
+RUN bundle install
+RUN bower install  --allow-root
+RUN grunt build:dist
