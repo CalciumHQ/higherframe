@@ -1,0 +1,31 @@
+
+machine:
+  node:
+    version: 5.2.4
+
+  services:
+    - docker
+
+general:
+  branches:
+    only:
+      - develop
+      - production
+      - master
+
+dependencies:
+  pre:
+    - sudo pip install --upgrade docker-compose==1.4.0
+    - heroku plugins:install heroku-docker
+
+  override:
+    - docker --version
+    - docker-compose --version
+    - docker-compose build
+
+deployment:
+  staging:
+    owner: Higherframe
+    branch: master
+    commands:
+      - heroku docker:release
