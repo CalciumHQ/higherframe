@@ -28,4 +28,5 @@ deployment:
     owner: Higherframe
     branch: master
     commands:
-      - heroku docker:release
+      - heroku git:remote --app higherframe-staging
+      - heroku docker:release --app higherframe-staging
