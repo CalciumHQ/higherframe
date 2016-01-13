@@ -3,10 +3,10 @@ web:
   command: 'bash -c ''npm start'''
   working_dir: /app/user
   environment:
-    PORT: 8080
+    PORT: 8081
     MONGOLAB_URI: 'mongolab:27017'
   ports:
-    - '8080:8080'
+    - '8081:8081'
   links:
     - mongolab
 shell:
@@ -14,10 +14,10 @@ shell:
   command: bash
   working_dir: /app/user
   environment:
-    PORT: 8080
+    PORT: 8081
     MONGOLAB_URI: 'mongolab:27017'
   ports:
-    - '8080:8080'
+    - '8081:8081'
   links:
     - mongolab
   volumes:
