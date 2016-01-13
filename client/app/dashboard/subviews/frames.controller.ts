@@ -1,7 +1,7 @@
 
 module Higherframe.Controllers {
 
-  export class Frames {
+  export class DashboardFrames {
 
     personal: Array<Higherframe.Data.IFrame> = [];
 
@@ -106,4 +106,4 @@ module Higherframe.Controllers {
 
 angular
   .module('siteApp')
-  .controller('FramesCtrl', Higherframe.Controllers.Frames);
+  .controller('DashboardFramesCtrl', Higherframe.Controllers.DashboardFrames);

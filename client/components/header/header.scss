@@ -22,6 +22,20 @@
     color: white;
   }
 
+  a {
+    @include transition(color 200ms);
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
+
+    &:hover {
+      color: white;
+    }
+  }
+
   .header-navigation {
     @include display-flex;
     @include align-items(center);
@@ -66,6 +80,7 @@
     height: $header-toolbar-height;
 
     .header-toolbar-item {
+      position: relative;
       height: $header-toolbar-height;
       margin-top: 0;
       margin-bottom: 0;
@@ -82,34 +97,24 @@
 
     .header-toolbar-link {
       margin-right: 46px;
+      line-height: $header-toolbar-height;
+      color: $grey1;
 
-      &,
-      a {
-        color: $grey1;
-      }
-
-      a {
-        display: block;
-        height: $header-toolbar-height;
-        line-height: $header-toolbar-height;
-        margin-top: 0;
-        margin-bottom: 0;
+      &:hover {
+        color: white;
       }
 
       &.active {
-        a {
-          position: relative;
-          color: white;
+        color: white;
 
-          &:after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: #ffc000;
-          }
+        &:after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 3px;
+          background: #ffc000;
         }
       }
     }
@@ -120,7 +125,14 @@
   .ui-dropdown-toggle {
     @include justify-content(flex-end);
 
+    &:hover {
+      span {
+        color: white;
+      }
+    }
+
     span {
+      @include transition(color 200ms);
       color: $grey1;
     }
   }

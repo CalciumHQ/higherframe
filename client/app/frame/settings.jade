@@ -1,4 +1,43 @@
-div#navbar.row.blue.light.border-light(ng-include='"components/navbar/navbar.html"')
+// Header
+#header(ng-controller="NavbarCtrl")
+	div.header-navigation
+		a.header-navigation-back.h6.medium(ui-sref="dashboard.frames")
+			span.font-awesome &#xf053;
+			span Dashboard
+
+		div.header-navigation-title.h4 {{ FrameCtrl.frame.name }}
+
+		div.header-navigation-right.h6.medium
+			div#identity(ng-show="isLoggedIn()", uib-dropdown="", dropdown-append-to-body="true")
+				a.ui-dropdown-toggle(uib-dropdown-toggle="")
+					ui-placeholder(type="user", src="getCurrentUser().image")
+					span {{ getCurrentUser().name }}
+					span.font-awesome &#xf078;
+
+				ul(uib-dropdown-menu="")
+					li
+						a {{ getCurrentUser().name }}
+
+					li.divider
+							
+					li(ng-class="{active: isActive('/settings')}")
+						a(href="/settings") Settings
+
+					li(ng-class="{active: isActive('/logout')}")
+						a(href="", ng-click="logout()") Log out
+
+	div.header-toolbar
+		div.header-toolbar-link.header-toolbar-item.active
+			a
+				span.header-toolbar-item-label.h6.medium Wireframes
+
+		div.header-toolbar-link.header-toolbar-item
+			a
+				span.header-toolbar-item-label.h6.medium Sharing
+
+		div.header-toolbar-link.header-toolbar-item
+			a
+				span.header-toolbar-item-label.h6.medium Settings
 
 .container
   .row

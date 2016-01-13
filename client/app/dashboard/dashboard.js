@@ -5,11 +5,12 @@ angular
   .config(function ($stateProvider) {
 
     $stateProvider
-      .state('frames', {
-        url: '/frames',
-        templateUrl: 'app/frames/frames.html',
-        controller: 'FramesCtrl',
-				controllerAs: 'FramesCtrl',
+      .state('dashboard', {
+        url: '/dashboard',
+				templateUrl: 'app/dashboard/dashboard.html',
+        abstract: true,
+        controller: 'DashboardCtrl',
+				controllerAs: 'DashboardCtrl',
 				authenticate: true,
         resolve: {
 					organisations: function($stateParams, $http, $q, Auth) {
@@ -56,5 +57,17 @@ angular
           },
 					$title: function() { return 'Dashboard'; }
         }
-      });
+      })
+
+			.state('dashboard.frames', {
+				url: '/',
+				templateUrl: 'app/dashboard/subviews/frames.html',
+				controller: 'DashboardFramesCtrl',
+				controllerAs: 'DashboardFramesCtrl',
+			})
+
+			.state('dashboard.settings', {
+				url: '/settings',
+				templateUrl: 'app/dashboard/subviews/settings.html'
+			});
   });

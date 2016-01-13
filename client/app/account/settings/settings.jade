@@ -1,37 +1,73 @@
-div#navbar.row.blue.light.border-light(ng-include='"components/navbar/navbar.html"')
+// Header
+#header.layout-partial(ng-controller="NavbarCtrl")
+	div.header-navigation
+		a.header-navigation-back.h6.medium(ui-sref="dashboard.frames")
+			span.font-awesome &#xf053;
+			span Dashboard
+
+		div.header-navigation-title.h4
+
+		div.header-navigation-right.h6.medium
+			div#identity(ng-show="isLoggedIn()", uib-dropdown="", dropdown-append-to-body="true")
+				a.ui-dropdown-toggle(uib-dropdown-toggle="")
+					ui-placeholder(type="user", src="getCurrentUser().image")
+					span {{ getCurrentUser().name }}
+					span.font-awesome &#xf078;
+
+				ul(uib-dropdown-menu="")
+					li
+						a {{ getCurrentUser().name }}
+
+					li.divider
+							
+					li(ng-class="{active: isActive('/settings')}")
+						a(href="/settings") Settings
+
+					li(ng-class="{active: isActive('/logout')}")
+						a(href="", ng-click="logout()") Log out
+						
+	div.header-title
+		h2 Account settings
+
+	div.header-toolbar
+		a.header-toolbar-link.header-toolbar-item.active
+			span.header-toolbar-item-label.h6.medium Personal
+
+		a.header-toolbar-link.header-toolbar-item
+			span.header-toolbar-item-label.h6.medium Payment
+
+		a.header-toolbar-link.header-toolbar-item
+			span.header-toolbar-item-label.h6.medium Your plan
 
 .container
-  .row
-    form.ui-property-page.form(name='form', ng-submit='submit(form)', novalidate='')
-      
-      legend.form-legend
-        span.h3.block Account settings
-      
-      .ui-property.form-group
-        label.ui-property-name Your image
-        div.ui-property-value
-          ui-image(name='name', ng-model='user.image', mongoose-error='')
-      
-      .ui-property.form-group
-        label.ui-property-name Your name
-        div.ui-property-value
-          input.form-control(type='text', name='name', ng-model='user.name', mongoose-error='')
-          p.help-block(ng-show='form.name.$error.mongoose')
-            | {{ errors.other }}
-          
-      .ui-property.form-group
-        label.ui-property-name Email address
-        div.ui-property-value
-          input.form-control(type='text', name='email', ng-model='user.email', mongoose-error='')
-          p.help-block(ng-show='form.email.$error.mongoose')
-            | {{ errors.other }}
-            
-      .ui-property.form-group
-        label.ui-property-name Password
-        div.ui-property-value
-          a(ui-sref="password") Change password
+	.row
+		form.ui-property-page.form(name='form', ng-submit='submit(form)', novalidate='')
+			
+			.ui-property.form-group
+				label.ui-property-name Your image
+				div.ui-property-value
+					ui-image(name='name', ng-model='user.image', mongoose-error='')
+			
+			.ui-property.form-group
+				label.ui-property-name Your name
+				div.ui-property-value
+					input.form-control(type='text', name='name', ng-model='user.name', mongoose-error='')
+					p.help-block(ng-show='form.name.$error.mongoose')
+						| {{ errors.other }}
+					
+			.ui-property.form-group
+				label.ui-property-name Email address
+				div.ui-property-value
+					input.form-control(type='text', name='email', ng-model='user.email', mongoose-error='')
+					p.help-block(ng-show='form.email.$error.mongoose')
+						| {{ errors.other }}
+						
+			.ui-property.form-group
+				label.ui-property-name Password
+				div.ui-property-value
+					a(ui-sref="password") Change password
 
-      p.help-block  {{ message }}
+			p.help-block	{{ message }}
 
-      .ui-buttons.form-group
-        button.btn.btn-success(type='submit', ng-disabled="form.$pristine") Save changes
+			.ui-buttons.form-group
+				button.btn.btn-success(type='submit', ng-disabled="form.$pristine") Save changes

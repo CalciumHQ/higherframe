@@ -47,7 +47,7 @@ $easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
 	}
 }
 
-#frames {
+#dashboard-frames {
 	margin-top: 6*$vu;
 
 	.group {
@@ -128,7 +128,7 @@ $easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
 
 @mixin card-width($columns, $margin) {
 
-	#frames {
+	#dashboard-frames {
 		.cards {
 			.card {
 				width: (100% - ($columns - 1)*$margin) / $columns;
