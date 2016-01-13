@@ -65,7 +65,7 @@ module.exports = function (grunt) {
       },
       injectCss: {
         files: [
-          '<%= yeoman.client %>/{app,components}/**/*.css'
+          '<%= yeoman.client %>/{app,components,assets}/**/*.css'
         ],
         tasks: ['injector:css']
       },
@@ -82,12 +82,12 @@ module.exports = function (grunt) {
       },
       injectSass: {
         files: [
-          '<%= yeoman.client %>/{app,components}/**/*.{scss,sass}'],
+          '<%= yeoman.client %>/{app,components,assets}/**/*.{scss,sass}'],
         tasks: ['injector:sass']
       },
       sass: {
         files: [
-          '<%= yeoman.client %>/{app,components}/**/*.{scss,sass}'],
+          '<%= yeoman.client %>/{app,components,assets}/**/*.{scss,sass}'],
         tasks: ['sass:server', 'autoprefixer']
       },
       jade: {
@@ -521,7 +521,8 @@ module.exports = function (grunt) {
           loadPath: [
             '<%= yeoman.client %>/bower_components',
             '<%= yeoman.client %>/app',
-            '<%= yeoman.client %>/components'
+            '<%= yeoman.client %>/components',
+            '<%= yeoman.client %>/assets'
           ],
           compass: true,
           require: ['susy', 'breakpoint']
@@ -533,7 +534,8 @@ module.exports = function (grunt) {
       bootstrap: {
         options: {
           loadPath: [
-            '<%= yeoman.client %>/library/bootstrap/assets/stylesheets'
+            '<%= yeoman.client %>/library/bootstrap/assets/stylesheets',
+            '<%= yeoman.client %>/assets'
           ],
           compass: false,
           require: []
@@ -602,7 +604,7 @@ module.exports = function (grunt) {
         },
         files: {
           '<%= yeoman.client %>/index.html': [
-            '<%= yeoman.client %>/{app,components}/**/*.css'
+            '<%= yeoman.client %>/{app,components,assets}/**/*.css'
           ]
         }
       }

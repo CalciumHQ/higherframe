@@ -3,7 +3,7 @@ module Higherframe.Controllers {
 
   export class Frames {
 
-    groups: any = [];
+    personal: Array<Higherframe.Data.IFrame> = [];
 
     constructor(
       private $scope: ng.IScope,
@@ -28,7 +28,7 @@ module Higherframe.Controllers {
         return this.organisations;
       }, () => {
 
-        this.regroup();
+        this.updateOrganisations();
       });
 
       $scope.$watchCollection(() => {
@@ -36,7 +36,7 @@ module Higherframe.Controllers {
         return this.frames;
       }, () => {
 
-        this.regroup();
+        this.updatePersonal();
       });
     }
 
@@ -57,33 +57,18 @@ module Higherframe.Controllers {
      *
      */
 
-    private regroup() {
+    private updateOrganisations() {
 
-      var groups = {};
+    }
 
-      this.organisations.forEach((organisation) => {
 
-        groups[organisation._id] =
-          groups[organisation._id] ||
-          {
-            organisation: organisation,
-            frames: []
-          };
-      });
+    /**
+     *
+     */
 
-      this.frames.forEach((frame) => {
+    private updatePersonal() {
 
-        groups[frame.organisation._id] =
-          groups[frame.organisation._id] ||
-          {
-            organisation: frame.organisation,
-            frames: []
-          };
-
-        groups[frame.organisation._id].frames.push(frame);
-      });
-
-      this.groups = groups;
+      this.personal = this.frames.filter((frame) => !frame.organisation);
     }
 
 

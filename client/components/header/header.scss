@@ -1,0 +1,151 @@
+
+.layout-partial {
+  & > * {
+    max-width: $page-partial-max-width;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+#header {
+  background: $grey-3;
+  -webkit-font-smoothing: antialiased;
+
+  .header-navigation,
+  .header-title,
+  .header-toolbar {
+    padding: 0 $page-full-margin;
+  }
+
+  &,
+  a {
+    color: white;
+  }
+
+  .header-navigation {
+    @include display-flex;
+    @include align-items(center);
+    height: $header-navigation-height;
+
+    .header-navigation-back {
+      width: 200px;
+
+      .font-awesome {
+        position: relative;
+        top: 0;
+        margin-right: 6px;
+        font-size: 0.8em;
+      }
+    }
+
+    .header-navigation-title {
+      @include flex-grow(1);
+      @include flex-shrink(1);
+      text-align: center;
+    }
+
+    .header-navigation-right {
+      width: 200px;
+      text-align: right;
+    }
+  }
+
+  .header-title {
+    @include box-sizing(border-box);
+    height: $header-title-height;
+    padding-bottom: 13px;
+
+    h2 {
+      margin-top: -7px;
+      margin-bottom: 0;
+    }
+  }
+
+  .header-toolbar {
+    @include display-flex;
+    height: $header-toolbar-height;
+
+    .header-toolbar-item {
+      height: $header-toolbar-height;
+      margin-top: 0;
+      margin-bottom: 0;
+
+      .header-toolbar-item-label {
+        display: block;
+        height: 9px;
+        line-height: 9px;
+        margin-top: 0;
+        margin-bottom: 0;
+        padding-top: 13px;
+      }
+    }
+
+    .header-toolbar-link {
+      margin-right: 46px;
+
+      &,
+      a {
+        color: $grey1;
+      }
+
+      a {
+        display: block;
+        height: $header-toolbar-height;
+        line-height: $header-toolbar-height;
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+
+      &.active {
+        a {
+          position: relative;
+          color: white;
+
+          &:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #ffc000;
+          }
+        }
+      }
+    }
+  }
+}
+
+#identity {
+  .ui-dropdown-toggle {
+    @include justify-content(flex-end);
+
+    span {
+      color: $grey1;
+    }
+  }
+
+  .ui-placeholder {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+  }
+}
+
+.ui-dropdown-toggle {
+  @include display-flex;
+  @include align-items(center);
+
+  span {
+    position: relative;
+    top: 1px;
+    display: block;
+  }
+
+  .font-awesome {
+    position: relative;
+    top: 0.08em;
+    margin-left: 7px;
+    font-size: 0.7em;
+  }
+}

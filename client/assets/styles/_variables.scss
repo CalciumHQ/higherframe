@@ -3,6 +3,14 @@
  * Dimensions
  */
 
+$page-full-margin: 18px;
+$page-partial-max-width: 1280px;
+
+$header-navigation-height: 45px;
+$header-title-height: 57px;
+$header-toolbar-height: 34px;
+
+// Legacy
 $vu: 0.65rem;
 
 $chromePaddingSmall: 7px;
@@ -17,7 +25,7 @@ $uiContainerPadding: 10px;
  */
 
 $blue-3: #4e8ca6;
-$blue: #57aacc;
+$blue: #42b2d6;
 $blue1: #72bad8;
 $blue2: #82cdec;
 $blue3: #d5f0fb;
@@ -38,15 +46,15 @@ $green: #6fcc41;
 $red-2: #9d2d1e;
 $red: #cc5141;
 
-$grey-3: #3c3c3c;
+$grey-3: #3c3e3a;
 $grey-2: #444444;
 $grey-1: #555555;
 $grey: #777777;
-$grey1: #858585;
-$grey2: #cdcdcd;
-$grey3: #dcdcdc;
+$grey1: #9e9f9d;  // 50% white on $grey-3
+$grey2: #cdcdcd;  // dark border on $grey5
+$grey3: #dedede;  // light border on $grey5
 $grey4: #e5e5e5;
-$grey5: #f0f0f0;
+$grey5: #f1f1f1;
 
 $uiContainerBackground: $blue5;
 $uiContainerBackgroundHighlight: $blue;

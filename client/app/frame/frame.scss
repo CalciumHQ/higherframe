@@ -51,11 +51,22 @@ $toolbarPaddingHorizontal: 10px;
 	}
 }
 
+#frame {
+	position: absolute;
+  @include display-flex;
+  @include flex-direction(column);
+  left: 0;
+  right: 0;
+  top: $header-navigation-height + $header-toolbar-height;
+  bottom: 0;
+}
+
 #frame-titlebar {
 	@include flex-grow(0);
 	@include flex-shrink(0);
 	@include display-flex;
 	@include align-items(center);
+	display: none;
 	height: 40px;
 	background: #3c3e3a;
 
@@ -113,6 +124,7 @@ $toolbarPaddingHorizontal: 10px;
 	@include flex-shrink(0);
 	@include align-items(center);
 	@include box-sizing(border-box);
+	display: none;
 	height: $toolbarHeight;
 	padding: 0 $toolbarPaddingHorizontal;
 	border-bottom: 1px solid #eee;
@@ -169,7 +181,7 @@ $toolbarPaddingHorizontal: 10px;
 	}
 }
 
-#frame {
+#frame-canvas-wrapper {
 	@include display-flex;
 	@include flex-direction(row);
 	@include flex-grow(1);
@@ -322,7 +334,7 @@ $toolbarPaddingHorizontal: 10px;
 		@include flex-grow(1);
 		width: 100%;
 		z-index: 1;
-		background: #cdcdcd;
+		background: $grey5;
 	}
 
 	#collaborators {

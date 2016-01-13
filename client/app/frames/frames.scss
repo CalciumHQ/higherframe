@@ -25,8 +25,7 @@ $easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
 	.card {
 		@include box-sizing(border-box);
 		@include display-flex;
-		border: 1px solid $blue8;
-		border-radius: 5px;
+		border: 1px solid $grey2;
 		background: white;
 		text-decoration: none;
 		letter-spacing: 0.01em;
@@ -34,13 +33,11 @@ $easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
 
 		&:hover {
 			cursor: pointer;
-			border-color: $grey2;
+			border-color: $blue;
 		}
 
 		&:active {
-			@include transition(all 150ms $easeOutQuint);
-			@include transform(translateY(-0.05rem));
-			box-shadow: 0.1rem 0.16rem 0.64rem 0 rgba(0, 0, 0, 0.2);
+
 		}
 
 		.content {
@@ -54,40 +51,10 @@ $easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
 	margin-top: 6*$vu;
 
 	.group {
-		& + .group {
-			margin-top: 10*$vu;
-		}
-
 		.organisation {
 			.name {
 				@include span(full);
 				color: $grey2;
-
-				.settings {
-					$padding: 5px;
-					display: none;
-					margin: (-$padding) (-$padding) (-$padding - 1px) (-$padding + 5px);
-					padding: $padding;
-					cursor: pointer;
-
-					&:hover {
-						svg {
-							path {
-								fill: $blue;
-							}
-						}
-					}
-
-					svg {
-						display: block;
-						width: 11px;
-						height: auto;
-
-						path {
-							fill: $grey2;
-						}
-					}
-				}
 			}
 		}
 
@@ -190,32 +157,7 @@ $easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
 	@include card-width(3, 2%);
 }
 
-@include breakpoint(1201px 1700px) {
+@include breakpoint(1201px) {
 
 	@include card-width(4, 1.5%);
-}
-
-@include breakpoint(1701px 2000px) {
-
-	@include card-width(5, 1.2%);
-}
-
-@include breakpoint(2001px 2300px) {
-
-	@include card-width(6, 1%);
-}
-
-@include breakpoint(2001px 2300px) {
-
-	@include card-width(7, 0.8%);
-}
-
-@include breakpoint(2301px 2800px) {
-
-	@include card-width(8, 0.6%);
-}
-
-@include breakpoint(2801px) {
-
-	@include card-width(9, 0.5%);
 }

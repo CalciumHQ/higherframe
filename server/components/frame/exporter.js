@@ -1,6 +1,6 @@
 
 'use strict';
-
+return;
 var _ = require('lodash');
 var paper = require('paper');
 var config = require('../../config/environment');

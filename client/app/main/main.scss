@@ -71,16 +71,6 @@ $unitPadding: 80px;
   }
 }
 
-.fullscreen-wrapper {
-  position: absolute;
-  @include display-flex;
-  @include flex-direction(column);
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-}
-
 .page.underlay-navbar {
   margin-top: -7*$vu;
 
@@ -237,7 +227,7 @@ body.page-transition-microForm-leave:not(.page-transition-microForm-enter) {
     .micro-form {
       & > .content {
         @include transition(transform 0.3s ease-in);
-        @include transform(scale(1.0)); 
+        @include transform(scale(1.0));
       }
     }
   }

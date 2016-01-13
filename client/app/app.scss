@@ -6,14 +6,13 @@
 $fa-font-path: "/bower_components/font-awesome/fonts";
 @import 'font-awesome/scss/font-awesome';
 
-@import 'theme/_variables.scss';
-@import 'theme/_typography.scss';
-@import 'theme/_animations.scss';
+@import 'styles/_variables.scss';
+@import 'styles/_grids.scss';
+@import 'styles/_typography.scss';
+@import 'styles/_animations.scss';
 
 // Component styles are injected through grunt task
 // injector
-@import '_grids.scss';
-@import '_helpers.scss';
 @import 'account/login/login.scss';
 @import 'account/signup/signup.scss';
 @import 'admin/admin.scss';
@@ -23,9 +22,7 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
 @import 'frame/trays/toolbox.scss';
 @import 'frames/frames.scss';
 @import 'main/main.scss';
-@import 'theme/_animations.scss';
-@import 'theme/_typography.scss';
-@import 'theme/_variables.scss';
+@import 'header/header.scss';
 @import 'navbar/navbar.scss';
 @import 'ui/forms/autocomplete.scss';
 @import 'ui/forms/error.scss';
