@@ -194,11 +194,21 @@ class FrameCtrl {
   	});
 
 
-    /*
-     * Tray notifications
+    /**
+     * Toolbar notifications
      */
 
-    $scope.$on('toolbox:component:added', (e, params) => {
+		$scope.$on('toolbar:view:gofullscreen', (e, params) => {
+
+			this.goFullscreen();
+		});
+
+		$scope.$on('toolbar:view:cancelfullscreen', (e, params) => {
+
+			this.cancelFullscreen();
+		});
+
+    $scope.$on('toolbar:component:added', (e, params) => {
 
       // Center new component in view
       var properties = {
@@ -214,6 +224,11 @@ class FrameCtrl {
       var instances = this.addComponentsToView(component, null);
       this.saveComponents(instances);
     });
+
+
+		/**
+		 * Tray notifications
+		 */
 
     $scope.$on('properties:component:updated', (e, params) => {
 
@@ -804,7 +819,7 @@ class FrameCtrl {
 			document.msFullscreenEnabled
 		) {
 
-			var el = document.getElementById('frame');
+			var el = document.body;
 
 			// go full-screen
 			if (el.requestFullscreen) {
@@ -815,6 +830,30 @@ class FrameCtrl {
 				el.mozRequestFullScreen();
 			} else if (el.msRequestFullscreen) {
 				el.msRequestFullscreen();
+			}
+		}
+	}
+
+	private cancelFullscreen() {
+
+		var document:any = window.document;
+
+		if (
+			document.fullscreenEnabled ||
+			document.webkitFullscreenEnabled ||
+			document.mozFullScreenEnabled ||
+			document.msFullscreenEnabled
+		) {
+
+			// cancel full-screen
+			if (document.exitFullscreen) {
+				document.exitFullscreen();
+			} else if (document.webkitExitFullscreen) {
+				document.webkitExitFullscreen();
+			} else if (document.mozCancelFullScreen) {
+				document.mozCancelFullScreen();
+			} else if (document.msExitFullscreen) {
+				document.msExitFullscreen();
 			}
 		}
 	}
@@ -878,11 +917,6 @@ class FrameCtrl {
 	onToolbarZoomLevelClick(zoom: number) {
 
 		this.setZoom(zoom);
-	}
-
-	onToolbarFullscreenClick() {
-
-		this.goFullscreen();
 	}
 
 	onToolbarCopyClick() {

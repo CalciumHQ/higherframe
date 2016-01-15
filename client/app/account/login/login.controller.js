@@ -15,7 +15,7 @@ angular.module('siteApp')
         })
         .then( function() {
           // Logged in, redirect to home
-          $state.go('dashboard');
+          $state.go('dashboard.frames');
         })
         .catch( function(err) {
           $scope.errors.other = err.message;

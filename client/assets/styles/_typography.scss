@@ -263,13 +263,17 @@ body,
 	font-family: 'FontAwesome';
 	font-size: 0.95em;
 
-	.fa-spin {
+	&.fa-spin {
 		@include animation(fa-spin 500ms);
 	}
 
-	.fa-fw {
+	&.fa-fw {
 		display: inline-block;
 		width: 1.216em;
+	}
+
+	&.fa-flip {
+		@include transform(rotateY(180deg));
 	}
 }
 

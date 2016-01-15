@@ -62,7 +62,7 @@ module Higherframe.Drawing {
 
 			else {
 
-				background.strokeColor = '#ccc';
+				background.strokeColor = 'rgba(0,0,0,0)'; 
 			}
 
 			background.strokeWidth = 1 / paper.view.zoom;

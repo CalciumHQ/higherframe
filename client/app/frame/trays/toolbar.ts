@@ -8,22 +8,56 @@ module Higherframe.Controllers.Frame {
     quickAdd: string = '';
     components: Array<Higherframe.Drawing.Component.Library.ILibraryItem> = [];
 
+    isFullscreen: boolean = false;
     generateImageWorking: boolean = false;
 
     constructor(private $scope: ng.IScope, private $http: ng.IHttpService, private ComponentLibrary: Higherframe.Drawing.Component.Library.IService) {
 
       this.components = this.ComponentLibrary.getItems();
-      this.registerWatches();
+      this.registerListeners();
     }
 
-    private registerWatches() {
+    private registerListeners() {
 
+      // Reflect fullscreen state in toolbar button
+      document.addEventListener('fullscreenchange', () => {
+
+        this.$scope.$apply(() => this.isFullscreen = (<any>document).fullscreen);
+      }, false);
+
+      document.addEventListener('mozfullscreenchange', () => {
+
+        this.$scope.$apply(() => this.isFullscreen = (<any>document).mozFullScreen);
+      }, false);
+
+      document.addEventListener('webkitfullscreenchange', () => {
+
+        this.$scope.$apply(() => this.isFullscreen = (<any>document).webkitIsFullScreen);
+      }, false);
+
+      document.addEventListener('msfullscreenchange', () => {
+
+        this.$scope.$apply(() => this.isFullscreen = (<any>document).msFullscreenElement);
+      }, false);
     }
+
+    onToolbarFullscreenClick() {
+
+      if (!this.isFullscreen) {
+
+        this.$scope.$emit('toolbar:view:gofullscreen');
+      }
+
+      else {
+
+        this.$scope.$emit('toolbar:view:cancelfullscreen');
+      }
+  	}
 
     onQuickAddSelect($item: Higherframe.Drawing.Component.Library.ILibraryItem) {
 
       // Add the component
-      this.$scope.$emit('toolbox:component:added', { id: $item.id });
+      this.$scope.$emit('toolbar:component:added', { id: $item.id });
 
       // Clear the quick add input
       this.quickAdd = '';

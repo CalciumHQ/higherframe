@@ -40,36 +40,36 @@
 				span.header-toolbar-item-label.h6.medium Settings
 
 .container
-  .row
-    form.ui-property-page.form(name='form', ng-submit='FrameSettingsCtrl.submit(form)', novalidate='')
-      
-      legend.form-legend
-        span.h3.block Frame settings
-    
-      .ui-property.form-group
-        label.ui-property-name Name
-        div.ui-property-value
-          input.form-control(type='text', name='name', ng-model='FrameSettingsCtrl.name', mongoose-error='')
-          p.help-block(ng-show='form.name.$error.mongoose')
-            | {{ errors.other }}
-      
-      .ui-property.form-group
-        label.ui-property-name Organisation
-        div.ui-property-value
-          select.form-control(name='organisation', ng-model='FrameSettingsCtrl.organisation ', mongoose-error='', ng-options="o._id as o.name for o in FrameSettingsCtrl.organisations")
-          p.help-block(ng-show='form.name.$error.mongoose')
-            | {{ errors.other }}
-      
-      .ui-property.form-group
-        label.ui-property-name Sharing with
-        div.ui-property-value
-          p(ng-if="!FrameSettingsCtrl.users.length") You are not sharing this wireframe with anybody.
-          div.ui-tokens
-            div.ui-token(ng-repeat="user in FrameSettingsCtrl.users") 
-              div.ui-token-container
-                span.b3.medium {{ user.name }}
-                a.ui-token-remove.b3.strong(ng-click="FrameSettingsCtrl.onRemoveUserClick(user)") x
-      
-      .ui-buttons.form-group
-        a.btn.btn-danger(ng-click="FrameSettingsCtrl.onDeleteButtonClick()") Delete
-        button.btn.btn-primary(type="submit", ng-disabled="form.$pristine") Save changes
+	.row
+		form.ui-property-page.form(name='form', ng-submit='FrameSettingsCtrl.submit(form)', novalidate='')
+			
+			legend.form-legend
+				span.h3.block Frame settings
+		
+			.ui-property.form-group
+				label.ui-property-name Name
+				div.ui-property-value
+					input.form-control(type='text', name='name', ng-model='FrameSettingsCtrl.name', mongoose-error='')
+					p.help-block(ng-show='form.name.$error.mongoose')
+						| {{ errors.other }}
+			
+			.ui-property.form-group
+				label.ui-property-name Organisation
+				div.ui-property-value
+					select.form-control(name='organisation', ng-model='FrameSettingsCtrl.organisation ', mongoose-error='', ng-options="o._id as o.name for o in FrameSettingsCtrl.organisations")
+					p.help-block(ng-show='form.name.$error.mongoose')
+						| {{ errors.other }}
+			
+			.ui-property.form-group
+				label.ui-property-name Sharing with
+				div.ui-property-value
+					p(ng-if="!FrameSettingsCtrl.users.length") You are not sharing this wireframe with anybody.
+					div.ui-tokens
+						div.ui-token(ng-repeat="user in FrameSettingsCtrl.users") 
+							div.ui-token-container
+								span.b3.medium {{ user.name }}
+								a.ui-token-remove.b3.strong(ng-click="FrameSettingsCtrl.onRemoveUserClick(user)") x
+			
+			.ui-buttons.form-group
+				a.btn.btn-danger(ng-click="FrameSettingsCtrl.onDeleteButtonClick()") Delete
+				button.btn.btn-primary(type="submit", ng-disabled="form.$pristine") Save changes
