@@ -12,7 +12,7 @@ module Higherframe.Modals.Frame {
 
     // Models
     name = '';
-    organisation: any;
+    project: Higherframe.Data.IProject;
 
 
     /**
@@ -52,7 +52,7 @@ module Higherframe.Modals.Frame {
           },
           data: {
             name: this.name,
-            organisation: this.organisation._id
+            project: this.project._id
           }
         })
         .then((response) => {

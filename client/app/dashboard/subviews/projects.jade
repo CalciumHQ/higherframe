@@ -1,0 +1,17 @@
+div#dashboard-frames.layout-partial
+	div.group
+		div.organisation.row
+			div.name.b3.uppercase.airy My projects
+			
+		div.frames.cards.row
+			a.card(ng-repeat="project in DashboardProjectsCtrl.projects | orderBy:'-created_at'", ui-sref="project.frames({ id: project._id })")
+				div.content
+					div.left
+						span.name.h4.block {{ project.name }}
+								
+						ul.users
+							li.user(ng-repeat="user in project.users", uib-tooltip-html="'Shared with ' + user.name", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+								ui-placeholder.avatar(type="user", src="user.image")
+						
+					div.right
+						span.lastModified {{ (frame.created_at | moment).fromNow() }}

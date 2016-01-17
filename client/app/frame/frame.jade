@@ -2,9 +2,9 @@
 #fullscreen-wrapper
 	#header(ng-controller="NavbarCtrl")
 		div.header-navigation
-			a.header-navigation-back.h6.medium(ui-sref="dashboard.frames")
+			a.header-navigation-back.h6.medium(ui-sref="project.frames({ id: FrameCtrl.frame.project._id })")
 				span.font-awesome &#xf053;
-				span Dashboard
+				span {{ FrameCtrl.frame.project.name }}
 
 			div.header-navigation-title.h4 {{ FrameCtrl.frame.name }}
 

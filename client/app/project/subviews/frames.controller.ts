@@ -1,7 +1,7 @@
 
 module Higherframe.Controllers {
 
-  export class DashboardFrames {
+  export class ProjectFrames {
 
     personal: Array<Higherframe.Data.IFrame> = [];
 
@@ -12,8 +12,7 @@ module Higherframe.Controllers {
       private $window: ng.IWindowService,
       private $timeout: ng.ITimeoutService,
       private $http: ng.IHttpService,
-      private frames: Array<any>,
-      private organisations: Array<any>,
+      private project: Higherframe.Data.IProject,
       private socket,
       private ModalManager: Higherframe.UI.Modal.Manager,
       private AlertManager: Higherframe.UI.AlertManager,
@@ -22,22 +21,6 @@ module Higherframe.Controllers {
     ) {
 
       this.registerSockets();
-
-      $scope.$watchCollection(() => {
-
-        return this.organisations;
-      }, () => {
-
-        this.updateOrganisations();
-      });
-
-      $scope.$watchCollection(() => {
-
-        return this.frames;
-      }, () => {
-
-        this.updatePersonal();
-      });
     }
 
 
@@ -48,27 +31,7 @@ module Higherframe.Controllers {
 		private registerSockets() {
 
       // Document updating
-			this.socket.syncUpdates('frame', this.frames);
-      this.socket.syncUpdates('organisation', this.organisations);
-    }
-
-
-    /**
-     *
-     */
-
-    private updateOrganisations() {
-
-    }
-
-
-    /**
-     *
-     */
-
-    private updatePersonal() {
-
-      this.personal = this.frames.filter((frame) => !frame.organisation);
+			this.socket.syncUpdates('frame', this.project.frames);
     }
 
 
@@ -76,16 +39,10 @@ module Higherframe.Controllers {
      * Event handlers
      */
 
-    onOrganisationSettingsClick($event, organisation) {
-
-      var modal = new Higherframe.Modals.Organisation.Update(organisation);
-      this.ModalManager.present(modal);
-    }
-
-		onNewFrameClick(organisation) {
+		onNewFrameClick() {
 
       var modal = new Higherframe.Modals.Frame.New(this.Auth, this.$mixpanel, this.AlertManager);
-      modal.organisation = organisation;
+      modal.project = this.project;
       this.ModalManager.present(modal);
 		};
 
@@ -106,4 +63,4 @@ module Higherframe.Controllers {
 
 angular
   .module('siteApp')
-  .controller('DashboardFramesCtrl', Higherframe.Controllers.DashboardFrames);
+  .controller('ProjectFramesCtrl', Higherframe.Controllers.ProjectFrames);

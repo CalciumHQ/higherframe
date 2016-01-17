@@ -34,19 +34,19 @@ angular
 
              return deferred.promise;
           },
-          frames: function($stateParams, $http, $q, Auth) {
+          projects: function($stateParams, $http, $q, Auth) {
 
             var deferred = $q.defer();
 
             $http({
-							url: '/api/frames',
+							url: '/api/projects',
 							headers: {
 								'Authorization': 'Bearer ' + Auth.getToken()
 							}
 						})
-              .success(function (frames) {
+              .success(function (projects) {
 
-                deferred.resolve(frames);
+                deferred.resolve(projects);
               })
               .error(function () {
 
@@ -59,11 +59,11 @@ angular
         }
       })
 
-			.state('dashboard.frames', {
+			.state('dashboard.projects', {
 				url: '/',
-				templateUrl: 'app/dashboard/subviews/frames.html',
-				controller: 'DashboardFramesCtrl',
-				controllerAs: 'DashboardFramesCtrl',
+				templateUrl: 'app/dashboard/subviews/projects.html',
+				controller: 'DashboardProjectsCtrl',
+				controllerAs: 'DashboardProjectsCtrl',
 			})
 
 			.state('dashboard.settings', {

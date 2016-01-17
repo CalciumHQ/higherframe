@@ -1,7 +1,9 @@
 // Header
 #header.layout-partial(ng-controller="NavbarCtrl")
 	div.header-navigation
-		div.header-navigation-back.h6.medium
+		a.header-navigation-back.h6.medium(ui-sref="dashboard.projects")
+			span.font-awesome &#xf053;
+			span Dashboard
 
 		div.header-navigation-title.h4
 
@@ -25,16 +27,16 @@
 						a(href="", ng-click="logout()") Log out
 
 	div.header-title
-		h2 Hi, {{ getCurrentUser().name }}
+		h2 {{ ProjectCtrl.project.name }}
 
 	div.header-toolbar
-		a.header-toolbar-link.header-toolbar-item(ui-sref="dashboard.projects", ui-sref-active="active")
-			span.header-toolbar-item-label.h6.medium Projects
+		a.header-toolbar-link.header-toolbar-item(ui-sref="project.frames", ui-sref-active="active")
+			span.header-toolbar-item-label.h6.medium Wireframes
 
 		a.header-toolbar-link.header-toolbar-item
 			span.header-toolbar-item-label.h6.medium Sharing
 
-		a.header-toolbar-link.header-toolbar-item(ui-sref="dashboard.settings", ui-sref-active="active")
+		a.header-toolbar-link.header-toolbar-item(ui-sref="project.settings", ui-sref-active="active")
 			span.header-toolbar-item-label.h6.medium Settings
 
 ui-view

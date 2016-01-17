@@ -19,9 +19,9 @@ var FrameSchema = new Schema({
     type: String,
     default: 'active'
   },
-  organisation: {
+  project: {
     type: Schema.ObjectId,
-    ref: 'Organisation'
+    ref: 'Project'
   },
   users: [{
     type: Schema.ObjectId,

@@ -17,7 +17,7 @@ angular.module('siteApp')
 
                 if (Auth.isLoggedIn()) {
 
-                  $state.go('dashboard.frames');
+                  $state.go('dashboard.projects');
                   reject();
                 }
 

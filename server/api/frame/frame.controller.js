@@ -11,6 +11,7 @@
 
 var _ = require('lodash');
 var Frame = require('./frame.model');
+var Project = require('./../project/project.model');
 var Component = require('./../component/component.model');
 var Artboard = require('./../artboard/artboard.model');
 var Activity = require('./../activity/activity.model');
@@ -24,7 +25,7 @@ exports.index = function(req, res) {
 
   var query = Frame
     .find({ users: req.user._id })
-    .populate('organisation users');
+    .populate('project users');
 
   if (!req.query.hasOwnProperty('include_deleted')) {
 
@@ -43,7 +44,7 @@ exports.show = function(req, res) {
 
   var query = Frame
 		.findOne({ _id: req.params.id, users: req.user._id })
-		.populate('organisation components artboards users collaborators media');
+		.populate('project components artboards users collaborators media');
 
   if (!req.query.hasOwnProperty('include_deleted')) {
 
@@ -76,7 +77,7 @@ exports.show = function(req, res) {
 // Creates a new frame in the DB.
 exports.create = function(req, res) {
 
-  if(!req.body.organisation) { return handleError(res, null); }
+  if(!req.body.project) { return handleError(res, null); }
 
   if (!_.find(req.body.users, function(user) { return req.user._id == req.user._id; })) {
 
@@ -94,17 +95,27 @@ exports.create = function(req, res) {
 
       if(err) { return handleError(res, err); }
 
-      Frame.populate(frame, {path:'organisation artboards'}, function(err, frame) {
+      Frame.populate(frame, {path:'project artboards'}, function(err, frame) {
 
         if(err) { return handleError(res, err); }
 
-        Activity.create({
-          frame: frame._id,
-          user: req.user._id,
-          type: 'new-frame'
-        });
+        // Add the frame reference to the project
+        Project.findOneAndUpdate(
+          { _id: frame.project._id },
+          { $push: { frames: frame._id }},
+          function(err, project) {
 
-        return res.json(201, frame);
+            if(err) { return handleError(res, err); }
+
+            Activity.create({
+              frame: frame._id,
+              user: req.user._id,
+              type: 'new-frame'
+            });
+
+            return res.json(201, frame);
+          }
+        );
       });
     });
   });

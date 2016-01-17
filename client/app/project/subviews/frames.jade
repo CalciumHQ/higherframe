@@ -4,7 +4,7 @@ div#dashboard-frames.layout-partial
 			div.name.b3.uppercase.airy My wireframes
 			
 		div.frames.cards.row
-			a.card(ng-repeat="frame in DashboardFramesCtrl.personal | orderBy:'-created_at'", ng-click="DashboardFramesCtrl.onFrameClick($event, frame)")
+			a.card(ng-repeat="frame in ProjectCtrl.project.frames | orderBy:'-created_at'", ui-sref="frame({ id: frame._id })")
 				div.content
 					div.left
 						span.name.h4.block {{ frame.name }}
@@ -16,6 +16,6 @@ div#dashboard-frames.layout-partial
 					div.right
 						span.lastModified {{ (frame.created_at | moment).fromNow() }}
 						
-			a.card.new(ng-click="DashboardFramesCtrl.onNewFrameClick(group.organisation)")
+			a.card.new(ng-click="ProjectFramesCtrl.onNewFrameClick()")
 				div.content
 					span + add new
