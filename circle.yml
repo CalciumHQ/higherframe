@@ -16,18 +16,14 @@ general:
 dependencies:
   pre:
     - sudo service docker stop; sudo curl -L -o /usr/bin/docker 'https://s3-external-1.amazonaws.com/circle-downloads/docker-1.9.0-circleci'; sudo chmod 0755 /usr/bin/docker; sudo service docker start; true
-    - sudo pip install --upgrade docker-compose==1.4.0
-    - heroku plugins:install heroku-docker
 
   override:
-    - docker --version
-    - docker-compose --version
-    - docker-compose build
+    - docker build -t higherframe/web:$CIRCLE_SHA1 .
 
 deployment:
   staging:
     owner: Higherframe
     branch: master
     commands:
-      - heroku git:remote --app higherframe-staging
-      - heroku docker:release --app higherframe-staging
+      - sed "s/<EMAIL>/$DOCKER_EMAIL/;s/<AUTH>/$DOCKER_AUTH/" < .dockercfg.template > ~/.dockercfg
+      - bash -x deploy.sh $CIRCLE_SHA1 higherframe-staging
