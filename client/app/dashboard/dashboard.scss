@@ -16,20 +16,62 @@ $easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
 	}
 }
 
+.form-page {
+	padding-top: 60px;
+}
+
+.listview-titlebar {
+	@include display-flex;
+	@include align-items(center);
+	height: 39px;
+	padding-bottom: 11px;
+	border-bottom: 1px solid $grey3;
+	margin-bottom: 30px;
+	color: $grey1;
+
+	.listview-titlebar-item {
+		& + .listview-titlebar-item {
+			margin-left: 35px;
+		}
+
+		&,
+		& + .listview-titlebar-item {
+			&.right {
+				margin-left: auto;
+			}
+		}
+
+		.dropdown {
+			display: inline-block;
+			margin-left: 5px;
+
+			.dropdown-toggle {
+				padding: 10px 0;
+				color: $grey-3;
+				cursor: pointer;
+
+				&:hover {
+					color: $blue;
+				}
+			}
+		}
+	}
+}
+
 .cards {
 	@include display-flex;
 	@include flex-wrap(wrap);
 	position: relative;
-	margin-top: -2*$vu;
 
 	.card {
 		@include box-sizing(border-box);
 		@include display-flex;
-		border: 1px solid $grey2;
+		@include flex-direction(column);
+		border: 1px solid $grey3;
+		margin-bottom: 30px;
 		background: white;
 		text-decoration: none;
 		letter-spacing: 0.01em;
-		margin-top: 2*$vu;
 
 		&:hover {
 			cursor: pointer;
@@ -40,87 +82,70 @@ $easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
 
 		}
 
+		.images {
+
+		}
+
+		.image {
+			width: 100%;
+			height: 186px;
+			background-position: center;
+			background-size: contain;
+			background-repeat: no-repeat;
+		}
+
 		.content {
 			@include flex-grow(1);
-			padding: 15px;
+			padding: 13px;
 		}
 	}
 }
 
 #dashboard-frames {
-	margin-top: 6*$vu;
 
-	.group {
-		.organisation {
-			.name {
-				@include span(full);
-				color: $grey2;
+	.frames {
+
+		.card {
+			position: relative;
+			// height: 114px;
+
+			&:nth-child(4n) {
+				margin-right: 0;
 			}
-		}
 
-		.frames {
-			margin-top: -$vu;
+			&.new {
+				border: none;
+				background: #f4f4f4;
+				text-align: center;
+			}
 
-			.card {
-				position: relative;
-				height: 114px;
+			.name {
+				margin: 0;
+				color: $grey-3;
+			}
 
-				&:nth-child(4n) {
-					margin-right: 0;
-				}
+			.users {
+				.user {
+					float: left;
 
-				&.new {
-					border: none;
-					background: #f4f4f4;
-					text-align: center;
+					& + .user {
+						margin-left: 5px;
+					}
 
-					.content {
-						padding-top: 7*$vu;
+					.avatar {
+						display: block;
+						width: 4*$vu;
+						height: 4*$vu;
+						border-radius: 2*$vu;
 					}
 				}
+			}
 
-				.left {
-
-				}
-
-				.right {
-					display: none;
-				}
-
-				.block {
-					display: block;
-				}
-
-				.name {
-					margin: 0;
-					color: $grey-3;
-				}
-
-				.project {
-					margin-top: $vu;
-					color: $grey1;
-				}
-
-				.users {
-					margin-top: $vu;
-
-					.user {
-						float: left;
-
-						& + .user {
-							margin-left: 5px;
-						}
-
-						.avatar {
-							display: block;
-							width: 4*$vu;
-							height: 4*$vu;
-							border-radius: 2*$vu;
-						}
-					}
-				}
-
-				.lastModified {}
+			.last-modified {
+				display: block;
+				margin-top: 5px;
+				margin-bottom: 0;
+				color: $grey1;
 			}
 		}
 	}
@@ -142,22 +167,22 @@ $easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
 	}
 }
 
-@include breakpoint(0 600px) {
+@include breakpoint(0 500px) {
 
-	@include card-width(1, 3%);
+	@include card-width(1, 4.5%);
 }
 
-@include breakpoint(601px 800px) {
+@include breakpoint(501px 800px) {
 
-	@include card-width(2, 2.5%);
+	@include card-width(2, 4.0%);
 }
 
-@include breakpoint(801px 1200px) {
+@include breakpoint(801px 1100px) {
 
-	@include card-width(3, 2%);
+	@include card-width(3, 3.5%);
 }
 
-@include breakpoint(1201px) {
+@include breakpoint(1101px) {
 
-	@include card-width(4, 1.5%);
+	@include card-width(4, 3.0%);
 }

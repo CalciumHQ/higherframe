@@ -11,7 +11,6 @@ angular
         abstract: true,
         controller: 'DashboardCtrl',
 				controllerAs: 'DashboardCtrl',
-				authenticate: true,
         resolve: {
 					organisations: function($stateParams, $http, $q, Auth) {
 
@@ -64,10 +63,12 @@ angular
 				templateUrl: 'app/dashboard/subviews/projects.html',
 				controller: 'DashboardProjectsCtrl',
 				controllerAs: 'DashboardProjectsCtrl',
+				authenticate: true
 			})
 
 			.state('dashboard.settings', {
 				url: '/settings',
-				templateUrl: 'app/dashboard/subviews/settings.html'
+				templateUrl: 'app/dashboard/subviews/settings.html',
+				authenticate: true
 			});
   });

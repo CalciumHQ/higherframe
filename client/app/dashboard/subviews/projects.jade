@@ -1,17 +1,31 @@
-div#dashboard-frames.layout-partial
-	div.group
-		div.organisation.row
-			div.name.b3.uppercase.airy My projects
-			
-		div.frames.cards.row
-			a.card(ng-repeat="project in DashboardProjectsCtrl.projects | orderBy:'-created_at'", ui-sref="project.frames({ id: project._id })")
-				div.content
-					div.left
-						span.name.h4.block {{ project.name }}
-								
-						ul.users
-							li.user(ng-repeat="user in project.users", uib-tooltip-html="'Shared with ' + user.name", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
-								ui-placeholder.avatar(type="user", src="user.image")
+div#dashboard-frames.form-page.layout-partial
+	
+	div.row
+		div.listview-titlebar
+			div.listview-titlebar-item
+				span.h6 {{ DashboardProjectsCtrl.projects.length }} project{{ DashboardProjectsCtrl.projects.length == 1 ? '' : 's' }}
+				
+			div.listview-titlebar-item
+				span.h6 Sort by
+				
+				div(uib-dropdown, dropdown-append-to-body)
+					span.ui-dropdown-toggle.h6(uib-dropdown-toggle)
+						| {{ DashboardProjectsCtrl.sort.options[DashboardProjectsCtrl.sort.value] }}
+						span.chevron
+							
+					ul.dropdown-menu
+						li(ng-repeat="(value, label) in DashboardProjectsCtrl.sort.options")
+							a(ng-click="ProjectFramesCtrl.sort.value = value") {{ label }}
 						
-					div.right
-						span.lastModified {{ (frame.created_at | moment).fromNow() }}
+	div.frames.cards.row
+		a.card(ng-repeat="project in DashboardProjectsCtrl.projects | orderBy:DashboardProjectsCtrl.sort.value", ui-sref="project.frames({ id: project._id })")
+			div.content
+				div.left
+					h5.name.medium {{ project.name }}
+							
+					ul.users
+						li.user(ng-repeat="user in project.users", uib-tooltip-html="'Shared with ' + user.name", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+							ui-placeholder.avatar(type="user", src="user.image")
+					
+				div.right
+					span.last-modified.h6 {{ (frame.created_at | moment).fromNow() }}

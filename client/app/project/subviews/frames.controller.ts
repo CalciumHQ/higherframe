@@ -3,7 +3,13 @@ module Higherframe.Controllers {
 
   export class ProjectFrames {
 
-    personal: Array<Higherframe.Data.IFrame> = [];
+    sort = {
+      value: 'name',
+      options: {
+        'name': 'Name',
+        '-created_at': 'Date created'
+      }
+    }
 
     constructor(
       private $scope: ng.IScope,

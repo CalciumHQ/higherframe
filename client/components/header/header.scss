@@ -230,8 +230,14 @@ $header-toolbar-padding: 11px;
   }
 }
 
+.ui-dropdown-toggle {
+
+}
+
 #identity {
   .ui-dropdown-toggle {
+    @include display-flex;
+    @include align-items(center);
     @include justify-content(flex-end);
 
     &:hover {
@@ -244,6 +250,13 @@ $header-toolbar-padding: 11px;
       @include transition(color 200ms);
       color: $grey1;
     }
+
+    .font-awesome {
+      position: relative;
+      top: 0.08em;
+      margin-left: 6px;
+      font-size: 0.7em;
+    }
   }
 
   .ui-placeholder {
@@ -254,19 +267,22 @@ $header-toolbar-padding: 11px;
 }
 
 .ui-dropdown-toggle {
-  @include display-flex;
-  @include align-items(center);
-
   span {
     position: relative;
     top: 1px;
     display: block;
   }
 
-  .font-awesome {
+  .chevron {
     position: relative;
-    top: 0.08em;
-    margin-left: 7px;
-    font-size: 0.7em;
+    display: inline-block;
+    top: -1px;
+    margin-left: 4px;
+    font-family: 'FontAwesome';
+    font-size: 8px;
+
+    &:after {
+      content: ''
+    }
   }
 }
