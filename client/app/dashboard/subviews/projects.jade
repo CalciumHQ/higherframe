@@ -15,17 +15,20 @@ div#dashboard-frames.form-page.layout-partial
 							
 					ul.dropdown-menu
 						li(ng-repeat="(value, label) in DashboardProjectsCtrl.sort.options")
-							a(ng-click="ProjectFramesCtrl.sort.value = value") {{ label }}
+							a(ng-click="DashboardProjectsCtrl.sort.value = value") {{ label }}
+							
+			div.listview-titlebar-item.right
+				button.btn.btn-primary(ng-click="DashboardProjectsCtrl.onNewProjectClick()")
+					span.font-awesome &#xf067; 
+					| Add project
 						
 	div.frames.cards.row
 		a.card(ng-repeat="project in DashboardProjectsCtrl.projects | orderBy:DashboardProjectsCtrl.sort.value", ui-sref="project.frames({ id: project._id })")
 			div.content
-				div.left
-					h5.name.medium {{ project.name }}
-							
-					ul.users
-						li.user(ng-repeat="user in project.users", uib-tooltip-html="'Shared with ' + user.name", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
-							ui-placeholder.avatar(type="user", src="user.image")
-					
-				div.right
-					span.last-modified.h6 {{ (frame.created_at | moment).fromNow() }}
+				h5.name.medium {{ project.name }}
+						
+				ul.users
+					li.user(ng-repeat="user in project.users", uib-tooltip-html="'Shared with ' + user.name", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+						ui-placeholder.avatar(type="user", src="user.image")
+				
+				span.last-modified.h6 {{ project.frames.length }} wireframe{{ project.frames.length == 1 ? '' : 's' }}

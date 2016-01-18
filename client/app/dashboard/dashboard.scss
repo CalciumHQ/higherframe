@@ -23,7 +23,7 @@ $easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
 .listview-titlebar {
 	@include display-flex;
 	@include align-items(center);
-	height: 39px;
+	height: 44px;
 	padding-bottom: 11px;
 	border-bottom: 1px solid $grey3;
 	margin-bottom: 30px;

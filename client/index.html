@@ -82,6 +82,7 @@
     <!-- endbuild -->
 
         <!-- build:js({.tmp,client}) app/app.js -->
+        <script src="library/common.js"></script>
         <script src="app/app.js"></script>
           <!-- injector:js -->
           <script src="library/common.js"></script>
@@ -156,7 +157,7 @@
           <script src="app/account/forgot/reset.controller.js"></script>
           <script src="app/alerts/alerts.controller.js"></script>
           <script src="app/dashboard/dashboard.controller.js"></script>
-          <script src="app/dashboard/subviews/frames.controller.js"></script>
+          <script src="app/dashboard/modals/new-project.controller.js"></script>
           <script src="app/dashboard/subviews/projects.controller.js"></script>
           <script src="app/frame/frame.controller.js"></script>
           <script src="app/frame/modals/new.js"></script>
@@ -169,6 +170,8 @@
           <script src="app/frame/trays/toolbox.js"></script>
           <script src="app/frame/trays/view.js"></script>
           <script src="app/organisation/modals/update.js"></script>
+          <script src="app/project/modals/new-project.controller.js"></script>
+          <script src="app/project/modals/new.controller.js"></script>
           <script src="app/project/project.controller.js"></script>
           <script src="app/project/subviews/frames.controller.js"></script>
           <script src="components/filters/symbol.js"></script>
@@ -206,5 +209,14 @@
           <script src="components/socket/socket.service.js"></script>
           <!-- endinjector -->
         <!-- endbuild -->
+
+    <script type="text/javascript">
+    
+      // Register common classes
+      angular
+        .module('siteApp')
+        .factory('Artboard', Common.Data.ArtboardResource)
+        .factory('Media', Common.Data.MediaResource);
+    </script>
 </body>
 </html>

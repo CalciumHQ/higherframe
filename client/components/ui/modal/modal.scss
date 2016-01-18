@@ -16,29 +16,30 @@ $modal-padding: 25px;
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 680px;
+  width: 480px;
   min-height: 200px;
-  margin-left: -340px;
+  margin-left: -240px;
   @include transform(translateY(-50%));
   @include box-shadow(0 0 30px rgba(0,0,0,0.1));
 
   .ui-modal-header {
     @include box-sizing(border-box);
-    padding: (2*$vu) $modal-padding;
-    background: #f8f8f8;
+    padding: 11px $modal-padding;
+    background: white;
   }
 
   .ui-modal-body {
     @include box-sizing(border-box);
     @include flex-grow(1);
-    padding: 4*$vu $modal-padding;
+    padding: 0 $modal-padding;
     background: white;
   }
 
   .ui-modal-footer {
     @include box-sizing(border-box);
-    padding: 2*$vu $modal-padding;
-    background: #f8f8f8;
+    padding: 11px $modal-padding;
+    border-top: 1px solid $grey3;
+    background: white;
 
     .ui-modal-buttons {
       text-align: right;

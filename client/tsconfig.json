@@ -39,6 +39,7 @@
         "./app/frame/trays/toolbox.ts",
         "./app/frame/trays/view.ts",
         "./app/organisation/modals/update.ts",
+        "./app/project/modals/new.controller.ts",
         "./app/project/project.controller.ts",
         "./app/project/subviews/frames.controller.ts",
         "./components/filters/symbol.ts",

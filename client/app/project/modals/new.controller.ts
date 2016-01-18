@@ -1,18 +1,17 @@
 /// <reference path="../../../library/higherframe.ts"/>
 
-module Higherframe.Modals.Frame {
+module Higherframe.Modals.Project {
 
   export class New extends Higherframe.UI.Modal.Base implements Higherframe.UI.Modal.IModal {
 
-    title = 'Create a new wireframe';
-    templateUrl = '/app/frame/modals/new.html';
+    title = 'Create a new project';
+    templateUrl = '/app/project/modals/new.html';
 
     // Form
-    frame: ng.IFormController;
+    project: ng.IFormController;
 
     // Models
     name = '';
-    project: Higherframe.Data.IProject;
 
 
     /**
@@ -35,8 +34,8 @@ module Higherframe.Modals.Frame {
 
     onSaveButtonClick() {
 
-      this.frame.$setSubmitted();
-      if (this.frame.$invalid) {
+      this.project.$setSubmitted();
+      if (this.project.$invalid) {
 
         return;
       }
@@ -46,13 +45,12 @@ module Higherframe.Modals.Frame {
 
         $http({
           method: 'POST',
-          url: '/api/frames',
+          url: '/api/projects',
           headers: {
             'Authorization': 'Bearer ' + this.Auth.getToken()
           },
           data: {
-            name: this.name,
-            project: this.project._id
+            name: this.name
           }
         })
         .then((response) => {
@@ -64,9 +62,9 @@ module Higherframe.Modals.Frame {
           this.AlertManager.add(alert);
 
           // Track the event
-          this.$mixpanel.track('Wireframe created', {
-            'Frame ID': response.data._id,
-            'Frame Name': response.data.name
+          this.$mixpanel.track('Project created', {
+            'Project ID': response.data._id,
+            'Project Name': response.data.name
           });
 
           // Close the modal

@@ -1,10 +1,10 @@
-form(name="ModalCtrl.frame").ui-modal
+form(name="ModalCtrl.project").ui-modal
   .ui-modal-header
     h4 {{ ModalCtrl.title }}
     
   .ui-modal-body
     div.form-group
-      label(for="name") What is the wireframe's name?
+      label(for="name") What is the project's name?
       input.form-control(name="name", type="text", ng-model="ModalCtrl.name", placeholder="Enter a name", required)
     
   .ui-modal-footer
