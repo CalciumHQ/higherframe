@@ -5,7 +5,7 @@ FROM node:5.4.1
 # Install dependencies
 RUN \
   apt-get update && \
-  apt-get install -y ruby ruby-dev libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++ && \
+  apt-get install -y ruby ruby-dev libcairo2-dev libjpeg62-turbo-dev libpango1.0-dev libgif-dev build-essential g++ && \
   gem install compass bundler --no-ri --no-rdoc
 
 # Install bower and grunt
