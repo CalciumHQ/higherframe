@@ -30,5 +30,14 @@ module Higherframe.UI.Modal {
         this.element.remove();
       }
     }
+
+    onKeyUp($event) {
+
+      // esc key
+      if ($event.keyCode == 27) {
+
+        this.close();
+      }
+    }
   }
 }

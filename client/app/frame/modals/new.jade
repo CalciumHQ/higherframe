@@ -5,12 +5,12 @@ form(name="ModalCtrl.frame").ui-modal
   .ui-modal-body
     div.form-group
       label(for="name") What is the wireframe's name?
-      input.form-control(name="name", type="text", ng-model="ModalCtrl.name", placeholder="Enter a name", required)
+      input.form-control(name="name", type="text", focus-on="true", ng-model="ModalCtrl.name", placeholder="Enter a name", required)
     
   .ui-modal-footer
     .ui-modal-buttons
-      button.btn.btn-default(ng-click="ModalCtrl.onCloseButtonClick()")
+      button.btn.btn-default(type="button", ng-click="ModalCtrl.onCloseButtonClick()")
         span Cancel
         
-      button.btn.btn-success(ng-click="ModalCtrl.onSaveButtonClick()")
+      button.btn.btn-success(type="submit", ng-click="ModalCtrl.onSaveButtonClick()")
         span Create

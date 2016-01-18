@@ -29,7 +29,7 @@ module Higherframe.UI.Modal {
       scope.ModalCtrl = modal;
       modal.$scope = scope;
 
-      var html = '<div class="ui-modal-wrapper"><div ng-include="ModalCtrl.templateUrl"></div></div>';
+      var html = '<div class="ui-modal-wrapper"><div ng-include="ModalCtrl.templateUrl" ng-keyup="ModalCtrl.onKeyUp($event)"></div></div>';
       var element = this.$compile(html)(modal.$scope);
       element.data('$ngControllerController', modal);
       element.children().data('$ngControllerController', modal);
