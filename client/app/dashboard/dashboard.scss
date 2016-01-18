@@ -58,6 +58,11 @@ $easeOutQuint: cubic-bezier(0.23, 1, 0.32, 1);
 	}
 }
 
+.listview-placeholder {
+	margin-top: 60px;
+	text-align: center;
+}
+
 .cards {
 	@include display-flex;
 	@include flex-wrap(wrap);

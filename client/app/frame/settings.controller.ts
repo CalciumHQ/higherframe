@@ -9,7 +9,6 @@ module Higherframe.Controllers {
 
     // Models
     name: string;
-    organisation: string;
     users: Array<any>;
 
     constructor(
@@ -22,7 +21,6 @@ module Higherframe.Controllers {
     ) {
 
       this.name = frame.name;
-      this.organisation = frame.organisation._id;
       this.users = angular.copy(frame.users);
 
       $http
@@ -39,7 +37,6 @@ module Higherframe.Controllers {
 
         this.$http.patch(`/api/frames/${this.frame._id}`, {
           name: this.name,
-          organisation: this.organisation,
           users: this.users.map(user => user._id)
         })
         .then((response) => {
@@ -75,11 +72,11 @@ module Higherframe.Controllers {
           var undoAction = new Higherframe.UI.AlertAction();
           undoAction.label = 'Undo this';
           undoAction.action = () => { this.onUndoDeleteClick.call(this, alert); };
-          alert.actions = [undoAction];
+          alert.actions = [undoAction]; 
 
           this.AlertManager.add(alert);
 
-          this.$state.go('frames');
+          this.$state.go('project.frames', { id: this.frame.project._id });
         });
     }
   }

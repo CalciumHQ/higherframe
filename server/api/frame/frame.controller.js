@@ -170,7 +170,17 @@ exports.destroy = function(req, res) {
     frame.save(function(err) {
 
       if(err) { return handleError(res, err); }
-      return res.send(204);
+
+      // Remove reference from the project
+      Project.findOneAndUpdate(
+        { _id: frame.project },
+        { $pull: { frames: frame._id }},
+        function(err, project) {
+
+          if(err) { return handleError(res, err); }
+          return res.send(204);
+        }
+      )
     });
   });
 };

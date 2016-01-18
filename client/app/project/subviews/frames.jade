@@ -21,8 +21,14 @@ div#dashboard-frames.form-page.layout-partial
 				button.btn.btn-primary(ng-click="ProjectFramesCtrl.onNewFrameClick()")
 					span.font-awesome &#xf067; 
 					| Add wireframe
+		
+	div.listview-placeholder.row(ng-if="!ProjectCtrl.project.frames.length")
+		h4 This project is empty
+		p Get started on this project by creating wireframes.
+		p
+			a(href="", ng-click="ProjectFramesCtrl.onNewFrameClick()") Add wireframe
 			
-	div.frames.cards.row
+	div.frames.cards.row(ng-if="ProjectCtrl.project.frames.length")
 		a.card(ng-repeat="frame in ProjectCtrl.project.frames | orderBy:ProjectFramesCtrl.sort.value", ui-sref="frame({ id: frame._id })")
 			div.images
 				div.image(style="background-image: url('/assets/images/sample-wireframe-tn@2x.png')")
@@ -31,7 +37,7 @@ div#dashboard-frames.form-page.layout-partial
 				h5.name.medium {{ frame.name }}
 				span.last-modified.h6 {{ (frame.created_at | moment).fromNow() }}
 				
-	div.row
+	div.row(ng-if="ProjectCtrl.project.frames.length")
 		a(href="", ng-click="ProjectFramesCtrl.onNewFrameClick()")
 			span.font-awesome &#xf067; 
 			| Add wireframe

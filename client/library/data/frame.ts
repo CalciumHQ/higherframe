@@ -6,7 +6,7 @@ module Higherframe.Data {
     name: string,
     created_at: string,
     updated_at: string,
-    organisation: any,
+    project: Higherframe.Data.IProject,
     users: Array<any>,
     collaborators: Array<any>,
     components: Array<any>
