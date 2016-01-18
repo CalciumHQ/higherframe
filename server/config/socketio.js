@@ -19,7 +19,9 @@ function onConnect(socket, socketio) {
   });
 
   // Insert sockets below
+  require('../api/user/user.socket').register(socket, socketio);
 	require('../api/organisation/organisation.socket').register(socket, socketio);
+  require('../api/project/project.socket').register(socket, socketio);
 	require('../api/frame/frame.socket').register(socket, socketio);
 	require('../api/component/component.socket').register(socket, socketio);
 }
@@ -61,6 +63,7 @@ module.exports = function (socketio) {
   });
 
   require('../api/frame/frame.socket').init(socketio);
+  require('../api/project/project.socket').init(socketio);
   require('../api/component/component.socket').init(socketio);
   require('../api/activity/activity.socket').init(socketio);
 };

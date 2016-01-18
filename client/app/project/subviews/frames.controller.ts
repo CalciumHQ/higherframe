@@ -27,6 +27,7 @@ module Higherframe.Controllers {
     ) {
 
       this.registerSockets();
+      this.$scope.$on('$destroy', this.deregisterSockets);
     }
 
 
@@ -36,9 +37,19 @@ module Higherframe.Controllers {
 
 		private registerSockets() {
 
+      // Register to receive updates to this project and its related models
+  		this.socket.emit('project:subscribe', this.project._id);
+
       // Document updating
 			this.socket.syncUpdates('frame', this.project.frames);
     }
+
+    private deregisterSockets() {
+
+			// Deregister from receiving updates to this project and its related models
+			this.socket.emit('project:unsubscribe', this.project._id);
+      this.socket.unsyncUpdates('frame');
+		};
 
 
     /*

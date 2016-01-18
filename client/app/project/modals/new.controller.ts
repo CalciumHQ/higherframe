@@ -57,7 +57,7 @@ module Higherframe.Modals.Project {
 
           // Add alert
           var alert = new Higherframe.UI.Alert();
-          alert.text = `<strong>${response.data.name}</strong> was created`;
+          alert.text = `<span class="medium">${response.data.name}</span> was created`;
           alert.type = 'success';
           this.AlertManager.add(alert);
 

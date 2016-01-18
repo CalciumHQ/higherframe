@@ -15,10 +15,10 @@ var Project = require('./project.model');
 // Get list of Projects
 exports.index = function(req, res) {
 
-  Project.find(function (err, Projects) {
+  Project.find({ owner: req.user._id }, function (err, projects) {
 
     if(err) { return handleError(res, err); }
-    return res.json(200, Projects);
+    return res.json(200, projects);
   });
 };
 
@@ -39,6 +39,8 @@ exports.show = function(req, res) {
 // Creates a new Project in the DB.
 exports.create = function(req, res) {
 
+  req.body.owner = req.user._id;
+  
   Project.create(req.body, function(err, Project) {
 
     if(err) { return handleError(res, err); }

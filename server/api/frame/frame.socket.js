@@ -10,7 +10,7 @@ exports.init = function(socketio) {
 
 	Frame.schema.post('save', function(doc) {
 
-		Frame.populate(doc, {path:'organisation users media'}, function(err, frame) {
+		Frame.populate(doc, {path:'project users media'}, function(err, frame) {
 
       onSave(socketio, frame);
     });
@@ -88,11 +88,19 @@ function onSave(socketio, doc, cb) {
 		.in('frame:' + doc._id)
 		.emit('frame:save', doc)
 		.emit('media:save', doc.media);
+
+	socketio.sockets
+		.in('project:' + doc.project._id)
+		.emit('frame:save', doc);
 }
 
 function onRemove(socketio, doc, cb) {
 
   socketio.sockets
 		.in('frame:' + doc._id)
+		.emit('frame:remove', doc);
+
+	socketio.sockets
+		.in('project:' + doc.project._id)
 		.emit('frame:remove', doc);
 }
