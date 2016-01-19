@@ -19,3 +19,6 @@ RUN cd /src && npm install && bundle install && bower install --allow-root && gr
 
 # Expose the 8081 port
 EXPOSE 8081
+
+# Start the runtime
+CMD ["node", "/src/server/app.js"]
