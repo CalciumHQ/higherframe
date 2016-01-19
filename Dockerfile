@@ -15,7 +15,7 @@ RUN npm install -g bower grunt-cli
 COPY . /src
 
 # Install managed dependancies and build
-RUN cd /src && npm install && bundle install && bower install  --allow-root && grunt build:dist
+RUN cd /src && npm install && bundle install && bower install --allow-root && grunt build:dist
 
 # Expose the 8081 port
 EXPOSE 8081
