@@ -5,7 +5,7 @@ module Higherframe.Modals.Project {
   export class New extends Higherframe.UI.Modal.Base implements Higherframe.UI.Modal.IModal {
 
     title = 'Create a new project';
-    templateUrl = '/app/project/modals/new.html';
+    templateUrl = 'app/project/modals/new.html';
 
     // Form
     project: ng.IFormController;

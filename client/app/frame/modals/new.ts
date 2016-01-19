@@ -5,7 +5,7 @@ module Higherframe.Modals.Frame {
   export class New extends Higherframe.UI.Modal.Base implements Higherframe.UI.Modal.IModal {
 
     title = 'Create a new wireframe';
-    templateUrl = '/app/frame/modals/new.html';
+    templateUrl = 'app/frame/modals/new.html';
 
     // Form
     frame: ng.IFormController;
