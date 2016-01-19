@@ -24,3 +24,10 @@ deployment:
     commands:
       - sed "s/<EMAIL>/$DOCKER_EMAIL/;s/<AUTH>/$DOCKER_AUTH/" < .dockercfg.template > ~/.dockercfg
       - bash -x deploy.sh $CIRCLE_SHA1 higherframe-staging
+
+  production:
+    owner: Higherframe
+    branch: production
+    commands:
+      - sed "s/<EMAIL>/$DOCKER_EMAIL/;s/<AUTH>/$DOCKER_AUTH/" < .dockercfg.template > ~/.dockercfg
+      - bash -x deploy.sh $CIRCLE_SHA1 higherframe-production
