@@ -107,7 +107,7 @@ module Higherframe.UI {
     restrict = 'E';
     replace = true;
     require = 'ngModel';
-    templateUrl = '/components/ui/forms/icon.html';
+    templateUrl = 'components/ui/forms/icon.html';
     controller = IconController;
     controllerAs = 'Ctrl';
 

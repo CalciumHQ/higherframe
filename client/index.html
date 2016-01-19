@@ -19,10 +19,10 @@
     <!-- endbuild -->
     <!-- build:css({.tmp,client}) app/app.css -->
     <link rel="stylesheet" href="app/app.css">
+    <link rel="stylesheet" href="library/bootstrap.css">
       <!-- injector:css -->
       <!-- endinjector -->
     <!-- endbuild -->
-    <link rel="stylesheet" href="library/bootstrap.css">
   </head>
   <body>
     <!--[if lt IE 7]>
@@ -33,13 +33,13 @@
     <div id="content" ui-view=""></div>
 
     <!-- Alerts -->
-    <div id="alerts" ng-controller="AlertsCtrl as AlertsCtrl">
+    <!-- <div id="alerts" ng-controller="AlertsCtrl as AlertsCtrl">
       <uib-alert ng-repeat="alert in AlertsCtrl.alerts" type="{{ alert.type || 'info' }}">
         <span ng-bind-html="alert.text"></span>
         <span ng-if="alert.actions.length"> | </span>
         <a ng-repeat="action in alert.actions" class="action" ng-click="action.action($event)">{{ action.label }}</a>
       </uib-alert>
-    </div>
+    </div> -->
 
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
@@ -156,7 +156,6 @@
           <script src="app/account/forgot/reset.controller.js"></script>
           <script src="app/alerts/alerts.controller.js"></script>
           <script src="app/dashboard/dashboard.controller.js"></script>
-          <script src="app/dashboard/modals/new-project.controller.js"></script>
           <script src="app/dashboard/subviews/projects.controller.js"></script>
           <script src="app/frame/frame.controller.js"></script>
           <script src="app/frame/modals/new.js"></script>
@@ -168,9 +167,7 @@
           <script src="app/frame/trays/toolbar.js"></script>
           <script src="app/frame/trays/toolbox.js"></script>
           <script src="app/frame/trays/view.js"></script>
-          <script src="app/frames/frames.controller.js"></script>
           <script src="app/organisation/modals/update.js"></script>
-          <script src="app/project/modals/new-project.controller.js"></script>
           <script src="app/project/modals/new.controller.js"></script>
           <script src="app/project/project.controller.js"></script>
           <script src="app/project/subviews/frames.controller.js"></script>
@@ -194,11 +191,12 @@
           <script src="app/account/signup/signup.controller.js"></script>
           <script src="app/admin/admin.controller.js"></script>
           <script src="app/admin/admin.js"></script>
+          <script src="app/dashboard/dashboard.js"></script>
           <script src="app/date/date.js"></script>
           <script src="app/frame/frame.js"></script>
-          <script src="app/frames/frames.js"></script>
           <script src="app/main/main.controller.js"></script>
           <script src="app/main/main.js"></script>
+          <script src="app/project/project.js"></script>
           <script src="components/auth/auth.service.js"></script>
           <script src="components/auth/user.service.js"></script>
           <script src="components/forms/focus.js"></script>
@@ -208,5 +206,14 @@
           <script src="components/socket/socket.service.js"></script>
           <!-- endinjector -->
         <!-- endbuild -->
+
+  <script type="text/javascript">
+
+    // Register common classes
+    angular
+      .module('siteApp')
+      .factory('Artboard', Common.Data.ArtboardResource)
+      .factory('Media', Common.Data.MediaResource);
+  </script>
 </body>
 </html>

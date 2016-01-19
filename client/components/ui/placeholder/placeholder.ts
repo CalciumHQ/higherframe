@@ -30,7 +30,7 @@ module Higherframe.UI {
     replace = true;
     controller = PlaceholderController;
     controllerAs = 'Ctrl';
-    templateUrl = '/components/ui/placeholder/placeholder.html';
+    templateUrl = 'components/ui/placeholder/placeholder.html';
     scope = {
       type: '@',
       src: '='

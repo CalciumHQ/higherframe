@@ -44,7 +44,7 @@ module.exports = function (grunt) {
       },
       prod: {
         options: {
-          script: 'dist/server/app.js'
+          script: 'server/app.js'
         }
       }
     },
@@ -297,12 +297,12 @@ module.exports = function (grunt) {
       },
       main: {
         cwd: '<%= yeoman.client %>',
-        src: ['{app,components}/**/*.html'],
+        src: ['{app,components,library}/**/*.html'],
         dest: '.tmp/templates.js'
       },
       tmp: {
         cwd: '.tmp',
-        src: ['{app,components}/**/*.html'],
+        src: ['{app,components,library}/**/*.html'],
         dest: '.tmp/tmp-templates.js'
       }
     },
@@ -609,6 +609,13 @@ module.exports = function (grunt) {
         }
       }
     },
+
+    uglify: {
+      options: {
+        beautify: true,
+        mangle: false
+      }
+    }
   });
 
   // Used for delaying livereload until after server has restarted
@@ -725,10 +732,10 @@ module.exports = function (grunt) {
     'concat',
     'ngAnnotate',
     'copy:dist',
-    'cdnify',
+    // 'cdnify',
     'cssmin',
     'uglify',
-    'rev',
+    // 'rev',
     'usemin'
   ]);
 

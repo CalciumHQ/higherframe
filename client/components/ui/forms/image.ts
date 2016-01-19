@@ -115,7 +115,7 @@ module Higherframe.UI {
     restrict = 'E';
     replace = true;
     require = 'ngModel';
-    templateUrl = '/components/ui/forms/image.html';
+    templateUrl = 'components/ui/forms/image.html';
     controller = ImageController;
     controllerAs = 'Ctrl';
 
