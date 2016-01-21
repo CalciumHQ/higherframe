@@ -26,6 +26,11 @@ module.exports = function (grunt) {
   // The target environment
   var env = grunt.option('target') || 'development';
 
+  // Circle passes a branch name to the target option instead.
+  // Map to a target
+  if (env == 'develop') { env = 'staging'; }
+  if (env == 'master') { env = 'staging'; }
+
   // Define the configuration for all the tasks
   grunt.initConfig({
 
