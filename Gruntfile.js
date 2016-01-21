@@ -53,21 +53,23 @@ module.exports = function (grunt) {
     },
 
     replace: {
-      options: {
-        patterns: [
+      html: {
+        options: {
+          patterns: [
+            {
+              json: require('./client/config.json')[env]
+            }
+          ]
+        },
+        files: [
           {
-            json: require('./client/config.json')[env]
+            expand: true,
+            flatten: true,
+            src: ['<%= yeoman.client %>/index.html'],
+            dest: '.tmp'
           }
         ]
-      },
-      files: [
-        {
-          expand: true,
-          flatten: true,
-          src: ['<%= yeoman.client %>/index.html'],
-          dest: '.tmp'
-        }
-      ]
+      }
     },
 
     open: {
@@ -264,7 +266,7 @@ module.exports = function (grunt) {
     // concat, minify and revision files. Creates configurations in memory so
     // additional tasks can operate on them
     useminPrepare: {
-      html: ['<%= yeoman.client %>/index.html'],
+      html: ['.tmp/index.html'],
       options: {
         dest: '<%= yeoman.dist %>/public'
       }
@@ -349,7 +351,13 @@ module.exports = function (grunt) {
             '.htaccess',
             'bower_components/**/*',
             'assets/images/**/*.{jpg,png,svg}',
-            'assets/fonts/**/*.{eot,ttf,woff}',
+            'assets/fonts/**/*.{eot,ttf,woff}'
+          ]
+        }, {
+          expand: true,
+          cwd: '.tmp',
+          dest: '<%= yeoman.dist %>/public',
+          src: [
             'index.html'
           ]
         }, {
@@ -685,7 +693,7 @@ module.exports = function (grunt) {
       'injector',
       'bowerInstall',
       'autoprefixer',
-      'replace:server',
+      'replace',
       'express:dev',
       'wait',
       'open',
@@ -749,6 +757,7 @@ module.exports = function (grunt) {
     'typescript:server',
     'injector',
     'bowerInstall',
+    'replace',
     'useminPrepare',
     'autoprefixer',
     'ngtemplates',

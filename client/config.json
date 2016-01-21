@@ -1,19 +1,19 @@
 {
   "development": {
     "ga": {
-      "ua": "UA-123456"
+      "ua": "UA-72702533-2"
     }
   },
 
   "staging": {
     "ga": {
-      "ua": "UA-staging"
+      "ua": "UA-72702533-2"
     }
   },
 
   "production": {
     "ga": {
-      "ua": "UA-prod"
+      "ua": "UA-72702533-1"
     }
   }
 }
