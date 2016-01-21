@@ -70,7 +70,7 @@ angular.module('siteApp', [
     };
   })
 
-  .run(function ($rootScope, $location, $document, $timeout, Auth) {
+  .run(function ($rootScope, $location, $document, $window, $timeout, Auth) {
 
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$stateChangeStart', function (event, next) {
@@ -84,6 +84,12 @@ angular.module('siteApp', [
     // Handle errors in routing
     $rootScope.$on('$stateChangeError', function() {
 
+    });
+
+    // Analytics
+    $rootScope.$on('$stateChangeSuccess', function() {
+
+      $window.ga('send', 'pageview', { page: $location.url() });
     });
 
     // Page transition class
