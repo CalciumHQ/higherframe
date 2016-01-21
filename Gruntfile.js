@@ -23,6 +23,9 @@ module.exports = function (grunt) {
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
 
+  // The target environment
+  var env = grunt.option('target') || 'development';
+
   // Define the configuration for all the tasks
   grunt.initConfig({
 
@@ -48,6 +51,25 @@ module.exports = function (grunt) {
         }
       }
     },
+
+    replace: {
+      options: {
+        patterns: [
+          {
+            json: require('./client/config.json')[env]
+          }
+        ]
+      },
+      files: [
+        {
+          expand: true,
+          flatten: true,
+          src: ['<%= yeoman.client %>/index.html'],
+          dest: '.tmp'
+        }
+      ]
+    },
+
     open: {
       server: {
         url: 'http://localhost:<%= express.options.port %>'
@@ -663,6 +685,7 @@ module.exports = function (grunt) {
       'injector',
       'bowerInstall',
       'autoprefixer',
+      'replace:server',
       'express:dev',
       'wait',
       'open',

@@ -8,14 +8,13 @@ RUN \
   apt-get install -y ruby ruby-dev libcairo2-dev libjpeg62-turbo-dev libpango1.0-dev libgif-dev build-essential g++ && \
   gem install compass bundler --no-ri --no-rdoc
 
-# Install bower and grunt
-RUN npm install -g bower grunt-cli
-
 # Add application files
 COPY . /src
 
 # Install managed dependancies and build
-RUN cd /src && npm install && bundle install && bower install --allow-root && grunt build:dist
+# Some node dependancies need to be recompiled with image libraries available,
+# so we do this here rather than copied in from outside the container
+RUN cd /src && npm install --production && bundle install
 
 # Expose the 8081 port
 EXPOSE 8081
