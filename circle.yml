@@ -1,5 +1,7 @@
 
 machine:
+  ruby:
+    version: 2.1.2
   services:
     - docker
 
@@ -17,6 +19,7 @@ dependencies:
     - npm --version
     - npm install --only=dev
     - bower install
+    - bundle install
     - grunt build:dist --target=$CIRCLE_BRANCH
 
   override:
