@@ -35,12 +35,17 @@ module Higherframe.Wireframe {
 		dragSelectionRectangle;
 		dragSelectionOverlay;
 
+		// Drawing interaction
 		hoveredItem;
 		selectedItems = [];
 		selectedSegment;
 		hoveredDragHandle;
 		selectedDragHandle;
 
+		// Artboard interaction
+
+
+		// Layers
 		layerArtboards: paper.Layer;
 		layerGrid: paper.Layer;
 		layerDrawing: paper.Layer;
@@ -239,24 +244,8 @@ module Higherframe.Wireframe {
 			// Configure tools
 			// These tools are singletons so may be already configured from a
 			// previous session, but no matter doing it again.
-			var drawTool = Wireframe.Tools.Draw.get();
-
-			drawTool.bind({
-				onMouseUp: this.onDrawMouseUp,
-				onMouseDown: this.onDrawMouseDown,
-				onMouseMove: this.onDrawMouseMove,
-				onMouseDrag: this.onDrawMouseDrag,
-				onMouseWheel: this.onDrawMouseWheel
-			}, this);
-
-			var artboardsTool = Wireframe.Tools.Artboards.get();
-
-			artboardsTool.bind({
-				onMouseUp: this.onArtboardsMouseUp,
-				onMouseDown: this.onArtboardsMouseDown,
-				onMouseMove: this.onArtboardsMouseMove,
-				onMouseDrag: this.onArtboardsMouseDrag
-			}, this);
+			var drawTool = Wireframe.Tools.Draw.get(this);
+			var artboardsTool = Wireframe.Tools.Artboards.get(this);
  		}
 
  		initLayers() {
@@ -722,57 +711,6 @@ module Higherframe.Wireframe {
 		}
 
 
-		onArtboardsMouseDown(event) {
-
-			// Clear old artboard focussed states
-			this.artboards.forEach((artboard) => {
-
-				artboard.focussed = false;
-			});
-
-			// Look for a clicked artboard
-			var hitResult = this.layerArtboards.hitTest(event.point, this.hitOptions);
-
-			if (hitResult) {
-
-				var artboard: Higherframe.Drawing.Artboard = this.getTopmost(hitResult.item);
-				artboard.focussed = true;
-			}
-
-			// Update artboards
-			this.updateArtboards();
-		}
-
-		onArtboardsMouseUp() {
-
-		}
-
-		onArtboardsMouseMove(event) {
-
-			// Clear old artboard hover states
-			this.artboards.forEach((artboard) => {
-
-				artboard.hovered = false;
-			});
-
-			// Look for a hovered artboard
-			var hitResult = this.layerArtboards.hitTest(event.point, this.hitOptions);
-
-			if (hitResult) {
-
-				var artboard: Higherframe.Drawing.Artboard = this.getTopmost(hitResult.item);
-				artboard.hovered = true;
-			}
-
-			// Update artboards
-			this.updateArtboards();
-		}
-
-		onArtboardsMouseDrag() {
-
-		}
-
-
 		/**
 		 * State handlers
 		 */
@@ -978,7 +916,7 @@ module Higherframe.Wireframe {
 
 				case Common.Drawing.EditMode.Artboards:
 
-					Wireframe.Tools.Artboards.get().activate();
+					Wireframe.Tools.Artboards.get(this).activate();
 
 					// Style the canvas
 					this.layerDrawing.opacity = 0.3;
