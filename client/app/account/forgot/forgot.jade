@@ -10,9 +10,9 @@
           a(href="mailto:support@higherfra.me") support@higherfra.me
           | .
         
-      div.input-group.input-group-lg
+      div.input-group.input-group-lg(ng-class="{ focus: emailAddressFocus }")
         span.input-group-addon.font-awesome &#xf007;
-        input.form-control(name="email", type="text", ng-model="user.email", placeholder="Your email address", required, tabindex="1")
+        input.form-control(name="email", type="text", ng-model="user.email", placeholder="Your email address", required, tabindex="1", focus-on="emailAddressFocus")
           
       div.ui-control.block
         p.ui-error.b1(ng-show='form.email.$error.required && form.password.$error.required && submitted')
@@ -20,7 +20,7 @@
         p.ui-error.b1 {{ errors.other }}
           
       div.micro-form-buttons
-        button.btn.btn-lg.btn-primary(type="submit") Send
+        button.btn.btn-lg.btn-warning(type="submit") Send
         
       p.micro-form-bottom-link.h5.text-center
         a.medium(ui-sref="login") Back to login  

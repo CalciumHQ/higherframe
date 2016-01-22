@@ -5,6 +5,8 @@ angular.module('siteApp')
     $scope.user = {};
     $scope.errors = {};
 
+    $scope.emailAddressFocus = true;
+
     $scope.submit = function(form) {
       $scope.submitted = true;
 
