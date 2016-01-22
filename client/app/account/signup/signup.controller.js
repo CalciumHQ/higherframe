@@ -5,6 +5,10 @@ angular.module('siteApp')
     $scope.user = {};
     $scope.errors = {};
 
+    $scope.nameFocus = true;
+    $scope.emailAddressFocus = false;
+    $scope.passwordFocus = false;
+
     $scope.register = function(form) {
       $scope.submitted = true;
 
