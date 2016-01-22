@@ -5,10 +5,15 @@ module Higherframe.Wireframe.Tools {
 
     private static tool: Wireframe.Tools.Artboards;
 
-    private selected: Array<Higherframe.Drawing.Artboard> = [];
-
     private dragging: boolean = false;
     private dragStart: paper.Point;
+
+    private hitOptions = {
+ 			segments: true,
+ 			stroke: true,
+ 			fill: true,
+ 			tolerance: 5
+ 		};
 
 
     /**
@@ -47,12 +52,12 @@ module Higherframe.Wireframe.Tools {
     clearSelection() {
 
       // Clear old artboard focussed states
-      this.selected.forEach((artboard: Higherframe.Drawing.Artboard) => {
+      this.canvas.selectedArtboards.forEach((artboard: Higherframe.Drawing.Artboard) => {
 
         artboard.focussed = false;
       });
 
-      this.selected = [];
+      this.canvas.selectedArtboards = [];
     }
 
     startDrag(event) {
@@ -61,7 +66,7 @@ module Higherframe.Wireframe.Tools {
       this.dragStart = event.downPoint;
 
       // Annotate the dragged elements with their starting position
-      this.selected.forEach((artboard) => {
+      this.canvas.selectedArtboards.forEach((artboard) => {
 
         (<any>artboard).dragStartLeft = artboard.left;
         (<any>artboard).dragStartTop = artboard.top;
@@ -77,7 +82,7 @@ module Higherframe.Wireframe.Tools {
       this.dragStart = null;
 
       // Clear the start position annotation on the dragged elements
-      this.selected.forEach((item: any) => {
+      this.canvas.selectedArtboards.forEach((item: any) => {
 
         delete item.dragStart;
       });
@@ -96,7 +101,7 @@ module Higherframe.Wireframe.Tools {
       this.clearSelection();
 
       // Look for a clicked artboard
-      var hitResult = this.canvas.layerArtboards.hitTest(event.point, this.canvas.hitOptions);
+      var hitResult = this.canvas.layerArtboards.hitTest(event.point, this.hitOptions);
 
       if (hitResult) {
 
@@ -104,7 +109,7 @@ module Higherframe.Wireframe.Tools {
 
         // Select the artboard
         artboard.focussed = true;
-        this.selected.push(artboard);
+        this.canvas.selectedArtboards.push(artboard);
       }
 
       // Start a drag
@@ -139,7 +144,7 @@ module Higherframe.Wireframe.Tools {
       if (this.dragging) {
 
         // Dragging a component
-        if (this.selected.length) {
+        if (this.canvas.selectedArtboards.length) {
 
           this.mouseMoveDragHandler(event);
         }
@@ -168,7 +173,7 @@ module Higherframe.Wireframe.Tools {
       });
 
       // Look for a hovered artboard
-      var hitResult = this.canvas.layerArtboards.hitTest(event.point, this.canvas.hitOptions);
+      var hitResult = this.canvas.layerArtboards.hitTest(event.point, this.hitOptions);
 
       if (hitResult) {
 
@@ -188,7 +193,7 @@ module Higherframe.Wireframe.Tools {
 
       var delta = event.point.subtract(this.dragStart);
 
-      this.selected.forEach((artboard) => {
+      this.canvas.selectedArtboards.forEach((artboard) => {
 
         artboard.left = (<any>artboard).dragStartLeft + delta.x;
         artboard.top = (<any>artboard).dragStartTop + delta.y;

@@ -13,18 +13,6 @@ module Higherframe.Wireframe {
 
 
 		/**
-		 * Configuration/constants
-		 */
-
-		hitOptions = {
- 			segments: true,
- 			stroke: true,
- 			fill: true,
- 			tolerance: 5
- 		};
-
-
-		/**
 		 * Member variables
 		 */
 
@@ -36,8 +24,11 @@ module Higherframe.Wireframe {
 		dragSelectionOverlay;
 
 		// Drawing interaction
+		public selectedComponents: Array<Common.Drawing.Component.IComponent> = [];
+		public selectedArtboards: Array<Higherframe.Drawing.Artboard> = [];
+		public selectedDragHandles: Array<Common.Drawing.Component.DragHandle> = [];
+
 		hoveredItem;
-		selectedItems = [];
 		selectedSegment;
 		hoveredDragHandle;
 		selectedDragHandle;
@@ -52,8 +43,6 @@ module Higherframe.Wireframe {
 		layerAnnotations: paper.Layer;
 		layerSelections: paper.Layer;
 		layerGuides: paper.Layer;
-
-		lastMousePosition;
 
 		gridLines:{
 			x: Array<paper.Path>,
@@ -260,453 +249,17 @@ module Higherframe.Wireframe {
  			this.layerDrawing.activate();
  		}
 
+
 		/**
 		 * Event handlers
 		 */
 
-		onDrawMouseUp(event) {
-
-			// If dragging a drag handle
-			if (this.selectedDragHandle) {}
-
-			// If dragging an item
-			else if (this.selectedItems.length) {
-
-				this.selectedItems.forEach((item) => {
-
-					this.moveItems([item], {
-						position: item.position,
-						delta: event.delta
-					});
-
-					this.removeSmartGuides();
-					item.mouseDownDelta = null;
-					item.update();
-				});
-			}
-
-			else {
-
-				// End drag selection
-				this.endDragSelection();
-			}
-
-			this.selectedDragHandle = null;
-			this.selectedSegment = null;
-		}
-
-		onDrawMouseMove(event) {
-
-			// Return the last hovered item to default state
-			if (this.hoveredItem) {
-
-				if (this.selectedItems.indexOf(this.hoveredItem) !== -1) {
-
-					this.hoveredItem.hovered = false;
-				}
-
-				else if (this.hoveredItem.collaborator) {
-
-					this.hoveredItem.hovered = false;
-				}
-
-				else {
-
-					this.hoveredItem.hovered = false;
-				}
-			}
-
-			// Hit test a drag handle and set hover style
-			var hitResult = this.layerSelections.hitTest(event.point, this.hitOptions);
-
-			if (hitResult) {
-
-				var dragHandle = this.getDragHandle(hitResult.item);
-
-				if (dragHandle) {
-
-					this.hoveredDragHandle = dragHandle;
-				}
-
-				else {
-
-					this.hoveredDragHandle = null;
-				}
-			}
-
-			else {
-
-				this.hoveredDragHandle = null;
-			}
-
-			// Hit test a new item and set hover style
-			hitResult = this.layerDrawing.hitTest(event.point, this.hitOptions);
-
-			if (hitResult) {
-
-				var component = this.getTopmost(hitResult.item);
-
-				component.hovered = true;
-				this.hoveredItem = component;
-			}
-
-			// Set the cursor
-			if (this.hoveredDragHandle && this.hoveredDragHandle.cursor) {
-
-				this.element.css('cursor', this.hoveredDragHandle.cursor);
-			}
-
-			else {
-
-				this.element.css('cursor', 'default');
-			}
-		}
-
-		onDrawMouseDrag(event) {
-
-			// Pan when space bar is held
-			if (event.modifiers.space) {
-
-				// Can't use event.delta since the canvas moves
-				// and odd behaviour occurs. Use browser events
-				// instead
-				var position = new paper.Point(
-					event.event.screenX,
-					event.event.screenY
-				);
-
-				var delta = position.subtract(this.lastMousePosition);
-				this.lastMousePosition = position;
-
-				// Move the canvas
-				this.changeCenter(delta.x, delta.y);
-			}
-
-			// If dragging a drag handle
-			else if (this.selectedDragHandle) {
-
-				// The new position
-				var position:paper.Point = event.point.add(this.selectedDragHandle.mouseDownDelta);
-
-				// Position the drag handle
-				this.selectedDragHandle.position = this.selectedDragHandle.onMove
-					? this.selectedDragHandle.onMove(position)
-					: position;
-
-				// TODO: Currently supporting only one selected item
-				var item = this.selectedItems[0];
-
-				// Find a snap point
-				var smartGuideResult = this.updateSmartGuides(
-					item,
-					this.selectedDragHandle.getSnapPoints(this.selectedDragHandle.position)
-				);
-
-				// If a snap point was found
-				if (smartGuideResult) {
-
-					position = smartGuideResult.x ? position.add(smartGuideResult.x.getAdjustment()) : position;
-					position = smartGuideResult.y ? position.add(smartGuideResult.y.getAdjustment()) : position;
-
-					// Reposition the drag handle
-					this.selectedDragHandle.position = this.selectedDragHandle.onMove
-						? this.selectedDragHandle.onMove(position)
-						: position;
-				}
-
-				// Draw smart guides
-				if (smartGuideResult.x) { this.drawGuide(smartGuideResult.x); }
-				if (smartGuideResult.y) { this.drawGuide(smartGuideResult.y); }
-			}
-
-			// If dragging an item
-			else if (this.selectedItems.length) {
-
-				var bestSmartGuideResult: {
-					x?: Common.Drawing.SmartGuide,
-					y?: Common.Drawing.SmartGuide
-				} = {};
-
-				angular.forEach(this.selectedItems, (item) => {
-
-					// The new position
-					var position = event.point.add(item.mouseDownDelta);
-
-					// Position the item and its bounding box
-					item.position = position;
-
-					if (item.boundingBox) {
-
-							item.boundingBox.position = position;
-					}
-
-					this.updateDragHandles(item);
-
-					// Find a snap point
-					var smartGuideResult = this.updateSmartGuides(item);
-
-					// If a snap point was found
-					if (smartGuideResult) {
-
-						if (smartGuideResult.x) {
-
-							if (
-								!bestSmartGuideResult.x ||
-								smartGuideResult.x.score < bestSmartGuideResult.x.score
-							) {
-
-								bestSmartGuideResult.x = smartGuideResult.x;
-							}
-						}
-
-						if (smartGuideResult.y) {
-
-							if (
-								!bestSmartGuideResult.y ||
-								smartGuideResult.y.score < bestSmartGuideResult.y.score
-							) {
-
-								bestSmartGuideResult.y = smartGuideResult.y;
-							}
-						}
-					}
-				});
-
-				// Adjust items according to smart guides
-				angular.forEach(this.selectedItems, (item) => {
-
-					var position = item.position;
-
-					position = bestSmartGuideResult.x ? position.add(bestSmartGuideResult.x.getAdjustment()) : position;
-					position = bestSmartGuideResult.y ? position.add(bestSmartGuideResult.y.getAdjustment()) : position;
-
-					// Reposition the item and its bounding box
-					item.position = position;
-
-					if (item.boundingBox) {
-
-						item.boundingBox.position = position;
-					}
-
-					this.updateDragHandles(item);
-				});
-
-				// Draw smart guides
-				if (bestSmartGuideResult.x) { this.drawGuide(bestSmartGuideResult.x); }
-				if (bestSmartGuideResult.y) { this.drawGuide(bestSmartGuideResult.y); }
-			}
-
-			// If drag selecting
-			else if (this.isDragSelecting) {
-
-				this.updateDragSelection(event.downPoint, event.point);
-			}
-		}
-
-		onDrawMouseDown(event) {
-
-			this.lastMousePosition = new paper.Point(
-				event.event.screenX,
-				event.event.screenY
-			);
-
-			// If a drag handle is clicked
-			var hitResult = this.layerSelections.hitTest(event.point, this.hitOptions);
-
-			if (hitResult) {
-
-				var handle = this.getDragHandle(hitResult.item);
-
-				if (handle) {
-
-					this.selectedDragHandle = handle;
-
-					// Store where the mouse down point is in relation
-					// to the position of the handle
-					// This is used to position an handle correctly during
-					// a drag
-					this.selectedDragHandle.mouseDownDelta = this.selectedDragHandle.position.subtract(event.point);
-				}
-
-				return;
-			}
-
-			hitResult = this.layerDrawing.hitTest(event.point, this.hitOptions);
-
-			// Clear the last selection unless the shift key
-			// is held down, or the hit target is already selected
-			if (!event.modifiers.shift && !hitResult) {
-
-				this.clearSelection();
-			}
-
-			// If a component is clicked
-			if (hitResult) {
-
-				// Find the top-level group
-				var item = this.getTopmost(hitResult.item);
-
-				// Clear the last selection unless the shift key
-				// is held down, or the hit target is already selected
-				if (!event.modifiers.shift && this.selectedItems.indexOf(item) === -1) {
-
-					this.clearSelection();
-				}
-
-				// Select the hit target
-				if (hitResult.type == 'segment') {
-
-					this.selectedSegment = hitResult.segment;
-					this.selectItems([item]);
-				}
-
-				else if (hitResult.type == 'fill' || hitResult.type == 'stroke') {
-
-					this.selectItems([item]);
-				}
-
-				// Store where the mouse down point is in relation
-				// to the position of each selected item
-				// This is used to position an item correctly during
-				// a drag
-				angular.forEach(this.selectedItems, function (item) {
-
-					item.mouseDownDelta = item.position.subtract(event.point);
-				});
-
-				return;
-			}
-
-			// If no hit target start drag selection
-			this.startDragSelection(event.downPoint);
-		}
-
-		onDrawMouseWheel(event) {
-
-			event.preventDefault();
-
-			var mousePosition = new paper.Point(event.offsetX, event.offsetY);
-			this.changeCenter(-event.deltaX, event.deltaY);
-		}
-
 		onDrawKeyDown(event) {
 
-			switch (event.key) {
-				case 'backspace':
+			// Proxy the event to the currently active tool
+			if ((<any>paper.tool).keyDownHandler) {
 
-					if (this.selectedItems.length) {
-
-						this.removeItems(this.selectedItems);
-						event.event.preventDefault();
-					}
-
-					break;
-
-				// Nudge left on the left key
-				case 'left':
-
-					var amount = event.modifiers.shift ? -10 : -1;
-					if (this.selectedItems.length) {
-
-						this.nudge(this.selectedItems, amount, 0);
-					}
-
-					break;
-
-				// Nudge right on the right key
-				case 'right':
-
-					var amount = event.modifiers.shift ? 10 : 1;
-					if (this.selectedItems.length) {
-
-						this.nudge(this.selectedItems, amount, 0);
-					}
-
-					break;
-
-				// Nudge up on the up key
-				case 'up':
-
-					var amount = event.modifiers.shift ? -10 : -1;
-					if (this.selectedItems.length) {
-
-						this.nudge(this.selectedItems, 0, amount);
-					}
-
-					break;
-
-				// Nudge down on the down key
-				case 'down':
-
-					var amount = event.modifiers.shift ? 10 : 1;
-					if (this.selectedItems) {
-
-						this.nudge(this.selectedItems, 0, amount);
-					}
-
-					break;
-
-				// Move forward on the ']' key
-				case ']':
-
-					if (this.selectedItems) {
-
-						this.moveForward(this.selectedItems);
-					}
-
-					break;
-
-				// Move to front on the 'shift+]' key
-				case '}':
-
-					if (this.selectedItems) {
-
-						this.moveToFront(this.selectedItems);
-					}
-
-					break;
-
-				// Move backward on the '[' key
-				case '[':
-
-					if (this.selectedItems) {
-
-						this.moveBackward(this.selectedItems);
-					}
-
-					break;
-
-				// Move to back on the 'shift+[' key
-				case '{':
-
-					if (this.selectedItems) {
-
-						this.moveToBack(this.selectedItems);
-					}
-
-					break;
-
-				// Copy on the 'c' key
-				case 'c':
-
-					if (event.modifiers.command || event.modifiers.control) {
-
-						event.event.preventDefault();
-						this.scope.$emit('component:copied', this.selectedItems);
-					}
-
-					break;
-
-					// Paste on the 'v' key
-					case 'v':
-
-						if (event.modifiers.command || event.modifiers.control) {
-
-							event.event.preventDefault();
-							this.scope.$emit('component:pasted');
-						}
-
-						break;
+				(<any>paper.tool).keyDownHandler(event);
 			}
 		}
 
@@ -729,13 +282,13 @@ module Higherframe.Wireframe {
 
 		clearSelection() {
 
-			angular.forEach(this.selectedItems, (item) => {
+			angular.forEach(this.selectedComponents, (item) => {
 
 				item.focussed = false;
 			});
 
-			this.scope.$emit('componentsDeselected', this.selectedItems);
-			this.selectedItems = [];
+			this.scope.$emit('componentsDeselected', this.selectedComponents);
+			this.selectedComponents = [];
 
 			angular.forEach(this.layerDrawing.children, (item: Common.Drawing.Component.IComponent) => {
 
@@ -745,11 +298,11 @@ module Higherframe.Wireframe {
 
 		selectItems(items: Array<Common.Drawing.Component.IComponent>) {
 
-			var newSelectedItems = [];
+			var newselectedComponents = [];
 
 			angular.forEach(items, (item) => {
 
-				var exists = !!_.find(this.selectedItems, (selectedItem) => {
+				var exists = !!_.find(this.selectedComponents, (selectedItem) => {
 
 					return selectedItem.id == item.id;
 				});
@@ -757,14 +310,14 @@ module Higherframe.Wireframe {
 				if (!exists) {
 
 					item.focussed = true;
-					this.selectedItems.push(item);
+					this.selectedComponents.push(item);
 					this.onItemUpdated(item);
 					(<any>paper.view).draw();
-					newSelectedItems.push(item);
+					newselectedComponents.push(item);
 				}
 			});
 
-			this.scope.$emit('componentsSelected', newSelectedItems);
+			this.scope.$emit('componentsSelected', newselectedComponents);
 		}
 
 		removeItems(items: Array<Common.Drawing.Component.IComponent>) {
@@ -783,10 +336,10 @@ module Higherframe.Wireframe {
 					this.components.splice(index, 1);
 				}
 
-				index = this.selectedItems.indexOf(item);
+				index = this.selectedComponents.indexOf(item);
 				if (index !== -1) {
 
-					this.selectedItems.splice(index, 1);
+					this.selectedComponents.splice(index, 1);
 				}
 
 				this.updateBoundingBoxes();
@@ -794,17 +347,7 @@ module Higherframe.Wireframe {
 			}
 		}
 
-		moveItems(items: Array<Common.Drawing.Component.IComponent>, event: Common.Drawing.Component.IComponentMoveEvent) {
-
-			angular.forEach(items, (item) => {
-
-				item.position = event.position;
-
-				if (item.onMove) { item.onMove(event); }
-
-				this.updateBoundingBoxes();
-				this.updateDragHandles(item);
-			});
+		moveItems(items: Array<Common.Drawing.Component.IComponent>) {
 
 			this.scope.$emit('componentsMoved', items);
 		}
@@ -898,7 +441,7 @@ module Higherframe.Wireframe {
 
 				case Common.Drawing.EditMode.Draw:
 
-					Wireframe.Tools.Draw.get().activate();
+					Wireframe.Tools.Draw.get(this).activate();
 
 					// Clean up
 					this.artboards.forEach((artboard) => {
@@ -1002,10 +545,10 @@ module Higherframe.Wireframe {
 		endDragSelection() {
 
 			// Select the items in the rectangle
-			angular.forEach(this.layerDrawing.children, (item) => {
+			angular.forEach(this.layerDrawing.children, (item: Common.Drawing.Component.IComponent) => {
 
 				if (item.isInside(this.dragSelectionRectangle) &&
-					this.selectedItems.indexOf(item) === -1
+					this.selectedComponents.indexOf(item) === -1
 				) {
 
 					this.selectItems([<Common.Drawing.Component.Base>item]);
@@ -1067,7 +610,7 @@ module Higherframe.Wireframe {
 
 		// Given a paper item, finds the next item in its
 		// hierarchy with a given class name.
-		getDragHandle(item: paper.Item): paper.Item {
+		getDragHandle(item: paper.Item): Common.Drawing.Component.DragHandle {
 
 			var result = item;
 
@@ -1122,7 +665,7 @@ module Higherframe.Wireframe {
 			});
 
 			// Draw the bounding box for the current user's selection
-			this.drawBoundingBox(this.selectedItems, this.theme.BoundsDefault);
+			this.drawBoundingBox(this.selectedComponents, this.theme.BoundsDefault);
 		}
 
 		removeBoundingBoxes() {
@@ -1222,7 +765,7 @@ module Higherframe.Wireframe {
 		 */
 		updateDragHandles(item) {
 
-			var selected = (this.selectedItems.indexOf(item) !== -1);
+			var selected = (this.selectedComponents.indexOf(item) !== -1);
 
 			if (selected && !item.dragHandles) {
 
@@ -1288,10 +831,10 @@ module Higherframe.Wireframe {
 			// TODO: Whittle down to elements in the nearby area
 
 			// Work through each element
-			this.layerDrawing.children.forEach((relation) => {
+			this.layerDrawing.children.forEach((relation: Common.Drawing.Component.IComponent) => {
 
 				// Don't compare target element with other selected elements
-				if (this.selectedItems.indexOf(relation) !== -1) {
+				if (this.selectedComponents.indexOf(relation) !== -1) {
 
 					return;
 				}
