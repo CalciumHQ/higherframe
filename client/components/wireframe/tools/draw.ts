@@ -37,6 +37,10 @@ module Higherframe.Wireframe.Tools {
       if (canvas) {
 
         Draw.tool.canvas = canvas;
+
+        // Apply mousewheel event to canvas element if it doesn't have an
+        // attached handler already
+        (<any>$(canvas.element)).unbind('mousewheel');
         (<any>$(canvas.element)).mousewheel((event) => Draw.tool.mouseWheelHandler.call(Draw.tool, event));
       }
 
