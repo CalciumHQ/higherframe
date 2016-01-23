@@ -91,7 +91,7 @@ module Higherframe.Wireframe {
 					this.changeCenter(center, null);
 				});
 
-				scope.$on('artboard:added', (e, data) => {
+				scope.$on('controller:artboard:added', (e, data) => {
 
 					data.artboards.forEach((artboard: Higherframe.Drawing.Artboard) => {
 
@@ -101,6 +101,25 @@ module Higherframe.Wireframe {
 						this.layerArtboards.addChild(artboard);
 
 						artboard.update(this);
+					});
+				});
+
+				scope.$on('controller:artboard:updated', (e, data) => {
+
+					var model = data.artboard;
+
+					// Find the artboard with the corresponding data model
+					this.layerArtboards.children.forEach((artboard: Higherframe.Drawing.Artboard) => {
+
+						if (artboard.model._id == model._id) {
+
+			        // Merge the changes into the view component object
+			        artboard.model = angular.extend(artboard.model, model);
+							artboard.sync();
+
+			        // Update
+							artboard.update(this);
+						}
 					});
 				});
 
@@ -320,6 +339,30 @@ module Higherframe.Wireframe {
 			this.scope.$emit('componentsSelected', newselectedComponents);
 		}
 
+		public removeArtboards(artboards: Array<Higherframe.Drawing.Artboard>) {
+
+			this.scope.$emit('view:artboard:deleted', artboards);
+
+			while(artboards.length) {
+
+				var artboard = artboards[artboards.length-1];
+
+				artboard.remove();
+
+				var index = this.artboards.indexOf(artboard);
+				if (index !== -1) {
+
+					this.artboards.splice(index, 1);
+				}
+
+				index = this.selectedArtboards.indexOf(artboard);
+				if (index !== -1) {
+
+					this.selectedArtboards.splice(index, 1);
+				}
+			}
+		}
+
 		removeItems(items: Array<Common.Drawing.Component.IComponent>) {
 
 			this.scope.$emit('componentsDeleted', items);
@@ -345,6 +388,11 @@ module Higherframe.Wireframe {
 				this.updateBoundingBoxes();
 				this.removeDragHandles(item);
 			}
+		}
+
+		public commitArtboards(artboards: Array<Higherframe.Drawing.Artboard>) {
+
+			this.scope.$emit('view:artboard:updated', artboards);
 		}
 
 		moveItems(items: Array<Common.Drawing.Component.IComponent>) {

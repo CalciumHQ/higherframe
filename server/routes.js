@@ -12,7 +12,7 @@ module.exports = function(app) {
   app.use('/api/projects', require('./api/project'));
   app.use('/api/frames', require('./api/frame'));
 	app.use('/api/components', require('./api/component'));
-  app.use('/api/artboard', require('./api/artboard'));
+  app.use('/api/artboards', require('./api/artboard'));
   app.use('/api/images', require('./api/image'));
   app.use('/api/media', require('./api/media'));
   app.use('/api/exports', require('./api/export'));

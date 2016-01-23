@@ -3,6 +3,8 @@ module Higherframe.Drawing {
 
   export class Artboard extends paper.Group {
 
+    model: Common.Data.IArtboard;
+
     name: string;
     width: number;
     height: number;
@@ -17,14 +19,34 @@ module Higherframe.Drawing {
 
       super();
 
-      this.name = model.name;
-      this.width = model.width;
-      this.height = model.height;
-      this.left = model.left;
-      this.top = model.top;
+      this.model = model;
+      this.initFromModel();
     }
 
-    update(canvas: any) {
+    private initFromModel() {
+
+      this.name = this.model.name;
+      this.width = this.model.width;
+      this.height = this.model.height;
+      this.left = this.model.left;
+      this.top = this.model.top;
+    }
+
+    public commit() {
+
+      this.model.name = this.name;
+      this.model.width = this.width;
+      this.model.height = this.height;
+      this.model.left = this.left;
+      this.model.top = this.top;
+    }
+
+    public sync() {
+
+      this.initFromModel();
+    }
+
+    public update(canvas: any) {
 
       // Determine palette
       var theme: Common.UI.ITheme = new Common.UI.DefaultTheme();
@@ -62,7 +84,7 @@ module Higherframe.Drawing {
 
 			else {
 
-				background.strokeColor = 'rgba(0,0,0,0)'; 
+				background.strokeColor = 'rgba(0,0,0,0)';
 			}
 
 			background.strokeWidth = 1 / paper.view.zoom;

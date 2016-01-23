@@ -5,6 +5,10 @@ var mongoose = require('mongoose'),
 
 var ArtboardSchema = new Schema({
 	lastModifiedBy: String,
+  frame: {
+    type: Schema.ObjectId,
+    ref: 'Frame'
+  },
   name: {
     type: String,
     default: 'New artboard'

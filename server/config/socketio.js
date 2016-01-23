@@ -65,5 +65,6 @@ module.exports = function (socketio) {
   require('../api/frame/frame.socket').init(socketio);
   require('../api/project/project.socket').init(socketio);
   require('../api/component/component.socket').init(socketio);
+  require('../api/artboard/artboard.socket').init(socketio);
   require('../api/activity/activity.socket').init(socketio);
 };

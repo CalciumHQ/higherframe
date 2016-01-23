@@ -2,7 +2,7 @@
 module Common.Data {
 
   export interface IArtboard extends ng.resource.IResource<IArtboard> {
-    id: string,
+    _id: string,
     name: string,
     width: number,
     height: number,
@@ -21,6 +21,6 @@ module Common.Data {
       isArray: false
     };
 
-    return <IArtboardResource>$resource('/api/artboards/:id', { id: '@id' }, { update: updateAction });
+    return <IArtboardResource>$resource('/api/artboards/:id', { id: '@_id' }, { update: updateAction });
   }
 }

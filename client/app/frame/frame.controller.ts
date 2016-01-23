@@ -21,6 +21,7 @@ class FrameCtrl {
     center: { x: 0, y: 0 }
   };
 
+	artboards:Array<Common.Data.IArtboard> = [];
   components:Array<any> = [];
   selection: Array<Common.Drawing.Component.IComponent> = [];
 
@@ -85,6 +86,7 @@ class FrameCtrl {
     private Auth,
     private TrayManager: Higherframe.UI.Tray.Manager,
     private ModalManager: Higherframe.UI.Modal.Manager,
+		private Artboard: Common.Data.IArtboardResource,
     private Activity: Higherframe.Data.IActivityResource,
     Clipboard: Higherframe.Utilities.Clipboard,
 		ComponentLibrary: Higherframe.Drawing.Component.Library.IService,
@@ -249,6 +251,16 @@ class FrameCtrl {
      * Wireframe notifications
      */
 
+		$scope.$on('view:artboard:updated', (e, artboards) => {
+
+			this.saveArtboards(artboards);
+		});
+
+		$scope.$on('view:artboard:deleted', (e, artboards) => {
+
+			this.deleteArtboards(artboards);
+		});
+
     $scope.$on('componentsMoved', function (e, components) {
 
   		angular.forEach(components, function (component) {
@@ -389,6 +401,32 @@ class FrameCtrl {
 			}
 		});
 
+		// Artboards updating
+		this.socket.syncUpdates('artboard', this.artboards, function (event, artboard, array) {
+
+			// If the event was triggered by this session
+			// don't update
+			if (artboard.lastModifiedBy == that.Session.getSessionId()) {
+
+				return;
+			}
+
+			if (event == 'created') {
+
+				that.addArtboardsToView([artboard], { select: false });
+			}
+
+			else if (event == 'updated') {
+
+				that.updateArtboardInView(artboard);
+			}
+
+			else if (event == 'deleted') {
+
+				// that.removeArtboardFromView(artboard);
+			}
+		});
+
     // Activity updating
     this.socket.syncUpdates('activity', this.activities);
 
@@ -434,9 +472,7 @@ class FrameCtrl {
 
   private initializeTool() {
 
-		var tool = Higherframe.Wireframe.Tools.Draw.get();
-
-    tool.onKeyDown = (event) => {
+    var handler = (event) => {
 
       // Special cases
       // Using the command/control modifier outputs special characters for the
@@ -552,6 +588,9 @@ class FrameCtrl {
           this.$scope.$broadcast('event:keydown', event);
       }
     };
+
+		Higherframe.Wireframe.Tools.Draw.get().onKeyDown = handler;
+		Higherframe.Wireframe.Tools.Artboards.get().onKeyDown = handler;
   }
 
 
@@ -574,13 +613,23 @@ class FrameCtrl {
 
       document.components.forEach((component) => {
 
+				// Store reference
 				this.components.push(component);
+
+				// Add to view
         this.addComponentsToView(component, { select: false });
       });
 
 			document.artboards.forEach((artboard) => {
 
-        this.addArtboardsToView(artboard, { select: false });
+				// Wrap data in a resource to allow direct updating of artboard
+				var resource = new this.Artboard(artboard);
+
+				// Store reference
+				this.artboards.push(resource);
+
+				// Add to view
+        this.addArtboardsToView(resource, { select: false });
       });
 
     }, 200);
@@ -609,6 +658,15 @@ class FrameCtrl {
 	 * Data methods
 	 */
 
+	public saveArtboards(artboards: Array<Higherframe.Drawing.Artboard>) {
+
+		artboards.forEach((artboard: Higherframe.Drawing.Artboard) => {
+
+			artboard.commit();
+			this.Artboard.update(artboard.model);
+		});
+	}
+
 	private saveComponents(components: any) {
 
     var that = this;
@@ -616,11 +674,6 @@ class FrameCtrl {
     if (!angular.isArray(components)) {
 
       components = [components];
-    }
-
-    if (!components.length) {
-
-      return;
     }
 
     // Save components and set _id when saved
@@ -657,6 +710,14 @@ class FrameCtrl {
 	        });
 			}
     });
+	};
+
+	private deleteArtboards(artboards: Array<Higherframe.Drawing.Artboard>) {
+
+		artboards.forEach((artboard) => {
+
+			artboard.model.$delete();
+		});
 	};
 
 	private deleteComponent(component) {
@@ -711,7 +772,7 @@ class FrameCtrl {
     });
 
     // Tell the view new components have been added
-    this.$scope.$broadcast('artboard:added', {
+    this.$scope.$broadcast('controller:artboard:added', {
       artboards: instances,
       options: options
     });
@@ -765,6 +826,11 @@ class FrameCtrl {
 				item.remove();
 			}
 		});
+	};
+
+	private updateArtboardInView(artboard) {
+
+		this.$scope.$broadcast('controller:artboard:updated', { artboard: artboard });
 	};
 
 	private updateComponentInView(component) {

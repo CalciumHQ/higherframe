@@ -9112,7 +9112,7 @@ declare module 'higherframe-common/library/common' {
 }
 declare module Common.Data {
     interface IArtboard extends ng.resource.IResource<IArtboard> {
-        id: string;
+        _id: string;
         name: string;
         width: number;
         height: number;
@@ -9234,6 +9234,7 @@ declare module Common.Data {
 }
 declare module Higherframe.Drawing {
     class Artboard extends paper.Group {
+        model: Common.Data.IArtboard;
         name: string;
         width: number;
         height: number;
@@ -9243,6 +9244,9 @@ declare module Higherframe.Drawing {
         active: boolean;
         focussed: boolean;
         constructor(model: Common.Data.IArtboard);
+        private initFromModel();
+        commit(): void;
+        sync(): void;
         update(canvas: any): void;
     }
 }

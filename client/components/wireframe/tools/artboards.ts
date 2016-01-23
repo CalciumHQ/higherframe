@@ -20,11 +20,18 @@ module Higherframe.Wireframe.Tools {
      * Exposes a singleton tool for the artboards edit mode
      */
 
-    public static get(canvas: Higherframe.Wireframe.Canvas): Wireframe.Tools.Artboards {
+    public static get(canvas?: Higherframe.Wireframe.Canvas): Wireframe.Tools.Artboards {
 
       if (!Artboards.tool) {
 
         Artboards.tool = new Wireframe.Tools.Artboards(canvas);
+      }
+
+      // Update the canvas reference, even if the singleton has already been
+      // instantiated
+      if (canvas) {
+
+        Artboards.tool.canvas = canvas;
       }
 
       return Artboards.tool;
@@ -35,7 +42,7 @@ module Higherframe.Wireframe.Tools {
      * Constructor
      */
 
-    constructor(private canvas: Higherframe.Wireframe.Canvas) {
+    constructor(private canvas?: Higherframe.Wireframe.Canvas) {
 
       super();
 
@@ -87,8 +94,11 @@ module Higherframe.Wireframe.Tools {
         delete item.dragStart;
       });
 
-      // Mark the drag as started
+      // Mark the drag as ended
       this.dragging = false;
+
+      // Commit the changes
+      this.canvas.commitArtboards(this.canvas.selectedArtboards);
     }
 
 
@@ -98,14 +108,21 @@ module Higherframe.Wireframe.Tools {
 
     private mouseDownHandler(event) {
 
-      this.clearSelection();
-
       // Look for a clicked artboard
-      var hitResult = this.canvas.layerArtboards.hitTest(event.point, this.hitOptions);
+      var artboardHitResult = this.canvas.layerArtboards.hitTest(event.point, this.hitOptions);
 
-      if (hitResult) {
+      var artboard: Higherframe.Drawing.Artboard = artboardHitResult
+        ? this.canvas.getTopmost(artboardHitResult.item)
+        : null;
 
-        var artboard: Higherframe.Drawing.Artboard = this.canvas.getTopmost(hitResult.item);
+      // Clear the selection if the shift key isn't held, and
+      // the area clicked isn't part of the existing selection
+      if (!(event.modifiers.shift || (artboard && artboard.focussed))) {
+
+        this.clearSelection();
+      }
+
+      if (artboard) {
 
         // Select the artboard
         artboard.focussed = true;
@@ -200,6 +217,24 @@ module Higherframe.Wireframe.Tools {
 
         artboard.update(this.canvas);
       });
+    }
+
+
+    /**
+     * Key down handler
+     */
+
+    private keyDownHandler(event) {
+
+      switch (event.key) {
+
+				case 'backspace':
+
+					this.canvas.removeArtboards(this.canvas.selectedArtboards);
+					event.event.preventDefault();
+
+					break;
+      }
     }
   }
 }
