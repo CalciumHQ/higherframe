@@ -5,8 +5,8 @@ module Higherframe.Wireframe.Tools {
 
     private static tool: Wireframe.Tools.Artboards;
 
-    private dragging: boolean = false;
-    private dragStart: paper.Point;
+    private dragRect: paper.Rectangle;
+    private dragPreview: paper.Item;
 
     private hitOptions = {
  			segments: true,
@@ -49,6 +49,7 @@ module Higherframe.Wireframe.Tools {
       this.onMouseMove = this.mouseMoveHandler;
       this.onMouseDown = this.mouseDownHandler;
       this.onMouseUp = this.mouseUpHandler;
+      this.onMouseDrag = this.mouseDragHandler;
     }
 
 
@@ -56,7 +57,7 @@ module Higherframe.Wireframe.Tools {
      * Manipulation functions
      */
 
-    clearSelection() {
+    private clearSelection() {
 
       // Clear old artboard focussed states
       this.canvas.selectedArtboards.forEach((artboard: Higherframe.Drawing.Artboard) => {
@@ -67,10 +68,7 @@ module Higherframe.Wireframe.Tools {
       this.canvas.selectedArtboards = [];
     }
 
-    startDrag(event) {
-
-      // Store the start point of the drag
-      this.dragStart = event.downPoint;
+    private startDrag(event) {
 
       // Annotate the dragged elements with their starting position
       this.canvas.selectedArtboards.forEach((artboard) => {
@@ -78,15 +76,19 @@ module Higherframe.Wireframe.Tools {
         (<any>artboard).dragStartLeft = artboard.left;
         (<any>artboard).dragStartTop = artboard.top;
       });
-
-      // Mark the drag as started
-      this.dragging = true;
     }
 
-    resetDrag() {
+    private resetDrag() {
 
-      // Clear the start point of the drag
-      this.dragStart = null;
+      // Clear the drag rectangle
+      this.dragRect = null;
+
+      // Clear the drag preview
+      if (this.dragPreview) {
+
+        this.dragPreview.remove();
+        this.dragPreview = null;
+      }
 
       // Clear the start position annotation on the dragged elements
       this.canvas.selectedArtboards.forEach((item: any) => {
@@ -94,11 +96,13 @@ module Higherframe.Wireframe.Tools {
         delete item.dragStart;
       });
 
-      // Mark the drag as ended
-      this.dragging = false;
-
       // Commit the changes
       this.canvas.commitArtboards(this.canvas.selectedArtboards);
+    }
+
+    private createArtboard(bounds: paper.Rectangle) {
+
+      this.canvas.createArtboard(bounds);
     }
 
 
@@ -136,16 +140,17 @@ module Higherframe.Wireframe.Tools {
       this.canvas.updateArtboards();
     }
 
-    private mouseDownFooHandler() {
-
-    }
-
 
     /**
      * Mouse up handlers
      */
 
     private mouseUpHandler(event) {
+
+      if (this.dragRect) {
+
+        this.createArtboard(this.dragRect);
+      }
 
       this.resetDrag();
     }
@@ -157,28 +162,7 @@ module Higherframe.Wireframe.Tools {
 
     private mouseMoveHandler(event) {
 
-      // Dragging
-      if (this.dragging) {
-
-        // Dragging a component
-        if (this.canvas.selectedArtboards.length) {
-
-          this.mouseMoveDragHandler(event);
-        }
-
-        // Drawing a select box
-        else {
-
-          this.mouseMoveSelectHandler(event);
-        }
-      }
-
-      // Not dragging
-      else {
-
-        this.mouseMoveHighlightHandler(event);
-      }
-
+      this.mouseMoveHighlightHandler(event);
     }
 
     private mouseMoveHighlightHandler(event) {
@@ -196,19 +180,42 @@ module Higherframe.Wireframe.Tools {
 
         var artboard: Higherframe.Drawing.Artboard = this.canvas.getTopmost(hitResult.item);
         artboard.hovered = true;
+
+        this.canvas.setCursor(Common.Drawing.Cursors.Move);
+      }
+
+      else {
+
+        this.canvas.setCursor(Common.Drawing.Cursors.Crosshair);
       }
 
       // Update artboards
       this.canvas.updateArtboards();
     }
 
-    private mouseMoveSelectHandler(event) {
 
+    /**
+     * Mouse drag handler
+     */
+
+    private mouseDragHandler(event) {
+
+      // Dragging an artboard
+      if (this.canvas.selectedArtboards.length) {
+
+        this.mouseDragMoveHandler(event);
+      }
+
+      // Draw a new artboard
+      else {
+
+        this.mouseDragDrawHandler(event);
+      }
     }
 
-    private mouseMoveDragHandler(event) {
+    private mouseDragMoveHandler(event) {
 
-      var delta = event.point.subtract(this.dragStart);
+      var delta = event.point.subtract(event.downPoint);
 
       this.canvas.selectedArtboards.forEach((artboard) => {
 
@@ -217,6 +224,22 @@ module Higherframe.Wireframe.Tools {
 
         artboard.update(this.canvas);
       });
+    }
+
+    private mouseDragDrawHandler(event) {
+
+      this.dragRect = new paper.Rectangle(event.downPoint, event.lastPoint);
+
+      if (this.dragPreview) {
+
+        this.dragPreview.remove();
+      }
+
+      this.canvas.layerSelections.activate();
+      this.dragPreview = paper.Path.Rectangle(this.dragRect);
+      this.dragPreview.strokeWidth = 1 / paper.view.zoom;
+      this.dragPreview.strokeColor = this.canvas.theme.ComponentFocus;
+      this.canvas.layerArtboards.activate();
     }
 
 

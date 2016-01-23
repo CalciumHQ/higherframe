@@ -3,6 +3,8 @@ module Common.Data {
 
   export interface IArtboard extends ng.resource.IResource<IArtboard> {
     _id: string,
+    frame: string,
+    lastModifiedBy: string,
     name: string,
     width: number,
     height: number,

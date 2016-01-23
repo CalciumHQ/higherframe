@@ -9113,6 +9113,8 @@ declare module 'higherframe-common/library/common' {
 declare module Common.Data {
     interface IArtboard extends ng.resource.IResource<IArtboard> {
         _id: string;
+        frame: string;
+        lastModifiedBy: string;
         name: string;
         width: number;
         height: number;

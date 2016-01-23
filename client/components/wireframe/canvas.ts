@@ -93,6 +93,14 @@ module Higherframe.Wireframe {
 
 				scope.$on('controller:artboard:added', (e, data) => {
 
+					// Insertion options
+					var defaults = {
+						select: true
+					};
+
+					var options = angular.extend(defaults, data.options || {});
+
+					// Add the artboards
 					data.artboards.forEach((artboard: Higherframe.Drawing.Artboard) => {
 
 						this.artboards.push(artboard);
@@ -101,6 +109,28 @@ module Higherframe.Wireframe {
 						this.layerArtboards.addChild(artboard);
 
 						artboard.update(this);
+					});
+
+					// Select new artboards if requested
+					if (options.select) {
+
+						this.clearArtboardSelection();
+						// this.selectArtboards(data.artboards);
+					}
+				});
+
+				scope.$on('controller:artboard:removed', (e, data) => {
+
+					var model = data.artboard;
+
+					// Find the artboard with the corresponding data model
+					this.layerArtboards.children.forEach((artboard: Higherframe.Drawing.Artboard) => {
+
+						if (artboard.model._id == model._id) {
+
+			        // Remove the artboard
+							artboard.remove();
+						}
 					});
 				});
 
@@ -147,7 +177,7 @@ module Higherframe.Wireframe {
 					// Select new components if requested
 					if (options.select) {
 
-						this.clearSelection();
+						this.clearComponentSelection();
 						this.selectItems(data.components);
 					}
 
@@ -299,7 +329,18 @@ module Higherframe.Wireframe {
 		 * Data methods
 		 */
 
-		clearSelection() {
+		public clearArtboardSelection() {
+
+ 			angular.forEach(this.selectedArtboards, (artboard) => {
+
+ 				artboard.focussed = false;
+ 			});
+
+ 			this.scope.$emit('view:artboard:deselected', this.selectedArtboards);
+ 			this.selectedArtboards = [];
+ 		}
+
+		public clearComponentSelection() {
 
 			angular.forEach(this.selectedComponents, (item) => {
 
@@ -313,6 +354,30 @@ module Higherframe.Wireframe {
 
 				this.onItemUpdated(item);
 			});
+		}
+
+		public selectArtboards(artboards: Array<Higherframe.Drawing.Artboard>) {
+
+			var newselectedArtboards = [];
+
+			artboards.forEach((artboard) => {
+
+				var exists = !!_.find(this.selectedArtboards, (selectedArtboard) => {
+
+					return selectedArtboard.id == artboard.id;
+				});
+
+				if (!exists) {
+
+					artboard.focussed = true;
+					this.selectedArtboards.push(artboard);
+					newselectedArtboards.push(artboard);
+
+					artboard.update(this);
+				}
+			});
+
+			this.scope.$emit('view:artboard:selected', newselectedArtboards);
 		}
 
 		selectItems(items: Array<Common.Drawing.Component.IComponent>) {
@@ -388,6 +453,26 @@ module Higherframe.Wireframe {
 				this.updateBoundingBoxes();
 				this.removeDragHandles(item);
 			}
+		}
+
+		public createArtboard(bounds: paper.Rectangle) {
+
+			var data: any = {
+				left: bounds.left,
+				top: bounds.top,
+				width: bounds.width,
+				height: bounds.height
+			};
+
+			// Find a suitable name
+			var i = 1;
+			while(_.find(this.artboards, (artboard) => artboard.name == `Artboard ${i}`)) {
+
+				i++;
+			}
+			data.name = `Artboard ${i}`;
+
+			this.scope.$emit('view:artboard:create', [data]);
 		}
 
 		public commitArtboards(artboards: Array<Higherframe.Drawing.Artboard>) {
@@ -479,6 +564,11 @@ module Higherframe.Wireframe {
 		/**
 		 * View methods
 		 */
+
+		setCursor(cursor: Common.Drawing.Cursor) {
+
+			this.element.css('cursor', <string>cursor);
+		}
 
 		setEditMode(mode: Common.Drawing.EditMode) {
 

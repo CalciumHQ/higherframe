@@ -251,6 +251,11 @@ class FrameCtrl {
      * Wireframe notifications
      */
 
+		$scope.$on('view:artboard:create', (e, artboards) => {
+
+ 			this.createArtboards(artboards);
+ 		});
+
 		$scope.$on('view:artboard:updated', (e, artboards) => {
 
 			this.saveArtboards(artboards);
@@ -402,28 +407,34 @@ class FrameCtrl {
 		});
 
 		// Artboards updating
-		this.socket.syncUpdates('artboard', this.artboards, function (event, artboard, array) {
+		this.socket.syncUpdates('artboard', this.artboards, (event, artboard, array) => {
 
 			// If the event was triggered by this session
 			// don't update
-			if (artboard.lastModifiedBy == that.Session.getSessionId()) {
+			if (artboard.lastModifiedBy == this.Session.getSessionId()) {
 
 				return;
 			}
 
 			if (event == 'created') {
 
-				that.addArtboardsToView([artboard], { select: false });
+				// Object is raw JSON. Replace with a resource representation so we can
+				// update the artboard directly.
+				var index = this.artboards.indexOf(artboard);
+				var resource = new this.Artboard(artboard);
+				this.artboards[index] = resource;
+
+				this.addArtboardsToView([resource], { select: false });
 			}
 
 			else if (event == 'updated') {
 
-				that.updateArtboardInView(artboard);
+				this.updateArtboardInView(artboard);
 			}
 
 			else if (event == 'deleted') {
 
-				// that.removeArtboardFromView(artboard);
+				this.removeArtboardFromView(artboard);
 			}
 		});
 
@@ -658,11 +669,34 @@ class FrameCtrl {
 	 * Data methods
 	 */
 
+	public createArtboards(datas: Array<Common.Data.IArtboard>) {
+
+		var models = datas.map((data) => {
+
+			data.frame = this.frame._id;
+			return new this.Artboard(data)
+		});
+
+		var artboards = this.addArtboardsToView(models);
+		artboards.forEach((artboard) => {
+
+			artboard.model.lastModifiedBy = this.Session.getSessionId();
+			artboard.model
+				.$save()
+				.then((response) => {
+
+					// Copy _id into new artboard
+					this.updateArtboardInView(response);
+				});
+		});
+	}
+
 	public saveArtboards(artboards: Array<Higherframe.Drawing.Artboard>) {
 
 		artboards.forEach((artboard: Higherframe.Drawing.Artboard) => {
 
 			artboard.commit();
+			artboard.model.lastModifiedBy = this.Session.getSessionId();
 			this.Artboard.update(artboard.model);
 		});
 	}
@@ -751,7 +785,7 @@ class FrameCtrl {
 		this.$scope.$broadcast('editMode:set', this.editMode);
 	}
 
-	private addArtboardsToView(artboards, options?) {
+	private addArtboardsToView(artboards, options?): Array<Higherframe.Drawing.Artboard> {
 
 		if (!angular.isArray(artboards)) {
 
@@ -764,7 +798,7 @@ class FrameCtrl {
     }
 
 		// Create the artboards in the view
-    var instances = [];
+    var instances: Array<Higherframe.Drawing.Artboard> = [];
     artboards.forEach((artboard: Common.Data.IArtboard) => {
 
       var instance = new Higherframe.Drawing.Artboard(artboard);
@@ -779,6 +813,16 @@ class FrameCtrl {
 
 		return instances;
 	}
+
+	private removeArtboardFromView(artboard) {
+
+		this.$scope.$broadcast('controller:artboard:removed', { artboard: artboard });
+	}
+
+	private updateArtboardInView(artboard) {
+
+		this.$scope.$broadcast('controller:artboard:updated', { artboard: artboard });
+	};
 
 
   private addComponentsToView(components, options?) {
@@ -826,11 +870,6 @@ class FrameCtrl {
 				item.remove();
 			}
 		});
-	};
-
-	private updateArtboardInView(artboard) {
-
-		this.$scope.$broadcast('controller:artboard:updated', { artboard: artboard });
 	};
 
 	private updateComponentInView(component) {

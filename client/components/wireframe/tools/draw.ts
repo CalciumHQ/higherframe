@@ -285,6 +285,13 @@ module Higherframe.Wireframe.Tools {
         var component: Common.Drawing.Component.IComponent = this.canvas.getTopmost(hitResult.item);
         component.hovered = true;
         component.update();
+
+        this.canvas.setCursor(Common.Drawing.Cursors.Move);
+      }
+
+      else {
+
+        this.canvas.setCursor(Common.Drawing.Cursors.Default);
       }
     }
 
