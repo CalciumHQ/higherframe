@@ -2,18 +2,27 @@
   "development": {
     "ga": {
       "ua": "UA-72702533-2"
+    },
+    "mixpanel": {
+      "key": "af59676d763430037ae39d86282dbaca"
     }
   },
 
   "staging": {
     "ga": {
       "ua": "UA-72702533-2"
+    },
+    "mixpanel": {
+      "key": "af59676d763430037ae39d86282dbaca"
     }
   },
 
   "production": {
     "ga": {
       "ua": "UA-72702533-1"
+    },
+    "mixpanel": {
+      "key": "43f5ab2389c819aca2d4c638752c3400"
     }
   }
 }

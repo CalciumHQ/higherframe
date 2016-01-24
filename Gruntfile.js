@@ -74,6 +74,24 @@ module.exports = function (grunt) {
             dest: '.tmp'
           }
         ]
+      },
+
+      scripts: {
+        options: {
+          patterns: [
+            {
+              json: require('./client/config.json')[env]
+            }
+          ]
+        },
+        files: [
+          {
+            expand: true,
+            flatten: true,
+            src: ['.tmp/app/app.js'],
+            dest: '.tmp/app'
+          }
+        ]
       }
     },
 
