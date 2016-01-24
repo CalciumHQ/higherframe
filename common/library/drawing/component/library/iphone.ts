@@ -140,7 +140,13 @@ module Common.Drawing.Component.Library {
         new SnapPoint(this.position.add(new paper.Point({ x: -110, y: -184 })), 'inner corner', 'inner corner', 0.8),
         new SnapPoint(this.position.add(new paper.Point({ x: 110, y: -184 })), 'inner corner', 'inner corner', 0.8),
         new SnapPoint(this.position.add(new paper.Point({ x: 110, y: 162 })), 'inner corner', 'inner corner', 0.8),
-        new SnapPoint(this.position.add(new paper.Point({ x: -110, y: 162 })), 'inner corner', 'inner corner', 0.8)
+        new SnapPoint(this.position.add(new paper.Point({ x: -110, y: 162 })), 'inner corner', 'inner corner', 0.8),
+
+        // Inner screen margins
+        new SnapPoint(this.position.add(new paper.Point({ x: -95, y: -169 })), 'margin', 'margin', 0.8),
+        new SnapPoint(this.position.add(new paper.Point({ x: 95, y: -169 })), 'margin', 'margin', 0.8),
+        new SnapPoint(this.position.add(new paper.Point({ x: 95, y: 147 })), 'margin', 'margin', 0.8),
+        new SnapPoint(this.position.add(new paper.Point({ x: -95, y: 147 })), 'margin', 'margin', 0.8)
       ];
     }
   }

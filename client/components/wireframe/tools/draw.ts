@@ -304,6 +304,14 @@ module Higherframe.Wireframe.Tools {
 
       var delta = event.point.subtract(this.dragStart);
 
+      // TODO: Currently supporting only one selected item
+      var item = this.canvas.selectedComponents[0];
+
+      var bestSmartGuideResult: {
+        x?: Common.Drawing.SmartGuide,
+        y?: Common.Drawing.SmartGuide
+      } = {};
+
       this.canvas.selectedDragHandles.forEach((handle) => {
 
         // The new position
@@ -313,7 +321,54 @@ module Higherframe.Wireframe.Tools {
         handle.position = handle.onMove
           ? handle.onMove(position)
           : position;
+
+				// Find a snap point
+				var smartGuideResult = this.canvas.updateSmartGuides(
+          item,
+          handle.getSnapPoints(handle.position)
+        );
+
+        // Store if best smart guide match
+        if (smartGuideResult.x) {
+
+          if (
+            !bestSmartGuideResult.x ||
+            smartGuideResult.x.score < bestSmartGuideResult.x.score
+          ) {
+
+            bestSmartGuideResult.x = smartGuideResult.x;
+          }
+        }
+
+        if (smartGuideResult.y) {
+
+          if (
+            !bestSmartGuideResult.y ||
+            smartGuideResult.y.score < bestSmartGuideResult.y.score
+          ) {
+
+            bestSmartGuideResult.y = smartGuideResult.y;
+          }
+        }
       });
+
+      // Adjust handles according to smart guides
+      this.canvas.selectedDragHandles.forEach((handle) => {
+
+        var position = handle.position;
+
+        position = bestSmartGuideResult.x ? position.add(bestSmartGuideResult.x.getAdjustment()) : position;
+        position = bestSmartGuideResult.y ? position.add(bestSmartGuideResult.y.getAdjustment()) : position;
+
+        // Position the drag handle
+        handle.position = handle.onMove
+          ? handle.onMove(position)
+          : position;
+      });
+
+      // Draw smart guides
+      if (bestSmartGuideResult.x) { this.canvas.drawGuide(bestSmartGuideResult.x); }
+      if (bestSmartGuideResult.y) { this.canvas.drawGuide(bestSmartGuideResult.y); }
 
       this.canvas.updateBoundingBoxes();
     }
