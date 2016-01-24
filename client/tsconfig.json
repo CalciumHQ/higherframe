@@ -24,6 +24,7 @@
         "./app/account/account.ts",
         "./app/account/forgot/forgot.controller.ts",
         "./app/account/forgot/reset.controller.ts",
+        "./app/account/signup/signup.controller.ts",
         "./app/alerts/alerts.controller.ts",
         "./app/app.ts",
         "./app/dashboard/dashboard.controller.ts",
