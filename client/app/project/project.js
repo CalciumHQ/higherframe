@@ -16,7 +16,8 @@ angular
           project: function($stateParams, Project) {
 
             return Project.get({ id: $stateParams.id }).$promise;
-          }
+          },
+					$title: function(project) { return project.name; }
 				}
       })
 
