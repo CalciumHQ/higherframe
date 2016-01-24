@@ -39,10 +39,19 @@ exports.show = function(req, res) {
 // Creates a new Artboard in the DB.
 exports.create = function(req, res) {
 
-  Artboard.create(req.body, function(err, Artboard) {
+  Artboard.create(req.body, function(err, artboard) {
 
     if(err) { return handleError(res, err); }
-    return res.json(201, Artboard);
+
+    Frame.findOneAndUpdate(
+      { _id: artboard.frame },
+      { $push: { artboards: artboard._id }},
+      function(err, frame) {
+
+        if(err) { return handleError(res, err); }
+        return res.json(201, artboard);
+      }
+    )
   });
 };
 

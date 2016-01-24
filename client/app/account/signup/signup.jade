@@ -4,33 +4,33 @@
       p.h4.micro-form-note Thanks for your interest in Higherframe. We want to create the best wireframing tool we can; a piece of software we hope you'll love.
       p.h4.micro-form-note If you would like to become a beta tester, please provide your details. We appreciate your help and will contact you soon.
       
-    form(name="form", ng-submit="register(form)", novalidate="")
+    form(name="form", ng-submit="SignupCtrl.register(form)", novalidate="")
       div.form-group.form-group-lg
-        div.input-group.input-group-lg(ng-class="{ focus: nameFocus }")
+        div.input-group.input-group-lg(ng-class="{ focus: SignupCtrl.nameFocus }")
           span.input-group-addon.font-awesome &#xf007;
-          input.form-control(name="name", type="text", ng-model="user.email", placeholder="Name", required, tabindex="1", focus-on="nameFocus")
+          input.form-control(name="name", type="text", ng-model="SignupCtrl.user.name", placeholder="Name", required, tabindex="1", focus-on="SignupCtrl.nameFocus")
 
         p.h5(ng-show='form.name.$error.required && submitted')
           | A name is required
           
       div.form-group.form-group-lg
-        div.input-group.input-group-lg(ng-class="{ focus: emailAddressFocus }")
+        div.input-group.input-group-lg(ng-class="{ focus: SignupCtrl.emailAddressFocus }")
           span.input-group-addon.font-awesome &#xf007;
-          input.form-control(name="email", type="text", ng-model="user.email", placeholder="Email address", required, tabindex="2", mongoose-error="", focus-on="emailAddressFocus")
+          input.form-control(name="email", type="text", ng-model="SignupCtrl.user.email", placeholder="Email address", required, tabindex="2", mongoose-error="", focus-on="SignupCtrl.emailAddressFocus")
             
-        p.h5(ng-show='form.email.$error.email && submitted')
+        p.h5(ng-show='form.email.$error.email && SignupCtrl.submitted')
           | Doesn't look like a valid email.
-        p.h5(ng-show='form.email.$error.required && submitted')
+        p.h5(ng-show='form.email.$error.required && SignupCtrl.submitted')
           | What's your email address?
         p.h5(ng-show='form.email.$error.mongoose')
           | {{ errors.email }}
             
       div.form-group.form-group-lg
-        div.input-group.input-group-lg(ng-class="{ focus: passwordFocus }")
+        div.input-group.input-group-lg(ng-class="{ focus: SignupCtrl.passwordFocus }")
           span.input-group-addon.font-awesome &#xf007;
-          input.form-control(name="password", type="password", ng-model="user.password", placeholder="Password", required, tabindex="3", mongoose-error="", focus-on="passwordFocus")
+          input.form-control(name="password", type="password", ng-model="SignupCtrl.user.password", placeholder="Password", required, tabindex="3", mongoose-error="", focus-on="SignupCtrl.passwordFocus")
             
-        p.h5(ng-show='(form.password.$error.minlength || form.password.$error.required) && submitted')
+        p.h5(ng-show='(form.password.$error.minlength || form.password.$error.required) && SignupCtrl.submitted')
           | Password must be at least 3 characters.
         p.h5(ng-show='form.password.$error.mongoose')
           | {{ errors.password }}

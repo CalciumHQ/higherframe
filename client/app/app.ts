@@ -27,7 +27,7 @@ angular.module('siteApp', [
     $locationProvider.html5Mode(true);
     $httpProvider.interceptors.push('authInterceptor');
 
-    $mixpanelProvider.apiKey('af59676d763430037ae39d86282dbaca');
+    $mixpanelProvider.apiKey('@@mixpanel.key');
 
     // Register components
     ComponentLibraryProvider.registerComponent(Common.Drawing.Component.Type.Rectangle);

@@ -12,7 +12,8 @@ angular.module('siteApp')
       .state('signup', {
         url: '/signup',
         templateUrl: 'app/account/signup/signup.html',
-        controller: 'SignupCtrl'
+        controller: 'SignupCtrl',
+        controllerAs: 'SignupCtrl'
       })
       .state('forgot', {
         url: '/forgot',
