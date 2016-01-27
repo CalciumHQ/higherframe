@@ -5,7 +5,11 @@ module Higherframe.Controllers.Frame {
 
   export class ToolbarController {
 
-    quickAdd: string = '';
+    quickAdd = {
+      value: '',
+      focus: false
+    };
+
     components: Array<Higherframe.Drawing.Component.Library.ILibraryItem> = [];
 
     isFullscreen: boolean = false;
@@ -39,6 +43,12 @@ module Higherframe.Controllers.Frame {
 
         this.$scope.$apply(() => this.isFullscreen = (<any>document).msFullscreenElement);
       }, false);
+
+      // Subscribe to view events
+      this.$scope.$on('view:mousedown', () => {
+
+        this.quickAdd.focus = false;
+      });
     }
 
     onToolbarFullscreenClick() {
@@ -60,7 +70,7 @@ module Higherframe.Controllers.Frame {
       this.$scope.$emit('toolbar:component:added', { id: $item.id });
 
       // Clear the quick add input
-      this.quickAdd = '';
+      this.quickAdd.value = '';
     }
 
     onGenerateImageClick(frame: Higherframe.Data.IFrame, type: string) {

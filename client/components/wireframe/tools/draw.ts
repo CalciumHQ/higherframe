@@ -131,7 +131,11 @@ module Higherframe.Wireframe.Tools {
 
     private mouseDownHandler(event) {
 
+      // Inform the rest of the view a click took place
+      // This may be consumed by other UI to blur controls, for example
+      this.canvas.scope.$broadcast('view:mousedown');
 
+      // Hit test for components and handles
       let handleHitResult = this.canvas.layerSelections.hitTest(event.point, this.hitOptions);
       let handle: Common.Drawing.Component.DragHandle = handleHitResult
         ? this.canvas.getDragHandle(handleHitResult.item)

@@ -83,7 +83,7 @@
 					span.header-toolbar-input-group-addon
 						span.font-awesome &#xf0e7;
 							
-					input.header-toolbar-input(ng-model="ToolbarCtrl.quickAdd", uib-typeahead="component.title for component in ToolbarCtrl.components | filter:{ title: $viewValue }", typeahead-on-select="ToolbarCtrl.onQuickAddSelect($item)", typeahead-append-to-body="true", placeholder="Quick add...")
+					input.header-toolbar-input(ng-model="ToolbarCtrl.quickAdd.value", uib-typeahead="component.title for component in ToolbarCtrl.components | filter:{ title: $viewValue }", typeahead-on-select="ToolbarCtrl.onQuickAddSelect($item)", typeahead-append-to-body="true", focus-on="ToolbarCtrl.quickAdd.focus", placeholder="Quick add...")
 						
 				button.header-toolbar-button.header-toolbar-item(ng-model="FrameCtrl.alignment", uib-btn-radio="'Left'", uib-tooltip="Align items left", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
 					span.header-toolbar-icon.font-awesome &#xf036;
@@ -186,7 +186,7 @@
 					span.input-group-addon
 						span.font-awesome &#xf0e7;
 							
-					input.form-control.input-sm(ng-model="ToolbarCtrl.quickAdd", uib-typeahead="component.title for component in ToolbarCtrl.components | filter:{ title: $viewValue }", typeahead-on-select="ToolbarCtrl.onQuickAddSelect($item)", typeahead-append-to-body="true", placeholder="Quick add...")
+					input.form-control.input-sm(ng-model="ToolbarCtrl.quickAdd.value", guib-typeahead="component.title for component in ToolbarCtrl.components | filter:{ title: $viewValue }", typeahead-on-select="ToolbarCtrl.onQuickAddSelect($item)", typeahead-append-to-body="true", ng-blur="ToolbarCtrl.onQuickAddBlur()", placeholder="Quick add...")
 						
 				div.btn-group.toolbar-item
 					button.btn.btn-default.btn-sm(ng-model="FrameCtrl.alignment", uib-btn-radio="'Left'", uib-tooltip="Align items left", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
@@ -336,8 +336,8 @@
 											ul.uib-dropdown-menu
 												li(ng-repeat="zoom in FrameCtrl.ZOOM_LEVELS")
 													a(ng-click="FrameCtrl.onToolbarZoomLevelClick(zoom)", ng-class="{ strong: zoom == FrameCtrl.view.zoom }") {{ zoom * 100 }}%
-								
-								li.property.form-group.form-group-sm			
+
+								li.property.form-group.form-group-sm
 									label.form-label.h5.text-muted Options
 										
 									div.property-controls
