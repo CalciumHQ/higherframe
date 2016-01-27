@@ -66,17 +66,6 @@ module Higherframe.Wireframe.Tools {
      * Manipulation functions
      */
 
-    private clearSelection() {
-
-      // Clear old artboard focussed states
-      this.canvas.selectedComponents.forEach((component: Common.Drawing.Component.IComponent) => {
-
-        component.focussed = false;
-      });
-
-      this.canvas.selectedComponents = [];
-    }
-
     private startDrag(event) {
 
       // Store the start point of the drag
@@ -142,13 +131,18 @@ module Higherframe.Wireframe.Tools {
 
     private mouseDownHandler(event) {
 
-      // First look for a clicked drag handle
-      let handleHitResult = this.canvas.layerSelections.hitTest(event.point, this.hitOptions);
 
+      let handleHitResult = this.canvas.layerSelections.hitTest(event.point, this.hitOptions);
       let handle: Common.Drawing.Component.DragHandle = handleHitResult
         ? this.canvas.getDragHandle(handleHitResult.item)
         : null;
 
+      let componentHitResult = this.canvas.layerDrawing.hitTest(event.point, this.hitOptions);
+      let component: Common.Drawing.Component.IComponent = componentHitResult
+        ? this.canvas.getTopmost(componentHitResult.item)
+        : null;
+
+      // Look for a clicked drag handle
       if (handle) {
 
         this.canvas.selectedDragHandles.push(handle);
@@ -157,24 +151,17 @@ module Higherframe.Wireframe.Tools {
       // Now look for a clicked component
       else {
 
-        let componentHitResult = this.canvas.layerDrawing.hitTest(event.point, this.hitOptions);
-
-        let component: Common.Drawing.Component.IComponent = componentHitResult
-          ? this.canvas.getTopmost(componentHitResult.item)
-          : null;
-
         // Clear the selection if the shift key isn't held, and
         // the area clicked isn't part of the existing selection
         if (!(event.modifiers.shift || (component && component.focussed))) {
 
-  				this.clearSelection();
+  				this.canvas.clearComponentSelection();
   			}
 
-        // Select the component
-        if (component && !component.focussed) {
+        // Select the component if one was found
+        if (component) {
 
-          component.focussed = true;
-          this.canvas.selectedComponents.push(component);
+          this.canvas.selectItems([component]);
         }
       }
 
@@ -186,6 +173,20 @@ module Higherframe.Wireframe.Tools {
 
       // Update components
       this.canvas.updateBoundingBoxes();
+
+      // Check for right click and open properties panel
+      if (event.event.button == 2) {
+
+        let bounds = this.canvas.getBounds(this.canvas.selectedComponents);
+        let documentBounds = paper.view.bounds;
+        var point = bounds.bottomRight
+          .subtract(documentBounds.topLeft)
+          .add(new paper.Point(10, 5));
+
+        point.y = event.event.offsetY;
+
+        this.canvas.scope.$emit('view:properties:open', { point: point });
+      }
     }
 
     private mouseDownSelectHandler(event) {

@@ -1,7 +1,100 @@
 
 #properties-pane {
-  .frame-sidebar-content {
+  left: 100px;
+  top: 100px;
+  width: 240px;
 
-    
+  .tray-header {
+    .tray-header-buttons {
+      .tray-pin {
+        line-height: 24px;
+
+        span {
+          display: block;
+          @include transition(transform 200ms);
+        }
+
+        &.active {
+          span {
+            @include transform(rotateZ(-20deg));
+          }
+        }
+      }
+
+      .tray-close {
+        font-size: 0.85em;
+      }
+    }
+  }
+}
+
+$tray-padding: 15px;
+$tray-tab-padding: 7px;
+
+.tray {
+  position: absolute;
+  z-index: 100;
+  border-radius: 3px;
+  background: #3c3e3a;
+  @include box-shadow(1px 1.732px 10px 0px rgba(109, 109, 109, 0.7));
+
+  .tray-header {
+    @include display-flex;
+    height: 20px;
+    cursor: move;
+    background: rgba(black, 0.40);
+
+    .tray-header-tabs {
+      @include display-flex;
+      padding-left: $tray-padding;
+      line-height: 22px;
+      font-size: 10px;
+      font-weight: 500;
+
+      .tray-header-tab {
+        padding: 0 $tray-tab-padding;
+        cursor: pointer;
+        color: $grey1;
+        @include transition(all 50ms);
+
+        &:first-child {
+          margin-left: -$tray-tab-padding;
+        }
+
+        &:hover {
+          color: $yellow;
+        }
+
+        &.active {
+          color: white;
+          background: #3c3e3a;
+        }
+      }
+    }
+
+    .tray-header-buttons {
+      @include display-flex;
+      margin-left: auto;
+
+      .tray-header-button {
+        padding: 0 4px;
+        line-height: 20px;
+        color: $grey2;
+        cursor: pointer;
+
+        &:hover {
+          background: $yellow;
+          color: white;
+        }
+
+        &.active {
+          color: white;
+        }
+      }
+    }
+  }
+
+  .tray-content {
+    padding: $tray-padding;
   }
 }

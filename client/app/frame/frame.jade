@@ -206,9 +206,75 @@
 						
 			button#activity-toggle.btn.btn-sm.btn-default.toolbar-item(ng-model="FrameCtrl.activityOpen", uib-btn-checkbox)
 				span.font-awesome &#xf0c0;
-			
+				
+		// Properties
+		#properties-pane.tray(ng-controller="PropertiesCtrl as PropertiesCtrl", ng-show="PropertiesCtrl.open", ng-style="{ left: PropertiesCtrl.point.x, top: PropertiesCtrl.point.y }")
+			.tray-header(ui-draggable, ui-draggable-method="custom", ui-draggable-drag="PropertiesCtrl.onHeaderDrag($event)")
+				.tray-header-tabs
+					span.tray-header-tab(ng-class="{ active: PropertiesCtrl.tab == 'display' }", ng-click="PropertiesCtrl.tab = 'display'") Display
+					
+				.tray-header-buttons
+					div.tray-pin.tray-header-button(ng-click="PropertiesCtrl.pinned = !PropertiesCtrl.pinned", ng-class="{ active: PropertiesCtrl.pinned }")
+						span.glyph p
+						
+					div.tray-close.tray-header-button(ng-click="PropertiesCtrl.open = false")
+						span.glyph x
+				
+			.tray-content.form
+				div.text-center(ng-if="PropertiesCtrl.selection.length == 0")
+					div.h3.text-muted
+						i.font-awesome &#xf05e;
+						
+					p.h5.text-muted No component selected
+				
+				div(ng-if="PropertiesCtrl.selection.length == 1")
+					.frame-sidebar-panel
+						p.frame-sidebar-panel-placeholder.h5.text-muted(ng-if="!PropertiesCtrl.selection[0].properties.length") No editable properties
+						
+						ul.properties(ng-if="PropertiesCtrl.selection[0].properties.length")
+							li.form-group.form-group-sm(ng-repeat="property in PropertiesCtrl.selection[0].properties")
+								div.property-controls
+									div.property-control(ng-repeat="control in property.controls")
+										div(ng-class="{ 'input-group': control.unit, 'input-group-sm': control.unit }")
+											select.form-control(ng-if="control.ui == 'select'", placeholder="{{ control.placeholder }}", ng-options="o.value as o.label for o in control.options", ng-model="PropertiesCtrl.models[control.model]", ng-change="PropertiesCtrl.onPropertyControlChange(control)")
+											ui-image.h6(ng-if="control.ui == 'file'", ng-model="PropertiesCtrl.models[control.model]", ui-image-change="PropertiesCtrl.onMediaPropertyControlChange(control, { media: media })")
+											ui-icon.h6(ng-if="control.ui == 'icon'", ng-model="PropertiesCtrl.models[control.model]", ui-icon-change="PropertiesCtrl.onPropertyControlChange(control)")
+											input.form-control(ng-if="!control.ui || control.ui == 'text'", type="text", placeholder="{{ control.placeholder }}", focus-on="control.focus", ng-model="PropertiesCtrl.models[control.model]", ng-focus="PropertiesCtrl.onPropertyControlFocus(control)", ng-blur="PropertiesCtrl.onPropertyControlBlur(control)", ng-keydown="PropertiesCtrl.onPropertyControlKeydown(control, $event)")
+										
+											span.input-group-addon(ng-if="control.unit") {{ control.unit }}
+						
+					.frame-sidebar-panel
+						ul.properties(ng-if="PropertiesCtrl.selection.length")
+							li.form-group.form-group-sm
+								label.form-label.h5.text-muted Position
+								
+								div.property-controls
+									div.property-control
+										div.input-group.input-group-sm
+											input.form-control(type="text", placeholder="Left")
+											span.input-group-addon px
+											
+									div.property-control
+										div.input-group.input-group-sm
+											input.form-control(type="text", placeholder="Top")
+											span.input-group-addon px
+										
+							li.form-group
+								label.form-label.h5.text-muted Dimensions
+								
+								div.property-controls
+									div.property-control
+										div.input-group.input-group-sm
+											input.form-control(type="text", placeholder="Width")
+											span.input-group-addon px
+											
+									div.property-control
+										div.input-group.input-group-sm
+											input.form-control(type="text", placeholder="Height")
+											span.input-group-addon px
+	
 		#frame-canvas-wrapper
-			canvas#canvas(wireframe, data="FrameCtrl.wireframe", resize, keepalive="true", jqyoui-droppable)
+			canvas#canvas(wireframe, data="FrameCtrl.wireframe", resize, keepalive="true", oncontextmenu="return false", jqyoui-droppable)
 					
 			// Media library
 			img(ng-repeat="media in FrameCtrl.media", ng-src="{{ media.large }}", id="{{ media._id }}", style="display:none")
@@ -224,69 +290,6 @@
 								div#toolbox-components
 									div.toolbox-component(ng-repeat="component in ToolboxCtrl.components | filter:{ category: category.name }", ng-click="ToolboxCtrl.onComponentClick(component)", title="{{ component.title }}", ui-draggable, ui-draggable-end="ToolboxCtrl.onComponentDragEnd($event, component)")
 										svg-replace(ng-src="{{ component.preview }}")
-								
-								
-				#properties-pane.frame-sidebar-pane(ng-controller="PropertiesCtrl as PropertiesCtrl", ng-show="false")
-					.frame-sidebar-content.form
-						div.text-center(ng-if="PropertiesCtrl.selection.length == 0")
-							div.h3.text-muted
-								i.font-awesome &#xf05e;
-								
-							p.h5.text-muted No component selected
-						
-						div(ng-if="PropertiesCtrl.selection.length == 1")
-							.frame-sidebar-panel-header
-								h5.medium.loose.text-muted Properties
-								
-							.frame-sidebar-panel
-								p.frame-sidebar-panel-placeholder.h5.text-muted(ng-if="!PropertiesCtrl.selection[0].properties.length") No editable properties
-								
-								ul.properties(ng-if="PropertiesCtrl.selection[0].properties.length")
-									li.form-group.form-group-sm(ng-repeat="property in PropertiesCtrl.selection[0].properties")
-										label.form-label.h5.text-muted {{ property.label }}
-										
-										div.property-controls
-											div.property-control(ng-repeat="control in property.controls")
-												div(ng-class="{ 'input-group': control.unit, 'input-group-sm': control.unit }")
-													select.form-control(ng-if="control.ui == 'select'", placeholder="{{ control.placeholder }}", ng-options="o.value as o.label for o in control.options", ng-model="PropertiesCtrl.models[control.model]", ng-change="PropertiesCtrl.onPropertyControlChange(control)")
-													ui-image.h6(ng-if="control.ui == 'file'", ng-model="PropertiesCtrl.models[control.model]", ui-image-change="PropertiesCtrl.onMediaPropertyControlChange(control, { media: media })")
-													ui-icon.h6(ng-if="control.ui == 'icon'", ng-model="PropertiesCtrl.models[control.model]", ui-icon-change="PropertiesCtrl.onPropertyControlChange(control)")
-													input.form-control(ng-if="!control.ui || control.ui == 'text'", type="text", placeholder="{{ control.placeholder }}", focus-on="control.focus", ng-model="PropertiesCtrl.models[control.model]", ng-focus="PropertiesCtrl.onPropertyControlFocus(control)", ng-blur="PropertiesCtrl.onPropertyControlBlur(control)", ng-keydown="PropertiesCtrl.onPropertyControlKeydown(control, $event)")
-												
-													span.input-group-addon(ng-if="control.unit") {{ control.unit }}
-													
-							.frame-sidebar-panel-header
-								h5.medium.loose.text-muted Layout
-								
-							.frame-sidebar-panel
-								ul.properties(ng-if="PropertiesCtrl.selection.length")
-									li.form-group.form-group-sm
-										label.form-label.h5.text-muted Position
-										
-										div.property-controls
-											div.property-control
-												div.input-group.input-group-sm
-													input.form-control(type="text", placeholder="Left")
-													span.input-group-addon px
-													
-											div.property-control
-												div.input-group.input-group-sm
-													input.form-control(type="text", placeholder="Top")
-													span.input-group-addon px
-												
-									li.form-group
-										label.form-label.h5.text-muted Dimensions
-										
-										div.property-controls
-											div.property-control
-												div.input-group.input-group-sm
-													input.form-control(type="text", placeholder="Width")
-													span.input-group-addon px
-													
-											div.property-control
-												div.input-group.input-group-sm
-													input.form-control(type="text", placeholder="Height")
-													span.input-group-addon px
 											
 				
 				#activity-pane.frame-sidebar-pane(ng-controller="ActivityCtrl as ActivityCtrl")

@@ -347,7 +347,7 @@ module Higherframe.Wireframe {
 				item.focussed = false;
 			});
 
-			this.scope.$emit('componentsDeselected', this.selectedComponents);
+			this.scope.$emit('view:component:deselected', this.selectedComponents);
 			this.selectedComponents = [];
 
 			angular.forEach(this.layerDrawing.children, (item: Common.Drawing.Component.IComponent) => {
@@ -817,7 +817,7 @@ module Higherframe.Wireframe {
 		}
 
 		// Get a rectangle containing the given items
-		private getBounds(items: Array<paper.Item>) {
+		public getBounds(items: Array<paper.Item>) {
 
 			var x1 = Infinity,
 					x2 = -x1,

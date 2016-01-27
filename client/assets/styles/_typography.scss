@@ -147,10 +147,25 @@ body,
 	}
 }
 
+.glyph {
+	font-family: 'Higherframe Glyphs';
+	font-weight: 400;
+}
+
 
 /*
  * Font imports
  */
+
+ @font-face {
+     font-family: 'Higherframe Glyphs';
+     src: url('/assets/fonts/higherframe-glyphs/higherframe-glyphs.eot');
+     src: url('/assets/fonts/higherframe-glyphs/higherframe-glyphs.eot?#iefix') format('embedded-opentype'),
+          url('/assets/fonts/higherframe-glyphs/higherframe-glyphs.woff') format('woff'),
+          url('/assets/fonts/higherframe-glyphs/higherframe-glyphs.ttf') format('truetype');
+     font-weight: 400;
+     font-style: normal;
+ }
 
 @font-face {
     font-family: 'Theinhardt-web';

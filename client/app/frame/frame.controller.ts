@@ -251,6 +251,17 @@ class FrameCtrl {
      * Wireframe notifications
      */
 
+		$scope.$on('view:properties:open', (e, data) => {
+
+			let point = <paper.Point>data.point;
+			this.setPropertiesOpen(true, point);
+		});
+
+		$scope.$on('view:properties:close', (e, data) => {
+
+			this.setPropertiesOpen(false);
+		});
+
 		$scope.$on('view:artboard:create', (e, artboards) => {
 
  			this.createArtboards(artboards);
@@ -309,7 +320,7 @@ class FrameCtrl {
       this.selection = this.selection.concat(components);
     });
 
-  	$scope.$on('componentsDeselected', (e, components) => {
+  	$scope.$on('view:component:deselected', (e, components) => {
 
   		angular.forEach(components, (component) => {
 
@@ -324,6 +335,11 @@ class FrameCtrl {
 
         return components.indexOf(c) < 0;
       });
+
+			if (!this.selection.length) {
+
+				this.$scope.$broadcast('controller:properties:close');
+			}
     });
 
     $scope.$on('component:copied', (e, components) => {
@@ -770,6 +786,11 @@ class FrameCtrl {
   /*
    * View methods
    */
+
+	private setPropertiesOpen(open: boolean, point?: { x: number, y: number}) {
+
+		this.$scope.$broadcast('controller:properties:open', { open: open, point: point });
+	}
 
 	private setActivityOpen(open: boolean) {
 

@@ -41,11 +41,13 @@ module Higherframe.UI {
       private $parse: ng.IParseService
     ) {
 
-      DraggableDirective.prototype.link = ($scope: ng.IScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes) => {
+      DraggableDirective.prototype.link = ($scope: ng.IScope, element: ng.IAugmentedJQuery, attrs: any) => {
 
         var isDragging: boolean;
         var anchor: { x: number, y: number};
+        var previous: { x: number, y: number};
         var relative: { x: number, y: number};
+        var method: string = attrs.uiDraggableMethod || 'relative';
 
         (function() {
 
@@ -55,7 +57,10 @@ module Higherframe.UI {
 
         function initializeStyles() {
 
-          element.css('position', 'relative');
+          if (method == 'relative') {
+
+            element.css('position', 'relative');
+          }
         }
 
         function attachEventHandlers() {
@@ -91,20 +96,38 @@ module Higherframe.UI {
             return;
           }
 
-          relative = {
-            x: originalEvent.clientX - anchor.x,
-            y: originalEvent.clientY - anchor.y
-          };
+          // Add a delta attribute to the event
+          originalEvent.deltaX = originalEvent.clientX - previous.x;
+          originalEvent.deltaY = originalEvent.clientY - previous.y;
 
-          element
-            .css('left', `${relative.x}px`)
-            .css('top', `${relative.y}px`);
+          previous = {
+            x: originalEvent.clientX,
+            y: originalEvent.clientY
+          }
+
+          // Call the provided handler
+          var attrHandler = $parse(attrs['uiDraggableDrag']);
+          attrHandler($scope, { $event: originalEvent });
+
+          // Position the element according to the requested method
+          if (method == 'relative') {
+
+            relative = {
+              x: originalEvent.clientX - anchor.x,
+              y: originalEvent.clientY - anchor.y
+            };
+
+            element
+              .css('left', `${relative.x}px`)
+              .css('top', `${relative.y}px`);
+          }
         }
 
         function start(x: number, y: number) {
 
           isDragging = true;
           anchor = { x:x, y:y }
+          previous = anchor;
           element.addClass('ui-draggable-dragging');
         }
 
@@ -112,15 +135,21 @@ module Higherframe.UI {
 
           isDragging = false;
           anchor = null;
+          previous = null;
           relative = null;
           element.removeClass('ui-draggable-dragging');
-          element
-            .css('left', '0')
-            .css('top', '0');
 
           // Call the provided handler
           var attrHandler = $parse(attrs['uiDraggableEnd']);
           attrHandler($scope, { $event: event });
+
+          // Position the element
+          if (method == 'relative') {
+
+            element
+              .css('left', '0')
+              .css('top', '0');
+          }
         }
       };
     }
