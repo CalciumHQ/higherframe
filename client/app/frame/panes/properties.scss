@@ -16,7 +16,7 @@
 
         &.active {
           span {
-            @include transform(rotateZ(-20deg));
+            @include transform(rotateZ(-22deg));
           }
         }
       }
@@ -24,6 +24,19 @@
       .tray-close {
         font-size: 0.85em;
       }
+    }
+  }
+
+  .form-group {
+    @include display-flex;
+
+    .form-label {
+      color: $grey1;
+    }
+
+    .property-controls {
+      @include flex-grow(1);
+      margin-left: 10px;
     }
   }
 }
@@ -35,7 +48,7 @@ $tray-tab-padding: 7px;
   position: absolute;
   z-index: 100;
   border-radius: 3px;
-  background: #3c3e3a;
+  background: $grey-3;
   @include box-shadow(1px 1.732px 10px 0px rgba(109, 109, 109, 0.7));
 
   .tray-header {
@@ -81,14 +94,20 @@ $tray-tab-padding: 7px;
         line-height: 20px;
         color: $grey2;
         cursor: pointer;
+        @include transition(all 100ms);
 
         &:hover {
+          background: rgba(white, 0.2);
+        }
+
+        &:active {
+          @include transition(all 30ms);
           background: $yellow;
-          color: white;
+          color: $grey-3
         }
 
         &.active {
-          color: white;
+          color: $yellow;
         }
       }
     }
@@ -96,5 +115,9 @@ $tray-tab-padding: 7px;
 
   .tray-content {
     padding: $tray-padding;
+
+    .tray-placeholder {
+
+    }
   }
 }
