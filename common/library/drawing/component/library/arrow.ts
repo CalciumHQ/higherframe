@@ -179,7 +179,7 @@ module Common.Drawing.Component.Library {
 
         case 'angle':
 
-          var mid = new paper.Point(properties.start.x, properties.end.y)
+          var mid = new paper.Point(start.x, end.y)
           var midSgm = new paper.Segment(mid);
 
           line.addSegments([midSgm]);
@@ -187,8 +187,8 @@ module Common.Drawing.Component.Library {
 
         case 'dangle':
 
-          var midOne = new paper.Point(properties.start.x + 50, properties.start.y);
-          var midTwo = new paper.Point(properties.start.x + 50, properties.end.y);
+          var midOne = new paper.Point((start.x + end.x)/2, start.y);
+          var midTwo = new paper.Point((start.x + end.x)/2, end.y);
           var midOneSgm = new paper.Segment(midOne);
           var midTwoSgm = new paper.Segment(midTwo);
 
@@ -255,7 +255,7 @@ module Common.Drawing.Component.Library {
      * Calculate the drag handles for the component
      */
 
-    getDragHandles(color: paper.Color): Array<IDragHandle> {
+    getTransformHandles(color: paper.Color): Array<IDragHandle> {
 
       var properties = <Common.Data.IArrowProperties>this.model.properties;
       var position = new paper.Point(properties.x, properties.y);
@@ -264,6 +264,10 @@ module Common.Drawing.Component.Library {
 
       var start = new DragHandle(new paper.Point(startPoint), color);
       start.cursor = Cursors.ResizeNESW;
+      start.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
+
+        return [new SnapPoint(position, 'vertex', 'vertex')];
+      };
       start.onMove = (pos: paper.Point): paper.Point => {
 
         properties.start = pos.subtract(position);
@@ -274,6 +278,10 @@ module Common.Drawing.Component.Library {
 
       var end = new DragHandle(new paper.Point(endPoint), color);
       end.cursor = Cursors.ResizeNESW;
+      end.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
+
+        return [new SnapPoint(position, 'vertex', 'vertex')];
+      };
       end.onMove = (pos: paper.Point): paper.Point => {
 
         properties.end = pos.subtract(position);
