@@ -36,27 +36,27 @@ module Common.UI {
 
     ComponentDefault = new paper.Color('#888');
     ComponentHover = new paper.Color('#444');
-    ComponentActive = new paper.Color('#a4d64e');
-    ComponentFocus = new paper.Color('#a4d64e');
+    ComponentActive = new paper.Color('#0881a8');
+    ComponentFocus = new paper.Color('#82cdec');
 
     ComponentDefaultLight = new paper.Color('#aaa');
     ComponentHoverLight = new paper.Color('#444');
-    ComponentActiveLight = new paper.Color('#a4d64e');
-    ComponentFocusLight = new paper.Color('#a4d64e');
+    ComponentActiveLight = new paper.Color('#0881a8');
+    ComponentFocusLight = new paper.Color('#82cdec');
 
     ComponentDefaultDark = new paper.Color('#222');
     ComponentHoverDark = new paper.Color('#000');
-    ComponentActiveDark = new paper.Color('#a4d64e');
-    ComponentFocusDark = new paper.Color('#a4d64e');
+    ComponentActiveDark = new paper.Color('#0881a8');
+    ComponentFocusDark = new paper.Color('#82cdec');
 
     BorderDefault = new paper.Color('#ddd');
     BorderHover = new paper.Color('#666');
-    BorderActive = new paper.Color('#a4d64e');
-    BorderFocus = new paper.Color('#a4d64e');
+    BorderActive = new paper.Color('#0881a8');
+    BorderFocus = new paper.Color('#82cdec');
 
     DragHandleDefault = new paper.Color('#98e001');
 
-    BoundsDefault = new paper.Color('#a4d64e');
+    BoundsDefault = new paper.Color('#42b2d6');
 
     GuideDefault = new paper.Color('#ffc000');
 

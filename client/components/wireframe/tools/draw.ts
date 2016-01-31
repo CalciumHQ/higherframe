@@ -166,6 +166,9 @@ module Higherframe.Wireframe.Tools {
         if (component) {
 
           this.canvas.selectItems([component]);
+
+          // Mark as active
+          component.active = true;
         }
       }
 
@@ -206,6 +209,12 @@ module Higherframe.Wireframe.Tools {
 
     private mouseUpHandler(event) {
 
+      // Mark components as inactive
+      this.canvas.selectedComponents.forEach((component) => {
+
+        component.active = false;
+      });
+      
       this.resetDrag();
       this.canvas.endDragSelection();
     }
