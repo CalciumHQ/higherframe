@@ -7,6 +7,7 @@ module Higherframe.Wireframe.Tools {
 
     private dragRect: paper.Rectangle;
     private dragPreview: paper.Item;
+    private dragComponents: Array<Common.Drawing.Component.IComponent>;
 
     private hitOptions = {
  			segments: true,
@@ -57,24 +58,31 @@ module Higherframe.Wireframe.Tools {
      * Manipulation functions
      */
 
-    private clearSelection() {
-
-      // Clear old artboard focussed states
-      this.canvas.selectedArtboards.forEach((artboard: Higherframe.Drawing.Artboard) => {
-
-        artboard.focussed = false;
-      });
-
-      this.canvas.selectedArtboards = [];
-    }
-
     private startDrag(event) {
 
-      // Annotate the dragged elements with their starting position
+      this.dragComponents = [];
+
       this.canvas.selectedArtboards.forEach((artboard) => {
 
+        // Annotate the dragged artboards with their starting position
         (<any>artboard).dragStartLeft = artboard.left;
         (<any>artboard).dragStartTop = artboard.top;
+
+        // Get components that are on this artboard
+        this.canvas.components.forEach((component) => {
+
+          if (
+            component.isInside(artboard.bounds) ||
+            artboard.intersects(component)
+          ) {
+
+            // Annotate the dragged artboards with their starting position
+            (<any>component).dragStartLeft = component.model.properties.x;
+            (<any>component).dragStartTop = component.model.properties.y;
+
+            this.dragComponents.push(component);
+          }
+        });
       });
     }
 
@@ -90,14 +98,26 @@ module Higherframe.Wireframe.Tools {
         this.dragPreview = null;
       }
 
-      // Clear the start position annotation on the dragged elements
-      this.canvas.selectedArtboards.forEach((item: any) => {
+      // Clear the start position annotation on the dragged artboards
+      this.canvas.selectedArtboards.forEach((artboard: any) => {
 
-        delete item.dragStart;
+        delete artboard.dragStartLeft;
+        delete artboard.dragStartTop
+      });
+
+      // Clear the start position annotation on the dragged components
+      this.dragComponents.forEach((component: any) => {
+
+        delete component.dragStartLeft;
+        delete component.dragStartTop;
       });
 
       // Commit the changes
       this.canvas.commitArtboards(this.canvas.selectedArtboards);
+      this.canvas.moveItems(this.dragComponents);
+
+      // Clear the dragged component list
+      this.dragComponents = [];
     }
 
     private createArtboard(bounds: paper.Rectangle) {
@@ -123,14 +143,13 @@ module Higherframe.Wireframe.Tools {
       // the area clicked isn't part of the existing selection
       if (!(event.modifiers.shift || (artboard && artboard.focussed))) {
 
-        this.clearSelection();
+        this.canvas.clearArtboardSelection();
       }
 
       if (artboard) {
 
         // Select the artboard
-        artboard.focussed = true;
-        this.canvas.selectedArtboards.push(artboard);
+        this.canvas.selectArtboards([artboard]);
       }
 
       // Start a drag
@@ -223,6 +242,14 @@ module Higherframe.Wireframe.Tools {
         artboard.top = (<any>artboard).dragStartTop + delta.y;
 
         artboard.update(this.canvas);
+      });
+
+      this.dragComponents.forEach((component) => {
+
+        component.model.properties.x = (<any>component).dragStartLeft + delta.x;
+        component.model.properties.y = (<any>component).dragStartTop + delta.y;
+
+        component.update();
       });
     }
 

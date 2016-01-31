@@ -582,12 +582,7 @@ module Higherframe.Wireframe {
 					Wireframe.Tools.Draw.get(this).activate();
 
 					// Clean up
-					this.artboards.forEach((artboard) => {
-
-						artboard.hovered = false;
-						artboard.focussed = false;
-					});
-
+					this.clearArtboardSelection();
 					this.updateArtboards();
 
 					// Style the canvas
@@ -598,6 +593,9 @@ module Higherframe.Wireframe {
 				case Common.Drawing.EditMode.Artboards:
 
 					Wireframe.Tools.Artboards.get(this).activate();
+
+					// Clean up
+					this.clearComponentSelection();
 
 					// Style the canvas
 					this.layerDrawing.opacity = 0.3;
