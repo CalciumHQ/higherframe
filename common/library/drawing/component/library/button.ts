@@ -89,6 +89,7 @@ module Common.Drawing.Component.Library {
       properties.width = properties.width || 160;
       properties.height = properties.height || 32;
       properties.type = properties.type || 'primary';
+      properties.label = (typeof properties.label === 'undefined') ? 'Submit' : properties.label;
       properties.cornerRadius = properties.cornerRadius || 5;
       properties.fontSize = properties.fontSize || 14;
       properties.fontWeight = properties.fontWeight || 400;

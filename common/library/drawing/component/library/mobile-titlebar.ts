@@ -54,6 +54,8 @@ module Common.Drawing.Component.Library {
 
     icon: paper.PointText;
 
+    // Drawing constants
+    static HEIGHT = 40;
 
     /**
      * Create a new Mobile Titlebar component
@@ -65,7 +67,6 @@ module Common.Drawing.Component.Library {
 
       var properties = this.getProperties();
       properties.width = properties.width || 220;
-      properties.height = properties.height || 40;
       properties.title = properties.title || 'Title';
 
       // Perform the initial draw
@@ -107,8 +108,8 @@ module Common.Drawing.Component.Library {
       // Remove the old parts
       this.removeChildren();
 
-      var topLeft = new paper.Point(properties.x - properties.width / 2, properties.y - properties.height / 2);
-      var bottomRight = new paper.Point(properties.x + properties.width / 2, properties.y + properties.height / 2);
+      var topLeft = new paper.Point(properties.x - properties.width / 2, properties.y - MobileTitlebar.HEIGHT / 2);
+      var bottomRight = new paper.Point(properties.x + properties.width / 2, properties.y + MobileTitlebar.HEIGHT / 2);
       var bounds = new paper.Rectangle(topLeft, bottomRight);
 
       // Draw the background
@@ -175,8 +176,6 @@ module Common.Drawing.Component.Library {
       var properties = this.getProperties();
       properties.x = this.position.x;
       properties.y = this.position.y;
-      properties.width = this.bounds.width;
-      properties.height = this.bounds.height;
     }
 
 
@@ -195,6 +194,55 @@ module Common.Drawing.Component.Library {
         new SnapPoint(this.bounds.bottomCenter, 'center', 'edge')
       ];
     }
+
+
+    /**
+     * Calculate the transform handles for the component
+     */
+
+    getTransformHandles(color: paper.Color): Array<IDragHandle> {
+
+      var rightCenter = new DragHandle(this.bounds.rightCenter, color);
+      rightCenter.cursor = Cursors.ResizeHorizontal;
+      rightCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
+
+        return [new SnapPoint(position, 'edge', 'center')];
+      };
+      rightCenter.onMove = (position: paper.Point): paper.Point => {
+
+        var properties = this.getProperties();
+
+        this.bounds.rightCenter = position;
+        properties.x = this.bounds.center.x;
+        properties.width = this.bounds.width;
+        this.update();
+
+        return this.bounds.rightCenter;
+      };
+
+      var leftCenter = new DragHandle(this.bounds.leftCenter, color);
+      leftCenter.cursor = Cursors.ResizeHorizontal;
+      leftCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
+
+        return [new SnapPoint(position, 'edge', 'center')];
+      };
+      leftCenter.onMove = (position: paper.Point): paper.Point => {
+
+        var properties = this.getProperties();
+
+        this.bounds.topCenter = position;
+        properties.x = this.bounds.center.x;
+        properties.width = this.bounds.width;
+        this.update();
+
+        return this.bounds.leftCenter;
+      };
+
+      return [
+        rightCenter,
+        leftCenter
+      ];
+    };
 
 
     /**

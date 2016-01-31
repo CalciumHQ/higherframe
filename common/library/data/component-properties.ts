@@ -34,7 +34,6 @@ module Common.Data {
 
   export interface IMobileTitlebarProperties extends IComponentProperties {
     width: number,
-    height: number,
     title: string,
     leftIcon: string,
     rightIcon: string
