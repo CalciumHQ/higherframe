@@ -3,8 +3,7 @@ module Common.Drawing.Component {
   export enum Type {
     Rectangle,
     Arrow,
-    IPhone,
-    IPhoneTitlebar,
+    MobileDevice,
     MobileTitlebar,
     TextInput,
     SelectInput,

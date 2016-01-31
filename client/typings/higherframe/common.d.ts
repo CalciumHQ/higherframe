@@ -9148,10 +9148,10 @@ declare module Common.Data {
         direction: string;
         type: string;
     }
-    interface IIPhoneProperties extends IComponentProperties {
-    }
-    interface IIPhoneTitlebarProperties extends IComponentProperties {
-        time: String;
+    interface IMobileDeviceProperties extends IComponentProperties {
+        width: number;
+        height: number;
+        showBar: boolean;
     }
     interface IMobileTitlebarProperties extends IComponentProperties {
         width: number;
@@ -9653,71 +9653,45 @@ declare module Common.Drawing.Component.Library {
         getProperties(): Common.Data.IImageProperties;
     }
 }
-declare module Common.Drawing.Component {
-    enum Type {
-        Rectangle = 0,
-        Arrow = 1,
-        IPhone = 2,
-        IPhoneTitlebar = 3,
-        MobileTitlebar = 4,
-        TextInput = 5,
-        SelectInput = 6,
-        Checkbox = 7,
-        Label = 8,
-        Button = 9,
-        Image = 10,
-        Icon = 11,
-    }
-}
-/// <reference path="../component.d.ts" />
-/// <reference path="../type.d.ts" />
 declare module Common.Drawing.Component.Library {
-    class IPhoneTitlebar extends Drawing.Component.Base implements Drawing.Component.IComponent {
+    class MobileDevice extends Drawing.Component.Base implements Drawing.Component.IComponent {
         id: Type;
         static title: string;
         static preview: string;
         static category: string;
         tags: string[];
-        properties: {
+        properties: ({
             label: string;
             controls: {
                 model: string;
-                type: StringConstructor;
-                placeholder: string;
+                type: NumberConstructor;
                 description: string;
             }[];
-        }[];
-        preview: string;
+        } | {
+            label: string;
+            controls: {
+                model: string;
+                type: BooleanConstructor;
+                ui: string;
+                options: {
+                    label: string;
+                    value: boolean;
+                }[];
+                description: string;
+            }[];
+        })[];
         model: Common.Data.Component;
-        constructor(model: Common.Data.IDrawingModel);
-        update(): void;
+        static BAR_HEIGHT: number;
         /**
-         * Update model with the state of the view component
-         */
-        updateModel(): void;
-        /**
-         * Calculate the snap points for the component
-         */
-        getSnapPoints(): Array<SnapPoint>;
-        /**
-         * Cast the model properties into the correct type
-         */
-        getProperties(): Common.Data.IIPhoneTitlebarProperties;
-    }
-}
-declare module Common.Drawing.Component.Library {
-    class IPhone extends Drawing.Component.Base implements Drawing.Component.IComponent {
-        id: Type;
-        static title: string;
-        static preview: string;
-        static category: string;
-        tags: string[];
-        properties: any[];
-        model: Common.Data.Component;
-        /**
-         * Create a new iPhone component
+         * Create a new mobile device component
          */
         constructor(model: Common.Data.IDrawingModel);
+        /**
+         * Utility functions for finding points in the components
+         */
+        getComponentBounds(): paper.Rectangle;
+        getScreenRect(): paper.Rectangle;
+        getUsableScreenRect(): paper.Rectangle;
         /**
          * Redraw the component
          */
@@ -9730,6 +9704,14 @@ declare module Common.Drawing.Component.Library {
          * Calculate the snap points for the component
          */
         getSnapPoints(): Array<SnapPoint>;
+        /**
+         * Calculate the transform handles for the component
+         */
+        getTransformHandles(color: paper.Color): Array<IDragHandle>;
+        /**
+         * Cast the model properties into the correct type
+         */
+        getProperties(): Common.Data.IMobileDeviceProperties;
     }
 }
 declare module Common.Drawing.Component.Library {
@@ -10026,6 +10008,21 @@ declare module Common.Drawing.Component.Library {
          * Calculate the height of the component
          */
         getHeight(): number;
+    }
+}
+declare module Common.Drawing.Component {
+    enum Type {
+        Rectangle = 0,
+        Arrow = 1,
+        MobileDevice = 2,
+        MobileTitlebar = 3,
+        TextInput = 4,
+        SelectInput = 5,
+        Checkbox = 6,
+        Label = 7,
+        Button = 8,
+        Image = 9,
+        Icon = 10,
     }
 }
 declare module Common.Drawing {

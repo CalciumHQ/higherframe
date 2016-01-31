@@ -272,7 +272,7 @@ module Higherframe.Wireframe.Tools {
 
     private mouseMoveHighlightHandler(event) {
 
-      // Clear old artboard hovered states
+      // Clear old component hovered states
       this.canvas.components.forEach((component) => {
 
         if (component.hovered) {
@@ -282,12 +282,26 @@ module Higherframe.Wireframe.Tools {
         }
       });
 
-      // Look for a hovered component
-      var hitResult = this.canvas.layerDrawing.hitTest(event.point, this.hitOptions);
+      // Hit test for components and handles
+      let handleHitResult = this.canvas.layerSelections.hitTest(event.point, this.hitOptions);
+      let handle: Common.Drawing.Component.DragHandle = handleHitResult
+        ? this.canvas.getDragHandle(handleHitResult.item)
+        : null;
 
-      if (hitResult) {
+      let componentHitResult = this.canvas.layerDrawing.hitTest(event.point, this.hitOptions);
+      let component: Common.Drawing.Component.IComponent = componentHitResult
+        ? this.canvas.getTopmost(componentHitResult.item)
+        : null;
 
-        var component: Common.Drawing.Component.IComponent = this.canvas.getTopmost(hitResult.item);
+      // If a drag handle is hovered
+      if (handle) {
+
+        this.canvas.setCursor(handle.cursor);
+      }
+
+      // If a component is hovered
+      else if (component) {
+
         component.hovered = true;
         component.update();
 

@@ -34,8 +34,7 @@ angular.module('siteApp', [
     ComponentLibraryProvider.registerComponent(Common.Drawing.Component.Type.Arrow);
     ComponentLibraryProvider.registerComponent(Common.Drawing.Component.Type.Label);
     ComponentLibraryProvider.registerComponent(Common.Drawing.Component.Type.Image);
-    ComponentLibraryProvider.registerComponent(Common.Drawing.Component.Type.IPhone);
-    ComponentLibraryProvider.registerComponent(Common.Drawing.Component.Type.IPhoneTitlebar);
+    ComponentLibraryProvider.registerComponent(Common.Drawing.Component.Type.MobileDevice);
     ComponentLibraryProvider.registerComponent(Common.Drawing.Component.Type.MobileTitlebar);
     ComponentLibraryProvider.registerComponent(Common.Drawing.Component.Type.TextInput);
     ComponentLibraryProvider.registerComponent(Common.Drawing.Component.Type.SelectInput);

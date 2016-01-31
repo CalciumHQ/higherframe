@@ -177,6 +177,10 @@ module Common.Drawing.Component.Library {
 
       var rightCenter = new DragHandle(this.bounds.rightCenter, color);
       rightCenter.cursor = Cursors.ResizeHorizontal;
+      rightCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
+
+        return [new SnapPoint(position, 'edge', 'center')];
+      }; 
       rightCenter.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.rightCenter.x = position.x;
@@ -189,6 +193,10 @@ module Common.Drawing.Component.Library {
 
       var leftCenter = new DragHandle(this.bounds.leftCenter, color);
       leftCenter.cursor = Cursors.ResizeHorizontal;
+      leftCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
+
+        return [new SnapPoint(position, 'edge', 'center')];
+      };
       leftCenter.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.leftCenter.x = position.x;

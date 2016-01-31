@@ -26,17 +26,15 @@ module Common.Data {
     type: string
   }
 
-  export interface IIPhoneProperties extends IComponentProperties {
-
-  }
-
-  export interface IIPhoneTitlebarProperties extends IComponentProperties {
-    time: String
+  export interface IMobileDeviceProperties extends IComponentProperties {
+    width: number,
+    height: number,
+    showBar: boolean
   }
 
   export interface IMobileTitlebarProperties extends IComponentProperties {
     width: number,
-    height: number
+    height: number,
     title: string,
     leftIcon: string,
     rightIcon: string
