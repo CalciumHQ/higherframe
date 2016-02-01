@@ -56,7 +56,7 @@ module Common.Drawing.Component.Library {
 
       super(model);
 
-      var properties = <Common.Data.IRectangleProperties>this.model.properties;
+      var properties = this.getProperties();
       properties.width = properties.width || 160;
       properties.height = properties.height || 120;
       properties.cornerRadius = properties.cornerRadius || 0;
@@ -72,7 +72,7 @@ module Common.Drawing.Component.Library {
 
     update() {
 
-      var properties = <Common.Data.IRectangleProperties>this.model.properties;
+      var properties = this.getProperties();
 
       // Determine palette
       var theme: Common.UI.ITheme = new Common.UI.DefaultTheme();
@@ -96,8 +96,8 @@ module Common.Drawing.Component.Library {
       // Remove the old parts
       this.removeChildren();
 
-      var topLeft = new paper.Point(properties.x, properties.y);
-      var bottomRight = new paper.Point(properties.x + properties.width, properties.y + properties.height);
+      var topLeft = new paper.Point(properties.x - (properties.width/2), properties.y - (properties.height/2));
+      var bottomRight = new paper.Point(properties.x + (properties.width/2), properties.y + (properties.height/2));
       var bounds = new paper.Rectangle(topLeft, bottomRight);
 
       // Draw the shape
@@ -117,11 +117,9 @@ module Common.Drawing.Component.Library {
 
     updateModel() {
 
-      var properties = <Common.Data.IRectangleProperties>this.model.properties;
-      properties.x = this.bounds.topLeft.x;
-      properties.y = this.bounds.topLeft.y;
-      properties.width = this.bounds.width;
-      properties.height = this.bounds.height;
+      var properties = this.getProperties();
+      properties.x = this.bounds.center.x;
+      properties.y = this.bounds.center.y;
     }
 
 
@@ -131,7 +129,7 @@ module Common.Drawing.Component.Library {
 
     getSnapPoints(): Array<SnapPoint> {
 
-      var properties = <Common.Data.IRectangleProperties>this.model.properties;
+      var properties = this.getProperties();
 
       return [
         new SnapPoint(this.bounds.leftCenter, 'edge', 'center'),
@@ -146,82 +144,180 @@ module Common.Drawing.Component.Library {
      * Calculate the transform handles for the component
      */
 
-    getTransformHandles(color: paper.Color): Array<IDragHandle> {
+     getTransformHandles(color: paper.Color): Array<IDragHandle> {
 
-      var topLeft = new DragHandle(this.bounds.topLeft, color);
-      topLeft.cursor = Cursors.ResizeNWSE;
-      topLeft.onMove = (position: paper.Point): paper.Point => {
+       var topLeft = new DragHandle(this.bounds.topLeft, color);
+       topLeft.cursor = Cursors.ResizeNWSE;
+       topLeft.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 
-        this.bounds.topLeft = position;
-        return this.bounds.topLeft;
-      };
+         return [new SnapPoint(position, 'corner', 'corner')];
+       };
+       topLeft.onMove = (position: paper.Point): paper.Point => {
 
-      var topCenter = new DragHandle(this.bounds.topCenter, color);
-      topCenter.cursor = Cursors.ResizeVertical;
-      topCenter.onMove = (position: paper.Point): paper.Point => {
+         var properties = this.getProperties();
 
-        this.bounds.topCenter.y = position.y;
-        return this.bounds.topCenter;
-      };
+         this.bounds.topLeft = position;
+         properties.x = this.bounds.center.x;
+         properties.y = this.bounds.center.y;
+         properties.width = this.bounds.width;
+         properties.height = this.bounds.height;
+         this.update();
 
-      var topRight = new DragHandle(this.bounds.topRight, color);
-      topRight.cursor = Cursors.ResizeNESW;
-      topRight.onMove = (position: paper.Point): paper.Point => {
+         return this.bounds.topLeft;
+       };
 
-        this.bounds.topRight = position;
-        return this.bounds.topRight;
-      };
+       var topCenter = new DragHandle(this.bounds.topCenter, color);
+       topCenter.cursor = Cursors.ResizeVertical;
+       topCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 
-      var rightCenter = new DragHandle(this.bounds.rightCenter, color);
-      rightCenter.cursor = Cursors.ResizeHorizontal;
-      rightCenter.onMove = (position: paper.Point): paper.Point => {
+         return [new SnapPoint(position, 'center', 'edge')];
+       };
+       topCenter.onMove = (position: paper.Point): paper.Point => {
 
-        this.bounds.rightCenter.x = position.x;
-        return this.bounds.rightCenter;
-      };
+         var properties = this.getProperties();
 
-      var bottomRight = new DragHandle(this.bounds.bottomRight, color);
-      bottomRight.cursor = Cursors.ResizeNWSE;
-      bottomRight.onMove = (position: paper.Point): paper.Point => {
+         this.bounds.topCenter = position;
+         properties.y = this.bounds.center.y;
+         properties.height = this.bounds.height;
+         this.update();
 
-        this.bounds.bottomRight = position;
-        return this.bounds.bottomRight;
-      };
+         return this.bounds.topCenter;
+       };
 
-      var bottomCenter = new DragHandle(this.bounds.bottomCenter, color);
-      bottomCenter.cursor = Cursors.ResizeVertical;
-      bottomCenter.onMove = (position: paper.Point): paper.Point => {
+       var topRight = new DragHandle(this.bounds.topRight, color);
+       topRight.cursor = Cursors.ResizeNESW;
+       topRight.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 
-        this.bounds.bottomCenter.y = position.y;
-        return this.bounds.bottomCenter;
-      };
+         return [new SnapPoint(position, 'corner', 'corner')];
+       };
+       topRight.onMove = (position: paper.Point): paper.Point => {
 
-      var bottomLeft = new DragHandle(this.bounds.bottomLeft, color);
-      bottomLeft.cursor = Cursors.ResizeNESW;
-      bottomLeft.onMove = (position: paper.Point): paper.Point => {
+         var properties = this.getProperties();
 
-        this.bounds.bottomLeft = position;
-        return this.bounds.bottomLeft;
-      };
+         this.bounds.topRight = position;
+         properties.x = this.bounds.center.x;
+         properties.y = this.bounds.center.y;
+         properties.width = this.bounds.width;
+         properties.height = this.bounds.height;
+         this.update();
 
-      var leftCenter = new DragHandle(this.bounds.leftCenter, color);
-      leftCenter.cursor = Cursors.ResizeHorizontal;
-      leftCenter.onMove = (position: paper.Point): paper.Point => {
+         return this.bounds.topRight;
+       };
 
-        this.bounds.leftCenter.x = position.x;
-        return this.bounds.leftCenter;
-      };
+       var rightCenter = new DragHandle(this.bounds.rightCenter, color);
+       rightCenter.cursor = Cursors.ResizeHorizontal;
+       rightCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 
-      return [
-        topLeft,
-        topCenter,
-        topRight,
-        rightCenter,
-        bottomRight,
-        bottomCenter,
-        bottomLeft,
-        leftCenter
-      ];
-    };
+         return [new SnapPoint(position, 'edge', 'center')];
+       };
+       rightCenter.onMove = (position: paper.Point): paper.Point => {
+
+         var properties = this.getProperties();
+
+         this.bounds.rightCenter = position;
+         properties.x = this.bounds.center.x;
+         properties.width = this.bounds.width;
+         this.update();
+
+         return this.bounds.rightCenter;
+       };
+
+       var bottomRight = new DragHandle(this.bounds.bottomRight, color);
+       bottomRight.cursor = Cursors.ResizeNWSE;
+       bottomRight.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
+
+         return [new SnapPoint(position, 'corner', 'corner')];
+       };
+       bottomRight.onMove = (position: paper.Point): paper.Point => {
+
+         var properties = this.getProperties();
+
+         this.bounds.bottomRight = position;
+         properties.x = this.bounds.center.x;
+         properties.y = this.bounds.center.y;
+         properties.width = this.bounds.width;
+         properties.height = this.bounds.height;
+         this.update();
+
+         return this.bounds.bottomRight;
+       };
+
+       var bottomCenter = new DragHandle(this.bounds.bottomCenter, color);
+       bottomCenter.cursor = Cursors.ResizeVertical;
+       bottomCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
+
+         return [new SnapPoint(position, 'center', 'edge')];
+       };
+       bottomCenter.onMove = (position: paper.Point): paper.Point => {
+
+         var properties = this.getProperties();
+
+         this.bounds.bottomCenter = position;
+         properties.y = this.bounds.center.y;
+         properties.height = this.bounds.height;
+         this.update();
+
+         return this.bounds.bottomCenter;
+       };
+
+       var bottomLeft = new DragHandle(this.bounds.bottomLeft, color);
+       bottomLeft.cursor = Cursors.ResizeNESW;
+       bottomLeft.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
+
+         return [new SnapPoint(position, 'corner', 'corner')];
+       };
+       bottomLeft.onMove = (position: paper.Point): paper.Point => {
+
+         var properties = this.getProperties();
+
+         this.bounds.bottomLeft = position;
+         properties.x = this.bounds.center.x;
+         properties.y = this.bounds.center.y;
+         properties.width = this.bounds.width;
+         properties.height = this.bounds.height;
+         this.update();
+
+         return this.bounds.bottomLeft;
+       };
+
+       var leftCenter = new DragHandle(this.bounds.leftCenter, color);
+       leftCenter.cursor = Cursors.ResizeHorizontal;
+       leftCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
+
+         return [new SnapPoint(position, 'edge', 'center')];
+       };
+       leftCenter.onMove = (position: paper.Point): paper.Point => {
+
+         var properties = this.getProperties();
+
+         this.bounds.topCenter = position;
+         properties.x = this.bounds.center.x;
+         properties.width = this.bounds.width;
+         this.update();
+
+         return this.bounds.leftCenter;
+       };
+
+       return [
+         topLeft,
+         topCenter,
+         topRight,
+         rightCenter,
+         bottomRight,
+         bottomCenter,
+         bottomLeft,
+         leftCenter
+       ];
+     };
+
+
+    /**
+     * Cast the model properties into the correct type
+     */
+
+    getProperties(): Common.Data.IRectangleProperties {
+
+      return <Common.Data.IRectangleProperties>this.model.properties;
+    }
   }
 }
