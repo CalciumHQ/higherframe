@@ -562,7 +562,8 @@ module.exports = function (grunt) {
             '{app,components,library}/**/*.jade'
           ],
           dest: '.tmp',
-          ext: '.html'
+          ext: '.html',
+          extDot: 'last'
         }]
       }
     },

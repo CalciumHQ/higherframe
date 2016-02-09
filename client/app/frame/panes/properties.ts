@@ -12,10 +12,17 @@ module Higherframe.Controllers.Frame {
     public tab: string = 'display';
 
     public selection: Array<Common.Drawing.Component.IComponent>;
+
     public models: Object;
     private isPreventingCommit: Boolean = false;
 
-    constructor(private $scope: ng.IScope, private $rootScope: ng.IRootScopeService, private $timeout: ng.ITimeoutService) {
+    constructor(
+      private $scope: ng.IScope,
+      private $rootScope: ng.IRootScopeService,
+      private $timeout: ng.ITimeoutService,
+      private $controller: ng.IControllerService,
+      private $compile: ng.ICompileService
+    ) {
 
       $scope.$on('controller:component:selected', (event, components) => {
 
@@ -56,6 +63,10 @@ module Higherframe.Controllers.Frame {
         this.commitControl(focussed);
       }
 
+      // Get the display tab element and empty
+      let parent = angular.element('#properties-pane-display');
+      parent.empty();
+
       // Set the new selection
       this.selection = selection;
 
@@ -63,6 +74,15 @@ module Higherframe.Controllers.Frame {
 
         return;
       }
+
+      // Create a new scope
+      var scope = <Higherframe.UI.Component.IPropertiesScope>this.$rootScope.$new();
+      scope.properties = (<any>this.selection[0]).model.properties;
+
+      // Create the properties page
+      let html = `<div ng-controller="${ (<any>this.selection[0]).propertiesController }" ng-include="'${ (<any>this.selection[0]).propertiesTemplateUrl }'" />`;
+      let el = this.$compile(html)(scope);
+      el.appendTo(parent);
 
       // Initialise a fresh set of models with the component's properties values
       // Also initialise the control

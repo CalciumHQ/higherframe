@@ -1,0 +1,16 @@
+div.form-group
+  label.form-label.h6(for="") Left
+  
+  div.form-controls
+    input.full(ng-model="PropsCtrl.models.x")
+    
+div.form-group
+  label.form-label.h6(for="") Size
+  
+  div.form-controls
+    div.form-control-row
+      input(ng-model="PropsCtrl.models.type")
+      
+    div.form-control-row
+      input(ng-model="PropsCtrl.models.width")
+      input(ng-model="PropsCtrl.models.height")

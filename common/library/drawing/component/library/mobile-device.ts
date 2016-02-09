@@ -13,6 +13,8 @@ module Common.Drawing.Component.Library {
       'apple',
       'phone'
     ];
+    propertiesController: string = 'MobileDevicePropertiesController as PropsCtrl';
+    propertiesTemplateUrl: string = '/library/drawing/component/library/mobile-device.props.html';
     properties = [
       {
         label: 'Size',

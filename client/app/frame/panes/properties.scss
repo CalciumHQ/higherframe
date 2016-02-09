@@ -29,19 +29,68 @@
 
   .form-group {
     @include display-flex;
+    margin-bottom: 0;
+
+    & + .form-group {
+      margin-top: 8px;
+    }
 
     .form-label {
+      margin: 0;
+      padding-top: 2px;
       color: $grey1;
     }
 
-    .property-controls {
+    .form-controls {
       @include flex-grow(1);
-      margin-left: 10px;
+      margin-left: 16px;
+      min-width: 0;
+    }
+
+    .form-control-row {
+      @include display-flex;
+
+      & + .form-control-row {
+        margin-top: 6px;
+      }
+
+      input + input {
+        margin-left: 15px;
+      }
+    }
+
+    .full {
+      width: 100%;
+    }
+
+    input {
+      height: 21px;
+      min-width: 0;
+      padding: 0 4px;
+      border: none;
+      border-bottom: 1px solid transparent;
+      background: none;
+      color: white;
+      line-height: $font-size-h6;
+      font-size: $font-size-h6;
+      @include transition(all 100ms);
+
+      &:hover {
+        background: rgba(black, 0.25);
+      }
+
+      &:focus {
+        outline: none;
+        @include box-shadow(none);
+        background: rgba(black, 0.25);
+        border-bottom: 1px solid $yellow;
+      }
     }
   }
 }
 
-$tray-padding: 15px;
+$tray-padding-vertical: 13px;
+$tray-padding-horizontal: 15px;
 $tray-tab-padding: 7px;
 
 .tray {
@@ -55,11 +104,11 @@ $tray-tab-padding: 7px;
     @include display-flex;
     height: 20px;
     cursor: move;
-    background: rgba(black, 0.40);
+    background: rgba(black, 0.30);
 
     .tray-header-tabs {
       @include display-flex;
-      padding-left: $tray-padding;
+      padding-left: $tray-padding-horizontal;
       line-height: 22px;
       font-size: 10px;
       font-weight: 500;
@@ -114,7 +163,7 @@ $tray-tab-padding: 7px;
   }
 
   .tray-content {
-    padding: $tray-padding;
+    padding: $tray-padding-vertical $tray-padding-horizontal;
 
     .tray-placeholder {
 
