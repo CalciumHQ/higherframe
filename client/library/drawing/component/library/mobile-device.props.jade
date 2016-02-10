@@ -2,15 +2,22 @@ div.form-group
   label.form-label.h6(for="") Left
   
   div.form-controls
-    input.full(ng-model="PropsCtrl.models.x", property-type="Float", property-suffix="px")
+    input.form-control.full(ng-model="PropsCtrl.models.x", property-type="Float", property-suffix="px")
     
 div.form-group
   label.form-label.h6(for="") Size
   
   div.form-controls
     div.form-control-row
-      input(ng-model="PropsCtrl.models.type")
+      div.ui-dropdown(uib-dropdown, dropdown-append-to-body)
+        div.form-control.ui-dropdown-toggle(uib-dropdown-toggle)
+          | {{ PropsCtrl.sizeOptions[PropsCtrl.models.size] }}
+          span.chevron
+            
+        ul.uib-dropdown-menu
+          li(ng-repeat="(value, label) in PropsCtrl.sizeOptions")
+            a(ng-click="PropsCtrl.models.size = value") {{ label }}
       
     div.form-control-row
-      input(ng-model="PropsCtrl.models.width", property-type="Float", property-suffix="px")
-      input(ng-model="PropsCtrl.models.height", property-type="Float", property-suffix="px")
+      input.form-control(ng-model="PropsCtrl.models.width", property-type="Float", property-suffix="px")
+      input.form-control(ng-model="PropsCtrl.models.height", property-type="Float", property-suffix="px")

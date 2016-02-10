@@ -5,6 +5,12 @@ module Higherframe.Drawing.Component.Library {
 
     public models: any = {};
 
+    private sizeOptions = {
+      'iphone5': 'iPhone 5',
+      'ipad': 'iPad',
+      'ipadMini': 'iPad Mini'
+    };
+
     constructor(private $scope: Higherframe.UI.Component.IPropertiesScope) {
 
       this.models = angular.copy(this.getProperties());
