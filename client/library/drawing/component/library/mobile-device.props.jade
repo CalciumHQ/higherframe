@@ -2,7 +2,7 @@ div.form-group
   label.form-label.h6(for="") Left
   
   div.form-controls
-    input.full(ng-model="PropsCtrl.models.x")
+    input.full(ng-model="PropsCtrl.models.x", property-type="Float", property-suffix="px")
     
 div.form-group
   label.form-label.h6(for="") Size
@@ -12,5 +12,5 @@ div.form-group
       input(ng-model="PropsCtrl.models.type")
       
     div.form-control-row
-      input(ng-model="PropsCtrl.models.width")
-      input(ng-model="PropsCtrl.models.height")
+      input(ng-model="PropsCtrl.models.width", property-type="Float", property-suffix="px")
+      input(ng-model="PropsCtrl.models.height", property-type="Float", property-suffix="px")

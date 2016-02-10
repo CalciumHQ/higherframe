@@ -78,6 +78,8 @@
         "./library/ui/modal/manager.ts",
         "./library/ui/modal/modal.ts",
         "./library/ui/properties/properties.ts",
+        "./library/ui/properties/type.ts",
+        "./library/ui/properties/unit.ts",
         "./library/ui/tray/manager.ts",
         "./library/ui/tray/region.ts",
         "./library/ui/tray/tray.ts",
