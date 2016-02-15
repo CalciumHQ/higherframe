@@ -15,65 +15,8 @@ module Common.Drawing.Component.Library {
       'line',
       'flowchart'
     ];
-    properties = [
-      {
-        label: 'Direction',
-        controls: [
-          {
-            model: 'direction',
-            type: String,
-            ui: 'select',
-            options: [
-              {
-                label: 'None',
-                value: ''
-              },
-              {
-                label: 'Left',
-                value: 'left'
-              },
-              {
-                label: 'Right',
-                value: 'right'
-              },
-              {
-                label: 'Both',
-                value: 'both'
-              }
-            ],
-            description: 'Set which ends of the line should have an arrow head.'
-          }
-        ]
-      },
-      {
-        label: 'Type',
-        controls: [
-          {
-            model: 'type',
-            type: String,
-            ui: 'select',
-            options: [
-              {
-                label: 'Straight',
-                value: 'straight'
-              },
-              {
-                label: 'Curve',
-                value: 'curve'
-              },
-              {
-                label: 'Angle',
-                value: 'angle'
-              },
-              {
-                label: 'Double angle',
-                value: 'dangle'
-              }
-            ]
-          }
-        ]
-      }
-    ];
+    propertiesController: string = 'ArrowPropertiesController as PropsCtrl';
+    propertiesTemplateUrl: string = '/library/drawing/component/library/arrow.props.html';
     thumbnail = '/assets/images/components/iphone-thumbnail@2x.png';
     snapPoints = [
       { x: -116, y: -232 },		// Bounding box

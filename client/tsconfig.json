@@ -63,6 +63,7 @@
         "./library/data/frame.ts",
         "./library/data/project.ts",
         "./library/data/reset.ts",
+        "./library/drawing/component/library/arrow.props.ts",
         "./library/drawing/component/library/button.props.ts",
         "./library/drawing/component/library/mobile-device.props.ts",
         "./library/drawing/component/library/service.ts",
