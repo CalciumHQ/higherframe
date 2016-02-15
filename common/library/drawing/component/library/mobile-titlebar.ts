@@ -14,6 +14,8 @@ module Common.Drawing.Component.Library {
       'mobile',
       'phone'
     ];
+    propertiesController: string = 'MobileTitlebarPropertiesController as PropsCtrl';
+    propertiesTemplateUrl: string = '/library/drawing/component/library/mobile-titlebar.props.html';
     properties = [
       {
         label: 'Title',

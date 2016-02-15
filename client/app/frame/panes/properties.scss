@@ -117,6 +117,15 @@
         display: inline;
       }
     }
+
+    .ui-icon {
+      margin: 0;
+
+      .ui-icon-icon {
+        color: white;
+        border-color: $grey-1;
+      }
+    }
   }
 }
 

@@ -67,6 +67,7 @@
         "./library/drawing/component/library/button.props.ts",
         "./library/drawing/component/library/checkbox.props.ts",
         "./library/drawing/component/library/mobile-device.props.ts",
+        "./library/drawing/component/library/mobile-titlebar.props.ts",
         "./library/drawing/component/library/service.ts",
         "./library/higherframe.ts",
         "./library/ui/alerts/alert-manager.ts",
