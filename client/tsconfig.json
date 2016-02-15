@@ -65,6 +65,7 @@
         "./library/data/reset.ts",
         "./library/drawing/component/library/arrow.props.ts",
         "./library/drawing/component/library/button.props.ts",
+        "./library/drawing/component/library/checkbox.props.ts",
         "./library/drawing/component/library/mobile-device.props.ts",
         "./library/drawing/component/library/service.ts",
         "./library/higherframe.ts",

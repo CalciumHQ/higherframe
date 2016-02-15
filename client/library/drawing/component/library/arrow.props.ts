@@ -3,7 +3,7 @@ module Higherframe.Drawing.Component.Library {
 
   export class ArrowPropertiesController implements Higherframe.UI.Component.PropertiesController {
 
-    properties: Common.Data.IButtonProperties;
+    properties: Common.Data.IArrowProperties;
 
     typeOptions = {
       straight: 'Straight',
@@ -20,7 +20,7 @@ module Higherframe.Drawing.Component.Library {
 
     constructor(private $scope: Higherframe.UI.Component.IPropertiesScope) {
 
-      this.properties = <Common.Data.IButtonProperties>this.$scope.properties;
+      this.properties = <Common.Data.IArrowProperties>this.$scope.properties;
     }
   }
 }

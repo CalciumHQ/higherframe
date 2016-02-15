@@ -14,6 +14,8 @@ module Common.Drawing.Component.Library {
       'checkbox',
       'tick'
     ];
+    propertiesController: string = 'CheckboxPropertiesController as PropsCtrl';
+    propertiesTemplateUrl: string = '/library/drawing/component/library/checkbox.props.html';
     properties = [
       {
         label: 'Label',
