@@ -14,7 +14,6 @@ module Higherframe.Controllers.Frame {
     public selection: Array<Common.Drawing.Component.IComponent>;
 
     public models: Object;
-    private isPreventingCommit: Boolean = false;
 
     constructor(
       private $scope: ng.IScope,
@@ -50,6 +49,11 @@ module Higherframe.Controllers.Frame {
           this.open = false;
         }
       });
+
+      $scope.$on('properties:property:commit', (event, data) => {
+
+        this.commitControl(data.name, data.value);
+      });
     }
 
     public setSelection(selection: Array<Common.Drawing.Component.IComponent>) {
@@ -60,7 +64,7 @@ module Higherframe.Controllers.Frame {
       var focussed = this.getFocussedControl();
       if (focussed) {
 
-        this.commitControl(focussed);
+        // this.commitControl(focussed);
       }
 
       // Get the display tab element and empty
@@ -83,18 +87,6 @@ module Higherframe.Controllers.Frame {
       let html = `<div ng-controller="${ (<any>this.selection[0]).propertiesController }" ng-include="'${ (<any>this.selection[0]).propertiesTemplateUrl }'" />`;
       let el = this.$compile(html)(scope);
       el.appendTo(parent);
-
-      // Initialise a fresh set of models with the component's properties values
-      // Also initialise the control
-      this.models = {};
-      this.selection[0].properties.forEach((property: any) => {
-
-        property.controls.forEach((control: any) => {
-
-          this.resetControl(control);
-          control.focus = false;
-        });
-      });
     }
 
     public getFocussedControl() {
@@ -115,65 +107,16 @@ module Higherframe.Controllers.Frame {
       return c;
     }
 
-    public preventCommit() {
+    public commitControl(name, value) {
 
-      this.isPreventingCommit = true;
-      this.$timeout(() => this.isPreventingCommit = false, 100);
-    }
-
-    public commitControl(control) {
-
-      if (this.isPreventingCommit) {
-
-        return;
-      }
-
-      this.selection[0].model.properties[control.model] = this.models[control.model];
+      this.selection[0].model.properties[name] = value;
       this.$rootScope.$broadcast('properties:component:updated', { component: this.selection[0] });
-    }
-
-    public resetControl(control) {
-
-      this.models[control.model] = this.selection[0].model.properties[control.model];
     }
 
     public onHeaderDrag($event) {
 
       this.point.x += $event.deltaX,
       this.point.y += $event.deltaY;
-    }
-
-    public onPropertyControlFocus(property) {
-
-    }
-
-    public onPropertyControlBlur(control) {
-
-      this.commitControl(control);
-    }
-
-    public onPropertyControlKeydown(control, $event) {
-
-      switch($event.keyCode) {
-
-        case 13: // enter
-
-          $event.preventDefault();
-          $event.stopPropagation();
-
-          control.focus = false;
-          break;
-
-        case 27: // esc
-
-          $event.preventDefault();
-          $event.stopPropagation();
-
-          this.resetControl(control);
-          this.preventCommit();
-          control.focus = false;
-          break;
-      }
     }
 
     public onMediaPropertyControlChange(control, data) {
@@ -183,15 +126,6 @@ module Higherframe.Controllers.Frame {
 
       // TODO: Resize the control to natural dimensions
       // this.selection[0].properties.width = data.media.width;
-
-      // Defer to regular handler
-      this.onPropertyControlChange(control, data);
-    }
-
-    public onPropertyControlChange(control, data) {
-
-      // Save the updated control to database
-      this.commitControl(control);
     }
   }
 }

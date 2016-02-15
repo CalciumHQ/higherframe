@@ -470,7 +470,7 @@ module Common.Drawing.Component.Library {
 
         var properties = this.getProperties();
 
-        this.bounds.topCenter = position;
+        this.bounds.leftCenter = position;
         properties.x = this.bounds.center.x;
         properties.width = this.bounds.width;
         this.update();

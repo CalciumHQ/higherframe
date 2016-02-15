@@ -109,6 +109,14 @@
         color: $grey1;
       }
     }
+
+    input[type="checkbox"] {
+      margin-right: 5px;
+
+      & + label {
+        display: inline;
+      }
+    }
   }
 }
 
@@ -187,6 +195,7 @@ $tray-tab-padding: 7px;
 
   .tray-content {
     padding: $tray-padding-vertical $tray-padding-horizontal;
+    color: white;
 
     .tray-placeholder {
 

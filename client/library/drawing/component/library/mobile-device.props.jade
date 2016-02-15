@@ -1,8 +1,17 @@
 div.form-group
-  label.form-label.h6(for="") Left
+  label.form-label.h6(for="") Position
   
   div.form-controls
-    input.form-control.full(ng-model="PropsCtrl.models.x", property-type="Float", property-suffix="px")
+    div.form-control-row
+      input.form-control.full(property-name="x", property-bindings, ng-model="PropsCtrl.properties.x", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+      input.form-control.full(property-name="y", property-bindings, ng-model="PropsCtrl.properties.y", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+
+div.form-group
+  label.form-label.h6 Options
+  
+  div.form-controls
+    input#show-status(type="checkbox", property-bindings, ng-model="PropsCtrl.properties.showBar")
+    label.h6(for="show-status") Show status bar
     
 div.form-group
   label.form-label.h6(for="") Size
@@ -11,13 +20,13 @@ div.form-group
     div.form-control-row
       div.ui-dropdown(uib-dropdown, dropdown-append-to-body)
         div.form-control.ui-dropdown-toggle(uib-dropdown-toggle)
-          | {{ PropsCtrl.sizeOptions[PropsCtrl.models.size] }}
+          | {{ PropsCtrl.size.label }}
           span.chevron
             
         ul.uib-dropdown-menu
-          li(ng-repeat="(value, label) in PropsCtrl.sizeOptions")
-            a(ng-click="PropsCtrl.models.size = value") {{ label }}
+          li(ng-repeat="option in PropsCtrl.sizeOptions")
+            a(ng-click="PropsCtrl.onSizeSelect(option)") {{ option.label }}
       
     div.form-control-row
-      input.form-control(ng-model="PropsCtrl.models.width", property-type="Float", property-suffix="px")
-      input.form-control(ng-model="PropsCtrl.models.height", property-type="Float", property-suffix="px")
+      input.form-control(property-name="width", property-bindings, ng-model="PropsCtrl.properties.width", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+      input.form-control(property-name="height", property-bindings, ng-model="PropsCtrl.properties.height", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")

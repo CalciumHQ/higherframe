@@ -5,8 +5,8 @@ module Higherframe.UI.Component {
     properties: Common.Data.IComponentProperties
   }
 
-  export interface IProperties {
+  export class PropertiesController {
 
-    
+
   }
 }
