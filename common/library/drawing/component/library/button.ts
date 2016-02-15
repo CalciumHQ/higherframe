@@ -13,6 +13,8 @@ module Common.Drawing.Component.Library {
     tags = [
       'form'
     ];
+    propertiesController: string = 'ButtonPropertiesController as PropsCtrl';
+    propertiesTemplateUrl: string = '/library/drawing/component/library/button.props.html';
     properties = [
       {
         label: 'Label',

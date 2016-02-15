@@ -1,0 +1,37 @@
+div.form-group
+  label.form-label.h6 Label
+  
+  div.form-controls
+    div.form-control-row
+      input.form-control.full(property-name="label", property-bindings, ng-model="PropsCtrl.properties.label", ng-model-options="{ updateOn: 'blur' }")
+    
+div.form-group
+  label.form-label.h6(for="") Type
+  
+  div.form-controls
+    div.form-control-row
+      input(type="hidden", property-name="type", property-bindings, ng-model="PropsCtrl.properties.type")
+      div.ui-dropdown(uib-dropdown, dropdown-append-to-body)
+        div.form-control.ui-dropdown-toggle(uib-dropdown-toggle)
+          | {{ PropsCtrl.typeOptions[PropsCtrl.properties.type] }}
+          span.chevron
+            
+        ul.uib-dropdown-menu
+          li(ng-repeat="(value, label) in PropsCtrl.typeOptions")
+            a(ng-click="PropsCtrl.properties.type = value") {{ label }}
+
+div.form-group
+  label.form-label.h6(for="") Position
+  
+  div.form-controls
+    div.form-control-row
+      input.form-control.full(property-name="x", property-bindings, ng-model="PropsCtrl.properties.x", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+      input.form-control.full(property-name="y", property-bindings, ng-model="PropsCtrl.properties.y", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+                        
+div.form-group
+  label.form-label.h6 Size
+    
+  div.form-controls
+    div.form-control-row
+      input.form-control(property-name="width", property-bindings, ng-model="PropsCtrl.properties.width", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+      input.form-control(property-name="height", property-bindings, ng-model="PropsCtrl.properties.height", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")

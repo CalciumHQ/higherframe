@@ -15,38 +15,6 @@ module Common.Drawing.Component.Library {
     ];
     propertiesController: string = 'MobileDevicePropertiesController as PropsCtrl';
     propertiesTemplateUrl: string = '/library/drawing/component/library/mobile-device.props.html';
-    properties = [
-      {
-        label: 'Size',
-        controls: [
-          {
-            model: 'width',
-            type: Number,
-            description: 'The width of the component.'
-          },
-          {
-            model: 'height',
-            type: Number,
-            description: 'The height of the component.'
-          }
-        ]
-      },
-      {
-        label: 'Show bar',
-        controls: [
-          {
-            model: 'showBar',
-            type: Boolean,
-            ui: 'select',
-            options: [
-              { label: 'Yes', value: true },
-              { label: 'No', value: false }
-            ],
-            description: 'Display the device title bar.'
-          }
-        ]
-      }
-    ];
 
     model: Common.Data.Component;
 
