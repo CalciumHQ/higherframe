@@ -13,6 +13,8 @@ module Common.Drawing.Component.Library {
       'input',
       'text'
     ];
+    propertiesController: string = 'TextInputPropertiesController as PropsCtrl';
+    propertiesTemplateUrl: string = '/library/drawing/component/library/text-input.props.html';
     properties = [
       {
         label: 'Placeholder',

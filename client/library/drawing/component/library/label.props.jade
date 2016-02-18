@@ -1,0 +1,22 @@
+div.form-group
+  label.form-label.h6 Text
+  
+  div.form-controls
+    div.form-control-row
+      input.form-control.full(property-name="text", property-bindings, ng-model="PropsCtrl.properties.text", ng-model-options="{ updateOn: 'blur' }")
+
+div.form-group
+  label.form-label.h6(for="") Position
+  
+  div.form-controls
+    div.form-control-row
+      input.form-control.full(property-name="x", property-bindings, ng-model="PropsCtrl.properties.x", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+      input.form-control.full(property-name="y", property-bindings, ng-model="PropsCtrl.properties.y", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+                        
+div.form-group
+  label.form-label.h6 Size
+    
+  div.form-controls
+    div.form-control-row
+      input.form-control(property-name="width", property-bindings, ng-model="PropsCtrl.properties.width", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+      input.form-control(property-name="height", property-bindings, ng-model="PropsCtrl.properties.height", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")

@@ -16,6 +16,8 @@ module Common.Drawing.Component.Library {
       'label',
       'string'
     ];
+    propertiesController: string = 'LabelPropertiesController as PropsCtrl';
+    propertiesTemplateUrl: string = '/library/drawing/component/library/label.props.html';
     properties = [
       {
         label: 'Text',
