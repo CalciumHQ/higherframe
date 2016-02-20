@@ -23,11 +23,6 @@ module Higherframe.UI {
           );
         }
 
-        function onModelChanged() {
-
-          commit.call(this);
-        }
-
         function onKeyDown(e) {
 
           switch(e.keyCode) {
@@ -51,8 +46,21 @@ module Higherframe.UI {
           }
         }
 
-        scope.$watch(() => ngModel.$modelValue, () => onModelChanged.call(this));
         element.on('keydown', (e) => scope.$apply(onKeyDown.call(this, e)));
+
+        // When the model value changes, commit the value to database
+        // However, we only want to do this when the value is changed through
+        // the properties panel, as opposed to changes originating elsewhere
+        // (e.g.: dragging a control updates the model value)
+        // Therefore use a parser instead of a watch on ngModel.$modelValue.
+        ngModel.$parsers.push((value) => {
+
+          // Allow the value to pass through the parser pipeline first,
+          // since the $modelValue hasn't been set yet
+          $timeout(() => commit.call(this));
+
+          return value;
+        })
       };
     }
 

@@ -27,7 +27,7 @@ module Higherframe.Drawing.Component.Library {
       }
     ];
 
-    constructor(private $scope: Higherframe.UI.Component.IPropertiesScope) {
+    constructor(private $scope: Higherframe.UI.Component.IPropertiesScope, private $rootScope: ng.IRootScopeService) {
 
       this.properties = <Common.Data.IMobileDeviceProperties>this.$scope.properties;
 
@@ -55,8 +55,25 @@ module Higherframe.Drawing.Component.Library {
 
       this.size = option;
 
-      if (option.width) { this.properties.width = option.width; }
-      if (option.height) { this.properties.height = option.height; }
+      if (option.width) {
+
+        this.properties.width = option.width;
+
+        this.$rootScope.$broadcast('properties:property:commit', {
+          name: 'width',
+          value: this.properties.width
+        });
+      }
+
+      if (option.height) {
+
+        this.properties.height = option.height;
+
+        this.$rootScope.$broadcast('properties:property:commit', {
+          name: 'height',
+          value: this.properties.height
+        });
+      }
     }
   }
 }
