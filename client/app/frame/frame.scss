@@ -74,6 +74,7 @@ body {
   right: 0;
   top: $header-navigation-height + $header-toolbar-height;
   bottom: 0;
+	overflow: hidden;
 }
 
 #frame-titlebar {

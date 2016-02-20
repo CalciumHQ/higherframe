@@ -21,6 +21,7 @@ module Higherframe.Controllers.Frame {
       private $timeout: ng.ITimeoutService,
       private $controller: ng.IControllerService,
       private $compile: ng.ICompileService,
+      private $window: ng.IWindowService,
       private localStorageService
     ) {
 
@@ -55,6 +56,16 @@ module Higherframe.Controllers.Frame {
 
         this.commitControl(data.name, data.value);
       });
+
+      // Ensure the tray is inside the browser window
+      this.checkBounds();
+      angular.element($window).on('resize', (e) => {
+
+        this.$scope.$apply(() => {
+
+          this.checkBounds();
+        });
+      });
     }
 
     public setOpen(open: boolean) {
@@ -76,15 +87,6 @@ module Higherframe.Controllers.Frame {
     }
 
     public setSelection(selection: Array<Common.Drawing.Component.IComponent>) {
-
-      // Ensure a focussed control is committed before changing the selection
-      // This is important for filling out a control, then clicking in the
-      // canvas to select another control.
-      var focussed = this.getFocussedControl();
-      if (focussed) {
-
-        // this.commitControl(focussed);
-      }
 
       // Get the display tab element and empty
       let parent = angular.element('#properties-pane-display');
@@ -108,28 +110,16 @@ module Higherframe.Controllers.Frame {
       el.appendTo(parent);
     }
 
-    public getFocussedControl() {
-
-      if (!this.selection || !this.selection.length) {
-
-        return;
-      }
-
-      var c;
-      this.selection[0].properties.forEach((property: any) => {
-
-        property.controls.forEach((control: any) => {
-
-          if (control.focus) { c = control; }
-        });
-      });
-      return c;
-    }
-
     public commitControl(name, value) {
 
       this.selection[0].model.properties[name] = value;
       this.$rootScope.$broadcast('properties:component:updated', { component: this.selection[0] });
+    }
+
+    public checkBounds() {
+
+      this.point.x = Math.min(this.point.x, this.$window.outerWidth - 300);
+      this.point.y = Math.min(this.point.y, this.$window.outerHeight - 200);
     }
 
     public onHeaderDrag($event) {
