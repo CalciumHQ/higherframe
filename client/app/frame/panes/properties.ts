@@ -6,9 +6,9 @@ module Higherframe.Controllers.Frame {
   export class PropertiesPaneController {
 
     // Member variables
-    public open: boolean = false;
-    public pinned: boolean = false;
-    public point: { x: number, y: number } = { x: 100, y: 200 };
+    public open: boolean = this.localStorageService.get(`frame.properties.open`);
+    public pinned: boolean = this.localStorageService.get(`frame.properties.pinned`);
+    public point: { x: number, y: number } = this.localStorageService.get(`frame.properties.point`) || { x: 100, y: 200 };
     public tab: string = 'display';
 
     public selection: Array<Common.Drawing.Component.IComponent>;
@@ -20,7 +20,8 @@ module Higherframe.Controllers.Frame {
       private $rootScope: ng.IRootScopeService,
       private $timeout: ng.ITimeoutService,
       private $controller: ng.IControllerService,
-      private $compile: ng.ICompileService
+      private $compile: ng.ICompileService,
+      private localStorageService
     ) {
 
       $scope.$on('controller:component:selected', (event, components) => {
@@ -32,7 +33,7 @@ module Higherframe.Controllers.Frame {
 
         data = data || {};
 
-        this.open = true;
+        this.setOpen(true);
 
         if (!this.pinned && data.point) {
 
@@ -46,7 +47,7 @@ module Higherframe.Controllers.Frame {
 
         if (!this.pinned || data.force) {
 
-          this.open = false;
+          this.setOpen(false);
         }
       });
 
@@ -54,6 +55,24 @@ module Higherframe.Controllers.Frame {
 
         this.commitControl(data.name, data.value);
       });
+    }
+
+    public setOpen(open: boolean) {
+
+      this.open = open;
+      this.localStorageService.set(`frame.properties.open`, open);
+    }
+
+    public setPinned(pinned: boolean) {
+
+      this.pinned = pinned;
+      this.localStorageService.set(`frame.properties.pinned`, pinned);
+    }
+
+    public setPoint(point: { x: number, y: number }) {
+
+      this.point = point;
+      this.localStorageService.set(`frame.properties.point`, point);
     }
 
     public setSelection(selection: Array<Common.Drawing.Component.IComponent>) {
@@ -115,8 +134,20 @@ module Higherframe.Controllers.Frame {
 
     public onHeaderDrag($event) {
 
-      this.point.x += $event.deltaX,
-      this.point.y += $event.deltaY;
+      var x = this.point.x + $event.deltaX;
+      var y = this.point.y + $event.deltaY;
+
+      this.setPoint({ x, y });
+    }
+
+    public onCloseClick() {
+
+      this.setOpen(false);
+    }
+
+    public onPinClick() {
+
+      this.setPinned(!this.pinned);
     }
 
     public onMediaPropertyControlChange(control, data) {

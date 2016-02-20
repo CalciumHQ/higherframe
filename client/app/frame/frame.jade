@@ -214,10 +214,10 @@
 					span.tray-header-tab(ng-class="{ active: PropertiesCtrl.tab == 'display' }", ng-click="PropertiesCtrl.tab = 'display'") Display
 					
 				.tray-header-buttons
-					div.tray-pin.tray-header-button(ng-click="PropertiesCtrl.pinned = !PropertiesCtrl.pinned", ng-class="{ active: PropertiesCtrl.pinned }")
+					div.tray-pin.tray-header-button(ng-click="PropertiesCtrl.onPinClick()", ng-class="{ active: PropertiesCtrl.pinned }")
 						span.glyph p
 						
-					div.tray-close.tray-header-button(ng-click="PropertiesCtrl.open = false")
+					div.tray-close.tray-header-button(ng-click="PropertiesCtrl.onCloseClick()")
 						span.glyph x
 						
 			.tray-content.form
