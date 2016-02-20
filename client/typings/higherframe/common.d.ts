@@ -9155,12 +9155,18 @@ declare module Common.Data {
     }
     interface IMobileTitlebarProperties extends IComponentProperties {
         width: number;
-        height: number;
         title: string;
         leftIcon: string;
         rightIcon: string;
     }
     interface ITextInputProperties extends IComponentProperties {
+        width: number;
+        placeholder: String;
+        value: String;
+        fontSize: number;
+        fontWeight: number;
+    }
+    interface ISelectInputProperties extends IComponentProperties {
         width: number;
         placeholder: String;
         value: String;
@@ -9366,30 +9372,8 @@ declare module Common.Drawing.Component.Library {
         static preview: string;
         static category: string;
         tags: string[];
-        properties: ({
-            label: string;
-            controls: {
-                model: string;
-                type: StringConstructor;
-                ui: string;
-                options: {
-                    label: string;
-                    value: string;
-                }[];
-                description: string;
-            }[];
-        } | {
-            label: string;
-            controls: {
-                model: string;
-                type: StringConstructor;
-                ui: string;
-                options: {
-                    label: string;
-                    value: string;
-                }[];
-            }[];
-        })[];
+        propertiesController: string;
+        propertiesTemplateUrl: string;
         thumbnail: string;
         snapPoints: {
             x: number;
@@ -9420,7 +9404,7 @@ declare module Common.Drawing.Component.Library {
         /**
          * Calculate the drag handles for the component
          */
-        getDragHandles(color: paper.Color): Array<IDragHandle>;
+        getTransformHandles(color: paper.Color): Array<IDragHandle>;
     }
 }
 declare module Common.Drawing.Component.Library {
@@ -9430,6 +9414,8 @@ declare module Common.Drawing.Component.Library {
         static preview: string;
         static category: string;
         tags: string[];
+        propertiesController: string;
+        propertiesTemplateUrl: string;
         properties: ({
             label: string;
             controls: {
@@ -9504,6 +9490,8 @@ declare module Common.Drawing.Component.Library {
         static preview: string;
         static category: string;
         tags: string[];
+        propertiesController: string;
+        propertiesTemplateUrl: string;
         properties: ({
             label: string;
             controls: {
@@ -9654,73 +9642,14 @@ declare module Common.Drawing.Component.Library {
     }
 }
 declare module Common.Drawing.Component.Library {
-    class MobileDevice extends Drawing.Component.Base implements Drawing.Component.IComponent {
-        id: Type;
-        static title: string;
-        static preview: string;
-        static category: string;
-        tags: string[];
-        properties: ({
-            label: string;
-            controls: {
-                model: string;
-                type: NumberConstructor;
-                description: string;
-            }[];
-        } | {
-            label: string;
-            controls: {
-                model: string;
-                type: BooleanConstructor;
-                ui: string;
-                options: {
-                    label: string;
-                    value: boolean;
-                }[];
-                description: string;
-            }[];
-        })[];
-        model: Common.Data.Component;
-        static BAR_HEIGHT: number;
-        /**
-         * Create a new mobile device component
-         */
-        constructor(model: Common.Data.IDrawingModel);
-        /**
-         * Utility functions for finding points in the components
-         */
-        getComponentBounds(): paper.Rectangle;
-        getScreenRect(): paper.Rectangle;
-        getUsableScreenRect(): paper.Rectangle;
-        /**
-         * Redraw the component
-         */
-        update(): void;
-        /**
-         * Update model with the state of the view component
-         */
-        updateModel(): void;
-        /**
-         * Calculate the snap points for the component
-         */
-        getSnapPoints(): Array<SnapPoint>;
-        /**
-         * Calculate the transform handles for the component
-         */
-        getTransformHandles(color: paper.Color): Array<IDragHandle>;
-        /**
-         * Cast the model properties into the correct type
-         */
-        getProperties(): Common.Data.IMobileDeviceProperties;
-    }
-}
-declare module Common.Drawing.Component.Library {
     class Label extends Drawing.Component.Base implements Drawing.Component.IComponent {
         id: Type;
         static title: string;
         static preview: string;
         static category: string;
         tags: string[];
+        propertiesController: string;
+        propertiesTemplateUrl: string;
         properties: ({
             label: string;
             controls: {
@@ -9772,12 +9701,57 @@ declare module Common.Drawing.Component.Library {
     }
 }
 declare module Common.Drawing.Component.Library {
+    class MobileDevice extends Drawing.Component.Base implements Drawing.Component.IComponent {
+        id: Type;
+        static title: string;
+        static preview: string;
+        static category: string;
+        tags: string[];
+        propertiesController: string;
+        propertiesTemplateUrl: string;
+        model: Common.Data.Component;
+        static BAR_HEIGHT: number;
+        /**
+         * Create a new mobile device component
+         */
+        constructor(model: Common.Data.IDrawingModel);
+        /**
+         * Utility functions for finding points in the components
+         */
+        getComponentBounds(): paper.Rectangle;
+        getScreenRect(): paper.Rectangle;
+        getUsableScreenRect(): paper.Rectangle;
+        /**
+         * Redraw the component
+         */
+        update(): void;
+        /**
+         * Update model with the state of the view component
+         */
+        updateModel(): void;
+        /**
+         * Calculate the snap points for the component
+         */
+        getSnapPoints(): Array<SnapPoint>;
+        /**
+         * Calculate the transform handles for the component
+         */
+        getTransformHandles(color: paper.Color): Array<IDragHandle>;
+        /**
+         * Cast the model properties into the correct type
+         */
+        getProperties(): Common.Data.IMobileDeviceProperties;
+    }
+}
+declare module Common.Drawing.Component.Library {
     class MobileTitlebar extends Drawing.Component.Base implements Drawing.Component.IComponent {
         id: Type;
         static title: string;
         static preview: string;
         static category: string;
         tags: string[];
+        propertiesController: string;
+        propertiesTemplateUrl: string;
         properties: ({
             label: string;
             controls: {
@@ -9797,6 +9771,7 @@ declare module Common.Drawing.Component.Library {
         showBounds: boolean;
         model: Common.Data.Component;
         icon: paper.PointText;
+        static HEIGHT: number;
         /**
          * Create a new Mobile Titlebar component
          */
@@ -9813,6 +9788,10 @@ declare module Common.Drawing.Component.Library {
          * Calculate the snap points for the component
          */
         getSnapPoints(): Array<SnapPoint>;
+        /**
+         * Calculate the transform handles for the component
+         */
+        getTransformHandles(color: paper.Color): Array<IDragHandle>;
         /**
          * Cast the model properties into the correct type
          */
@@ -9863,6 +9842,10 @@ declare module Common.Drawing.Component.Library {
          * Calculate the transform handles for the component
          */
         getTransformHandles(color: paper.Color): Array<IDragHandle>;
+        /**
+         * Cast the model properties into the correct type
+         */
+        getProperties(): Common.Data.IRectangleProperties;
     }
 }
 declare module Common.Drawing.Component.Library {
@@ -9930,7 +9913,7 @@ declare module Common.Drawing.Component.Library {
         /**
          * Cast the model properties into the correct type
          */
-        getProperties(): Common.Data.ITextInputProperties;
+        getProperties(): Common.Data.ISelectInputProperties;
         /**
          * Calculate the height of the component
          */
@@ -9944,6 +9927,8 @@ declare module Common.Drawing.Component.Library {
         static preview: string;
         static category: string;
         tags: string[];
+        propertiesController: string;
+        propertiesTemplateUrl: string;
         properties: ({
             label: string;
             controls: {

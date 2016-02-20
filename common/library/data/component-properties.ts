@@ -47,6 +47,14 @@ module Common.Data {
     fontWeight: number
   }
 
+  export interface ISelectInputProperties extends IComponentProperties {
+    width: number,
+    placeholder: String,
+    value: String,
+    fontSize: number,
+    fontWeight: number
+  }
+
   export interface ICheckboxProperties extends IComponentProperties {
     label: String,
     value: Boolean,

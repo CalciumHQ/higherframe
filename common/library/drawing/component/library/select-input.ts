@@ -15,6 +15,8 @@ module Common.Drawing.Component.Library {
       'input',
       'select'
     ];
+    propertiesController: string = 'SelectInputPropertiesController as PropsCtrl';
+    propertiesTemplateUrl: string = '/library/drawing/component/library/select-input.props.html';
     properties = [
       {
         label: 'Placeholder',
@@ -73,7 +75,7 @@ module Common.Drawing.Component.Library {
 
       super(model);
 
-      var properties = <Common.Data.ITextInputProperties>this.model.properties;
+      var properties = <Common.Data.ISelectInputProperties>this.model.properties;
       properties.width = properties.width || 160;
       properties.placeholder = properties.placeholder || 'Select option';
       properties.fontSize = properties.fontSize || 14;
@@ -90,7 +92,7 @@ module Common.Drawing.Component.Library {
 
     update() {
 
-      var properties = <Common.Data.ITextInputProperties>this.model.properties;
+      var properties = <Common.Data.ISelectInputProperties>this.model.properties;
       var HEIGHT = this.getHeight();
 
       // Determine palette
@@ -180,7 +182,7 @@ module Common.Drawing.Component.Library {
       rightCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 
         return [new SnapPoint(position, 'edge', 'center')];
-      }; 
+      };
       rightCenter.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.rightCenter.x = position.x;
@@ -233,9 +235,9 @@ module Common.Drawing.Component.Library {
      * Cast the model properties into the correct type
      */
 
-    getProperties(): Common.Data.ITextInputProperties {
+    getProperties(): Common.Data.ISelectInputProperties {
 
-      return <Common.Data.ITextInputProperties>this.model.properties;
+      return <Common.Data.ISelectInputProperties>this.model.properties;
     }
 
 
