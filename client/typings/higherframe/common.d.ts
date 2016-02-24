@@ -9201,6 +9201,10 @@ declare module Common.Data {
         height: number;
         fontSize: number;
     }
+    interface IBrowserProperties extends IComponentProperties {
+        width: number;
+        height: number;
+    }
 }
 declare module Common.Data {
     class Component implements IDrawingModel {
@@ -9405,6 +9409,49 @@ declare module Common.Drawing.Component.Library {
          * Calculate the drag handles for the component
          */
         getTransformHandles(color: paper.Color): Array<IDragHandle>;
+    }
+}
+declare module Common.Drawing.Component.Library {
+    class Browser extends Drawing.Component.Base implements Drawing.Component.IComponent {
+        id: Type;
+        static title: string;
+        static preview: string;
+        static category: string;
+        tags: string[];
+        propertiesController: string;
+        propertiesTemplateUrl: string;
+        model: Common.Data.Component;
+        static BAR_HEIGHT: number;
+        /**
+         * Create a new mobile device component
+         */
+        constructor(model: Common.Data.IDrawingModel);
+        /**
+         * Utility functions for finding points in the components
+         */
+        getComponentBounds(): paper.Rectangle;
+        getScreenRect(): paper.Rectangle;
+        getUsableScreenRect(): paper.Rectangle;
+        /**
+         * Redraw the component
+         */
+        update(): void;
+        /**
+         * Update model with the state of the view component
+         */
+        updateModel(): void;
+        /**
+         * Calculate the snap points for the component
+         */
+        getSnapPoints(): Array<SnapPoint>;
+        /**
+         * Calculate the transform handles for the component
+         */
+        getTransformHandles(color: paper.Color): Array<IDragHandle>;
+        /**
+         * Cast the model properties into the correct type
+         */
+        getProperties(): Common.Data.IBrowserProperties;
     }
 }
 declare module Common.Drawing.Component.Library {
@@ -9855,6 +9902,8 @@ declare module Common.Drawing.Component.Library {
         static preview: string;
         static category: string;
         tags: string[];
+        propertiesController: string;
+        propertiesTemplateUrl: string;
         properties: ({
             label: string;
             controls: {
@@ -10008,6 +10057,7 @@ declare module Common.Drawing.Component {
         Button = 8,
         Image = 9,
         Icon = 10,
+        Browser = 11,
     }
 }
 declare module Common.Drawing {

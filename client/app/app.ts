@@ -41,6 +41,7 @@ angular.module('siteApp', [
     ComponentLibraryProvider.registerComponent(Common.Drawing.Component.Type.Checkbox);
     ComponentLibraryProvider.registerComponent(Common.Drawing.Component.Type.Button);
     ComponentLibraryProvider.registerComponent(Common.Drawing.Component.Type.Icon);
+    ComponentLibraryProvider.registerComponent(Common.Drawing.Component.Type.Browser);
   })
 
   .factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location) {

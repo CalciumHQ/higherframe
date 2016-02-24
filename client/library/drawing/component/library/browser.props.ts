@@ -1,9 +1,9 @@
 
 module Higherframe.Drawing.Component.Library {
 
-  export class MobileDevicePropertiesController implements Higherframe.UI.Component.PropertiesController {
+  export class BrowserPropertiesController implements Higherframe.UI.Component.PropertiesController {
 
-    properties: Common.Data.IMobileDeviceProperties;
+    properties: Common.Data.IBrowserProperties;
     size: string;
 
     private sizeOptions = [
@@ -29,7 +29,7 @@ module Higherframe.Drawing.Component.Library {
 
     constructor(private $scope: Higherframe.UI.Component.IPropertiesScope, private $rootScope: ng.IRootScopeService) {
 
-      this.properties = <Common.Data.IMobileDeviceProperties>this.$scope.properties;
+      this.properties = <Common.Data.IBrowserProperties>this.$scope.properties;
 
       this.$scope.$watch(() => this.properties.width, () => this.sizeChanged());
       this.$scope.$watch(() => this.properties.height, () => this.sizeChanged());
@@ -80,4 +80,4 @@ module Higherframe.Drawing.Component.Library {
 
 angular
   .module('siteApp')
-  .controller('MobileDevicePropertiesController', Higherframe.Drawing.Component.Library.MobileDevicePropertiesController);
+  .controller('BrowserPropertiesController', Higherframe.Drawing.Component.Library.BrowserPropertiesController);

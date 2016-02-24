@@ -86,4 +86,10 @@ module Common.Data {
     height: number,
     fontSize: number
   }
+
+  export interface IBrowserProperties extends IComponentProperties {
+    address: string,
+    width: number,
+    height: number
+  }
 }

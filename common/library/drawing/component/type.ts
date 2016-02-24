@@ -11,6 +11,7 @@ module Common.Drawing.Component {
     Label,
     Button,
     Image,
-    Icon
+    Icon,
+    Browser
   };
 };
