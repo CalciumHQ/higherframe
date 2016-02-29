@@ -3,13 +3,46 @@
 
 module Higherframe.Controllers.Frame {
 
+  interface ToolboxItem {
+    tool?: any,
+    title: string,
+    icon: string,
+    active?: boolean
+  }
+
   export class ToolboxTrayController {
 
-    components: Array<Higherframe.Drawing.Component.Library.ILibraryItem> = [];
+    items: Array<ToolboxItem> = [];
 
     constructor(private $scope: ng.IScope, private ComponentLibrary: Higherframe.Drawing.Component.Library.IService) {
 
-      this.components = this.ComponentLibrary.getItems();
+      // Add the select tool
+      this.items.push({
+        title: 'Select',
+        icon: '/assets/images/select.svg',
+        active: true
+      });
+
+      // Add the artboard tool
+      this.items.push({
+        title: 'Edit artboards',
+        icon: '/assets/images/artboard.svg'
+      });
+
+      // Add the component tools
+      this.ComponentLibrary.getItems().forEach((item) => {
+
+        this.items.push({
+          title: item.title,
+          icon: item.icon
+        });
+      });
+    }
+
+    onItemClick(item) {
+
+      this.items.forEach((item) => item.active = false);
+      item.active = true;
     }
   }
 }

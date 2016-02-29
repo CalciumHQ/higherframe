@@ -228,8 +228,8 @@
 
 		#frame-canvas-wrapper
 			#toolbox(ng-controller="ToolboxCtrl as ToolboxCtrl")
-				div.toolbox-component(ng-repeat="component in ToolboxCtrl.components", ng-click="ToolboxCtrl.onComponentClick(component)", title="{{ component.title }}")
-					svg-replace(ng-src="{{ component.icon }}")
+				div.toolbox-item(ng-repeat="item in ToolboxCtrl.items", ng-class="{ active: item.active }", ng-click="ToolboxCtrl.onItemClick(item)", title="{{ item.title }}")
+					svg-replace(ng-src="{{ item.icon }}")
 				
 			canvas#canvas(wireframe, data="FrameCtrl.wireframe", resize, keepalive="true", oncontextmenu="return false", jqyoui-droppable)
 					

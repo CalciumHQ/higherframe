@@ -8,7 +8,7 @@ module Higherframe.Drawing.Component.Library {
   export interface ILibraryItem {
     id: string,
     title: string,
-    icon: String
+    icon: string
   }
 
   export class ServiceProvider implements ng.IServiceProvider {

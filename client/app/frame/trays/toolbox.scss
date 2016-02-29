@@ -3,14 +3,42 @@
   @include display-flex;
   @include flex-direction(column);
   height: 100%;
-  padding-top: 10px;
   background: $grey-3;
 
-  .toolbox-component {
-    padding: 6px;
+  .toolbox-item {
+    padding: 9px;
+    @include transition(all 100ms);
+
+    &:active {
+      @include transition(all 30ms);
+    }
+
+    &:hover {
+      background: #525550;
+    }
+
+    &:active,
+    &.active:active {
+      background: #ffc000;
+
+      svg {
+        path, circle {
+          fill: $grey-3;
+        }
+      }
+    }
+
+    &.active {
+      svg {
+        path, circle {
+          fill: #ffc000;
+        }
+      }
+    }
 
     svg {
-      width: 28px;
+      display: block;
+      width: 24px;
 
       path, circle {
         fill: white;

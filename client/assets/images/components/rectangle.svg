@@ -1,1 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" viewBox="0 0 60 60" version="1.1" x="0px" y="0px"><title>130 - Edit Rounding Box (Solid)</title><desc>Created with Sketch.</desc><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage"><g sketch:type="MSLayerGroup" fill="#000000"><path d="M60,8 L60,0 L52,0 L52,3 L34,3 L34,0 L26,0 L26,3 L8,3 L8,0 L0,0 L0,8 L3,8 L3,26 L0,26 L0,34 L3,34 L3,52 L0,52 L0,60 L8,60 L8,57 L26,57 L26,60 L34,60 L34,57 L52,57 L52,60 L60,60 L60,52 L57,52 L57,34 L60,34 L60,26 L57,26 L57,8 L60,8 L60,8 Z M55,26 L52,26 L52,34 L55,34 L55,52 L52,52 L52,55 L34,55 L34,52 L26,52 L26,55 L8,55 L8,52 L5,52 L5,34 L8,34 L8,26 L5,26 L5,8 L8,8 L8,5 L26,5 L26,8 L34,8 L34,5 L52,5 L52,8 L55,8 L55,26 L55,26 Z" sketch:type="MSShapeGroup"></path></g></g></svg>
+<svg version="1.1" id="Layer_1" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="-116 684 74 74"
+	 style="enable-background:new -116 684 74 74;" xml:space="preserve">
+<title>130 - Edit Rounding Box (Solid)</title>
+<desc>Created with Sketch.</desc>
+<g sketch:type="MSPage">
+	<g sketch:type="MSLayerGroup">
+		<path sketch:type="MSShapeGroup" d="M-49,699v-8h-8v3h-18v-3h-8v3h-18v-3h-8v8h3v18h-3v8h3v18h-3v8h8v-3h18v3h8v-3h18v3h8v-8h-3
+			v-18h3v-8h-3v-18H-49L-49,699z M-54,717h-3v8h3v18h-3v3h-18v-3h-8v3h-18v-3h-3v-18h3v-8h-3v-18h3v-3h18v3h8v-3h18v3h3V717L-54,717
+			z"/>
+	</g>
+</g>
+</svg>
