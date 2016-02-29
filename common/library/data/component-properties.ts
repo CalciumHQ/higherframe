@@ -21,6 +21,11 @@ module Common.Data {
     cornerRadius: number
   }
 
+  export interface IEllipseProperties extends IComponentProperties {
+    width: number,
+    height: number
+  }
+
   export interface IArrowProperties extends IComponentProperties {
     start: Drawing.IPoint,
     end: Drawing.IPoint,

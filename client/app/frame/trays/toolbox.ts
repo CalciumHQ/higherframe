@@ -12,7 +12,7 @@ module Higherframe.Controllers.Frame {
 
   export class ToolboxTrayController {
 
-    items: Array<ToolboxItem> = [];
+    private items: Array<ToolboxItem> = [];
 
     constructor(private $scope: ng.IScope, private ComponentLibrary: Higherframe.Drawing.Component.Library.IService) {
 

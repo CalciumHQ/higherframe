@@ -9144,6 +9144,10 @@ declare module Common.Data {
         height: number;
         cornerRadius: number;
     }
+    interface IEllipseProperties extends IComponentProperties {
+        width: number;
+        height: number;
+    }
     interface IArrowProperties extends IComponentProperties {
         start: Drawing.IPoint;
         end: Drawing.IPoint;
@@ -9576,6 +9580,39 @@ declare module Common.Drawing.Component.Library {
          * Cast the model properties into the correct type
          */
         getProperties(): Common.Data.ICheckboxProperties;
+    }
+}
+declare module Common.Drawing.Component.Library {
+    class Ellipse extends Drawing.Component.Component {
+        id: Type;
+        static title: string;
+        static category: string;
+        tags: string[];
+        model: Common.Data.Component;
+        /**
+         * Create a new Ellipse component
+         */
+        constructor(model: Common.Data.IDrawingModel);
+        /**
+         * Redraw the component
+         */
+        update(): void;
+        /**
+         * Update model with the state of the view component
+         */
+        updateModel(): void;
+        /**
+         * Calculate the snap points for the component
+         */
+        getSnapPoints(): Array<SnapPoint>;
+        /**
+         * Calculate the transform handles for the component
+         */
+        getTransformHandles(color: paper.Color): Array<IDragHandle>;
+        /**
+         * Cast the model properties into the correct type
+         */
+        getProperties(): Common.Data.IEllipseProperties;
     }
 }
 declare module Common.Drawing.Component.Library {
@@ -10019,17 +10056,18 @@ declare module Common.Drawing.Component {
     enum Type {
         Generic = 0,
         Rectangle = 1,
-        Arrow = 2,
-        MobileDevice = 3,
-        MobileTitlebar = 4,
-        TextInput = 5,
-        SelectInput = 6,
-        Checkbox = 7,
-        Label = 8,
-        Button = 9,
-        Image = 10,
-        Icon = 11,
-        Browser = 12,
+        Ellipse = 2,
+        Arrow = 3,
+        MobileDevice = 4,
+        MobileTitlebar = 5,
+        TextInput = 6,
+        SelectInput = 7,
+        Checkbox = 8,
+        Label = 9,
+        Button = 10,
+        Image = 11,
+        Icon = 12,
+        Browser = 13,
     }
 }
 declare module Common.Drawing {

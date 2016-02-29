@@ -37,6 +37,12 @@ angular.module('siteApp', [
     });
 
     ComponentLibraryProvider.register({
+      id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.Ellipse],
+      title: Common.Drawing.Component.Library.Ellipse.title,
+      icon: '/assets/images/components/ellipse.svg'
+    });
+
+    ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.Arrow],
       title: Common.Drawing.Component.Library.Arrow.title,
       icon: '/assets/images/components/line.svg'
@@ -52,18 +58,6 @@ angular.module('siteApp', [
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.Image],
       title: Common.Drawing.Component.Library.Image.title,
       icon: '/assets/images/components/image.svg'
-    });
-
-    ComponentLibraryProvider.register({
-      id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.MobileDevice],
-      title: Common.Drawing.Component.Library.MobileDevice.title,
-      icon: '/assets/images/components/mobile.svg'
-    });
-
-    ComponentLibraryProvider.register({
-      id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.MobileTitlebar],
-      title: Common.Drawing.Component.Library.MobileTitlebar.title,
-      icon: '/assets/images/components/mobile-titlebar.svg'
     });
 
     ComponentLibraryProvider.register({
@@ -102,6 +96,17 @@ angular.module('siteApp', [
       icon: '/assets/images/components/browser.svg'
     });
 
+    ComponentLibraryProvider.register({
+      id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.MobileDevice],
+      title: Common.Drawing.Component.Library.MobileDevice.title,
+      icon: '/assets/images/components/mobile.svg'
+    });
+
+    ComponentLibraryProvider.register({
+      id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.MobileTitlebar],
+      title: Common.Drawing.Component.Library.MobileTitlebar.title,
+      icon: '/assets/images/components/mobile-titlebar.svg'
+    });
   })
 
   .factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location) {
