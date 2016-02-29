@@ -8,7 +8,6 @@ module Common.Drawing.Component.Library {
     // Implement IDefinition members
     id = Drawing.Component.Type.Button;
     static title = 'Button';
-    static preview = '/assets/images/components/rectangle.svg';
     static category = 'Form';
     tags = [
       'form'

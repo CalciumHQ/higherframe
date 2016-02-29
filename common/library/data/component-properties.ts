@@ -4,6 +4,8 @@ module Common.Data {
   export interface IComponentProperties {
     x: number,
     y: number,
+    width?: number,
+    height?: number,
     index: number
   }
 

@@ -6,7 +6,6 @@ module Common.Drawing.Component.Library {
     // Implement IDefinition members
     id = Drawing.Component.Type.TextInput;
     static title = 'Text control';
-    static preview = '/assets/images/components/iphone.svg';
     static category = 'Form';
     tags = [
       'form',

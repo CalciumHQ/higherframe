@@ -8,7 +8,6 @@ module Common.Drawing.Component.Library {
     // Implement IDefinition members
     id = Drawing.Component.Type.SelectInput;
     static title = 'Select control';
-    static preview = '/assets/images/components/iphone.svg';
     static category = 'Form';
     tags = [
       'form',

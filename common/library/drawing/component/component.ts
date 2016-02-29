@@ -21,10 +21,8 @@ module Common.Drawing.Component {
 
     id: Common.Drawing.Component.Type = Common.Drawing.Component.Type.Generic;
     title: String = 'Generic Component';
-    preview: String = '';
     category: String = '';
     tags: Array<String> = [];
-    thumbnail: String = '';
     model: Common.Data.IDrawingModel;
 
     _hovered: Boolean = false;

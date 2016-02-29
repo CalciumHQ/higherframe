@@ -7,30 +7,18 @@ module Higherframe.Drawing.Component.Library {
 
   export interface ILibraryItem {
     id: string,
-    category: string,
     title: string,
-    preview: string
+    icon: String
   }
 
   export class ServiceProvider implements ng.IServiceProvider {
 
     private items: Array<ILibraryItem> = [];
 
-    public registerComponent(type: Common.Drawing.Component.Type) {
-
-      // Get a string representation of the component type enum
-      var id = Common.Drawing.Component.Type[type];
-
-      // Create a library item for the component
-      var libraryItem: ILibraryItem = {
-        id: id,
-        category: Common.Drawing.Component.Library[id].category,
-        title: Common.Drawing.Component.Library[id].title,
-        preview: Common.Drawing.Component.Library[id].preview
-      };
+    public registerComponent(item: ILibraryItem) {
 
       // Add to the list
-      this.items.push(libraryItem);
+      this.items.push(item);
     }
 
     public $get(): IService {

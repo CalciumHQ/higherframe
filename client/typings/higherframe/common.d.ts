@@ -9130,6 +9130,8 @@ declare module Common.Data {
     interface IComponentProperties {
         x: number;
         y: number;
+        width?: number;
+        height?: number;
         index: number;
     }
     interface ILabelProperties extends IComponentProperties {
@@ -9280,10 +9282,8 @@ declare module Common.Drawing.Component {
          */
         id: Common.Drawing.Component.Type;
         title: String;
-        preview: String;
         category: String;
         tags: Array<String>;
-        thumbnail: String;
         model: Common.Data.IDrawingModel;
         _hovered: Boolean;
         hovered: Boolean;
@@ -9354,12 +9354,10 @@ declare module Common.Drawing.Component.Library {
     class Arrow extends Drawing.Component.Component {
         id: Type;
         static title: string;
-        static preview: string;
         static category: string;
         tags: string[];
         propertiesController: string;
         propertiesTemplateUrl: string;
-        thumbnail: string;
         snapPoints: {
             x: number;
             y: number;
@@ -9396,7 +9394,6 @@ declare module Common.Drawing.Component.Library {
     class Browser extends Drawing.Component.Component {
         id: Type;
         static title: string;
-        static preview: string;
         static category: string;
         tags: string[];
         propertiesController: string;
@@ -9442,7 +9439,6 @@ declare module Common.Drawing.Component.Library {
     class Button extends Drawing.Component.Component {
         id: Type;
         static title: string;
-        static preview: string;
         static category: string;
         tags: string[];
         propertiesController: string;
@@ -9518,7 +9514,6 @@ declare module Common.Drawing.Component.Library {
     class Checkbox extends Drawing.Component.Component {
         id: Type;
         static title: string;
-        static preview: string;
         static category: string;
         tags: string[];
         propertiesController: string;
@@ -9587,7 +9582,6 @@ declare module Common.Drawing.Component.Library {
     class Icon extends Drawing.Component.Component {
         id: Type;
         static title: string;
-        static preview: string;
         static category: string;
         tags: string[];
         properties: ({
@@ -9633,7 +9627,6 @@ declare module Common.Drawing.Component.Library {
     class Image extends Drawing.Component.Component {
         id: Type;
         static title: string;
-        static preview: string;
         static category: string;
         tags: string[];
         properties: {
@@ -9676,7 +9669,6 @@ declare module Common.Drawing.Component.Library {
     class Label extends Drawing.Component.Component {
         id: Type;
         static title: string;
-        static preview: string;
         static category: string;
         tags: string[];
         propertiesController: string;
@@ -9735,7 +9727,6 @@ declare module Common.Drawing.Component.Library {
     class MobileDevice extends Drawing.Component.Component {
         id: Type;
         static title: string;
-        static preview: string;
         static category: string;
         tags: string[];
         propertiesController: string;
@@ -9778,7 +9769,6 @@ declare module Common.Drawing.Component.Library {
     class MobileTitlebar extends Drawing.Component.Component {
         id: Type;
         static title: string;
-        static preview: string;
         static category: string;
         tags: string[];
         propertiesController: string;
@@ -9833,7 +9823,6 @@ declare module Common.Drawing.Component.Library {
     class Rectangle extends Drawing.Component.Component {
         id: Type;
         static title: string;
-        static preview: string;
         static category: string;
         tags: string[];
         properties: ({
@@ -9883,7 +9872,6 @@ declare module Common.Drawing.Component.Library {
     class SelectInput extends Drawing.Component.Component {
         id: Type;
         static title: string;
-        static preview: string;
         static category: string;
         tags: string[];
         propertiesController: string;
@@ -9957,7 +9945,6 @@ declare module Common.Drawing.Component.Library {
     class TextInput extends Drawing.Component.Component {
         id: Type;
         static title: string;
-        static preview: string;
         static category: string;
         tags: string[];
         propertiesController: string;

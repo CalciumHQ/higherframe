@@ -8,7 +8,6 @@ module Common.Drawing.Component.Library {
     // Implement IDefinition members
     id = Drawing.Component.Type.Icon;
     static title = 'Icon';
-    static preview = '/assets/images/components/rectangle.svg';
     static category = 'Basic';
     tags = [
       'basic',

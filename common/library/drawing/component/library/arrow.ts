@@ -8,7 +8,6 @@ module Common.Drawing.Component.Library {
     // Implement IDefinition members
     id = Drawing.Component.Type.Arrow;
     static title = 'Arrow';
-    static preview = '/assets/images/components/arrow.svg';
     static category = 'Basic';
     tags = [
       'basic',
@@ -17,7 +16,6 @@ module Common.Drawing.Component.Library {
     ];
     propertiesController: string = 'ArrowPropertiesController as PropsCtrl';
     propertiesTemplateUrl: string = '/library/drawing/component/library/arrow.props.html';
-    thumbnail = '/assets/images/components/iphone-thumbnail@2x.png';
     snapPoints = [
       { x: -116, y: -232 },		// Bounding box
       { x: 116, y: -232 }

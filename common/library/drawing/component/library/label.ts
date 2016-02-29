@@ -8,7 +8,6 @@ module Common.Drawing.Component.Library {
     // Implement IDefinition members
     id = Drawing.Component.Type.Label;
     static title = 'Label';
-    static preview = '/assets/images/components/iphone.svg';
     static category = 'Basic';
     tags = [
       'basic',

@@ -8,7 +8,6 @@ module Common.Drawing.Component.Library {
     // Implement IDefinition members
     id = Drawing.Component.Type.Icon;
     static title = 'Mobile Titlebar';
-    static preview = '/assets/images/components/iphone-titlebar.svg';
     static category = 'Mobile';
     tags = [
       'mobile',

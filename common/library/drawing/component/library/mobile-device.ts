@@ -6,7 +6,6 @@ module Common.Drawing.Component.Library {
     // Implement IDefinition members
     id = Drawing.Component.Type.MobileDevice;
     static title = 'Mobile Device';
-    static preview = '/assets/images/components/iphone.svg';
     static category = 'Containers';
     tags = [
       'container',
