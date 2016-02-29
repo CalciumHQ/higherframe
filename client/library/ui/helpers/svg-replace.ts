@@ -41,7 +41,7 @@ module Higherframe.UI {
 
     manipulateImgNode(data: any, element: ng.IAugmentedJQuery):HTMLElement {
 
-      var $svg = angular.element(data)[4];
+      var $svg = angular.element(data)[0];
       var imgClass = element.attr('class');
 
       if (typeof(imgClass) !== 'undefined') {

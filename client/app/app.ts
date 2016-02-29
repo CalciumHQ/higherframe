@@ -30,76 +30,76 @@ angular.module('siteApp', [
     $mixpanelProvider.apiKey('@@mixpanel.key');
 
     // Register components
-    ComponentLibraryProvider.registerComponent({
+    ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.Rectangle],
       title: Common.Drawing.Component.Library.Rectangle.title,
-      icon: ''
+      icon: '/assets/images/components/rectangle.svg'
     });
 
-    ComponentLibraryProvider.registerComponent({
+    ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.Arrow],
       title: Common.Drawing.Component.Library.Arrow.title,
-      icon: ''
+      icon: '/assets/images/components/line.svg'
     });
 
-    ComponentLibraryProvider.registerComponent({
+    ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.Label],
       title: Common.Drawing.Component.Library.Label.title,
-      icon: ''
+      icon: '/assets/images/components/text.svg'
     });
 
-    ComponentLibraryProvider.registerComponent({
+    ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.Image],
       title: Common.Drawing.Component.Library.Image.title,
-      icon: ''
+      icon: '/assets/images/components/image.svg'
     });
 
-    ComponentLibraryProvider.registerComponent({
+    ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.MobileDevice],
       title: Common.Drawing.Component.Library.MobileDevice.title,
-      icon: ''
+      icon: '/assets/images/components/mobile.svg'
     });
 
-    ComponentLibraryProvider.registerComponent({
+    ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.MobileTitlebar],
       title: Common.Drawing.Component.Library.MobileTitlebar.title,
-      icon: ''
+      icon: '/assets/images/components/mobile-titlebar.svg'
     });
 
-    ComponentLibraryProvider.registerComponent({
+    ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.TextInput],
       title: Common.Drawing.Component.Library.TextInput.title,
-      icon: ''
+      icon: '/assets/images/components/text-input.svg'
     });
 
-    ComponentLibraryProvider.registerComponent({
+    ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.SelectInput],
       title: Common.Drawing.Component.Library.SelectInput.title,
-      icon: ''
+      icon: '/assets/images/components/select-input.svg'
     });
 
-    ComponentLibraryProvider.registerComponent({
+    ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.Checkbox],
       title: Common.Drawing.Component.Library.Checkbox.title,
-      icon: ''
+      icon: '/assets/images/components/checkbox.svg'
     });
 
-    ComponentLibraryProvider.registerComponent({
+    ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.Button],
       title: Common.Drawing.Component.Library.Button.title,
-      icon: ''
+      icon: '/assets/images/components/button.svg'
     });
 
-    ComponentLibraryProvider.registerComponent({
+    ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.Icon],
       title: Common.Drawing.Component.Library.Icon.title,
-      icon: ''
+      icon: '/assets/images/components/icon.svg'
     });
 
-    ComponentLibraryProvider.registerComponent({
+    ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.Browser],
       title: Common.Drawing.Component.Library.Browser.title,
-      icon: ''
+      icon: '/assets/images/components/browser.svg'
     });
 
   })

@@ -227,24 +227,16 @@
 				div#properties-pane-display(ng-show="PropertiesCtrl.selection.length == 1")
 
 		#frame-canvas-wrapper
+			#toolbox(ng-controller="ToolboxCtrl as ToolboxCtrl")
+				div.toolbox-component(ng-repeat="component in ToolboxCtrl.components", ng-click="ToolboxCtrl.onComponentClick(component)", title="{{ component.title }}")
+					svg-replace(ng-src="{{ component.icon }}")
+				
 			canvas#canvas(wireframe, data="FrameCtrl.wireframe", resize, keepalive="true", oncontextmenu="return false", jqyoui-droppable)
 					
 			// Media library
 			img(ng-repeat="media in FrameCtrl.media", ng-src="{{ media.large }}", id="{{ media._id }}", style="display:none")
 
 			#frame-sidebar(ng-class="{ 'frame-sidebar-collapse': !FrameCtrl.activityOpen }")
-				#toolbox.frame-sidebar-pane(ng-controller="ToolboxCtrl as ToolboxCtrl", ng-show="false")
-					.frame-sidebar-content
-						div(ng-repeat="category in ToolboxCtrl.categories")
-							.frame-sidebar-panel-header
-								h5.medium.loose.text-muted {{ category.name }}
-							
-							.frame-sidebar-panel
-								div#toolbox-components
-									div.toolbox-component(ng-repeat="component in ToolboxCtrl.components | filter:{ category: category.name }", ng-click="ToolboxCtrl.onComponentClick(component)", title="{{ component.title }}", ui-draggable, ui-draggable-end="ToolboxCtrl.onComponentDragEnd($event, component)")
-										svg-replace(ng-src="{{ component.preview }}")
-											
-				
 				#activity-pane.frame-sidebar-pane(ng-controller="ActivityCtrl as ActivityCtrl")
 					#activity-list.frame-sidebar-content(scroll-lock)
 						div.frame-sidebar-panel

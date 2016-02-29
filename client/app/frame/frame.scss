@@ -204,6 +204,7 @@ body {
 	@include flex-basis(100%);
 	position: relative;
 	z-index: 1;
+	height: 100%;
 	-webkit-font-smoothing: antialiased;
 
 	#frame-sidebar {

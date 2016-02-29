@@ -15,7 +15,7 @@ module Higherframe.Drawing.Component.Library {
 
     private items: Array<ILibraryItem> = [];
 
-    public registerComponent(item: ILibraryItem) {
+    public register(item: ILibraryItem) {
 
       // Add to the list
       this.items.push(item);
