@@ -3,7 +3,7 @@
 
 module Common.Drawing.Component.Library {
 
-  export class Icon extends Drawing.Component.Base implements Drawing.Component.IComponent {
+  export class Icon extends Drawing.Component.Component {
 
     // Implement IDefinition members
     id = Drawing.Component.Type.Icon;
@@ -165,7 +165,7 @@ module Common.Drawing.Component.Library {
         new SnapPoint(this.bounds.bottomCenter, 'center', 'edge')
       ];
     }
-    
+
 
     /**
      * Cast the model properties into the correct type

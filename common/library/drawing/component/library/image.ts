@@ -3,7 +3,7 @@
 
 module Common.Drawing.Component.Library {
 
-  export class Image extends Drawing.Component.Base implements Drawing.Component.IComponent {
+  export class Image extends Drawing.Component.Component {
 
     // Implement IDefinition members
     id = Drawing.Component.Type.Image;

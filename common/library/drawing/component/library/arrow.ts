@@ -3,7 +3,7 @@
 
 module Common.Drawing.Component.Library {
 
-  export class Arrow extends Drawing.Component.Base implements Drawing.Component.IComponent {
+  export class Arrow extends Drawing.Component.Component {
 
     // Implement IDefinition members
     id = Drawing.Component.Type.Arrow;

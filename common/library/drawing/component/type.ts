@@ -1,6 +1,7 @@
 
 module Common.Drawing.Component {
   export enum Type {
+    Generic,
     Rectangle,
     Arrow,
     MobileDevice,

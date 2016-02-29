@@ -10,13 +10,13 @@ module Common.Drawing.Component {
     /**
      * Create a drawing component from a component data model.
      */
-    static fromModel(model?: Common.Data.Component): Drawing.Component.IComponent {
+    static fromModel(model?: Common.Data.Component): Drawing.Component.Component {
 
       // Get the component type
       var type = Type[<string>model.type];
 
       // Get the component definition and create an instance
-      var component: Drawing.Component.IComponent = this.get(type, model);
+      var component: Drawing.Component.Component = this.get(type, model);
 
       return component;
     }
@@ -26,11 +26,11 @@ module Common.Drawing.Component {
      * Creates a new component for a given component type
      */
 
-    private static get(type: Type, model: Common.Data.Component): IComponent {
+    private static get(type: Type, model: Common.Data.Component): Component {
 
       // Passing an enum value to the enum returns the corresponding
       // enum key. Use this to return the requested component constructor.
-      var id = Component.Type[type];
+      var id = Common.Drawing.Component.Type[type];
       var comConstr = Common.Drawing.Component.Library[id];
 
       if (!comConstr) {

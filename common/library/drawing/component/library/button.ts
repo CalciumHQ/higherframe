@@ -3,7 +3,7 @@
 
 module Common.Drawing.Component.Library {
 
-  export class Button extends Drawing.Component.Base implements Drawing.Component.IComponent {
+  export class Button extends Drawing.Component.Component {
 
     // Implement IDefinition members
     id = Drawing.Component.Type.Button;

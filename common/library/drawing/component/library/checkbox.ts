@@ -1,7 +1,7 @@
 
 module Common.Drawing.Component.Library {
 
-  export class Checkbox extends Drawing.Component.Base implements Drawing.Component.IComponent {
+  export class Checkbox extends Drawing.Component.Component {
 
     // Implement IDefinition members
     id = Drawing.Component.Type.Checkbox;

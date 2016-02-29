@@ -8,64 +8,25 @@ module Common.Drawing.Component {
 
 
   /**
-   * Defines the interface for a component which can be drawn on a
-   * paperjs canvas
+   * Defines the a component which can be drawn on a paperjs canvas
    *
    * @extends Paper.Group
    */
 
-  export interface IComponent extends paper.Group {
+  export class Component extends paper.Group {
 
-    id: Component.Type,
-    title: String,
-    preview?: String,
-    category?: String,
-    tags: Array<String>,
-    thumbnail: String,
-    model: Common.Data.IDrawingModel,
+    /**
+     * Properties
+     */
 
-    deserialize?: () => void;
-    serialize: () => Common.Data.IDrawingModel;
-    update: () => void;
-    updateModel: () => void;
-    getSnapPoints: () => Array<SnapPoint>;
-    getTransformHandles: (color: paper.Color) => Array<IDragHandle>;
-    getDragHandles: (color: paper.Color) => Array<IDragHandle>;
-    setProperty: (string, any) => void;
-    onMove?: (IComponentMoveEvent) => void;
-
-    // Drawing properties
-    hovered: Boolean,
-    active: Boolean,
-    focussed: Boolean,
-
-    parts;
-    collaborator;
-    properties: Array<Object>;
-    dragHandles: paper.Group;
-
-    // Provide definitions for paper.Item methods that we need in lieu
-    // of a definition file for the interface
-    position: paper.Point,
-    remove(): boolean,
-  }
-
-
-  /**
-   * Provides boilerplate for creating components
-   */
-
-  export class Base extends paper.Group implements IComponent {
-
-    id: Component.Type;
-    title: String;
-    tags: Array<String>;
-    thumbnail: String;
-    resizable: Boolean;
-    showBounds: Boolean;
+    id: Common.Drawing.Component.Type = Common.Drawing.Component.Type.Generic;
+    title: String = 'Generic Component';
+    preview: String = '';
+    category: String = '';
+    tags: Array<String> = [];
+    thumbnail: String = '';
     model: Common.Data.IDrawingModel;
 
-    // Drawing properties
     _hovered: Boolean = false;
     get hovered(): Boolean { return this._hovered; }
     set hovered(value) { this._hovered = value; this.update(); }
@@ -77,10 +38,6 @@ module Common.Drawing.Component {
     _focussed: Boolean = false;
     get focussed(): Boolean { return this._focussed; }
     set focussed(value) { this._focussed = value; this.update(); }
-
-    _parts = {};
-    get parts() { return this._parts; }
-    set parts(value) { this._parts = value; }
 
     _collaborator: Common.Data.IUser;
     get collaborator(): Common.Data.IUser { return this._collaborator; }
@@ -99,6 +56,19 @@ module Common.Drawing.Component {
     set dragHandles(value) { this._dragHandles = value; }
 
 
+    /**
+     * Methods
+     */
+
+    // Provide definitions for paper.Item methods that we need in lieu
+    // of a definition file for the interface
+    position: paper.Point;
+
+
+    /**
+     * Constructor
+     */
+
     constructor(model: Common.Data.IDrawingModel) {
 
       super();
@@ -112,16 +82,40 @@ module Common.Drawing.Component {
       return this.model;
     }
 
+    deserialize(): void {
+
+    }
+
+    update(): void {
+
+    }
+
+    updateModel(): void {
+
+    }
+
     setProperty(name: string, value: any) {
 
       this.model.properties[name] = value;
     }
 
-    // Should be implemented by derived class
-    update() {};
-    updateModel() {};
-    getSnapPoints() { return []; }
-    getDragHandles(color: paper.Color) { return []; }
-    getTransformHandles(color: paper.Color) { return []; }
+    getSnapPoints(): Array<SnapPoint> {
+
+      return [];
+    }
+
+    getTransformHandles(color: paper.Color): Array<IDragHandle> {
+
+      return [];
+    }
+
+    getDragHandles(color: paper.Color): Array<IDragHandle> {
+
+      return [];
+    }
+
+    onMove(IComponentMoveEvent): void {
+
+    }
   }
 };

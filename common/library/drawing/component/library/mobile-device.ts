@@ -1,7 +1,7 @@
 
 module Common.Drawing.Component.Library {
 
-  export class MobileDevice extends Drawing.Component.Base implements Drawing.Component.IComponent {
+  export class MobileDevice extends Drawing.Component.Component {
 
     // Implement IDefinition members
     id = Drawing.Component.Type.MobileDevice;

@@ -9202,6 +9202,7 @@ declare module Common.Data {
         fontSize: number;
     }
     interface IBrowserProperties extends IComponentProperties {
+        address: string;
         width: number;
         height: number;
     }
@@ -9241,6 +9242,7 @@ declare module Common.Data {
 declare module Common.Data {
     interface IUser {
         _id: String;
+        name: String;
         color?: String;
     }
 }
@@ -9268,48 +9270,20 @@ declare module Common.Drawing.Component {
         delta: paper.Point;
     }
     /**
-     * Defines the interface for a component which can be drawn on a
-     * paperjs canvas
+     * Defines the a component which can be drawn on a paperjs canvas
      *
      * @extends Paper.Group
      */
-    interface IComponent extends paper.Group {
-        id: Component.Type;
+    class Component extends paper.Group {
+        /**
+         * Properties
+         */
+        id: Common.Drawing.Component.Type;
         title: String;
-        preview?: String;
-        category?: String;
+        preview: String;
+        category: String;
         tags: Array<String>;
         thumbnail: String;
-        model: Common.Data.IDrawingModel;
-        deserialize?: () => void;
-        serialize: () => Common.Data.IDrawingModel;
-        update: () => void;
-        updateModel: () => void;
-        getSnapPoints: () => Array<SnapPoint>;
-        getTransformHandles: (color: paper.Color) => Array<IDragHandle>;
-        getDragHandles: (color: paper.Color) => Array<IDragHandle>;
-        setProperty: (string, any) => void;
-        onMove?: (IComponentMoveEvent) => void;
-        hovered: Boolean;
-        active: Boolean;
-        focussed: Boolean;
-        parts: any;
-        collaborator: any;
-        properties: Array<Object>;
-        dragHandles: paper.Group;
-        position: paper.Point;
-        remove(): boolean;
-    }
-    /**
-     * Provides boilerplate for creating components
-     */
-    class Base extends paper.Group implements IComponent {
-        id: Component.Type;
-        title: String;
-        tags: Array<String>;
-        thumbnail: String;
-        resizable: Boolean;
-        showBounds: Boolean;
         model: Common.Data.IDrawingModel;
         _hovered: Boolean;
         hovered: Boolean;
@@ -9317,8 +9291,6 @@ declare module Common.Drawing.Component {
         active: Boolean;
         _focussed: Boolean;
         focussed: Boolean;
-        _parts: {};
-        parts: {};
         _collaborator: Common.Data.IUser;
         collaborator: Common.Data.IUser;
         _properties: Array<Object>;
@@ -9327,14 +9299,23 @@ declare module Common.Drawing.Component {
         boundingBox: paper.Group;
         _dragHandles: paper.Group;
         dragHandles: paper.Group;
+        /**
+         * Methods
+         */
+        position: paper.Point;
+        /**
+         * Constructor
+         */
         constructor(model: Common.Data.IDrawingModel);
         serialize(): Common.Data.IDrawingModel;
-        setProperty(name: string, value: any): void;
+        deserialize(): void;
         update(): void;
         updateModel(): void;
-        getSnapPoints(): any[];
-        getDragHandles(color: paper.Color): any[];
-        getTransformHandles(color: paper.Color): any[];
+        setProperty(name: string, value: any): void;
+        getSnapPoints(): Array<SnapPoint>;
+        getTransformHandles(color: paper.Color): Array<IDragHandle>;
+        getDragHandles(color: paper.Color): Array<IDragHandle>;
+        onMove(IComponentMoveEvent: any): void;
     }
 }
 declare module Common.Drawing.Component {
@@ -9362,7 +9343,7 @@ declare module Common.Drawing.Component {
         /**
          * Create a drawing component from a component data model.
          */
-        static fromModel(model?: Common.Data.Component): Drawing.Component.IComponent;
+        static fromModel(model?: Common.Data.Component): Drawing.Component.Component;
         /**
          * Creates a new component for a given component type
          */
@@ -9370,7 +9351,7 @@ declare module Common.Drawing.Component {
     }
 }
 declare module Common.Drawing.Component.Library {
-    class Arrow extends Drawing.Component.Base implements Drawing.Component.IComponent {
+    class Arrow extends Drawing.Component.Component {
         id: Type;
         static title: string;
         static preview: string;
@@ -9412,7 +9393,7 @@ declare module Common.Drawing.Component.Library {
     }
 }
 declare module Common.Drawing.Component.Library {
-    class Browser extends Drawing.Component.Base implements Drawing.Component.IComponent {
+    class Browser extends Drawing.Component.Component {
         id: Type;
         static title: string;
         static preview: string;
@@ -9421,6 +9402,10 @@ declare module Common.Drawing.Component.Library {
         propertiesController: string;
         propertiesTemplateUrl: string;
         model: Common.Data.Component;
+        static TAB_BAR_HEIGHT: number;
+        static TAB_HEIGHT: number;
+        static BAR_CONTROL_SIZE: number;
+        static BAR_CONTROL_MARGIN: number;
         static BAR_HEIGHT: number;
         /**
          * Create a new mobile device component
@@ -9431,7 +9416,6 @@ declare module Common.Drawing.Component.Library {
          */
         getComponentBounds(): paper.Rectangle;
         getScreenRect(): paper.Rectangle;
-        getUsableScreenRect(): paper.Rectangle;
         /**
          * Redraw the component
          */
@@ -9455,7 +9439,7 @@ declare module Common.Drawing.Component.Library {
     }
 }
 declare module Common.Drawing.Component.Library {
-    class Button extends Drawing.Component.Base implements Drawing.Component.IComponent {
+    class Button extends Drawing.Component.Component {
         id: Type;
         static title: string;
         static preview: string;
@@ -9531,7 +9515,7 @@ declare module Common.Drawing.Component.Library {
     }
 }
 declare module Common.Drawing.Component.Library {
-    class Checkbox extends Drawing.Component.Base implements Drawing.Component.IComponent {
+    class Checkbox extends Drawing.Component.Component {
         id: Type;
         static title: string;
         static preview: string;
@@ -9600,7 +9584,7 @@ declare module Common.Drawing.Component.Library {
     }
 }
 declare module Common.Drawing.Component.Library {
-    class Icon extends Drawing.Component.Base implements Drawing.Component.IComponent {
+    class Icon extends Drawing.Component.Component {
         id: Type;
         static title: string;
         static preview: string;
@@ -9646,7 +9630,7 @@ declare module Common.Drawing.Component.Library {
     }
 }
 declare module Common.Drawing.Component.Library {
-    class Image extends Drawing.Component.Base implements Drawing.Component.IComponent {
+    class Image extends Drawing.Component.Component {
         id: Type;
         static title: string;
         static preview: string;
@@ -9689,7 +9673,7 @@ declare module Common.Drawing.Component.Library {
     }
 }
 declare module Common.Drawing.Component.Library {
-    class Label extends Drawing.Component.Base implements Drawing.Component.IComponent {
+    class Label extends Drawing.Component.Component {
         id: Type;
         static title: string;
         static preview: string;
@@ -9748,7 +9732,7 @@ declare module Common.Drawing.Component.Library {
     }
 }
 declare module Common.Drawing.Component.Library {
-    class MobileDevice extends Drawing.Component.Base implements Drawing.Component.IComponent {
+    class MobileDevice extends Drawing.Component.Component {
         id: Type;
         static title: string;
         static preview: string;
@@ -9791,7 +9775,7 @@ declare module Common.Drawing.Component.Library {
     }
 }
 declare module Common.Drawing.Component.Library {
-    class MobileTitlebar extends Drawing.Component.Base implements Drawing.Component.IComponent {
+    class MobileTitlebar extends Drawing.Component.Component {
         id: Type;
         static title: string;
         static preview: string;
@@ -9846,7 +9830,7 @@ declare module Common.Drawing.Component.Library {
     }
 }
 declare module Common.Drawing.Component.Library {
-    class Rectangle extends Drawing.Component.Base implements Drawing.Component.IComponent {
+    class Rectangle extends Drawing.Component.Component {
         id: Type;
         static title: string;
         static preview: string;
@@ -9896,7 +9880,7 @@ declare module Common.Drawing.Component.Library {
     }
 }
 declare module Common.Drawing.Component.Library {
-    class SelectInput extends Drawing.Component.Base implements Drawing.Component.IComponent {
+    class SelectInput extends Drawing.Component.Component {
         id: Type;
         static title: string;
         static preview: string;
@@ -9970,7 +9954,7 @@ declare module Common.Drawing.Component.Library {
     }
 }
 declare module Common.Drawing.Component.Library {
-    class TextInput extends Drawing.Component.Base implements Drawing.Component.IComponent {
+    class TextInput extends Drawing.Component.Component {
         id: Type;
         static title: string;
         static preview: string;
@@ -10046,18 +10030,19 @@ declare module Common.Drawing.Component.Library {
 }
 declare module Common.Drawing.Component {
     enum Type {
-        Rectangle = 0,
-        Arrow = 1,
-        MobileDevice = 2,
-        MobileTitlebar = 3,
-        TextInput = 4,
-        SelectInput = 5,
-        Checkbox = 6,
-        Label = 7,
-        Button = 8,
-        Image = 9,
-        Icon = 10,
-        Browser = 11,
+        Generic = 0,
+        Rectangle = 1,
+        Arrow = 2,
+        MobileDevice = 3,
+        MobileTitlebar = 4,
+        TextInput = 5,
+        SelectInput = 6,
+        Checkbox = 7,
+        Label = 8,
+        Button = 9,
+        Image = 10,
+        Icon = 11,
+        Browser = 12,
     }
 }
 declare module Common.Drawing {

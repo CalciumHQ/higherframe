@@ -7,7 +7,7 @@ module Higherframe.Wireframe.Tools {
 
     private dragRect: paper.Rectangle;
     private dragPreview: paper.Item;
-    private dragComponents: Array<Common.Drawing.Component.IComponent>;
+    private dragComponents: Array<Common.Drawing.Component.Component>;
 
     private hitOptions = {
  			segments: true,

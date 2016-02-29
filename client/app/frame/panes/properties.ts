@@ -11,7 +11,7 @@ module Higherframe.Controllers.Frame {
     public point: { x: number, y: number } = this.localStorageService.get(`frame.properties.point`) || { x: 100, y: 200 };
     public tab: string = 'display';
 
-    public selection: Array<Common.Drawing.Component.IComponent>;
+    public selection: Array<Common.Drawing.Component.Component>;
 
     public models: Object;
 
@@ -86,7 +86,7 @@ module Higherframe.Controllers.Frame {
       this.localStorageService.set(`frame.properties.point`, point);
     }
 
-    public setSelection(selection: Array<Common.Drawing.Component.IComponent>) {
+    public setSelection(selection: Array<Common.Drawing.Component.Component>) {
 
       // Get the display tab element and empty
       let parent = angular.element('#properties-pane-display');

@@ -5,6 +5,7 @@ module Common.Data {
 
     // From database
     _id: String;
+    name: String;
 
     // Client variables
     color?: String;

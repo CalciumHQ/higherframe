@@ -23,7 +23,7 @@ class FrameCtrl {
 
 	artboards:Array<Common.Data.IArtboard> = [];
   components:Array<any> = [];
-  selection: Array<Common.Drawing.Component.IComponent> = [];
+  selection: Array<Common.Drawing.Component.Component> = [];
 
   activities: Array<Higherframe.Data.IActivity> = [];
 	media: Array<Common.Data.IMedia> = [];
@@ -727,7 +727,7 @@ class FrameCtrl {
     }
 
     // Save components and set _id when saved
-    angular.forEach(components, function (component: Common.Drawing.Component.IComponent) {
+    angular.forEach(components, function (component: Common.Drawing.Component.Component) {
 
       // We will first serialize the data in the component's model.
       // If an _id key is found on the model, we know this component has already
@@ -876,7 +876,7 @@ class FrameCtrl {
 		return instances;
   };
 
-	private updateUiWithComponents(components: Array<Common.Drawing.Component.IComponent>) {
+	private updateUiWithComponents(components: Array<Common.Drawing.Component.Component>) {
 
     this.$scope.$broadcast('controller:component:selected', components);
 	};
@@ -884,7 +884,7 @@ class FrameCtrl {
 	private removeComponentFromView(component) {
 
 		// Find the component with this _id
-		angular.forEach(paper.project.activeLayer.children, function (item: Common.Drawing.Component.IComponent) {
+		angular.forEach(paper.project.activeLayer.children, function (item: Common.Drawing.Component.Component) {
 
 			if (item.model._id == component._id) {
 
@@ -896,7 +896,7 @@ class FrameCtrl {
 	private updateComponentInView(component) {
 
 		// Find the component with this _id
-		angular.forEach(paper.project.activeLayer.children, function (item: Common.Drawing.Component.IComponent) {
+		angular.forEach(paper.project.activeLayer.children, function (item: Common.Drawing.Component.Component) {
 
 			if (item.model._id == component._id) {
 

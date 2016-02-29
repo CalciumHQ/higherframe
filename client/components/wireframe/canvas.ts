@@ -24,7 +24,7 @@ module Higherframe.Wireframe {
 		dragSelectionOverlay;
 
 		// Drawing interaction
-		public selectedComponents: Array<Common.Drawing.Component.IComponent> = [];
+		public selectedComponents: Array<Common.Drawing.Component.Component> = [];
 		public selectedArtboards: Array<Higherframe.Drawing.Artboard> = [];
 		public selectedDragHandles: Array<Common.Drawing.Component.DragHandle> = [];
 
@@ -49,7 +49,7 @@ module Higherframe.Wireframe {
 			y: Array<paper.Path>
 		} = { x: [], y: [] };
 
-		components: Array<Common.Drawing.Component.IComponent> = [];
+		components: Array<Common.Drawing.Component.Component> = [];
 		artboards: Array<Higherframe.Drawing.Artboard> = [];
 		boundingBoxes: Array<paper.Item> = [];
 		smartGuides: Array<paper.Item> = [];
@@ -155,7 +155,7 @@ module Higherframe.Wireframe {
 
 				scope.$on('controller:component:updated', (e, data) => {
 
-					let component = <Common.Drawing.Component.IComponent>data.component;
+					let component = <Common.Drawing.Component.Component>data.component;
 					component.update();
 
 					// Update bounding boxes
@@ -317,7 +317,7 @@ module Higherframe.Wireframe {
 		 * State handlers
 		 */
 
-		onItemUpdated(item: Common.Drawing.Component.IComponent) {
+		onItemUpdated(item: Common.Drawing.Component.Component) {
 
 			item.update();
 			this.updateBoundingBoxes();
@@ -350,7 +350,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('view:component:deselected', this.selectedComponents);
 			this.selectedComponents = [];
 
-			angular.forEach(this.layerDrawing.children, (item: Common.Drawing.Component.IComponent) => {
+			angular.forEach(this.layerDrawing.children, (item: Common.Drawing.Component.Component) => {
 
 				this.onItemUpdated(item);
 			});
@@ -380,7 +380,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('view:artboard:selected', newselectedArtboards);
 		}
 
-		selectItems(items: Array<Common.Drawing.Component.IComponent>) {
+		selectItems(items: Array<Common.Drawing.Component.Component>) {
 
 			var newselectedComponents = [];
 
@@ -428,7 +428,7 @@ module Higherframe.Wireframe {
 			}
 		}
 
-		removeItems(items: Array<Common.Drawing.Component.IComponent>) {
+		removeItems(items: Array<Common.Drawing.Component.Component>) {
 
 			this.scope.$emit('componentsDeleted', items);
 
@@ -480,12 +480,12 @@ module Higherframe.Wireframe {
 			this.scope.$emit('view:artboard:updated', artboards);
 		}
 
-		moveItems(items: Array<Common.Drawing.Component.IComponent>) {
+		moveItems(items: Array<Common.Drawing.Component.Component>) {
 
 			this.scope.$emit('componentsMoved', items);
 		}
 
-		nudge(items: Array<Common.Drawing.Component.IComponent>, x, y) {
+		nudge(items: Array<Common.Drawing.Component.Component>, x, y) {
 
 			angular.forEach(items, (item) => {
 
@@ -498,7 +498,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('componentsMoved', items);
 		}
 
-		moveForward(items: Array<Common.Drawing.Component.IComponent>) {
+		moveForward(items: Array<Common.Drawing.Component.Component>) {
 
 			angular.forEach(items, (item) => {
 
@@ -519,7 +519,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('componentsIndexModified', items);
 		}
 
-		moveToFront(items: Array<Common.Drawing.Component.IComponent>) {
+		moveToFront(items: Array<Common.Drawing.Component.Component>) {
 
 			angular.forEach(items, (item) => {
 
@@ -529,7 +529,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('componentsIndexModified', items);
 		}
 
-		moveBackward(items: Array<Common.Drawing.Component.IComponent>) {
+		moveBackward(items: Array<Common.Drawing.Component.Component>) {
 
 			angular.forEach(items, (item) => {
 
@@ -550,7 +550,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('componentsIndexModified', items);
 		}
 
-		moveToBack(items: Array<Common.Drawing.Component.IComponent>) {
+		moveToBack(items: Array<Common.Drawing.Component.Component>) {
 
 			angular.forEach(items, (item) => {
 
@@ -681,13 +681,13 @@ module Higherframe.Wireframe {
 		endDragSelection() {
 
 			// Select the items in the rectangle
-			angular.forEach(this.layerDrawing.children, (item: Common.Drawing.Component.IComponent) => {
+			angular.forEach(this.layerDrawing.children, (item: Common.Drawing.Component.Component) => {
 
 				if (item.isInside(this.dragSelectionRectangle) &&
 					this.selectedComponents.indexOf(item) === -1
 				) {
 
-					this.selectItems([<Common.Drawing.Component.Base>item]);
+					this.selectItems([<Common.Drawing.Component.Component>item]);
 				}
 			});
 
@@ -796,7 +796,7 @@ module Higherframe.Wireframe {
 
 				var collaborator = selection[0].collaborator;
 
-				var boundingBox = this.drawBoundingBox(selection, collaborator.color);
+				var boundingBox = this.drawBoundingBox(selection, new paper.Color(collaborator.color));
 				this.addCollaboratorLabel(collaborator, boundingBox.bounds.topRight);
 			});
 
@@ -835,7 +835,7 @@ module Higherframe.Wireframe {
 				: null;
 		}
 
-		private drawBoundingBox(items: Array<Common.Drawing.Component.IComponent>, color: paper.Color): paper.Group {
+		private drawBoundingBox(items: Array<Common.Drawing.Component.Component>, color: paper.Color): paper.Group {
 
 			var rect = this.getBounds(items);
 
@@ -857,7 +857,7 @@ module Higherframe.Wireframe {
 			// A single component is selected
 			if (items.length == 1) {
 
-				var component: Common.Drawing.Component.IComponent = items[0];
+				var component: Common.Drawing.Component.Component = items[0];
 
 				// Add the transform handles
 				_.forEach(component.getTransformHandles(color), (transformHandle) => {
@@ -920,7 +920,7 @@ module Higherframe.Wireframe {
 			}
 		}
 
-		addDragHandles(item: Common.Drawing.Component.IComponent) {
+		addDragHandles(item: Common.Drawing.Component.Component) {
 
 			this.layerSelections.activate();
 
@@ -967,7 +967,7 @@ module Higherframe.Wireframe {
 			// TODO: Whittle down to elements in the nearby area
 
 			// Work through each element
-			this.layerDrawing.children.forEach((relation: Common.Drawing.Component.IComponent) => {
+			this.layerDrawing.children.forEach((relation: Common.Drawing.Component.Component) => {
 
 				// Don't compare target element with other selected elements
 				if (this.selectedComponents.indexOf(relation) !== -1) {
@@ -1180,7 +1180,7 @@ module Higherframe.Wireframe {
 		      );
 
 		      var bubble = paper.Path.Rectangle(bubbleRect, 6 / paper.view.zoom);
-		      bubble.fillColor = component.collaborator.color;
+		      bubble.fillColor = new paper.Color(component.collaborator.color);
 
 					label.addChild(bubble);
 					label.addChild(text);

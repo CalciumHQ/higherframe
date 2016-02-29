@@ -3,7 +3,7 @@
 
 module Common.Drawing.Component.Library {
 
-  export class SelectInput extends Drawing.Component.Base implements Drawing.Component.IComponent {
+  export class SelectInput extends Drawing.Component.Component {
 
     // Implement IDefinition members
     id = Drawing.Component.Type.SelectInput;

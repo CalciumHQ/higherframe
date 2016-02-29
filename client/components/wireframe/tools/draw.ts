@@ -142,7 +142,7 @@ module Higherframe.Wireframe.Tools {
         : null;
 
       let componentHitResult = this.canvas.layerDrawing.hitTest(event.point, this.hitOptions);
-      let component: Common.Drawing.Component.IComponent = componentHitResult
+      let component: Common.Drawing.Component.Component = componentHitResult
         ? this.canvas.getTopmost(componentHitResult.item)
         : null;
 
@@ -214,7 +214,7 @@ module Higherframe.Wireframe.Tools {
 
         component.active = false;
       });
-      
+
       this.resetDrag();
       this.canvas.endDragSelection();
     }
@@ -298,7 +298,7 @@ module Higherframe.Wireframe.Tools {
         : null;
 
       let componentHitResult = this.canvas.layerDrawing.hitTest(event.point, this.hitOptions);
-      let component: Common.Drawing.Component.IComponent = componentHitResult
+      let component: Common.Drawing.Component.Component = componentHitResult
         ? this.canvas.getTopmost(componentHitResult.item)
         : null;
 
@@ -410,7 +410,7 @@ module Higherframe.Wireframe.Tools {
         y?: Common.Drawing.SmartGuide
       } = {};
 
-      this.canvas.selectedComponents.forEach((component: Common.Drawing.Component.IComponent) => {
+      this.canvas.selectedComponents.forEach((component: Common.Drawing.Component.Component) => {
 
         // The new position
         var position = new paper.Point(

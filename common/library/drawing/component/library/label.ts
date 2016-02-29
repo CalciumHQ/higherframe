@@ -3,7 +3,7 @@
 
 module Common.Drawing.Component.Library {
 
-  export class Label extends Drawing.Component.Base implements Drawing.Component.IComponent {
+  export class Label extends Drawing.Component.Component {
 
     // Implement IDefinition members
     id = Drawing.Component.Type.Label;
