@@ -56,15 +56,36 @@ module Higherframe.Wireframe {
 		collaboratorLabels: Array<paper.Item> = [];
 
 		theme: Common.UI.ITheme = new Common.UI.DefaultTheme();
-		editMode: Common.Drawing.EditMode = Common.Drawing.EditMode.Draw;
+		tool: Higherframe.Wireframe.Tool;
 
 
-		constructor(private $window: Higherframe.IWindow) {
+		constructor(
+			private $window: Higherframe.IWindow,
+			private CanvasRegistry: Higherframe.Wireframe.CanvasRegistry
+		) {
 
 			Canvas.prototype.link = (scope: ng.IScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes, ngModel: ng.INgModelController) => {
 
 				this.element = element;
 				this.scope = scope;
+
+				// Register as the current canvas
+				CanvasRegistry.setCanvas(this);
+
+
+				/**
+				 * Toolbox notifications
+				 */
+
+				scope.$on('toolbox:tool:selected', (e, tool) => {
+
+					if (!tool) {
+
+						return;
+					}
+
+					this.setTool(tool);
+				});
 
 
 				/**
@@ -74,11 +95,6 @@ module Higherframe.Wireframe {
 				scope.$on('event:keydown', (e, keyEvent) => {
 
 					this.onDrawKeyDown(keyEvent);
-				});
-
-				scope.$on('editMode:set', (e, mode) => {
-
-					this.setEditMode(mode);
 				});
 
 				scope.$on('view:zoom', (e, zoom) => {
@@ -279,11 +295,10 @@ module Higherframe.Wireframe {
  			paper.setup(<HTMLCanvasElement>this.element[0]);
  			paper.view.onFrame = function () {};
 
-			// Configure tools
-			// These tools are singletons so may be already configured from a
-			// previous session, but no matter doing it again.
-			var drawTool = Wireframe.Tools.Draw.get(this);
-			var artboardsTool = Wireframe.Tools.Artboards.get(this);
+			// Apply mousewheel event to canvas element if it doesn't have an
+			// attached handler already
+			(<any>$(this.element)).unbind('mousewheel');
+			(<any>$(this.element)).mousewheel((event) => this.mouseWheelHandler.call(this, event));
  		}
 
  		initLayers() {
@@ -302,6 +317,14 @@ module Higherframe.Wireframe {
 		/**
 		 * Event handlers
 		 */
+
+     mouseWheelHandler(event) {
+
+       event.preventDefault();
+
+			 var mousePosition = new paper.Point(event.offsetX, event.offsetY);
+			 this.changeCenter(-event.deltaX, event.deltaY);
+     }
 
 		onDrawKeyDown(event) {
 
@@ -570,36 +593,31 @@ module Higherframe.Wireframe {
 			this.element.css('cursor', <string>cursor);
 		}
 
-		setEditMode(mode: Common.Drawing.EditMode) {
+		setTool(tool: Higherframe.Wireframe.Tool) {
 
-			this.editMode = mode;
+			// Activate the tool
+			tool.activate();
+
+			this.tool = tool;
 			this.updateArtboards();
 
-			switch (mode) {
+			if (tool instanceof Higherframe.Wireframe.Tools.Draw) {
 
-				case Common.Drawing.EditMode.Draw:
+				// Clean up
+				this.clearArtboardSelection();
+				this.updateArtboards();
 
-					Wireframe.Tools.Draw.get(this).activate();
+				// Style the canvas
+				this.layerDrawing.opacity = 1;
+			}
 
-					// Clean up
-					this.clearArtboardSelection();
-					this.updateArtboards();
+			else if (tool instanceof Higherframe.Wireframe.Tools.Artboards) {
 
-					// Style the canvas
-					this.layerDrawing.opacity = 1;
+				// Clean up
+				this.clearComponentSelection();
 
-					break;
-
-				case Common.Drawing.EditMode.Artboards:
-
-					Wireframe.Tools.Artboards.get(this).activate();
-
-					// Clean up
-					this.clearComponentSelection();
-
-					// Style the canvas
-					this.layerDrawing.opacity = 0.3;
-					break;
+				// Style the canvas
+				this.layerDrawing.opacity = 0.3;
 			}
 		}
 
@@ -1318,8 +1336,8 @@ return;
 
 		static factory(): ng.IDirectiveFactory {
 
-			const directive = ($window: Higherframe.IWindow) => new Canvas($window);
-			directive.$inject = ['$window'];
+			const directive = ($window: Higherframe.IWindow, CanvasRegistry: Higherframe.Wireframe.CanvasRegistry) => new Canvas($window, CanvasRegistry);
+			directive.$inject = ['$window', 'CanvasRegistry'];
 			return directive;
 		}
 	}

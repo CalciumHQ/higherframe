@@ -1,9 +1,7 @@
 
 module Higherframe.Wireframe.Tools {
 
-  export class Draw extends paper.Tool {
-
-    private static tool: Wireframe.Tools.Draw;
+  export class Draw extends Higherframe.Wireframe.Tool {
 
     private dragging: boolean = false;
 
@@ -22,37 +20,10 @@ module Higherframe.Wireframe.Tools {
 
 
     /**
-     * Exposes a singleton tool for the artboards edit mode
-     */
-
-    public static get(canvas?: Higherframe.Wireframe.Canvas): Wireframe.Tools.Draw {
-
-      if (!Draw.tool) {
-
-        Draw.tool = new Wireframe.Tools.Draw(canvas);
-      }
-
-      // Update the canvas reference, even if the singleton has already been
-      // instantiated
-      if (canvas) {
-
-        Draw.tool.canvas = canvas;
-
-        // Apply mousewheel event to canvas element if it doesn't have an
-        // attached handler already
-        (<any>$(canvas.element)).unbind('mousewheel');
-        (<any>$(canvas.element)).mousewheel((event) => Draw.tool.mouseWheelHandler.call(Draw.tool, event));
-      }
-
-      return Draw.tool;
-    }
-
-
-    /**
      * Constructor
      */
 
-    constructor(private canvas?: Higherframe.Wireframe.Canvas) {
+    constructor() {
 
       super();
 
@@ -472,19 +443,6 @@ module Higherframe.Wireframe.Tools {
       if (bestSmartGuideResult.y) { this.canvas.drawGuide(bestSmartGuideResult.y); }
 
       this.canvas.updateBoundingBoxes();
-    }
-
-
-    /**
-     * Mouse wheel handler
-     */
-
-    private mouseWheelHandler(event) {
-
-      event.preventDefault();
-
-    	var mousePosition = new paper.Point(event.offsetX, event.offsetY);
-    	this.canvas.changeCenter(-event.deltaX, event.deltaY);
     }
 
 

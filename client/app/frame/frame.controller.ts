@@ -34,7 +34,6 @@ class FrameCtrl {
 		? this.localStorageService.get(this.STORAGE_ACTIVITY_OPEN_KEY)
 		: true);
 
-	editMode: Common.Drawing.EditMode = this.localStorageService.get(this.STORAGE_EDIT_MODE_KEY) || Common.Drawing.EditMode.Draw;
   quickAdd = {
     open: false,
     focus: false,
@@ -42,28 +41,6 @@ class FrameCtrl {
     results: [],
     index: 0
   };
-
-	toolbarConfig = {
-		editMode: {
-			options: [
-				{
-					title: 'Draw',
-					description: 'Add components to your wireframe',
-					value: Common.Drawing.EditMode.Draw
-				},
-				{
-					title: 'Artboards',
-					description: 'Manage your wireframe workspaces',
-					value: Common.Drawing.EditMode.Artboards
-				},
-				{
-					title: 'Annotate',
-					description: 'Review and discuss your team\'s work',
-					value: Common.Drawing.EditMode.Annotate
-				}
-			]
-		}
-	}
 
 
   /**
@@ -149,7 +126,6 @@ class FrameCtrl {
 
       this.setCenter(this.localStorageService.get(`frame.${ this.frame._id }.view.center`));
       this.setZoom(this.localStorageService.get(`frame.${ this.frame._id }.view.zoom`));
-			this.setEditMode(this.editMode);
     });
 
 
@@ -537,36 +513,6 @@ class FrameCtrl {
         }
       }
 
-			if (!event.modifiers.command && !event.modifiers.control) {
-
-				switch(event.key) {
-
-					case '1':
-					case '2':
-					case '3':
-
-						// If in an input, allow event to continue
-						if (event.event.target.tagName == 'INPUT' || event.event.target.tagName == 'TEXTAREA') {}
-
-						// Otherwise cancel and broadcast to wireframe
-						else {
-
-							event.event.preventDefault();
-
-							this.$scope.$apply(() => {
-
-								switch(event.key) {
-									case '1':	this.setEditMode(Common.Drawing.EditMode.Draw); break;
-									case '2':	this.setEditMode(Common.Drawing.EditMode.Artboards); break;
-									case '3':	this.setEditMode(Common.Drawing.EditMode.Annotate); break;
-								}
-							});
-						}
-
-						break;
-				}
-			}
-
       // Standard cases
       switch(event.key) {
 
@@ -616,8 +562,9 @@ class FrameCtrl {
       }
     };
 
-		Higherframe.Wireframe.Tools.Draw.get().onKeyDown = handler;
-		Higherframe.Wireframe.Tools.Artboards.get().onKeyDown = handler;
+		// TODO
+		// Higherframe.Wireframe.Tools.Draw.get().onKeyDown = handler;
+		// Higherframe.Wireframe.Tools.Artboards.get().onKeyDown = handler;
   }
 
 
@@ -796,14 +743,6 @@ class FrameCtrl {
 
 		this.activityOpen = open;
 		this.localStorageService.set(this.STORAGE_ACTIVITY_OPEN_KEY, this.activityOpen);
-	}
-
-	private setEditMode(mode: Common.Drawing.EditMode) {
-
-		this.editMode = mode;
-		this.localStorageService.set(this.STORAGE_EDIT_MODE_KEY, this.editMode);
-
-		this.$scope.$broadcast('editMode:set', this.editMode);
 	}
 
 	private addArtboardsToView(artboards, options?): Array<Higherframe.Drawing.Artboard> {
@@ -1033,12 +972,6 @@ class FrameCtrl {
   /*
    * Event handlers
    */
-
-	// Toolbar
-	onEditModeClick(mode: Common.Drawing.EditMode) {
-
-		this.setEditMode(mode);
-	}
 
 	onToolbarZoomLevelClick(zoom: number) {
 

@@ -1,4 +1,6 @@
 
+angular.module('siteApp.library', []);
+
 angular.module('siteApp', [
   'ngCookies',
   'ngResource',
@@ -10,7 +12,8 @@ angular.module('siteApp', [
   'ui.bootstrap',
   'LocalStorageModule',
   'analytics.mixpanel',
-  'monospaced.elastic'
+  'monospaced.elastic',
+  'siteApp.library',
 ])
   .config(function (
     $stateProvider,

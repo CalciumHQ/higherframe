@@ -4,7 +4,7 @@
 module Higherframe.Controllers.Frame {
 
   interface ToolboxItem {
-    tool?: any,
+    tool?: Higherframe.Wireframe.Tool,
     title: string,
     icon: string,
     active?: boolean
@@ -14,10 +14,15 @@ module Higherframe.Controllers.Frame {
 
     private items: Array<ToolboxItem> = [];
 
-    constructor(private $scope: ng.IScope, private ComponentLibrary: Higherframe.Drawing.Component.Library.IService) {
+    constructor(
+      private $scope: ng.IScope,
+      private $rootScope: ng.IRootScopeService,
+      private ComponentLibrary: Higherframe.Drawing.Component.Library.IService
+    ) {
 
       // Add the select tool
       this.items.push({
+        tool: new Wireframe.Tools.Draw(),
         title: 'Select',
         icon: '/assets/images/select.svg',
         active: true
@@ -25,6 +30,7 @@ module Higherframe.Controllers.Frame {
 
       // Add the artboard tool
       this.items.push({
+        tool: new Wireframe.Tools.Artboards(),
         title: 'Edit artboards',
         icon: '/assets/images/artboard.svg'
       });
@@ -43,6 +49,8 @@ module Higherframe.Controllers.Frame {
 
       this.items.forEach((item) => item.active = false);
       item.active = true;
+
+      this.$rootScope.$broadcast('toolbox:tool:selected', item.tool);
     }
   }
 }

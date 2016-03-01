@@ -1,9 +1,7 @@
 
 module Higherframe.Wireframe.Tools {
 
-  export class Artboards extends paper.Tool {
-
-    private static tool: Wireframe.Tools.Artboards;
+  export class Artboards extends Higherframe.Wireframe.Tool {
 
     private dragRect: paper.Rectangle;
     private dragPreview: paper.Item;
@@ -18,32 +16,10 @@ module Higherframe.Wireframe.Tools {
 
 
     /**
-     * Exposes a singleton tool for the artboards edit mode
-     */
-
-    public static get(canvas?: Higherframe.Wireframe.Canvas): Wireframe.Tools.Artboards {
-
-      if (!Artboards.tool) {
-
-        Artboards.tool = new Wireframe.Tools.Artboards(canvas);
-      }
-
-      // Update the canvas reference, even if the singleton has already been
-      // instantiated
-      if (canvas) {
-
-        Artboards.tool.canvas = canvas;
-      }
-
-      return Artboards.tool;
-    }
-
-
-    /**
      * Constructor
      */
 
-    constructor(private canvas?: Higherframe.Wireframe.Canvas) {
+    constructor() {
 
       super();
 
