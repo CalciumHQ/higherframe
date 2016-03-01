@@ -601,7 +601,7 @@ module Higherframe.Wireframe {
 			this.tool = tool;
 			this.updateArtboards();
 
-			if (tool instanceof Higherframe.Wireframe.Tools.Draw) {
+			if (tool instanceof Higherframe.Wireframe.Tools.Select) {
 
 				// Clean up
 				this.clearArtboardSelection();
@@ -611,7 +611,7 @@ module Higherframe.Wireframe {
 				this.layerDrawing.opacity = 1;
 			}
 
-			else if (tool instanceof Higherframe.Wireframe.Tools.Artboards) {
+			else if (tool instanceof Higherframe.Wireframe.Tools.Artboard) {
 
 				// Clean up
 				this.clearComponentSelection();

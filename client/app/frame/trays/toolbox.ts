@@ -22,7 +22,7 @@ module Higherframe.Controllers.Frame {
 
       // Add the select tool
       this.items.push({
-        tool: new Wireframe.Tools.Draw(),
+        tool: new Wireframe.Tools.Select(),
         title: 'Select',
         icon: '/assets/images/select.svg',
         active: true
@@ -30,7 +30,7 @@ module Higherframe.Controllers.Frame {
 
       // Add the artboard tool
       this.items.push({
-        tool: new Wireframe.Tools.Artboards(),
+        tool: new Wireframe.Tools.Artboard(),
         title: 'Edit artboards',
         icon: '/assets/images/artboard.svg'
       });
