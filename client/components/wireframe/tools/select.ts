@@ -1,0 +1,575 @@
+
+module Higherframe.Wireframe.Tools {
+
+  export class Select extends Higherframe.Wireframe.Tool {
+
+    private dragging: boolean = false;
+
+    // Record the starting position of a drag operation
+    private dragStart: paper.Point;
+
+    // Record the last client mouse position in a drag operation
+    private clientDragPrevious: paper.Point;
+
+    private hitOptions = {
+ 			segments: true,
+ 			stroke: true,
+ 			fill: true,
+ 			tolerance: 5
+ 		};
+
+
+    /**
+     * Constructor
+     */
+
+    constructor() {
+
+      super();
+
+      this.onMouseMove = this.mouseMoveHandler;
+      this.onMouseDown = this.mouseDownHandler;
+      this.onMouseUp = this.mouseUpHandler;
+    }
+
+
+    /**
+     * Manipulation functions
+     */
+
+    private startDrag(event) {
+
+      // Store the start point of the drag
+      this.dragStart = event.downPoint;
+
+      // Store the client start position of the drag
+      this.clientDragPrevious = new paper.Point(
+        event.event.screenX,
+        event.event.screenY
+      );
+
+      // Annotate the dragged elements with their starting position
+      this.canvas.selectedComponents.forEach((component) => {
+
+        (<any>component).dragStartX = component.model.properties.x;
+        (<any>component).dragStartY = component.model.properties.y;
+      });
+
+      // Annotate the drag handles with their starting position
+      this.canvas.selectedDragHandles.forEach((handle) => {
+
+        (<any>handle).dragStart = handle.position;
+      });
+
+      // Mark the drag as started
+      this.dragging = true;
+    }
+
+    private resetDrag() {
+
+      // Clear the start point of the drag
+      this.dragStart = null;
+
+      // Clear the start position annotation on the dragged components
+      this.canvas.selectedComponents.forEach((component: any) => {
+
+        delete component.dragStart;
+      });
+
+      // Clear the start position annotation on the dragged handles
+      this.canvas.selectedDragHandles.forEach((handle: any) => {
+
+        delete handle.dragStart;
+      });
+
+      // Clear the selected drag handles
+      this.canvas.selectedDragHandles = [];
+
+      // Indicate the components have moved
+      this.canvas.moveItems(this.canvas.selectedComponents);
+
+      // Mark the drag as started
+      this.dragging = false;
+
+      // Clean up
+      this.canvas.removeSmartGuides();
+    }
+
+
+    /**
+     * Mouse down handler
+     */
+
+    private mouseDownHandler(event) {
+
+      // Inform the rest of the view a click took place
+      // This may be consumed by other UI to blur controls, for example
+      this.canvas.scope.$broadcast('view:mousedown');
+
+      // Hit test for components and handles
+      let handleHitResult = this.canvas.layerSelections.hitTest(event.point, this.hitOptions);
+      let handle: Common.Drawing.Component.DragHandle = handleHitResult
+        ? this.canvas.getDragHandle(handleHitResult.item)
+        : null;
+
+      let componentHitResult = this.canvas.layerDrawing.hitTest(event.point, this.hitOptions);
+      let component: Common.Drawing.Component.Component = componentHitResult
+        ? this.canvas.getTopmost(componentHitResult.item)
+        : null;
+
+      // Look for a clicked drag handle
+      if (handle) {
+
+        this.canvas.selectedDragHandles.push(handle);
+      }
+
+      // Now look for a clicked component
+      else {
+
+        // Clear the selection if the shift key isn't held, and
+        // the area clicked isn't part of the existing selection
+        if (!(event.modifiers.shift || (component && component.focussed))) {
+
+  				this.canvas.clearComponentSelection();
+  			}
+
+        // Select the component if one was found
+        if (component) {
+
+          this.canvas.selectItems([component]);
+
+          // Mark as active
+          component.active = true;
+        }
+      }
+
+      // Start a drag
+      this.startDrag(event);
+
+      // Start a drag selection
+      this.mouseDownSelectHandler(event);
+
+      // Update components
+      this.canvas.updateBoundingBoxes();
+
+      // Check for right click and open properties panel
+      if (event.event.button == 2) {
+
+        let bounds = this.canvas.getBounds(this.canvas.selectedComponents);
+        let documentBounds = paper.view.bounds;
+        var point = bounds.bottomRight
+          .subtract(documentBounds.topLeft)
+          .add(new paper.Point(10, 5));
+
+        point.y = event.event.offsetY;
+
+        this.canvas.scope.$emit('view:properties:open', { point: point });
+      }
+    }
+
+    private mouseDownSelectHandler(event) {
+
+      // If no hit target start drag selection
+			this.canvas.startDragSelection(event.downPoint);
+    }
+
+
+    /**
+     * Mouse up handlers
+     */
+
+    private mouseUpHandler(event) {
+
+      // Mark components as inactive
+      this.canvas.selectedComponents.forEach((component) => {
+
+        component.active = false;
+      });
+
+      this.resetDrag();
+      this.canvas.endDragSelection();
+    }
+
+
+    /**
+     * Mouse move handlers
+     */
+
+    private mouseMoveHandler(event) {
+
+      // Dragging
+      if (this.dragging) {
+
+        // Pan when space bar is held
+  			if (event.modifiers.space) {
+
+  				this.mouseMovePanHandler(event);
+  			}
+
+        // Dragging a drag handle
+        else if (this.canvas.selectedDragHandles.length) {
+
+          this.mouseMoveHandleDragHandler(event);
+        }
+
+        // Dragging a component
+        else if (this.canvas.selectedComponents.length) {
+
+          this.mouseMoveDragHandler(event);
+        }
+
+        // Drawing a select box
+        else {
+
+          this.mouseMoveSelectHandler(event);
+        }
+      }
+
+      // Not dragging
+      else {
+
+        this.mouseMoveHighlightHandler(event);
+      }
+
+    }
+
+    private mouseMovePanHandler(event) {
+
+      // Can't use event.delta since the canvas moves
+      // and odd behaviour occurs. Use browser events
+      // instead
+      var clientPosition = new paper.Point(
+        event.event.screenX,
+        event.event.screenY
+      );
+
+      var delta = clientPosition.subtract(this.clientDragPrevious);
+      this.clientDragPrevious = clientPosition;
+
+      // Move the canvas
+      this.canvas.changeCenter(delta.x, delta.y);
+    }
+
+    private mouseMoveHighlightHandler(event) {
+
+      // Clear old component hovered states
+      this.canvas.components.forEach((component) => {
+
+        if (component.hovered) {
+
+          component.hovered = false;
+          component.update();
+        }
+      });
+
+      // Hit test for components and handles
+      let handleHitResult = this.canvas.layerSelections.hitTest(event.point, this.hitOptions);
+      let handle: Common.Drawing.Component.DragHandle = handleHitResult
+        ? this.canvas.getDragHandle(handleHitResult.item)
+        : null;
+
+      let componentHitResult = this.canvas.layerDrawing.hitTest(event.point, this.hitOptions);
+      let component: Common.Drawing.Component.Component = componentHitResult
+        ? this.canvas.getTopmost(componentHitResult.item)
+        : null;
+
+      // If a drag handle is hovered
+      if (handle) {
+
+        this.canvas.setCursor(handle.cursor);
+      }
+
+      // If a component is hovered
+      else if (component) {
+
+        component.hovered = true;
+        component.update();
+
+        this.canvas.setCursor(Common.Drawing.Cursors.Move);
+      }
+
+      else {
+
+        this.canvas.setCursor(Common.Drawing.Cursors.Default);
+      }
+    }
+
+    private mouseMoveSelectHandler(event) {
+
+      this.canvas.updateDragSelection(event.downPoint, event.point);
+    }
+
+    private mouseMoveHandleDragHandler(event) {
+
+      var delta = event.point.subtract(this.dragStart);
+
+      // TODO: Currently supporting only one selected item
+      var item = this.canvas.selectedComponents[0];
+
+      var bestSmartGuideResult: {
+        x?: Common.Drawing.SmartGuide,
+        y?: Common.Drawing.SmartGuide
+      } = {};
+
+      this.canvas.selectedDragHandles.forEach((handle) => {
+
+        // The new position
+        var position = (<any>handle).dragStart.add(delta);
+
+        // Position the drag handle
+        handle.position = handle.onMove
+          ? handle.onMove(position)
+          : position;
+
+				// Find a snap point
+				var smartGuideResult = this.canvas.updateSmartGuides(
+          item,
+          handle.getSnapPoints(handle.position)
+        );
+
+        // Store if best smart guide match
+        if (smartGuideResult.x) {
+
+          if (
+            !bestSmartGuideResult.x ||
+            smartGuideResult.x.score < bestSmartGuideResult.x.score
+          ) {
+
+            bestSmartGuideResult.x = smartGuideResult.x;
+          }
+        }
+
+        if (smartGuideResult.y) {
+
+          if (
+            !bestSmartGuideResult.y ||
+            smartGuideResult.y.score < bestSmartGuideResult.y.score
+          ) {
+
+            bestSmartGuideResult.y = smartGuideResult.y;
+          }
+        }
+      });
+
+      // Adjust handles according to smart guides
+      this.canvas.selectedDragHandles.forEach((handle) => {
+
+        var position = handle.position;
+
+        position = bestSmartGuideResult.x ? position.add(bestSmartGuideResult.x.getAdjustment()) : position;
+        position = bestSmartGuideResult.y ? position.add(bestSmartGuideResult.y.getAdjustment()) : position;
+
+        // Position the drag handle
+        handle.position = handle.onMove
+          ? handle.onMove(position)
+          : position;
+      });
+
+      // Draw smart guides
+      if (bestSmartGuideResult.x) { this.canvas.drawGuide(bestSmartGuideResult.x); }
+      if (bestSmartGuideResult.y) { this.canvas.drawGuide(bestSmartGuideResult.y); }
+
+      this.canvas.updateBoundingBoxes();
+    }
+
+    private mouseMoveDragHandler(event) {
+
+      var delta = event.point.subtract(this.dragStart);
+
+      var bestSmartGuideResult: {
+        x?: Common.Drawing.SmartGuide,
+        y?: Common.Drawing.SmartGuide
+      } = {};
+
+      this.canvas.selectedComponents.forEach((component: Common.Drawing.Component.Component) => {
+
+        // The new position
+        var position = new paper.Point(
+          (<any>component).dragStartX + delta.x,
+          (<any>component).dragStartY + delta.y
+        );
+
+        // Position the component
+        component.model.properties.x = (<any>component).dragStartX + delta.x;
+        component.model.properties.y = (<any>component).dragStartY + delta.y;
+        component.update();
+
+        // Find a snap point
+        var smartGuideResult = this.canvas.updateSmartGuides(component);
+
+        // Store if best smart guide match
+        if (smartGuideResult.x) {
+
+          if (
+            !bestSmartGuideResult.x ||
+            smartGuideResult.x.score < bestSmartGuideResult.x.score
+          ) {
+
+            bestSmartGuideResult.x = smartGuideResult.x;
+          }
+        }
+
+        if (smartGuideResult.y) {
+
+          if (
+            !bestSmartGuideResult.y ||
+            smartGuideResult.y.score < bestSmartGuideResult.y.score
+          ) {
+
+            bestSmartGuideResult.y = smartGuideResult.y;
+          }
+        }
+      });
+
+      // Adjust items according to smart guides
+      this.canvas.selectedComponents.forEach((component) => {
+
+        var position = new paper.Point(
+          component.model.properties.x,
+          component.model.properties.y
+        );
+
+        position = bestSmartGuideResult.x ? position.add(bestSmartGuideResult.x.getAdjustment()) : position;
+        position = bestSmartGuideResult.y ? position.add(bestSmartGuideResult.y.getAdjustment()) : position;
+
+        // Reposition the item
+        component.model.properties.x = position.x;
+        component.model.properties.y = position.y;
+        component.update();
+      });
+
+      // Draw smart guides
+      if (bestSmartGuideResult.x) { this.canvas.drawGuide(bestSmartGuideResult.x); }
+      if (bestSmartGuideResult.y) { this.canvas.drawGuide(bestSmartGuideResult.y); }
+
+      this.canvas.updateBoundingBoxes();
+    }
+
+
+    /**
+     * Key down handler
+     */
+
+    private keyDownHandler(event) {
+
+      switch (event.key) {
+
+				case 'backspace':
+
+					if (this.canvas.selectedComponents.length) {
+
+						this.canvas.removeItems(this.canvas.selectedComponents);
+						event.event.preventDefault();
+					}
+
+					break;
+
+				// Nudge left on the left key
+				case 'left':
+
+					var amount = event.modifiers.shift ? -10 : -1;
+					if (this.canvas.selectedComponents.length) {
+
+						this.canvas.nudge(this.canvas.selectedComponents, amount, 0);
+					}
+
+					break;
+
+				// Nudge right on the right key
+				case 'right':
+
+					var amount = event.modifiers.shift ? 10 : 1;
+					if (this.canvas.selectedComponents.length) {
+
+						this.canvas.nudge(this.canvas.selectedComponents, amount, 0);
+					}
+
+					break;
+
+				// Nudge up on the up key
+				case 'up':
+
+					var amount = event.modifiers.shift ? -10 : -1;
+					if (this.canvas.selectedComponents.length) {
+
+						this.canvas.nudge(this.canvas.selectedComponents, 0, amount);
+					}
+
+					break;
+
+				// Nudge down on the down key
+				case 'down':
+
+					var amount = event.modifiers.shift ? 10 : 1;
+					if (this.canvas.selectedComponents) {
+
+						this.canvas.nudge(this.canvas.selectedComponents, 0, amount);
+					}
+
+					break;
+
+				// Move forward on the ']' key
+				case ']':
+
+					if (this.canvas.selectedComponents) {
+
+						this.canvas.moveForward(this.canvas.selectedComponents);
+					}
+
+					break;
+
+				// Move to front on the 'shift+]' key
+				case '}':
+
+					if (this.canvas.selectedComponents) {
+
+						this.canvas.moveToFront(this.canvas.selectedComponents);
+					}
+
+					break;
+
+				// Move backward on the '[' key
+				case '[':
+
+					if (this.canvas.selectedComponents) {
+
+						this.canvas.moveBackward(this.canvas.selectedComponents);
+					}
+
+					break;
+
+				// Move to back on the 'shift+[' key
+				case '{':
+
+					if (this.canvas.selectedComponents) {
+
+						this.canvas.moveToBack(this.canvas.selectedComponents);
+					}
+
+					break;
+
+				// Copy on the 'c' key
+				case 'c':
+
+					if (event.modifiers.command || event.modifiers.control) {
+
+						event.event.preventDefault();
+						this.canvas.scope.$emit('component:copied', this.canvas.selectedComponents);
+					}
+
+					break;
+
+					// Paste on the 'v' key
+					case 'v':
+
+						if (event.modifiers.command || event.modifiers.control) {
+
+							event.event.preventDefault();
+							this.canvas.scope.$emit('component:pasted');
+						}
+
+						break;
+			}
+    }
+  }
+}
