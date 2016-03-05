@@ -588,37 +588,22 @@ module Higherframe.Wireframe {
 		 * View methods
 		 */
 
-		setCursor(cursor: Common.Drawing.Cursor) {
+		setCursor(cursor: string) {
 
-			this.element.css('cursor', <string>cursor);
+			this.element.css('cursor', cursor);
+		}
+
+		setImageCursor(url: string, urlHidpi: string, fallback: string, focus?: string) {
+
+			this.element.css('cursor', `${ url } ${ focus }`);
+			this.element.css('cursor', `-webkit-image-set(url(${ url }) 1x, url(${ urlHidpi }) 2x) ${ focus }, ${ fallback }`);
 		}
 
 		setTool(tool: Higherframe.Wireframe.Tool) {
 
 			// Activate the tool
 			tool.activate();
-
 			this.tool = tool;
-			this.updateArtboards();
-
-			if (tool instanceof Higherframe.Wireframe.Tools.Select) {
-
-				// Clean up
-				this.clearArtboardSelection();
-				this.updateArtboards();
-
-				// Style the canvas
-				this.layerDrawing.opacity = 1;
-			}
-
-			else if (tool instanceof Higherframe.Wireframe.Tools.Artboard) {
-
-				// Clean up
-				this.clearComponentSelection();
-
-				// Style the canvas
-				this.layerDrawing.opacity = 0.3;
-			}
 		}
 
 		updateCanvas() {

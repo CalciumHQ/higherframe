@@ -44,5 +44,13 @@ module Higherframe.Wireframe {
         this.canvas = canvas;
       });
     }
+
+    public onActivated() {
+
+    }
+
+    public onDeactivated() {
+
+    }
   }
 }

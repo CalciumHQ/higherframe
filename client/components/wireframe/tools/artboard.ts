@@ -177,12 +177,12 @@ module Higherframe.Wireframe.Tools {
         var artboard: Higherframe.Drawing.Artboard = this.canvas.getTopmost(hitResult.item);
         artboard.hovered = true;
 
-        this.canvas.setCursor(Common.Drawing.Cursors.Move);
+        this.canvas.setCursor('move');
       }
 
       else {
 
-        this.canvas.setCursor(Common.Drawing.Cursors.Crosshair);
+        this.canvas.setCursor('crosshair');
       }
 
       // Update artboards
@@ -262,6 +262,22 @@ module Higherframe.Wireframe.Tools {
 
 					break;
       }
+    }
+
+    public onActivated() {
+
+      // Style the canvas
+      this.canvas.layerDrawing.opacity = 0.3;
+    }
+
+    public onDeactivated() {
+
+      // Clean up
+      this.canvas.clearArtboardSelection();
+      this.canvas.updateArtboards();
+
+      // Style the canvas
+      this.canvas.layerDrawing.opacity = 1;
     }
   }
 }

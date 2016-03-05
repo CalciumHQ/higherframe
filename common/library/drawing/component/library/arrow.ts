@@ -204,7 +204,7 @@ module Common.Drawing.Component.Library {
       var endPoint = position.add(new paper.Point(properties.end.x, properties.end.y));
 
       var start = new DragHandle(new paper.Point(startPoint), color);
-      start.cursor = Cursors.ResizeNESW;
+      start.cursor = 'nesw-resize';
       start.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 
         return [new SnapPoint(position, 'vertex', 'vertex')];
@@ -218,7 +218,7 @@ module Common.Drawing.Component.Library {
       };
 
       var end = new DragHandle(new paper.Point(endPoint), color);
-      end.cursor = Cursors.ResizeNESW;
+      end.cursor = 'nesw-resize';
       end.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 
         return [new SnapPoint(position, 'vertex', 'vertex')];

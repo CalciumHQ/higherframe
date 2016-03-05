@@ -3,7 +3,7 @@ module Common.Drawing.Component {
 
   export interface IDragHandle extends paper.Group {
     position: paper.Point;
-    cursor?: Cursor;
+    cursor?: string;
     getSnapPoints?: (position: paper.Point) => Array<SnapPoint>;
     onMove?: (position: paper.Point) => paper.Point;
   }
@@ -33,7 +33,7 @@ module Common.Drawing.Component {
      * Derived class should implement
      */
 
-    cursor: Cursor;
+    cursor: string;
 
     getSnapPoints(position: paper.Point): Array<SnapPoint> {
 

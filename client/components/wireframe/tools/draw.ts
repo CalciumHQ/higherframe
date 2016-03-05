@@ -159,6 +159,12 @@ module Higherframe.Wireframe.Tools {
       if (event.key == 'command') {
 
         this.delegate.createGhostWithCenter(this.mousePosition);
+        this.canvas.setImageCursor(
+          this.delegate.placeCursor,
+          this.delegate.placeCursorHidpi,
+          this.delegate.placeCursorFallback,
+          this.delegate.placeCursorFocus
+        );
       }
     }
 
@@ -167,6 +173,26 @@ module Higherframe.Wireframe.Tools {
       if (event.key == 'command') {
 
         this.delegate.removeGhost();
+        this.canvas.setImageCursor(
+          this.delegate.drawCursor,
+          this.delegate.drawCursorHidpi,
+          this.delegate.drawCursorFallback,
+          this.delegate.drawCursorFocus
+        );
+      }
+    }
+
+    public onActivated() {
+
+      // Set the cursor
+      if (this.canvas) {
+
+        this.canvas.setImageCursor(
+          this.delegate.drawCursor,
+          this.delegate.drawCursorHidpi,
+          this.delegate.drawCursorFallback,
+          this.delegate.drawCursorFocus
+        );
       }
     }
   }

@@ -286,12 +286,12 @@ module Higherframe.Wireframe.Tools {
         component.hovered = true;
         component.update();
 
-        this.canvas.setCursor(Common.Drawing.Cursors.Move);
+        this.canvas.setCursor('move');
       }
 
       else {
 
-        this.canvas.setCursor(Common.Drawing.Cursors.Default);
+        this.canvas.setCursor('default');
       }
     }
 
@@ -573,6 +573,12 @@ module Higherframe.Wireframe.Tools {
 
 						break;
 			}
+    }
+
+    public onDeactivated() {
+
+      // Clean up
+      this.canvas.clearComponentSelection();
     }
   }
 }

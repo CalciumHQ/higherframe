@@ -204,7 +204,7 @@ module Common.Drawing.Component.Library {
     getTransformHandles(color: paper.Color): Array<IDragHandle> {
 
       var rightCenter = new DragHandle(this.bounds.rightCenter, color);
-      rightCenter.cursor = Cursors.ResizeHorizontal;
+      rightCenter.cursor = 'ew-resize';
       rightCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 
         return [new SnapPoint(position, 'edge', 'center')];
@@ -222,7 +222,7 @@ module Common.Drawing.Component.Library {
       };
 
       var leftCenter = new DragHandle(this.bounds.leftCenter, color);
-      leftCenter.cursor = Cursors.ResizeHorizontal;
+      leftCenter.cursor = 'ew-resize';
       leftCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 
         return [new SnapPoint(position, 'edge', 'center')];

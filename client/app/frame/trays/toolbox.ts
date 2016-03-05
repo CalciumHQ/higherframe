@@ -74,15 +74,24 @@ module Higherframe.Controllers.Frame {
 
     selectItem(item) {
 
-      this.items.forEach((item) => item.active = false);
+      // Deactive the old item
+      var oldItem = _.find(this.items, (item) => item.active);
+
+      if (oldItem) {
+
+        oldItem.active = false;
+        oldItem.tool.onDeactivated();
+      }
+
+      // Activate the new item
       item.active = true;
+      item.tool.onActivated();
 
       this.$rootScope.$broadcast('toolbox:tool:selected', item.tool);
     }
 
     onKeyPress(event) {
 
-      console.log(event.which);
   		this.items.forEach((item) => {
 
         if (item.shortcut && item.shortcut.code == event.which) {

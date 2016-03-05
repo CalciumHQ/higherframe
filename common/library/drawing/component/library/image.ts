@@ -162,7 +162,7 @@ module Common.Drawing.Component.Library {
     getTransformHandles(color: paper.Color): Array<IDragHandle> {
 
       var topLeft = new DragHandle(this.bounds.topLeft, color);
-      topLeft.cursor = Cursors.ResizeNWSE;
+      topLeft.cursor = 'nwse-resize';
       topLeft.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.topLeft = position;
@@ -170,7 +170,7 @@ module Common.Drawing.Component.Library {
       };
 
       var topCenter = new DragHandle(this.bounds.topCenter, color);
-      topCenter.cursor = Cursors.ResizeVertical;
+      topCenter.cursor = 'ns-resize';
       topCenter.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.topCenter.y = position.y;
@@ -178,7 +178,7 @@ module Common.Drawing.Component.Library {
       };
 
       var topRight = new DragHandle(this.bounds.topRight, color);
-      topRight.cursor = Cursors.ResizeNESW;
+      topRight.cursor = 'nesw-resize';
       topRight.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.topRight = position;
@@ -186,7 +186,7 @@ module Common.Drawing.Component.Library {
       };
 
       var rightCenter = new DragHandle(this.bounds.rightCenter, color);
-      rightCenter.cursor = Cursors.ResizeHorizontal;
+      rightCenter.cursor = 'ew-resize';
       rightCenter.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.rightCenter.x = position.x;
@@ -194,7 +194,7 @@ module Common.Drawing.Component.Library {
       };
 
       var bottomRight = new DragHandle(this.bounds.bottomRight, color);
-      bottomRight.cursor = Cursors.ResizeNWSE;
+      bottomRight.cursor = 'nwse-resize';
       bottomRight.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.bottomRight = position;
@@ -202,7 +202,7 @@ module Common.Drawing.Component.Library {
       };
 
       var bottomCenter = new DragHandle(this.bounds.bottomCenter, color);
-      bottomCenter.cursor = Cursors.ResizeVertical;
+      bottomCenter.cursor = 'ns-resize';
       bottomCenter.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.bottomCenter.y = position.y;
@@ -210,7 +210,7 @@ module Common.Drawing.Component.Library {
       };
 
       var bottomLeft = new DragHandle(this.bounds.bottomLeft, color);
-      bottomLeft.cursor = Cursors.ResizeNESW;
+      bottomLeft.cursor = 'nesw-resize';
       bottomLeft.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.bottomLeft = position;
@@ -218,7 +218,7 @@ module Common.Drawing.Component.Library {
       };
 
       var leftCenter = new DragHandle(this.bounds.leftCenter, color);
-      leftCenter.cursor = Cursors.ResizeHorizontal;
+      leftCenter.cursor = 'ew-resize';
       leftCenter.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.leftCenter.x = position.x;

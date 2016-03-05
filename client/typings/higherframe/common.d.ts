@@ -9325,7 +9325,7 @@ declare module Common.Drawing.Component {
 declare module Common.Drawing.Component {
     interface IDragHandle extends paper.Group {
         position: paper.Point;
-        cursor?: Cursor;
+        cursor?: string;
         getSnapPoints?: (position: paper.Point) => Array<SnapPoint>;
         onMove?: (position: paper.Point) => paper.Point;
     }
@@ -9334,7 +9334,7 @@ declare module Common.Drawing.Component {
         /**
          * Derived class should implement
          */
-        cursor: Cursor;
+        cursor: string;
         getSnapPoints(position: paper.Point): Array<SnapPoint>;
         onMove(position: paper.Point): paper.Point;
     }
@@ -10068,20 +10068,6 @@ declare module Common.Drawing.Component {
         Image = 11,
         Icon = 12,
         Browser = 13,
-    }
-}
-declare module Common.Drawing {
-    class Cursor {
-    }
-    class Cursors {
-        static Default: Cursor;
-        static Pointer: Cursor;
-        static Move: Cursor;
-        static Crosshair: Cursor;
-        static ResizeHorizontal: Cursor;
-        static ResizeVertical: Cursor;
-        static ResizeNESW: Cursor;
-        static ResizeNWSE: Cursor;
     }
 }
 declare module Common.Drawing {

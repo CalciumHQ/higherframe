@@ -15,6 +15,16 @@ module Higherframe.Wireframe {
     protected defaultWidth: number = 0;
     protected defaultHeight: number = 0;
 
+    public drawCursor: string = '/assets/cursors/checkbox-draw.png';
+    public drawCursorHidpi: string = '/assets/cursors/checkbox-draw@2x.png';
+    public drawCursorFallback: string = 'crosshair';
+    public drawCursorFocus: string = '6 6';
+
+    public placeCursor: string = '/assets/cursors/checkbox-place.png';
+    public placeCursorHidpi: string = '/assets/cursors/checkbox-place@2x.png';
+    public placeCursorFallback: string = 'default';
+    public placeCursorFocus: string = '6 6';
+
     public createGhost(topLeft: paper.Point, size?: paper.Size) {
 
       if (this.ghost) {
