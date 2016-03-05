@@ -37,7 +37,10 @@ angular.module('siteApp', [
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.Rectangle],
       title: Common.Drawing.Component.Library.Rectangle.title,
       icon: '/assets/images/components/rectangle.svg',
-      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.Rectangle())
+      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.Rectangle()),
+      shortcut: {
+        code: 117   // u
+      }
     });
 
     ComponentLibraryProvider.register({
@@ -51,28 +54,40 @@ angular.module('siteApp', [
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.Arrow],
       title: Common.Drawing.Component.Library.Arrow.title,
       icon: '/assets/images/components/line.svg',
-      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.Arrow())
+      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.Arrow()),
+      shortcut: {
+        code: 47   // /
+      }
     });
 
     ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.Label],
       title: Common.Drawing.Component.Library.Label.title,
       icon: '/assets/images/components/text.svg',
-      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.Label())
+      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.Label()),
+      shortcut: {
+        code: 116   // t
+      }
     });
 
     ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.Image],
       title: Common.Drawing.Component.Library.Image.title,
       icon: '/assets/images/components/image.svg',
-      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.Image())
+      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.Image()),
+      shortcut: {
+        code: 105   // i
+      }
     });
 
     ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.TextInput],
       title: Common.Drawing.Component.Library.TextInput.title,
       icon: '/assets/images/components/text-input.svg',
-      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.TextInput())
+      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.TextInput()),
+      shortcut: {
+        code: 102   // f
+      }
     });
 
     ComponentLibraryProvider.register({
@@ -93,7 +108,10 @@ angular.module('siteApp', [
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.Button],
       title: Common.Drawing.Component.Library.Button.title,
       icon: '/assets/images/components/button.svg',
-      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.Button())
+      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.Button()),
+      shortcut: {
+        code: 98   // b
+      }
     });
 
     ComponentLibraryProvider.register({
@@ -107,7 +125,10 @@ angular.module('siteApp', [
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.Browser],
       title: Common.Drawing.Component.Library.Browser.title,
       icon: '/assets/images/components/browser.svg',
-      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.Browser())
+      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.Browser()),
+      shortcut: {
+        code: 99   // c
+      }
     });
 
     ComponentLibraryProvider.register({

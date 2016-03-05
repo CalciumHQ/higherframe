@@ -1,6 +1,6 @@
 module Higherframe.Wireframe {
 
-  export class Tool extends paper.Tool {
+  export abstract class Tool extends paper.Tool {
 
     private rootScope: ng.IRootScopeService;
     private CanvasRegistry: Higherframe.Wireframe.CanvasRegistry;

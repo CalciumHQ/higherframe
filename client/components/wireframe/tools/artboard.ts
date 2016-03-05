@@ -27,6 +27,7 @@ module Higherframe.Wireframe.Tools {
       this.onMouseDown = this.mouseDownHandler;
       this.onMouseUp = this.mouseUpHandler;
       this.onMouseDrag = this.mouseDragHandler;
+      this.onKeyDown = this.keyDownHandler;
     }
 
 

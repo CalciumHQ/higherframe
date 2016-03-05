@@ -7,6 +7,9 @@ module Higherframe.Controllers.Frame {
     tool?: Higherframe.Wireframe.Tool,
     title: string,
     icon: string,
+    shortcut?: {
+      code: number
+    },
     active?: boolean
   }
 
@@ -21,11 +24,17 @@ module Higherframe.Controllers.Frame {
       private ComponentLibrary: Higherframe.Drawing.Component.Library.IService
     ) {
 
+      // Attach event handlers
+      this.attachEventHandlers();
+
       // Add the select tool
       let select = {
         tool: new Wireframe.Tools.Select(),
         title: 'Select',
-        icon: '/assets/images/select.svg'
+        icon: '/assets/images/select.svg',
+        shortcut: {
+          code: 118   // v
+        }
       };
 
       this.items.push(select);
@@ -34,7 +43,10 @@ module Higherframe.Controllers.Frame {
       this.items.push({
         tool: new Wireframe.Tools.Artboard(),
         title: 'Edit artboards',
-        icon: '/assets/images/artboard.svg'
+        icon: '/assets/images/artboard.svg',
+        shortcut: {
+          code: 111   // o
+        }
       });
 
       // Add the component tools
@@ -46,6 +58,13 @@ module Higherframe.Controllers.Frame {
       // Select the select tool, after allowing canvas to initialize
       this.$timeout(() => this.selectItem(select));
 
+    }
+
+    attachEventHandlers() {
+
+      angular
+        .element('body')
+        .on('keypress', (event) => this.$scope.$apply(() => this.onKeyPress.call(this, event)));
     }
 
     onItemClick(item) {
@@ -60,6 +79,18 @@ module Higherframe.Controllers.Frame {
 
       this.$rootScope.$broadcast('toolbox:tool:selected', item.tool);
     }
+
+    onKeyPress(event) {
+
+      console.log(event.which);
+  		this.items.forEach((item) => {
+
+        if (item.shortcut && item.shortcut.code == event.which) {
+
+          this.selectItem(item);
+        }
+      })
+  	}
   }
 }
 

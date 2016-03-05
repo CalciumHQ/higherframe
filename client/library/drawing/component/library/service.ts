@@ -9,7 +9,10 @@ module Higherframe.Drawing.Component.Library {
     id: string,
     title: string,
     icon: string,
-    tool?: Higherframe.Wireframe.Tool
+    tool?: Higherframe.Wireframe.Tool,
+    shortcut?: {
+      code: number
+    }
   }
 
   export class ServiceProvider implements ng.IServiceProvider {

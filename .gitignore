@@ -9,6 +9,7 @@ dist
 .bower-cache
 .bower-registry
 .bower-tmp
+.tscache
 tmp
 server/tmp
 

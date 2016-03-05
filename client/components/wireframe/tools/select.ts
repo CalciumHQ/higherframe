@@ -30,6 +30,7 @@ module Higherframe.Wireframe.Tools {
       this.onMouseMove = this.mouseMoveHandler;
       this.onMouseDown = this.mouseDownHandler;
       this.onMouseUp = this.mouseUpHandler;
+      this.onKeyDown = this.keyDownHandler;
     }
 
 
@@ -456,10 +457,12 @@ module Higherframe.Wireframe.Tools {
 
 				case 'backspace':
 
+          event.event.preventDefault();
+          event.event.stopPropagation();
+
 					if (this.canvas.selectedComponents.length) {
 
 						this.canvas.removeItems(this.canvas.selectedComponents);
-						event.event.preventDefault();
 					}
 
 					break;
