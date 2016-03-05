@@ -56,6 +56,11 @@ module Higherframe.Wireframe.Tools {
       this.delegate.removeGhost();
     }
 
+    private createComponent(component: Common.Drawing.Component.Component) {
+
+      this.canvas.scope.$emit('toolbox:component:added', component);
+    }
+
 
     /**
      * Mouse down handler
@@ -91,6 +96,7 @@ module Higherframe.Wireframe.Tools {
     private mouseUpHandlerPlace(event) {
 
       let component = this.delegate.createWithCenter(event.point);
+      this.createComponent(component);
     }
 
     private mouseUpHandlerDrag(event) {
@@ -98,6 +104,7 @@ module Higherframe.Wireframe.Tools {
       if (this.dragRect) {
 
         let component = this.delegate.create(this.dragRect.topLeft, this.dragRect.size);
+        this.createComponent(component);
       }
 
       this.resetDrag();

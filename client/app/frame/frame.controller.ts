@@ -172,6 +172,16 @@ class FrameCtrl {
   	});
 
 
+		/**
+		 * Toolbox notifications
+		 */
+
+		$scope.$on('toolbox:component:added', (e, component) => {
+
+			this.saveComponents(component);
+		});
+
+
     /**
      * Toolbar notifications
      */

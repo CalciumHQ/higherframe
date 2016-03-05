@@ -5,9 +5,13 @@ module Higherframe.Wireframe.Tools.Delegates {
 
     create(topLeft: paper.Point, size?: paper.Size): Common.Drawing.Component.Library.Arrow {
 
+      var properties = <Common.Data.IArrowProperties>this.getProperties(topLeft, size);
+
+      properties.start = topLeft;
+
       var model = new Common.Data.Component(
         Common.Drawing.Component.Type[Common.Drawing.Component.Type.Arrow],
-        this.getProperties(topLeft, size)
+        properties
       );
 
       return new Common.Drawing.Component.Library.Arrow(model);
