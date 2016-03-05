@@ -15,6 +15,11 @@ module Higherframe.UI {
 
         var name = (<any>attrs).propertyName;
 
+        // Prevent keystrokes from bubbling to the rest of the document
+        element.on('keydown', (event) => event.stopPropagation());
+        element.on('keyup', (event) => event.stopPropagation());
+        element.on('keypress', (event) => event.stopPropagation());
+
         function commit() {
 
           this.$rootScope.$broadcast('properties:property:commit', {
@@ -30,7 +35,6 @@ module Higherframe.UI {
             case 13: // enter
 
               e.preventDefault();
-              e.stopPropagation();
               element.blur();
 
               break;
@@ -38,8 +42,6 @@ module Higherframe.UI {
             case 27: // esc
 
               e.preventDefault();
-              e.stopPropagation();
-
               ngModel.$rollbackViewValue();
               element.blur();
               break;

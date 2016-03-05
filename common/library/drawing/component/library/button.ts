@@ -131,8 +131,8 @@ module Common.Drawing.Component.Library {
       // Remove the old parts
       this.removeChildren();
 
-      var topLeft = new paper.Point(properties.x, properties.y);
-      var bottomRight = new paper.Point(properties.x + properties.width, properties.y + properties.height);
+      var topLeft = new paper.Point(properties.x - properties.width/2, properties.y - properties.height/2);
+      var bottomRight = new paper.Point(properties.x + properties.width/2, properties.y + properties.height/2);
       var bounds = new paper.Rectangle(topLeft, bottomRight);
 
       // Draw the shape
@@ -174,8 +174,8 @@ module Common.Drawing.Component.Library {
     updateModel() {
 
       var properties = this.getProperties();
-      properties.x = this.bounds.topLeft.x;
-      properties.y = this.bounds.topLeft.y;
+      properties.x = this.bounds.center.x;
+      properties.y = this.bounds.center.y;
       properties.width = this.bounds.width;
       properties.height = this.bounds.height;
     }

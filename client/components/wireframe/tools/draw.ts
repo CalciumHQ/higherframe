@@ -5,6 +5,7 @@ module Higherframe.Wireframe.Tools {
 
     delegate: Higherframe.Wireframe.ToolDelegate;
 
+    private mousePosition: paper.Point;
     private dragRect: paper.Rectangle;
     private dragPreview: paper.Item;
 
@@ -25,6 +26,8 @@ module Higherframe.Wireframe.Tools {
       this.onMouseDown = this.mouseDownHandler;
       this.onMouseUp = this.mouseUpHandler;
       this.onMouseDrag = this.mouseDragHandler;
+      this.onKeyDown = this.keyDownHandler;
+      this.onKeyUp = this.keyUpHandler;
     }
 
     /**
@@ -60,8 +63,11 @@ module Higherframe.Wireframe.Tools {
 
     private mouseDownHandler(event) {
 
-      // Start a drag
-      this.startDrag(event);
+      if (!event.modifiers.command && !event.modifiers.control) {
+
+        // Start a drag
+        this.startDrag(event);
+      }
     }
 
 
@@ -84,7 +90,7 @@ module Higherframe.Wireframe.Tools {
 
     private mouseUpHandlerPlace(event) {
 
-      let component = this.delegate.create(event.point);
+      let component = this.delegate.createWithCenter(event.point);
     }
 
     private mouseUpHandlerDrag(event) {
@@ -104,7 +110,11 @@ module Higherframe.Wireframe.Tools {
 
     private mouseMoveHandler(event) {
 
+      // Store the mouse position
+      this.mousePosition = event.point;
 
+      // Update the ghost
+      this.delegate.updateGhostWithCenter(event.point);
     }
 
 
@@ -135,6 +145,22 @@ module Higherframe.Wireframe.Tools {
 
       // Update the ghost
       this.delegate.updateGhost(this.dragRect.topLeft, this.dragRect.size);
+    }
+
+    private keyDownHandler(event) {
+
+      if (event.key == 'command') {
+
+        this.delegate.createGhostWithCenter(this.mousePosition);
+      }
+    }
+
+    private keyUpHandler(event) {
+
+      if (event.key == 'command') {
+
+        this.delegate.removeGhost();
+      }
     }
   }
 }
