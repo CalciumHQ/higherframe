@@ -12,21 +12,16 @@ module Higherframe.UI.Filters {
 
         case 'ctrl':
           return '<span class="lucida">&#8984;</span>'
-          break;
 
         case 'shift':
           return '<span class="lucida">&#8679;</span>';
-          break;
 
         case 'alt':
           return '<span class="lucida">&#8997;</span>';
-          break;
 
         default:
           return input;
-          break;
       }
-      return input;
     };
   }
 }

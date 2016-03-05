@@ -36,79 +36,92 @@ angular.module('siteApp', [
     ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.Rectangle],
       title: Common.Drawing.Component.Library.Rectangle.title,
-      icon: '/assets/images/components/rectangle.svg'
+      icon: '/assets/images/components/rectangle.svg',
+      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.Rectangle())
     });
 
     ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.Ellipse],
       title: Common.Drawing.Component.Library.Ellipse.title,
-      icon: '/assets/images/components/ellipse.svg'
+      icon: '/assets/images/components/ellipse.svg',
+      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.Ellipse())
     });
 
     ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.Arrow],
       title: Common.Drawing.Component.Library.Arrow.title,
-      icon: '/assets/images/components/line.svg'
+      icon: '/assets/images/components/line.svg',
+      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.Arrow())
     });
 
     ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.Label],
       title: Common.Drawing.Component.Library.Label.title,
-      icon: '/assets/images/components/text.svg'
+      icon: '/assets/images/components/text.svg',
+      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.Label())
     });
 
     ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.Image],
       title: Common.Drawing.Component.Library.Image.title,
-      icon: '/assets/images/components/image.svg'
+      icon: '/assets/images/components/image.svg',
+      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.Image())
     });
 
     ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.TextInput],
       title: Common.Drawing.Component.Library.TextInput.title,
-      icon: '/assets/images/components/text-input.svg'
+      icon: '/assets/images/components/text-input.svg',
+      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.TextInput())
     });
 
     ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.SelectInput],
       title: Common.Drawing.Component.Library.SelectInput.title,
-      icon: '/assets/images/components/select-input.svg'
+      icon: '/assets/images/components/select-input.svg',
+      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.SelectInput())
     });
 
     ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.Checkbox],
       title: Common.Drawing.Component.Library.Checkbox.title,
-      icon: '/assets/images/components/checkbox.svg'
+      icon: '/assets/images/components/checkbox.svg',
+      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.Checkbox())
     });
 
     ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.Button],
       title: Common.Drawing.Component.Library.Button.title,
-      icon: '/assets/images/components/button.svg'
+      icon: '/assets/images/components/button.svg',
+      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.Button())
     });
 
     ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.Icon],
       title: Common.Drawing.Component.Library.Icon.title,
-      icon: '/assets/images/components/icon.svg'
+      icon: '/assets/images/components/icon.svg',
+      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.Icon())
     });
 
     ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.Browser],
       title: Common.Drawing.Component.Library.Browser.title,
-      icon: '/assets/images/components/browser.svg'
+      icon: '/assets/images/components/browser.svg',
+      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.Browser())
     });
 
     ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.MobileDevice],
       title: Common.Drawing.Component.Library.MobileDevice.title,
-      icon: '/assets/images/components/mobile.svg'
+      icon: '/assets/images/components/mobile.svg',
+      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.MobileDevice())
     });
 
     ComponentLibraryProvider.register({
       id: Common.Drawing.Component.Type[Common.Drawing.Component.Type.MobileTitlebar],
       title: Common.Drawing.Component.Library.MobileTitlebar.title,
-      icon: '/assets/images/components/mobile-titlebar.svg'
+      icon: '/assets/images/components/mobile-titlebar.svg',
+      tool: new Higherframe.Wireframe.Tools.Draw(new Higherframe.Wireframe.Tools.Delegates.MobileTitlebar())
     });
   })
 

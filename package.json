@@ -72,7 +72,7 @@
     "grunt-replace": "^0.11.0",
     "grunt-rev": "~0.1.0",
     "grunt-svgmin": "~0.4.0",
-    "grunt-typescript": "^0.7.0",
+    "grunt-ts": "^5.3.2",
     "grunt-usemin": "~2.1.1",
     "jit-grunt": "^0.5.0",
     "jshint-stylish": "~0.1.5",
@@ -93,7 +93,8 @@
     "requirejs": "~2.1.11",
     "should": "~3.3.1",
     "supertest": "~0.11.0",
-    "time-grunt": "~0.3.1"
+    "time-grunt": "~0.3.1",
+    "typescript": "^1.6.0"
   },
   "engines": {
     "node": ">=5.0.0"

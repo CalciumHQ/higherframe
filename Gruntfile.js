@@ -108,7 +108,7 @@ module.exports = function (grunt) {
           '!<%= yeoman.client %>/{app,components,library}/**/*.spec.js',
           '!<%= yeoman.client %>/{app,components,library}/**/*.mock.js',
           '!<%= yeoman.client %>/app/app.js'],
-        tasks: ['typescript', 'injector:scripts']
+        tasks: ['ts', 'injector:scripts']
       },
       injectCss: {
         files: [
@@ -433,7 +433,7 @@ module.exports = function (grunt) {
     },
 
     // Typescript
-    typescript: {
+    ts: {
       client: {
         src: [
           '<%= yeoman.client %>/**/*.ts',
@@ -456,7 +456,7 @@ module.exports = function (grunt) {
           'common/library/**/*.ts',
           '!common/typings/**/*.ts'
         ],
-        dest: '.tmp',
+        dest: '.tmp/library',
         options: {
           module: 'commonjs',
           target: 'es5',
@@ -711,9 +711,9 @@ module.exports = function (grunt) {
       'env:all',
       'injector:sass',
       'concurrent:server',
-      'typescript:client',
-      'typescript:common',
-      'typescript:server',
+      'ts:client',
+      'ts:common',
+      'ts:server',
       'injector',
       'bowerInstall',
       'autoprefixer',
@@ -776,9 +776,9 @@ module.exports = function (grunt) {
     'clean:dist',
     'injector:sass',
     'concurrent:dist',
-    'typescript:client',
-    'typescript:common',
-    'typescript:server',
+    'ts:client',
+    'ts:common',
+    'ts:server',
     'injector',
     'bowerInstall',
     'replace',

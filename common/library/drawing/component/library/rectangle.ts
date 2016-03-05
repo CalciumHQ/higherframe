@@ -1,6 +1,4 @@
 
-
-
 module Common.Drawing.Component.Library {
 
   export class Rectangle extends Drawing.Component.Component {

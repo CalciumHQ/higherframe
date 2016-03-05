@@ -94,7 +94,7 @@ module Higherframe.Wireframe {
 
 				scope.$on('event:keydown', (e, keyEvent) => {
 
-					this.onDrawKeyDown(keyEvent);
+					this.onKeyDown(keyEvent);
 				});
 
 				scope.$on('view:zoom', (e, zoom) => {
@@ -326,7 +326,7 @@ module Higherframe.Wireframe {
 			 this.changeCenter(-event.deltaX, event.deltaY);
      }
 
-		onDrawKeyDown(event) {
+		onKeyDown(event) {
 
 			// Proxy the event to the currently active tool
 			if ((<any>paper.tool).keyDownHandler) {
@@ -1238,8 +1238,8 @@ module Higherframe.Wireframe {
 		 */
 
 		updateGrid() {
-return;
-				var gridMajorSize = 100,
+
+				/* var gridMajorSize = 100,
 					gridMinorSize = 20,
 					gridMajorColor = 'rgba(0,0,0,0.07)',
 					gridMinorColor = 'rgba(0,0,0,0.03)',
@@ -1330,7 +1330,7 @@ return;
 					}
 				});
 
-				this.layerDrawing.activate();
+				this.layerDrawing.activate(); */
 		}
 
 
