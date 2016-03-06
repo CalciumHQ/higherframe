@@ -6,6 +6,14 @@ div.form-group
       input.form-control.full(property-name="text", property-bindings, ng-model="PropsCtrl.properties.text", ng-model-options="{ updateOn: 'blur' }")
 
 div.form-group
+  label.form-label.h6(for="") Font
+  
+  div.form-controls
+    div.form-control-row
+      input.form-control.full(property-name="fontSize", property-bindings, ng-model="PropsCtrl.properties.fontSize", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+      input.form-control.full(property-name="lineHeight", property-bindings, ng-model="PropsCtrl.properties.lineHeight", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+                
+div.form-group
   label.form-label.h6(for="") Position
   
   div.form-controls

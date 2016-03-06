@@ -12,7 +12,10 @@ module Common.Data {
   export interface ILabelProperties extends IComponentProperties {
     text: string,
     fontSize: number,
-    fontWeight: number
+    fontWeight: number,
+    lineHeight: number,
+    justification: string,
+    area: boolean
   }
 
   export interface IRectangleProperties extends IComponentProperties {

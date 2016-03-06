@@ -15,12 +15,26 @@ module Higherframe.Wireframe.Tools.Delegates {
 
     create(topLeft: paper.Point, size?: paper.Size): Common.Drawing.Component.Library.Label {
 
+      var properties = <Common.Data.ILabelProperties>this.getProperties(topLeft, size);
+
+      if (!size) {
+
+        properties.area = false;
+        properties.width = 200;
+        properties.height = 150;
+      }
+
       var model = new Common.Data.Component(
         Common.Drawing.Component.Type[Common.Drawing.Component.Type.Label],
-        this.getProperties(topLeft, size)
+        properties
       );
 
       return new Common.Drawing.Component.Library.Label(model);
+    }
+
+    createWithCenter(topLeft: paper.Point, size?: paper.Size): Common.Drawing.Component.Library.Label {
+
+      return this.create(topLeft);
     }
   }
 }

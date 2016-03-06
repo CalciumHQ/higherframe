@@ -4016,6 +4016,30 @@ declare module paper {
 
     }
 
+    /**
+     * A PointText item represents a piece of typography in your Paper.js project which starts from a certain point and extends by the amount of characters contained in it.
+     */
+    export class AreaText extends TextItem {
+
+        /**
+         * Creates a point text item
+         * @param point - the position where the text will start
+         */
+        constructor(rectangle: Rectangle);
+
+        /**
+         * Creates a point text item from the properties described by an object literal.
+         * @param object - an object literal containing properties describing the path's attributes
+         */
+        constructor(object: any);
+
+        /**
+         * The PointText's anchor point
+         */
+        rectangle: Rectangle;
+
+    }
+
 }
 // Type definitions for jQuery 1.10.x / 2.0.x
 // Project: http://jquery.com/
@@ -9138,6 +9162,9 @@ declare module Common.Data {
         text: string;
         fontSize: number;
         fontWeight: number;
+        lineHeight: number;
+        justification: string;
+        area: boolean;
     }
     interface IRectangleProperties extends IComponentProperties {
         width: number;
@@ -9754,6 +9781,10 @@ declare module Common.Drawing.Component.Library {
          * Calculate the snap points for the component
          */
         getSnapPoints(): Array<SnapPoint>;
+        /**
+         * Calculate the transform handles for the component
+         */
+        getTransformHandles(color: paper.Color): Array<IDragHandle>;
         /**
          * Cast the model properties into the correct type
          */
