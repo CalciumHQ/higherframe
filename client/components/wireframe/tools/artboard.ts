@@ -182,7 +182,12 @@ module Higherframe.Wireframe.Tools {
 
       else {
 
-        this.canvas.setCursor('crosshair');
+        this.canvas.setImageCursor(
+          '/assets/cursors/artboard-draw.png',
+          '/assets/cursors/artboard-draw@2x.png',
+          'crosshair',
+          '6 6'
+        );
       }
 
       // Update artboards

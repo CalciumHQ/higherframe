@@ -6,6 +6,16 @@ module Higherframe.Wireframe.Tools.Delegates {
     defaultWidth = 232;
     defaultHeight = 464;
 
+    public drawCursor: string = '/assets/cursors/mobile-draw.png';
+    public drawCursorHidpi: string = '/assets/cursors/mobile-draw@2x.png';
+    public drawCursorFallback: string = 'crosshair';
+    public drawCursorFocus: string = '6 6';
+
+    public placeCursor: string = '/assets/cursors/mobile-place.png';
+    public placeCursorHidpi: string = '/assets/cursors/mobile-place@2x.png';
+    public placeCursorFallback: string = 'default';
+    public placeCursorFocus: string = '6 6';
+
     create(topLeft: paper.Point, size?: paper.Size): Common.Drawing.Component.Library.MobileDevice {
 
       var model = new Common.Data.Component(
