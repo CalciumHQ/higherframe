@@ -77,7 +77,7 @@ module Higherframe.Drawing {
 			);
 			background.fillColor = 'white';
 
-			if (canvas.editMode == Common.Drawing.EditMode.Artboards) {
+			if (this.focussed) {
 
         background.strokeColor = foreColor;
 			}

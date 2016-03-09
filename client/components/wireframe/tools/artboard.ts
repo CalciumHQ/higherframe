@@ -50,7 +50,7 @@ module Higherframe.Wireframe.Tools {
 
           if (
             component.isInside(artboard.bounds) ||
-            artboard.intersects(component)
+            artboard.bounds.intersects(component.bounds)
           ) {
 
             // Annotate the dragged artboards with their starting position
