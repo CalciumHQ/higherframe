@@ -144,7 +144,7 @@ exports.export = function (frame, fileName, options) {
     // Draw the components
     frame.components.forEach(function (component) {
 
-      var component = Common.Drawing.Component.Factory.get(Common.Drawing.Component.Type[component.type], component);
+      var component = Common.Drawing.Component.Factory.get(Common.Drawing.ComponentType[component.type], component);
     });
 
     // Translate contents relative to artboard position

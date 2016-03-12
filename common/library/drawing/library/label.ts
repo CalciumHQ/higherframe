@@ -1,12 +1,12 @@
 
 
 
-module Common.Drawing.Component.Library {
+module Common.Drawing.Library {
 
-  export class Label extends Drawing.Component.Component {
+  export class Label extends Drawing.Component {
 
     // Implement IDefinition members
-    id = Drawing.Component.Type.Label;
+    id = Drawing.ComponentType.Label;
     static title = 'Label';
     static category = 'Basic';
     tags = [

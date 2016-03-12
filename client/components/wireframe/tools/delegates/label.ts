@@ -13,7 +13,7 @@ module Higherframe.Wireframe.Tools.Delegates {
     public placeCursorFallback: string = 'default';
     public placeCursorFocus: string = '6 6';
 
-    create(topLeft: paper.Point, size?: paper.Size): Common.Drawing.Component.Library.Label {
+    create(topLeft: paper.Point, size?: paper.Size): Common.Drawing.Library.Label {
 
       var properties = <Common.Data.ILabelProperties>this.getProperties(topLeft, size);
 
@@ -25,14 +25,14 @@ module Higherframe.Wireframe.Tools.Delegates {
       }
 
       var model = new Common.Data.Component(
-        Common.Drawing.Component.Type[Common.Drawing.Component.Type.Label],
+        Common.Drawing.ComponentType[Common.Drawing.ComponentType.Label],
         properties
       );
 
-      return new Common.Drawing.Component.Library.Label(model);
+      return new Common.Drawing.Library.Label(model);
     }
 
-    createWithCenter(topLeft: paper.Point, size?: paper.Size): Common.Drawing.Component.Library.Label {
+    createWithCenter(topLeft: paper.Point, size?: paper.Size): Common.Drawing.Library.Label {
 
       return this.create(topLeft);
     }

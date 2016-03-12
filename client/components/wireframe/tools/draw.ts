@@ -56,7 +56,7 @@ module Higherframe.Wireframe.Tools {
       this.delegate.removeGhost();
     }
 
-    private createComponent(component: Common.Drawing.Component.Component) {
+    private createComponent(component: Common.Drawing.Component) {
 
       this.canvas.scope.$emit('toolbox:component:added', component);
     }

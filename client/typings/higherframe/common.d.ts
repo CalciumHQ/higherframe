@@ -9280,24 +9280,45 @@ declare module Common.Data {
     }
 }
 declare module Higherframe.Drawing {
-    class Artboard extends paper.Group {
+    class Artboard extends Common.Drawing.Item {
         model: Common.Data.IArtboard;
         name: string;
         width: number;
         height: number;
         left: number;
         top: number;
-        hovered: boolean;
-        active: boolean;
-        focussed: boolean;
         constructor(model: Common.Data.IArtboard);
         private initFromModel();
         commit(): void;
         sync(): void;
-        update(canvas: any): void;
+        update(canvas?: any): void;
+        /**
+         * Calculate the transform handles for the component
+         */
+        getTransformHandles(color: paper.Color): Array<Common.Drawing.IDragHandle>;
+        getBoundsRectangle(): paper.Rectangle;
+        private getArtboardRectangle();
     }
 }
-declare module Common.Drawing.Component {
+declare module Common.Drawing {
+    enum ComponentType {
+        Generic = 0,
+        Rectangle = 1,
+        Ellipse = 2,
+        Arrow = 3,
+        MobileDevice = 4,
+        MobileTitlebar = 5,
+        TextInput = 6,
+        SelectInput = 7,
+        Checkbox = 8,
+        Label = 9,
+        Button = 10,
+        Image = 11,
+        Icon = 12,
+        Browser = 13,
+    }
+}
+declare module Common.Drawing {
     interface IComponentMoveEvent {
         position: paper.Point;
         delta: paper.Point;
@@ -9307,29 +9328,21 @@ declare module Common.Drawing.Component {
      *
      * @extends Paper.Group
      */
-    class Component extends paper.Group {
+    class Component extends Common.Drawing.Item {
         /**
          * Properties
          */
-        id: Common.Drawing.Component.Type;
+        id: Common.Drawing.ComponentType;
         title: String;
         category: String;
         tags: Array<String>;
         model: Common.Data.IDrawingModel;
-        _hovered: Boolean;
-        hovered: Boolean;
-        _active: Boolean;
-        active: Boolean;
-        _focussed: Boolean;
-        focussed: Boolean;
         _collaborator: Common.Data.IUser;
         collaborator: Common.Data.IUser;
         _properties: Array<Object>;
         properties: Array<Object>;
         _boundingBox: paper.Group;
         boundingBox: paper.Group;
-        _dragHandles: paper.Group;
-        dragHandles: paper.Group;
         /**
          * Methods
          */
@@ -9340,16 +9353,12 @@ declare module Common.Drawing.Component {
         constructor(model: Common.Data.IDrawingModel);
         serialize(): Common.Data.IDrawingModel;
         deserialize(): void;
-        update(): void;
         updateModel(): void;
         setProperty(name: string, value: any): void;
-        getSnapPoints(): Array<SnapPoint>;
-        getTransformHandles(color: paper.Color): Array<IDragHandle>;
-        getDragHandles(color: paper.Color): Array<IDragHandle>;
         onMove(IComponentMoveEvent: any): void;
     }
 }
-declare module Common.Drawing.Component {
+declare module Common.Drawing {
     interface IDragHandle extends paper.Group {
         position: paper.Point;
         cursor?: string;
@@ -9366,7 +9375,7 @@ declare module Common.Drawing.Component {
         onMove(position: paper.Point): paper.Point;
     }
 }
-declare module Common.Drawing.Component {
+declare module Common.Drawing {
     /**
      * Factory for drawing components
      */
@@ -9374,16 +9383,33 @@ declare module Common.Drawing.Component {
         /**
          * Create a drawing component from a component data model.
          */
-        static fromModel(model?: Common.Data.Component): Drawing.Component.Component;
+        static fromModel(model?: Common.Data.Component): Drawing.Component;
         /**
          * Creates a new component for a given component type
          */
         private static get(type, model);
     }
 }
-declare module Common.Drawing.Component.Library {
-    class Arrow extends Drawing.Component.Component {
-        id: Type;
+declare module Common.Drawing {
+    class Item extends paper.Group {
+        protected _hovered: Boolean;
+        hovered: Boolean;
+        protected _active: Boolean;
+        active: Boolean;
+        protected _focussed: Boolean;
+        focussed: Boolean;
+        protected _dragHandles: paper.Group;
+        dragHandles: paper.Group;
+        update(canvas?: any): void;
+        getSnapPoints(): Array<SnapPoint>;
+        getTransformHandles(color: paper.Color): Array<IDragHandle>;
+        getDragHandles(color: paper.Color): Array<IDragHandle>;
+        getBoundsRectangle(): paper.Rectangle;
+    }
+}
+declare module Common.Drawing.Library {
+    class Arrow extends Drawing.Component {
+        id: ComponentType;
         static title: string;
         static category: string;
         tags: string[];
@@ -9421,9 +9447,9 @@ declare module Common.Drawing.Component.Library {
         getTransformHandles(color: paper.Color): Array<IDragHandle>;
     }
 }
-declare module Common.Drawing.Component.Library {
-    class Browser extends Drawing.Component.Component {
-        id: Type;
+declare module Common.Drawing.Library {
+    class Browser extends Drawing.Component {
+        id: ComponentType;
         static title: string;
         static category: string;
         tags: string[];
@@ -9466,9 +9492,9 @@ declare module Common.Drawing.Component.Library {
         getProperties(): Common.Data.IBrowserProperties;
     }
 }
-declare module Common.Drawing.Component.Library {
-    class Button extends Drawing.Component.Component {
-        id: Type;
+declare module Common.Drawing.Library {
+    class Button extends Drawing.Component {
+        id: ComponentType;
         static title: string;
         static category: string;
         tags: string[];
@@ -9541,9 +9567,9 @@ declare module Common.Drawing.Component.Library {
         getProperties(): Common.Data.IButtonProperties;
     }
 }
-declare module Common.Drawing.Component.Library {
-    class Checkbox extends Drawing.Component.Component {
-        id: Type;
+declare module Common.Drawing.Library {
+    class Checkbox extends Drawing.Component {
+        id: ComponentType;
         static title: string;
         static category: string;
         tags: string[];
@@ -9609,9 +9635,9 @@ declare module Common.Drawing.Component.Library {
         getProperties(): Common.Data.ICheckboxProperties;
     }
 }
-declare module Common.Drawing.Component.Library {
-    class Ellipse extends Drawing.Component.Component {
-        id: Type;
+declare module Common.Drawing.Library {
+    class Ellipse extends Drawing.Component {
+        id: ComponentType;
         static title: string;
         static category: string;
         tags: string[];
@@ -9642,9 +9668,9 @@ declare module Common.Drawing.Component.Library {
         getProperties(): Common.Data.IEllipseProperties;
     }
 }
-declare module Common.Drawing.Component.Library {
-    class Icon extends Drawing.Component.Component {
-        id: Type;
+declare module Common.Drawing.Library {
+    class Icon extends Drawing.Component {
+        id: ComponentType;
         static title: string;
         static category: string;
         tags: string[];
@@ -9687,9 +9713,9 @@ declare module Common.Drawing.Component.Library {
         getProperties(): Common.Data.IIconProperties;
     }
 }
-declare module Common.Drawing.Component.Library {
-    class Image extends Drawing.Component.Component {
-        id: Type;
+declare module Common.Drawing.Library {
+    class Image extends Drawing.Component {
+        id: ComponentType;
         static title: string;
         static category: string;
         tags: string[];
@@ -9729,9 +9755,9 @@ declare module Common.Drawing.Component.Library {
         getProperties(): Common.Data.IImageProperties;
     }
 }
-declare module Common.Drawing.Component.Library {
-    class Label extends Drawing.Component.Component {
-        id: Type;
+declare module Common.Drawing.Library {
+    class Label extends Drawing.Component {
+        id: ComponentType;
         static title: string;
         static category: string;
         tags: string[];
@@ -9791,9 +9817,9 @@ declare module Common.Drawing.Component.Library {
         getProperties(): Common.Data.ILabelProperties;
     }
 }
-declare module Common.Drawing.Component.Library {
-    class MobileDevice extends Drawing.Component.Component {
-        id: Type;
+declare module Common.Drawing.Library {
+    class MobileDevice extends Drawing.Component {
+        id: ComponentType;
         static title: string;
         static category: string;
         tags: string[];
@@ -9833,9 +9859,9 @@ declare module Common.Drawing.Component.Library {
         getProperties(): Common.Data.IMobileDeviceProperties;
     }
 }
-declare module Common.Drawing.Component.Library {
-    class MobileTitlebar extends Drawing.Component.Component {
-        id: Type;
+declare module Common.Drawing.Library {
+    class MobileTitlebar extends Drawing.Component {
+        id: ComponentType;
         static title: string;
         static category: string;
         tags: string[];
@@ -9887,9 +9913,9 @@ declare module Common.Drawing.Component.Library {
         getProperties(): Common.Data.IMobileTitlebarProperties;
     }
 }
-declare module Common.Drawing.Component.Library {
-    class Rectangle extends Drawing.Component.Component {
-        id: Type;
+declare module Common.Drawing.Library {
+    class Rectangle extends Drawing.Component {
+        id: ComponentType;
         static title: string;
         static category: string;
         tags: string[];
@@ -9936,9 +9962,9 @@ declare module Common.Drawing.Component.Library {
         getProperties(): Common.Data.IRectangleProperties;
     }
 }
-declare module Common.Drawing.Component.Library {
-    class SelectInput extends Drawing.Component.Component {
-        id: Type;
+declare module Common.Drawing.Library {
+    class SelectInput extends Drawing.Component {
+        id: ComponentType;
         static title: string;
         static category: string;
         tags: string[];
@@ -10009,9 +10035,9 @@ declare module Common.Drawing.Component.Library {
         getHeight(): number;
     }
 }
-declare module Common.Drawing.Component.Library {
-    class TextInput extends Drawing.Component.Component {
-        id: Type;
+declare module Common.Drawing.Library {
+    class TextInput extends Drawing.Component {
+        id: ComponentType;
         static title: string;
         static category: string;
         tags: string[];
@@ -10081,31 +10107,6 @@ declare module Common.Drawing.Component.Library {
          * Calculate the height of the component
          */
         getHeight(): number;
-    }
-}
-declare module Common.Drawing.Component {
-    enum Type {
-        Generic = 0,
-        Rectangle = 1,
-        Ellipse = 2,
-        Arrow = 3,
-        MobileDevice = 4,
-        MobileTitlebar = 5,
-        TextInput = 6,
-        SelectInput = 7,
-        Checkbox = 8,
-        Label = 9,
-        Button = 10,
-        Image = 11,
-        Icon = 12,
-        Browser = 13,
-    }
-}
-declare module Common.Drawing {
-    enum EditMode {
-        Draw = 0,
-        Artboards = 1,
-        Annotate = 2,
     }
 }
 declare module Common.Drawing {

@@ -1,25 +1,30 @@
 
-module Common.Drawing.Component.Library {
+module Common.Drawing.Library {
 
-  export class MobileDevice extends Drawing.Component.Component {
+  export class Browser extends Drawing.Component {
 
     // Implement IDefinition members
-    id = Drawing.Component.Type.MobileDevice;
-    static title = 'Mobile Device';
+    id = Drawing.ComponentType.MobileDevice;
+    static title = 'Browser';
     static category = 'Containers';
     tags = [
       'container',
       'apple',
       'phone'
     ];
-    propertiesController: string = 'MobileDevicePropertiesController as PropsCtrl';
-    propertiesTemplateUrl: string = '/library/drawing/component/library/mobile-device.props.html';
+    propertiesController: string = 'BrowserPropertiesController as PropsCtrl';
+    propertiesTemplateUrl: string = '/library/drawing/component/library/browser.props.html';
 
     model: Common.Data.Component;
 
 
     // Drawing constants
-    static BAR_HEIGHT = 14;
+    static TAB_BAR_HEIGHT = 30;
+    static TAB_HEIGHT = 24;
+
+    static BAR_CONTROL_SIZE = 26;
+    static BAR_CONTROL_MARGIN = 5;
+    static BAR_HEIGHT = 36;
 
     /**
      * Create a new mobile device component
@@ -30,9 +35,8 @@ module Common.Drawing.Component.Library {
       super(model);
 
       var properties = this.getProperties();
-      properties.width = properties.width || 232;
-      properties.height = properties.height || 464;
-      properties.showBar = (typeof properties.showBar === 'undefined') ? true : properties.showBar;
+      properties.width = properties.width || 1024;
+      properties.height = properties.height || 768;
 
       // Perform the initial draw
       this.update();
@@ -57,22 +61,9 @@ module Common.Drawing.Component.Library {
       let bounds = this.getComponentBounds();
 
       return new paper.Rectangle(
-        new paper.Point(bounds.left + 6, bounds.top + 48),
-        new paper.Point(bounds.right - 6, bounds.bottom - 70)
+        new paper.Point(bounds.left, bounds.top + Browser.TAB_BAR_HEIGHT + Browser.BAR_HEIGHT),
+        new paper.Point(bounds.right, bounds.bottom)
       );
-    }
-
-    getUsableScreenRect(): paper.Rectangle {
-
-      var properties = this.getProperties();
-      var rect = this.getScreenRect();
-
-      if (properties.showBar) {
-
-        rect.top += MobileDevice.BAR_HEIGHT;
-      }
-
-      return rect;
     }
 
 
@@ -110,138 +101,137 @@ module Common.Drawing.Component.Library {
       var bottomRight = new paper.Point(this.model.properties.x + properties.width/2, this.model.properties.y + properties.height/2);
       var bounds = new paper.Rectangle(topLeft, bottomRight);
 
+      // Draw the tab bar
+      var tabBarTopLeft = topLeft;
+      var tabBarBottomRight = new paper.Point(bottomRight.x, topLeft.y + Browser.TAB_BAR_HEIGHT);
+      var tabBar = paper.Path.Rectangle(new paper.Rectangle(tabBarTopLeft, tabBarBottomRight));
+      tabBar.fillColor = '#f4f4f4';
+      this.addChild(tabBar);
+
+      var by = (tabBarTopLeft.y + tabBarBottomRight.y) / 2;
+      var close = paper.Path.Circle(
+        new paper.Point(tabBarTopLeft.x + 15, by),
+        5
+      );
+      close.fillColor = foreColor;
+      this.addChild(close);
+
+      var minimise = paper.Path.Circle(
+        new paper.Point(tabBarTopLeft.x + 30, by),
+        5
+      );
+      minimise.fillColor = foreColor;
+      this.addChild(minimise);
+
+      var maximise = paper.Path.Circle(
+        new paper.Point(tabBarTopLeft.x + 45, by),
+        5
+      );
+      maximise.fillColor = foreColor;
+      this.addChild(maximise);
+
+      /* var tab = paper.Path.Rectangle(new paper.Rectangle(
+        new paper.Point(tabBarTopLeft.x + 60, tabBarBottomRight.y - Browser.TAB_HEIGHT),
+        new paper.Point(tabBarTopLeft.x + 170, tabBarBottomRight.y)
+      ));
+      tab.strokeColor = foreColor;
+      tab.strokeWidth = 1.5;
+      tab.fillColor = 'white';
+      this.addChild(tab); */
+
       // Draw the outer frame
-      var outer = paper.Path.Rectangle(bounds, 20);
+      var outer = paper.Path.Rectangle(bounds);
       outer.strokeColor = foreColor;
       outer.strokeWidth = 1.5;
       outer.fillColor = 'rgba(255,255,255,0)';
-
-      // Draw the screen
-      var screenRectangle = this.getScreenRect();
-      var screen = paper.Path.Rectangle(screenRectangle, 2);
-      screen.strokeColor = foreColor;
-      screen.strokeWidth = 1.5;
-
-      // Draw the button
-      var buttonposition = new paper.Point(this.model.properties.x, bounds.bottom - 35);
-      var button = paper.Path.Circle(buttonposition, 24);
-      button.strokeColor = foreColor;
-      button.strokeWidth = 1.5;
-
-      // Draw the speaker
-      var speakerRectangle = new paper.Rectangle(
-        new paper.Point(this.model.properties.x - 23, bounds.top + 27),
-        new paper.Point(this.model.properties.x + 23, bounds.top + 33)
-      );
-      var speaker = paper.Path.Rectangle(speakerRectangle, 3);
-      speaker.strokeColor = foreColor;
-      speaker.strokeWidth = 1.5;
-
-      // Draw the camera
-      var cameraposition = new paper.Point(this.model.properties.x, bounds.top + 18);
-      var camera = paper.Path.Circle(cameraposition, 4);
-      camera.strokeColor = foreColor;
-      camera.strokeWidth = 1.5;
-
-      // Group the parts as a component
       this.addChild(outer);
-      this.addChild(screen);
-      this.addChild(button);
-      this.addChild(camera);
-      this.addChild(speaker);
 
-      if (properties.showBar) {
+      // Draw the bar dividers
+      var dividerStart = new paper.Point(bounds.left, bounds.top + Browser.TAB_BAR_HEIGHT);
+      var dividerEnd = new paper.Point(bounds.right, bounds.top + Browser.TAB_BAR_HEIGHT);
 
-        // The bounds of the status bar
-        let statusBounds = new paper.Rectangle(
-          screenRectangle.topLeft,
-          screenRectangle.topRight.add(new paper.Point(0, MobileDevice.BAR_HEIGHT))
-        );
+      var dividerTop = paper.Path.Line(dividerStart, dividerEnd);
+      dividerTop.strokeColor = foreColor;
+      dividerTop.strokeWidth = 1.5;
+      this.addChild(dividerTop);
 
-        // Draw the mobile area
-        var c1 = paper.Path.Circle(new paper.Point(statusBounds.topLeft.x + 6, statusBounds.topLeft.y + MobileDevice.BAR_HEIGHT/2), 2);
-        c1.strokeWidth = 0;
-        c1.fillColor = foreColor;
+      dividerStart = new paper.Point(bounds.left, bounds.top + Browser.TAB_BAR_HEIGHT + Browser.BAR_HEIGHT);
+      dividerEnd = new paper.Point(bounds.right, bounds.top + Browser.TAB_BAR_HEIGHT + Browser.BAR_HEIGHT);
 
-        var c2 = paper.Path.Circle(new paper.Point(statusBounds.topLeft.x + 11, statusBounds.topLeft.y + MobileDevice.BAR_HEIGHT/2), 2);
-        c2.strokeWidth = 0;
-        c2.fillColor = foreColor;
+      var dividerBottom = paper.Path.Line(dividerStart, dividerEnd);
+      dividerBottom.strokeColor = foreColor;
+      dividerBottom.strokeWidth = 1.5;
+      this.addChild(dividerBottom);
 
-        var c3 = paper.Path.Circle(new paper.Point(statusBounds.topLeft.x + 16, statusBounds.topLeft.y + MobileDevice.BAR_HEIGHT/2), 2);
-        c3.strokeWidth = 0;
-        c3.fillColor = foreColor;
+      // Track how much space is taken up by controls
+      var x = bounds.left + Browser.BAR_CONTROL_MARGIN;
 
-        var c4 = paper.Path.Circle(new paper.Point(statusBounds.topLeft.x + 21, statusBounds.topLeft.y + MobileDevice.BAR_HEIGHT/2), 2);
-        c4.strokeWidth = 0;
-        c4.fillColor = foreColor;
+      // Draw the back button
+      var backTopLeft = new paper.Point(x, bounds.top + Browser.TAB_BAR_HEIGHT + Browser.BAR_CONTROL_MARGIN);
+      var back = new paper.PointText({
+        point: new paper.Point(
+          backTopLeft.x + Browser.BAR_CONTROL_SIZE/2,
+          backTopLeft.y + Browser.BAR_CONTROL_SIZE - 7
+        ),
+        content: String.fromCharCode(parseInt('f060', 16)),
+        fillColor: foreColor,
+        fontSize: 18,
+        fontFamily: 'FontAwesome',
+        justification: 'center'
+      });
+      this.addChild(back);
+      x += Browser.BAR_CONTROL_SIZE + Browser.BAR_CONTROL_MARGIN;
 
-        var c5 = paper.Path.Circle(new paper.Point(statusBounds.topLeft.x + 26, statusBounds.topLeft.y + MobileDevice.BAR_HEIGHT/2), 2);
-        c5.strokeWidth = 0;
-        c5.fillColor = foreColor;
+      // Draw the forward button
+      var forwardTopLeft = new paper.Point(x, bounds.top + Browser.TAB_BAR_HEIGHT + Browser.BAR_CONTROL_MARGIN);
+      var forward = new paper.PointText({
+        point: new paper.Point(
+          forwardTopLeft.x + Browser.BAR_CONTROL_SIZE/2,
+          forwardTopLeft.y + Browser.BAR_CONTROL_SIZE - 7
+        ),
+        content: String.fromCharCode(parseInt('f061', 16)),
+        fillColor: foreColor,
+        fontSize: 18,
+        fontFamily: 'FontAwesome',
+        justification: 'center'
+      });
+      this.addChild(forward);
+      x += Browser.BAR_CONTROL_SIZE + Browser.BAR_CONTROL_MARGIN;
 
-        var carrier = new paper.PointText({
-          point: new paper.Point(statusBounds.topLeft.x + 32, statusBounds.topLeft.y + MobileDevice.BAR_HEIGHT/2 + 3),
-          content: 'Carrier',
-          fillColor: foreColor,
-          fontSize: 9
-        });
+      // Draw the refresh button
+      var refreshTopLeft = new paper.Point(x, bounds.top + Browser.TAB_BAR_HEIGHT + Browser.BAR_CONTROL_MARGIN);
+      var refresh = new paper.PointText({
+        point: new paper.Point(
+          refreshTopLeft.x + Browser.BAR_CONTROL_SIZE/2,
+          refreshTopLeft.y + Browser.BAR_CONTROL_SIZE - 6
+        ),
+        content: String.fromCharCode(parseInt('f021', 16)),
+        fillColor: foreColor,
+        fontSize: 18,
+        fontFamily: 'FontAwesome',
+        justification: 'center'
+      });
+      this.addChild(refresh);
+      x += Browser.BAR_CONTROL_SIZE + Browser.BAR_CONTROL_MARGIN;
 
-        var mobile = new paper.Group([
-          c1,
-          c2,
-          c3,
-          c4,
-          c5,
-          carrier
-        ]);
-        this.addChild(mobile);
+      // Draw the address bar
+      var addressTopLeft = new paper.Point(x, bounds.top + Browser.TAB_BAR_HEIGHT + Browser.BAR_CONTROL_MARGIN);
+      var addressBottomRight = new paper.Point(bounds.right - Browser.BAR_CONTROL_MARGIN, bounds.top + Browser.TAB_BAR_HEIGHT + Browser.BAR_CONTROL_MARGIN + Browser.BAR_CONTROL_SIZE);
+      var addressRect = new paper.Rectangle(addressTopLeft, addressBottomRight);
+      var address = paper.Path.Rectangle(addressRect);
+      address.strokeColor = foreColor;
+      address.strokeWidth = 1.5;
+      address.fillColor = 'rgba(255,255,255,0)';
+      this.addChild(address);
 
-        // Draw the indicators
-        var batteryOuterRect = new paper.Rectangle(
-          new paper.Point(statusBounds.bottomRight.x - 20, statusBounds.bottomRight.y - 4),
-          new paper.Point(statusBounds.bottomRight.x - 5, statusBounds.bottomRight.y - MobileDevice.BAR_HEIGHT + 4)
-        );
-
-        var batteryOuter = paper.Path.Rectangle(batteryOuterRect);
-        batteryOuter.strokeWidth = 1;
-        batteryOuter.strokeColor = foreColor;
-
-        var batteryInnerRect = new paper.Rectangle(
-          new paper.Point(statusBounds.bottomRight.x - 19, statusBounds.bottomRight.y - 5),
-          new paper.Point(statusBounds.bottomRight.x - 6, statusBounds.bottomRight.y - MobileDevice.BAR_HEIGHT + 5)
-        );
-
-        var batteryInner = paper.Path.Rectangle(batteryInnerRect);
-        batteryInner.strokeWidth = 0;
-        batteryInner.fillColor = foreColor;
-
-        var batteryKnobRect = new paper.Rectangle(
-        new paper.Point(statusBounds.bottomRight.x - 5, statusBounds.bottomRight.y - 8),
-        new paper.Point(statusBounds.bottomRight.x - 3, statusBounds.bottomRight.y - MobileDevice.BAR_HEIGHT + 8)
-        );
-
-        var batteryKnob = paper.Path.Rectangle(batteryKnobRect);
-        batteryKnob.strokeWidth = 0;
-        batteryKnob.fillColor = foreColor;
-
-        var indicators = new paper.Group([
-          batteryOuter,
-          batteryInner,
-          batteryKnob
-        ]);
-        this.addChild(indicators);
-
-        // Draw the time
-        var time = new paper.PointText({
-          point: new paper.Point(statusBounds.center.x, statusBounds.center.y + 3),
-          content: '3:29 pm',
-          fillColor: foreColor,
-          fontSize: 9,
-          fontWeight: 'bold',
-          justification: 'center'
-        });
-        this.addChild(time);
-      }
+      var url = new paper.PointText({
+        point: addressRect.bottomLeft.add(new paper.Point(7, -8)),
+        content: properties.address,
+        fillColor: foreColor,
+        fontSize: 14,
+        fontFamily: 'Myriad Pro'
+      });
+      this.addChild(url);
     }
 
     /**
@@ -263,7 +253,7 @@ module Common.Drawing.Component.Library {
     getSnapPoints(): Array<SnapPoint> {
 
       let bounds = this.getComponentBounds();
-      var screenRect = this.getUsableScreenRect();
+      var screenRect = this.getScreenRect();
 
       return [
         // Screen corners
@@ -462,9 +452,9 @@ module Common.Drawing.Component.Library {
      * Cast the model properties into the correct type
      */
 
-    getProperties(): Common.Data.IMobileDeviceProperties {
+    getProperties(): Common.Data.IBrowserProperties {
 
-      return <Common.Data.IMobileDeviceProperties>this.model.properties;
+      return <Common.Data.IBrowserProperties>this.model.properties;
     }
   }
 }

@@ -1,5 +1,5 @@
 
-module Common.Drawing.Component {
+module Common.Drawing {
 
   /**
    * Factory for drawing components
@@ -10,13 +10,13 @@ module Common.Drawing.Component {
     /**
      * Create a drawing component from a component data model.
      */
-    static fromModel(model?: Common.Data.Component): Drawing.Component.Component {
+    static fromModel(model?: Common.Data.Component): Drawing.Component {
 
       // Get the component type
-      var type = Type[<string>model.type];
+      var type = ComponentType[<string>model.type];
 
       // Get the component definition and create an instance
-      var component: Drawing.Component.Component = this.get(type, model);
+      var component: Drawing.Component = this.get(type, model);
 
       return component;
     }
@@ -26,12 +26,12 @@ module Common.Drawing.Component {
      * Creates a new component for a given component type
      */
 
-    private static get(type: Type, model: Common.Data.Component): Component {
+    private static get(type: ComponentType, model: Common.Data.Component): Component {
 
       // Passing an enum value to the enum returns the corresponding
       // enum key. Use this to return the requested component constructor.
-      var id = Common.Drawing.Component.Type[type];
-      var comConstr = Common.Drawing.Component.Library[id];
+      var id = Common.Drawing.ComponentType[type];
+      var comConstr = Common.Drawing.Library[id];
 
       if (!comConstr) {
 

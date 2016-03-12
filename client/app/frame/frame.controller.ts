@@ -23,7 +23,7 @@ class FrameCtrl {
 
 	artboards:Array<Common.Data.IArtboard> = [];
   components:Array<any> = [];
-  selection: Array<Common.Drawing.Component.Component> = [];
+  selection: Array<Common.Drawing.Component> = [];
 
   activities: Array<Higherframe.Data.IActivity> = [];
 	media: Array<Common.Data.IMedia> = [];
@@ -684,7 +684,7 @@ class FrameCtrl {
     }
 
     // Save components and set _id when saved
-    angular.forEach(components, function (component: Common.Drawing.Component.Component) {
+    angular.forEach(components, function (component: Common.Drawing.Component) {
 
       // We will first serialize the data in the component's model.
       // If an _id key is found on the model, we know this component has already
@@ -811,7 +811,7 @@ class FrameCtrl {
     var instances = [];
     components.forEach((component) => {
 
-			var instance = Common.Drawing.Component.Factory.fromModel(component);
+			var instance = Common.Drawing.Factory.fromModel(component);
 
       instances.push(instance);
     });
@@ -825,7 +825,7 @@ class FrameCtrl {
 		return instances;
   };
 
-	private updateUiWithComponents(components: Array<Common.Drawing.Component.Component>) {
+	private updateUiWithComponents(components: Array<Common.Drawing.Component>) {
 
     this.$scope.$broadcast('controller:component:selected', components);
 	};
@@ -833,7 +833,7 @@ class FrameCtrl {
 	private removeComponentFromView(component) {
 
 		// Find the component with this _id
-		angular.forEach(paper.project.activeLayer.children, function (item: Common.Drawing.Component.Component) {
+		angular.forEach(paper.project.activeLayer.children, function (item: Common.Drawing.Component) {
 
 			if (item.model._id == component._id) {
 
@@ -845,7 +845,7 @@ class FrameCtrl {
 	private updateComponentInView(component) {
 
 		// Find the component with this _id
-		angular.forEach(paper.project.activeLayer.children, function (item: Common.Drawing.Component.Component) {
+		angular.forEach(paper.project.activeLayer.children, function (item: Common.Drawing.Component) {
 
 			if (item.model._id == component._id) {
 

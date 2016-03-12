@@ -1,5 +1,5 @@
 
-module Common.Drawing.Component {
+module Common.Drawing {
 
   export interface IComponentMoveEvent {
     position: paper.Point,
@@ -13,29 +13,17 @@ module Common.Drawing.Component {
    * @extends Paper.Group
    */
 
-  export class Component extends paper.Group {
+  export class Component extends Common.Drawing.Item {
 
     /**
      * Properties
      */
 
-    id: Common.Drawing.Component.Type = Common.Drawing.Component.Type.Generic;
+    id: Common.Drawing.ComponentType = Common.Drawing.ComponentType.Generic;
     title: String = 'Generic Component';
     category: String = '';
     tags: Array<String> = [];
     model: Common.Data.IDrawingModel;
-
-    _hovered: Boolean = false;
-    get hovered(): Boolean { return this._hovered; }
-    set hovered(value) { this._hovered = value; this.update(); }
-
-    _active: Boolean = false;
-    get active(): Boolean { return this._active; }
-    set active(value) { this._active = value; this.update(); }
-
-    _focussed: Boolean = false;
-    get focussed(): Boolean { return this._focussed; }
-    set focussed(value) { this._focussed = value; this.update(); }
 
     _collaborator: Common.Data.IUser;
     get collaborator(): Common.Data.IUser { return this._collaborator; }
@@ -48,10 +36,6 @@ module Common.Drawing.Component {
     _boundingBox: paper.Group;
     get boundingBox(): paper.Group { return this._boundingBox; }
     set boundingBox(value) { this._boundingBox = value; }
-
-    _dragHandles: paper.Group;
-    get dragHandles(): paper.Group { return this._dragHandles; }
-    set dragHandles(value) { this._dragHandles = value; }
 
 
     /**
@@ -84,10 +68,6 @@ module Common.Drawing.Component {
 
     }
 
-    update(): void {
-
-    }
-
     updateModel(): void {
 
     }
@@ -95,21 +75,6 @@ module Common.Drawing.Component {
     setProperty(name: string, value: any) {
 
       this.model.properties[name] = value;
-    }
-
-    getSnapPoints(): Array<SnapPoint> {
-
-      return [];
-    }
-
-    getTransformHandles(color: paper.Color): Array<IDragHandle> {
-
-      return [];
-    }
-
-    getDragHandles(color: paper.Color): Array<IDragHandle> {
-
-      return [];
     }
 
     onMove(IComponentMoveEvent): void {

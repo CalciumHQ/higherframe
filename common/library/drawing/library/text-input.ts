@@ -1,10 +1,10 @@
 
-module Common.Drawing.Component.Library {
+module Common.Drawing.Library {
 
-  export class TextInput extends Drawing.Component.Component {
+  export class TextInput extends Drawing.Component {
 
     // Implement IDefinition members
-    id = Drawing.Component.Type.TextInput;
+    id = Drawing.ComponentType.TextInput;
     static title = 'Text control';
     static category = 'Form';
     tags = [

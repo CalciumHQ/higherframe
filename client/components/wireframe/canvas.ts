@@ -24,9 +24,9 @@ module Higherframe.Wireframe {
 		dragSelectionOverlay;
 
 		// Drawing interaction
-		public selectedComponents: Array<Common.Drawing.Component.Component> = [];
+		public selectedComponents: Array<Common.Drawing.Component> = [];
 		public selectedArtboards: Array<Higherframe.Drawing.Artboard> = [];
-		public selectedDragHandles: Array<Common.Drawing.Component.DragHandle> = [];
+		public selectedDragHandles: Array<Common.Drawing.DragHandle> = [];
 
 		hoveredItem;
 		selectedSegment;
@@ -49,7 +49,7 @@ module Higherframe.Wireframe {
 			y: Array<paper.Path>
 		} = { x: [], y: [] };
 
-		components: Array<Common.Drawing.Component.Component> = [];
+		components: Array<Common.Drawing.Component> = [];
 		artboards: Array<Higherframe.Drawing.Artboard> = [];
 		boundingBoxes: Array<paper.Item> = [];
 		smartGuides: Array<paper.Item> = [];
@@ -171,7 +171,7 @@ module Higherframe.Wireframe {
 
 				scope.$on('controller:component:updated', (e, data) => {
 
-					let component = <Common.Drawing.Component.Component>data.component;
+					let component = <Common.Drawing.Component>data.component;
 					component.update();
 
 					// Update bounding boxes
@@ -340,11 +340,18 @@ module Higherframe.Wireframe {
 		 * State handlers
 		 */
 
-		onItemUpdated(item: Common.Drawing.Component.Component) {
+		onItemChanged(item: Common.Drawing.Component) {
 
 			item.update();
 			this.updateBoundingBoxes();
 			this.updateDragHandles(item);
+		}
+
+		onArtboardChanged(artboard: Higherframe.Drawing.Artboard) {
+
+			artboard.update(this);
+			this.updateBoundingBoxes();
+			this.updateDragHandles(artboard);
 		}
 
 
@@ -361,6 +368,11 @@ module Higherframe.Wireframe {
 
  			this.scope.$emit('view:artboard:deselected', this.selectedArtboards);
  			this.selectedArtboards = [];
+
+			this.layerArtboards.children.forEach((artboard: Higherframe.Drawing.Artboard) => {
+
+				this.onArtboardChanged(artboard);
+			});
  		}
 
 		public clearComponentSelection() {
@@ -373,9 +385,9 @@ module Higherframe.Wireframe {
 			this.scope.$emit('view:component:deselected', this.selectedComponents);
 			this.selectedComponents = [];
 
-			angular.forEach(this.layerDrawing.children, (item: Common.Drawing.Component.Component) => {
+			this.layerDrawing.children.forEach((item: Common.Drawing.Component) => {
 
-				this.onItemUpdated(item);
+				this.onItemChanged(item);
 			});
 		}
 
@@ -394,6 +406,7 @@ module Higherframe.Wireframe {
 
 					artboard.focussed = true;
 					this.selectedArtboards.push(artboard);
+					this.onArtboardChanged(artboard);
 					newselectedArtboards.push(artboard);
 
 					artboard.update(this);
@@ -403,7 +416,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('view:artboard:selected', newselectedArtboards);
 		}
 
-		selectItems(items: Array<Common.Drawing.Component.Component>) {
+		selectItems(items: Array<Common.Drawing.Component>) {
 
 			var newselectedComponents = [];
 
@@ -418,7 +431,7 @@ module Higherframe.Wireframe {
 
 					item.focussed = true;
 					this.selectedComponents.push(item);
-					this.onItemUpdated(item);
+					this.onItemChanged(item);
 					(<any>paper.view).draw();
 					newselectedComponents.push(item);
 				}
@@ -451,7 +464,7 @@ module Higherframe.Wireframe {
 			}
 		}
 
-		removeItems(items: Array<Common.Drawing.Component.Component>) {
+		removeItems(items: Array<Common.Drawing.Component>) {
 
 			this.scope.$emit('componentsDeleted', items);
 
@@ -503,12 +516,12 @@ module Higherframe.Wireframe {
 			this.scope.$emit('view:artboard:updated', artboards);
 		}
 
-		moveItems(items: Array<Common.Drawing.Component.Component>) {
+		moveItems(items: Array<Common.Drawing.Component>) {
 
 			this.scope.$emit('componentsMoved', items);
 		}
 
-		nudge(items: Array<Common.Drawing.Component.Component>, x, y) {
+		nudge(items: Array<Common.Drawing.Component>, x, y) {
 
 			angular.forEach(items, (item) => {
 
@@ -521,7 +534,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('componentsMoved', items);
 		}
 
-		moveForward(items: Array<Common.Drawing.Component.Component>) {
+		moveForward(items: Array<Common.Drawing.Component>) {
 
 			angular.forEach(items, (item) => {
 
@@ -542,7 +555,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('componentsIndexModified', items);
 		}
 
-		moveToFront(items: Array<Common.Drawing.Component.Component>) {
+		moveToFront(items: Array<Common.Drawing.Component>) {
 
 			angular.forEach(items, (item) => {
 
@@ -552,7 +565,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('componentsIndexModified', items);
 		}
 
-		moveBackward(items: Array<Common.Drawing.Component.Component>) {
+		moveBackward(items: Array<Common.Drawing.Component>) {
 
 			angular.forEach(items, (item) => {
 
@@ -573,7 +586,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('componentsIndexModified', items);
 		}
 
-		moveToBack(items: Array<Common.Drawing.Component.Component>) {
+		moveToBack(items: Array<Common.Drawing.Component>) {
 
 			angular.forEach(items, (item) => {
 
@@ -684,13 +697,13 @@ module Higherframe.Wireframe {
 		endDragSelection() {
 
 			// Select the items in the rectangle
-			angular.forEach(this.layerDrawing.children, (item: Common.Drawing.Component.Component) => {
+			angular.forEach(this.layerDrawing.children, (item: Common.Drawing.Component) => {
 
 				if (item.isInside(this.dragSelectionRectangle) &&
 					this.selectedComponents.indexOf(item) === -1
 				) {
 
-					this.selectItems([<Common.Drawing.Component.Component>item]);
+					this.selectItems([<Common.Drawing.Component>item]);
 				}
 			});
 
@@ -749,11 +762,11 @@ module Higherframe.Wireframe {
 
 		// Given a paper item, finds the next item in its
 		// hierarchy with a given class name.
-		getDragHandle(item: paper.Item): Common.Drawing.Component.DragHandle {
+		getDragHandle(item: paper.Item): Common.Drawing.DragHandle {
 
 			var result = item;
 
-			if (result instanceof Common.Drawing.Component.DragHandle) {
+			if (result instanceof Common.Drawing.DragHandle) {
 
 				return result;
 			}
@@ -763,7 +776,7 @@ module Higherframe.Wireframe {
 
 				result = result.parent;
 
-				if (result instanceof Common.Drawing.Component.DragHandle) {
+				if (result instanceof Common.Drawing.DragHandle) {
 
 					return result;
 				}
@@ -804,7 +817,10 @@ module Higherframe.Wireframe {
 			});
 
 			// Draw the bounding box for the current user's selection
-			this.drawBoundingBox(this.selectedComponents, this.theme.BoundsDefault);
+			this.drawBoundingBox(
+				(<Array<any>>this.selectedComponents).concat(this.selectedArtboards),
+				this.theme.BoundsDefault
+			);
 		}
 
 		removeBoundingBoxes() {
@@ -818,7 +834,7 @@ module Higherframe.Wireframe {
 		}
 
 		// Get a rectangle containing the given items
-		public getBounds(items: Array<paper.Item>) {
+		public getBounds(items: Array<Common.Drawing.Item>) {
 
 			var x1 = Infinity,
 					x2 = -x1,
@@ -827,10 +843,11 @@ module Higherframe.Wireframe {
 
 			items.forEach((item) => {
 
-				x1 = Math.min(item.bounds.left, x1);
-				y1 = Math.min(item.bounds.top, y1);
-				x2 = Math.max(item.bounds.right, x2);
-				y2 = Math.max(item.bounds.bottom, y2);
+				let bounds = item.getBoundsRectangle();
+				x1 = Math.min(bounds.left, x1);
+				y1 = Math.min(bounds.top, y1);
+				x2 = Math.max(bounds.right, x2);
+				y2 = Math.max(bounds.bottom, y2);
 			});
 
 			return isFinite(x1)
@@ -838,7 +855,7 @@ module Higherframe.Wireframe {
 				: null;
 		}
 
-		private drawBoundingBox(items: Array<Common.Drawing.Component.Component>, color: paper.Color): paper.Group {
+		private drawBoundingBox(items: Array<Common.Drawing.Item>, color: paper.Color): paper.Group {
 
 			var rect = this.getBounds(items);
 
@@ -860,7 +877,7 @@ module Higherframe.Wireframe {
 			// A single component is selected
 			if (items.length == 1) {
 
-				var component: Common.Drawing.Component.Component = items[0];
+				var component = <Common.Drawing.Component>items[0];
 
 				// Add the transform handles
 				_.forEach(component.getTransformHandles(color), (transformHandle) => {
@@ -874,7 +891,7 @@ module Higherframe.Wireframe {
 
 				function addHandle(center: paper.Point) {
 
-					var handle = new Common.Drawing.Component.DragHandle(center, color);
+					var handle = new Common.Drawing.DragHandle(center, color);
 					boundingBox.addChild(handle);
 				}
 
@@ -923,7 +940,7 @@ module Higherframe.Wireframe {
 			}
 		}
 
-		addDragHandles(item: Common.Drawing.Component.Component) {
+		addDragHandles(item: Common.Drawing.Component) {
 
 			this.layerSelections.activate();
 
@@ -970,7 +987,7 @@ module Higherframe.Wireframe {
 			// TODO: Whittle down to elements in the nearby area
 
 			// Work through each element
-			this.layerDrawing.children.forEach((relation: Common.Drawing.Component.Component) => {
+			this.layerDrawing.children.forEach((relation: Common.Drawing.Component) => {
 
 				// Don't compare target element with other selected elements
 				if (this.selectedComponents.indexOf(relation) !== -1) {

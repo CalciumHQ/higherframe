@@ -1,12 +1,12 @@
 
 
 
-module Common.Drawing.Component.Library {
+module Common.Drawing.Library {
 
-  export class MobileTitlebar extends Drawing.Component.Component {
+  export class MobileTitlebar extends Drawing.Component {
 
     // Implement IDefinition members
-    id = Drawing.Component.Type.Icon;
+    id = Drawing.ComponentType.Icon;
     static title = 'Mobile Titlebar';
     static category = 'Mobile';
     tags = [

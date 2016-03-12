@@ -1,10 +1,10 @@
 
-module Common.Drawing.Component.Library {
+module Common.Drawing.Library {
 
-  export class Checkbox extends Drawing.Component.Component {
+  export class Checkbox extends Drawing.Component {
 
     // Implement IDefinition members
-    id = Drawing.Component.Type.Checkbox;
+    id = Drawing.ComponentType.Checkbox;
     static title = 'Checkbox control';
     static category = 'Form';
     tags = [

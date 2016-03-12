@@ -1,7 +1,7 @@
 
 module Higherframe.Drawing {
 
-  export class Artboard extends paper.Group {
+  export class Artboard extends Common.Drawing.Item {
 
     model: Common.Data.IArtboard;
 
@@ -10,10 +10,6 @@ module Higherframe.Drawing {
     height: number;
     left: number;
     top: number;
-
-    hovered: boolean = false;
-    active: boolean = false;
-    focussed: boolean = false;
 
     constructor(model: Common.Data.IArtboard) {
 
@@ -46,7 +42,7 @@ module Higherframe.Drawing {
       this.initFromModel();
     }
 
-    public update(canvas: any) {
+    public update() {
 
       // Determine palette
       var theme: Common.UI.ITheme = new Common.UI.DefaultTheme();
@@ -77,7 +73,7 @@ module Higherframe.Drawing {
 			);
 			background.fillColor = 'white';
 
-			if (this.focussed) {
+      if (this.hovered || this.focussed) {
 
         background.strokeColor = foreColor;
 			}
@@ -100,5 +96,184 @@ module Higherframe.Drawing {
 			});
 			this.addChild(label);
     }
+
+    /**
+     * Calculate the transform handles for the component
+     */
+
+     getTransformHandles(color: paper.Color): Array<Common.Drawing.IDragHandle> {
+
+       let bounds = this.getArtboardRectangle();
+
+       var topLeft = new Common.Drawing.DragHandle(bounds.topLeft, color);
+       topLeft.cursor = 'nwse-resize';
+       topLeft.getSnapPoints = (position: paper.Point): Array<Common.Drawing.SnapPoint> => {
+
+         return [new Common.Drawing.SnapPoint(position, 'corner', 'corner')];
+       };
+       topLeft.onMove = (position: paper.Point): paper.Point => {
+
+         var bounds = this.getBoundsRectangle();
+
+         bounds.topLeft = position;
+         this.top = bounds.top;
+         this.left = bounds.left;
+         this.width = bounds.width;
+         this.height = bounds.height;
+         this.update();
+
+         return position;
+       };
+
+       var topCenter = new Common.Drawing.DragHandle(bounds.topCenter, color);
+       topCenter.cursor = 'ns-resize';
+       topCenter.getSnapPoints = (position: paper.Point): Array<Common.Drawing.SnapPoint> => {
+
+         return [new Common.Drawing.SnapPoint(position, 'center', 'edge')];
+       };
+       topCenter.onMove = (position: paper.Point): paper.Point => {
+
+         var bounds = this.getBoundsRectangle();
+
+         bounds.top = position.y;
+         this.top = bounds.top;
+         this.height = bounds.height;
+         this.update();
+
+         return position;
+       };
+
+       var topRight = new Common.Drawing.DragHandle(bounds.topRight, color);
+       topRight.cursor = 'nesw-resize';
+       topRight.getSnapPoints = (position: paper.Point): Array<Common.Drawing.SnapPoint> => {
+
+         return [new Common.Drawing.SnapPoint(position, 'corner', 'corner')];
+       };
+       topRight.onMove = (position: paper.Point): paper.Point => {
+
+         var bounds = this.getBoundsRectangle();
+
+         bounds.topRight = position;
+         this.top = position.y;
+         this.width = bounds.width;
+         this.height = bounds.height;
+         this.update();
+
+         return position;
+       };
+
+       var rightCenter = new Common.Drawing.DragHandle(bounds.rightCenter, color);
+       rightCenter.cursor = 'ew-resize';
+       rightCenter.getSnapPoints = (position: paper.Point): Array<Common.Drawing.SnapPoint> => {
+
+         return [new Common.Drawing.SnapPoint(position, 'edge', 'center')];
+       };
+       rightCenter.onMove = (position: paper.Point): paper.Point => {
+
+         var bounds = this.getBoundsRectangle();
+
+         bounds.right = position.x;
+         this.width = bounds.width;
+         this.update();
+
+         return position;
+       };
+
+       var bottomRight = new Common.Drawing.DragHandle(bounds.bottomRight, color);
+       bottomRight.cursor = 'nwse-resize';
+       bottomRight.getSnapPoints = (position: paper.Point): Array<Common.Drawing.SnapPoint> => {
+
+         return [new Common.Drawing.SnapPoint(position, 'corner', 'corner')];
+       };
+       bottomRight.onMove = (position: paper.Point): paper.Point => {
+
+         var bounds = this.getBoundsRectangle();
+
+         bounds.bottomRight = position;
+         this.width = bounds.width;
+         this.height = bounds.height;
+         this.update();
+
+         return position;
+       };
+
+       var bottomCenter = new Common.Drawing.DragHandle(bounds.bottomCenter, color);
+       bottomCenter.cursor = 'ns-resize';
+       bottomCenter.getSnapPoints = (position: paper.Point): Array<Common.Drawing.SnapPoint> => {
+
+         return [new Common.Drawing.SnapPoint(position, 'center', 'edge')];
+       };
+       bottomCenter.onMove = (position: paper.Point): paper.Point => {
+
+         var bounds = this.getBoundsRectangle();
+
+         bounds.bottom = position.y;
+         this.height = bounds.height;
+         this.update();
+
+         return position;
+       };
+
+       var bottomLeft = new Common.Drawing.DragHandle(bounds.bottomLeft, color);
+       bottomLeft.cursor = 'nesw-resize';
+       bottomLeft.getSnapPoints = (position: paper.Point): Array<Common.Drawing.SnapPoint> => {
+
+         return [new Common.Drawing.SnapPoint(position, 'corner', 'corner')];
+       };
+       bottomLeft.onMove = (position: paper.Point): paper.Point => {
+
+         var bounds = this.getBoundsRectangle();
+
+         bounds.bottomLeft = position;
+         this.left = bounds.left;
+         this.width = bounds.width;
+         this.height = bounds.height;
+         this.update();
+
+         return position;
+       };
+
+       var leftCenter = new Common.Drawing.DragHandle(bounds.leftCenter, color);
+       leftCenter.cursor = 'ew-resize';
+       leftCenter.getSnapPoints = (position: paper.Point): Array<Common.Drawing.SnapPoint> => {
+
+         return [new Common.Drawing.SnapPoint(position, 'edge', 'center')];
+       };
+       leftCenter.onMove = (position: paper.Point): paper.Point => {
+
+         var bounds = this.getBoundsRectangle();
+
+         bounds.left = position.x;
+         this.left = bounds.left;
+         this.width = bounds.width;
+         this.update();
+
+         return position;
+       };
+
+       return [
+         topLeft,
+         topCenter,
+         topRight,
+         rightCenter,
+         bottomRight,
+         bottomCenter,
+         bottomLeft,
+         leftCenter
+       ];
+     };
+
+     getBoundsRectangle() {
+
+       return this.getArtboardRectangle();
+     }
+
+     private getArtboardRectangle() {
+
+       return new paper.Rectangle(
+         new paper.Point(this.left, this.top),
+         new paper.Size(this.width, this.height)
+       );
+     }
   }
 }

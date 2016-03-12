@@ -1,6 +1,6 @@
 
-module Common.Drawing.Component {
-  export enum Type {
+module Common.Drawing {
+  export enum ComponentType {
     Generic,
     Rectangle,
     Ellipse,

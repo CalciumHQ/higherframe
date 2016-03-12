@@ -1,12 +1,12 @@
 
 
 
-module Common.Drawing.Component.Library {
+module Common.Drawing.Library {
 
-  export class SelectInput extends Drawing.Component.Component {
+  export class SelectInput extends Drawing.Component {
 
     // Implement IDefinition members
-    id = Drawing.Component.Type.SelectInput;
+    id = Drawing.ComponentType.SelectInput;
     static title = 'Select control';
     static category = 'Form';
     tags = [

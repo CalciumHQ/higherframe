@@ -1,12 +1,12 @@
 
 
 
-module Common.Drawing.Component.Library {
+module Common.Drawing.Library {
 
-  export class Arrow extends Drawing.Component.Component {
+  export class Arrow extends Drawing.Component {
 
     // Implement IDefinition members
-    id = Drawing.Component.Type.Arrow;
+    id = Drawing.ComponentType.Arrow;
     static title = 'Arrow';
     static category = 'Basic';
     tags = [

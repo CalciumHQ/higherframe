@@ -5,7 +5,7 @@ module Higherframe.Wireframe.Tools {
 
     private dragRect: paper.Rectangle;
     private dragPreview: paper.Item;
-    private dragComponents: Array<Common.Drawing.Component.Component>;
+    private dragComponents: Array<Common.Drawing.Component>;
 
     private hitOptions = {
  			segments: true,
@@ -61,6 +61,12 @@ module Higherframe.Wireframe.Tools {
           }
         });
       });
+
+      // Annotate the drag handles with their starting position
+      this.canvas.selectedDragHandles.forEach((handle) => {
+
+        (<any>handle).dragStart = handle.position;
+      });
     }
 
     private resetDrag() {
@@ -89,12 +95,21 @@ module Higherframe.Wireframe.Tools {
         delete component.dragStartTop;
       });
 
+      // Clear the start position annotation on the dragged drag handles
+      this.canvas.selectedDragHandles.forEach((dragHandle: any) => {
+
+        delete dragHandle.dragStart;
+      });
+
       // Commit the changes
       this.canvas.commitArtboards(this.canvas.selectedArtboards);
       this.canvas.moveItems(this.dragComponents);
 
       // Clear the dragged component list
       this.dragComponents = [];
+
+      // Clear the selected drag handles
+      this.canvas.selectedDragHandles = [];
     }
 
     private createArtboard(bounds: paper.Rectangle) {
@@ -109,24 +124,45 @@ module Higherframe.Wireframe.Tools {
 
     private mouseDownHandler(event) {
 
-      // Look for a clicked artboard
-      var artboardHitResult = this.canvas.layerArtboards.hitTest(event.point, this.hitOptions);
+      // Inform the rest of the view a click took place
+      // This may be consumed by other UI to blur controls, for example
+      this.canvas.scope.$broadcast('view:mousedown');
 
+      // Hit test for artboards and handles
+      let handleHitResult = this.canvas.layerSelections.hitTest(event.point, this.hitOptions);
+      let handle: Common.Drawing.DragHandle = handleHitResult
+        ? this.canvas.getDragHandle(handleHitResult.item)
+        : null;
+
+      var artboardHitResult = this.canvas.layerArtboards.hitTest(event.point, this.hitOptions);
       var artboard: Higherframe.Drawing.Artboard = artboardHitResult
         ? this.canvas.getTopmost(artboardHitResult.item)
         : null;
 
-      // Clear the selection if the shift key isn't held, and
-      // the area clicked isn't part of the existing selection
-      if (!(event.modifiers.shift || (artboard && artboard.focussed))) {
+      // Look for a clicked drag handle
+      if (handle) {
 
-        this.canvas.clearArtboardSelection();
+        this.canvas.selectedDragHandles.push(handle);
       }
 
-      if (artboard) {
+      // Now look for a clicked artboard
+      else {
 
-        // Select the artboard
-        this.canvas.selectArtboards([artboard]);
+        // Clear the selection if the shift key isn't held, and
+        // the area clicked isn't part of the existing selection
+        if (!(event.modifiers.shift || (artboard && artboard.focussed))) {
+
+          this.canvas.clearArtboardSelection();
+        }
+
+        if (artboard) {
+
+          // Select the artboard
+          this.canvas.selectArtboards([artboard]);
+
+          // Mark as active
+          artboard.active = true;
+        }
       }
 
       // Start a drag
@@ -142,6 +178,12 @@ module Higherframe.Wireframe.Tools {
      */
 
     private mouseUpHandler(event) {
+
+      // Mark components as inactive
+      this.canvas.selectedArtboards.forEach((artboard) => {
+
+        artboard.active = false;
+      });
 
       if (this.dragRect) {
 
@@ -169,17 +211,33 @@ module Higherframe.Wireframe.Tools {
         artboard.hovered = false;
       });
 
-      // Look for a hovered artboard
-      var hitResult = this.canvas.layerArtboards.hitTest(event.point, this.hitOptions);
+      // Look for hovered artboards and handles
+      let handleHitResult = this.canvas.layerSelections.hitTest(event.point, this.hitOptions);
+      let handle: Common.Drawing.DragHandle = handleHitResult
+        ? this.canvas.getDragHandle(handleHitResult.item)
+        : null;
 
-      if (hitResult) {
+      let artboardHitResult = this.canvas.layerArtboards.hitTest(event.point, this.hitOptions);
+      let artboard: Common.Drawing.Component = artboardHitResult
+        ? this.canvas.getTopmost(artboardHitResult.item)
+        : null;
 
-        var artboard: Higherframe.Drawing.Artboard = this.canvas.getTopmost(hitResult.item);
+      // If a drag handle is hovered
+      if (handle) {
+
+        this.canvas.setCursor(handle.cursor);
+      }
+
+      // If a component is hovered
+      else if (artboard) {
+
         artboard.hovered = true;
+        artboard.update();
 
         this.canvas.setCursor('move');
       }
 
+      // Otherwise display the draw artboard cursor
       else {
 
         this.canvas.setImageCursor(
@@ -189,9 +247,6 @@ module Higherframe.Wireframe.Tools {
           '6 6'
         );
       }
-
-      // Update artboards
-      this.canvas.updateArtboards();
     }
 
 
@@ -201,8 +256,14 @@ module Higherframe.Wireframe.Tools {
 
     private mouseDragHandler(event) {
 
+      // Dragging a drag handle
+      if (this.canvas.selectedDragHandles.length) {
+
+        this.mouseDragHandleHandler(event);
+      }
+
       // Dragging an artboard
-      if (this.canvas.selectedArtboards.length) {
+      else if (this.canvas.selectedArtboards.length) {
 
         this.mouseDragMoveHandler(event);
       }
@@ -212,6 +273,24 @@ module Higherframe.Wireframe.Tools {
 
         this.mouseDragDrawHandler(event);
       }
+    }
+
+    private mouseDragHandleHandler(event) {
+
+      var delta = event.point.subtract(event.downPoint);
+
+      this.canvas.selectedDragHandles.forEach((handle) => {
+
+        // The new position
+        var position = (<any>handle).dragStart.add(delta);
+
+        // Position the drag handle
+        handle.position = handle.onMove
+          ? handle.onMove(position)
+          : position;
+      });
+
+      this.canvas.updateBoundingBoxes();
     }
 
     private mouseDragMoveHandler(event) {
@@ -233,6 +312,8 @@ module Higherframe.Wireframe.Tools {
 
         component.update();
       });
+
+      this.canvas.updateBoundingBoxes();
     }
 
     private mouseDragDrawHandler(event) {

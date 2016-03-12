@@ -16,14 +16,14 @@ module Higherframe.Wireframe.Tools.Delegates {
     public placeCursorFallback: string = 'default';
     public placeCursorFocus: string = '6 6';
 
-    create(topLeft: paper.Point, size?: paper.Size): Common.Drawing.Component.Library.Button {
+    create(topLeft: paper.Point, size?: paper.Size): Common.Drawing.Library.Button {
 
       var model = new Common.Data.Component(
-        Common.Drawing.Component.Type[Common.Drawing.Component.Type.Button],
+        Common.Drawing.ComponentType[Common.Drawing.ComponentType.Button],
         this.getProperties(topLeft, size)
       );
 
-      return new Common.Drawing.Component.Library.Button(model);
+      return new Common.Drawing.Library.Button(model);
     }
   }
 }

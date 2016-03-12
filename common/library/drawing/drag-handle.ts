@@ -1,5 +1,5 @@
 
-module Common.Drawing.Component {
+module Common.Drawing {
 
   export interface IDragHandle extends paper.Group {
     position: paper.Point;

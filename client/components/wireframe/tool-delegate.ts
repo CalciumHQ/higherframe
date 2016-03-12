@@ -3,7 +3,7 @@ module Higherframe.Wireframe {
 
   export interface IToolDelegate {
 
-    create(topLeft: paper.Point, size?: paper.Size): Common.Drawing.Component.Component;
+    create(topLeft: paper.Point, size?: paper.Size): Common.Drawing.Component;
     createGhost(topLeft: paper.Point, size?: paper.Size);
     updateGhost(point: paper.Point, size?: paper.Size);
     removeGhost();
@@ -11,7 +11,7 @@ module Higherframe.Wireframe {
 
   export abstract class ToolDelegate {
 
-    protected ghost: Common.Drawing.Component.Component;
+    protected ghost: Common.Drawing.Component;
     protected defaultWidth: number = 0;
     protected defaultHeight: number = 0;
 
@@ -82,9 +82,9 @@ module Higherframe.Wireframe {
       this.ghost = null;
     }
 
-    abstract create(topLeft: paper.Point, size?: paper.Size): Common.Drawing.Component.Component;
+    abstract create(topLeft: paper.Point, size?: paper.Size): Common.Drawing.Component;
 
-    public createWithCenter(center: paper.Point, size?: paper.Size): Common.Drawing.Component.Component {
+    public createWithCenter(center: paper.Point, size?: paper.Size): Common.Drawing.Component {
 
       if (!size) {
 

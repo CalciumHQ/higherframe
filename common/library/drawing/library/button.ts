@@ -1,30 +1,77 @@
 
 
 
-module Common.Drawing.Component.Library {
+module Common.Drawing.Library {
 
-  export class Image extends Drawing.Component.Component {
+  export class Button extends Drawing.Component {
 
     // Implement IDefinition members
-    id = Drawing.Component.Type.Image;
-    static title = 'Image';
-    static category = 'Basic';
+    id = Drawing.ComponentType.Button;
+    static title = 'Button';
+    static category = 'Form';
     tags = [
-      'basic',
-      'image',
-      'picture'
+      'form'
     ];
+    propertiesController: string = 'ButtonPropertiesController as PropsCtrl';
+    propertiesTemplateUrl: string = '/library/drawing/component/library/button.props.html';
     properties = [
       {
-        label: 'Image',
+        label: 'Label',
         controls: [
           {
-            model: 'media',
+            model: 'label',
             type: String,
-            ui: 'file',
-            description: 'The image to be displayed.'
+            description: 'The text shown in the button.'
           }
         ],
+      },
+      {
+        label: 'Type',
+        controls: [
+          {
+            model: 'type',
+            type: 'String',
+            ui: 'select',
+            options: [
+              {
+                label: 'Primary',
+                value: 'primary'
+              },
+              {
+                label: 'Secondary',
+                value: 'secondary'
+              }
+            ]
+          }
+        ]
+      },
+      {
+        label: 'Font',
+        controls: [
+          {
+            model: 'fontWeight',
+            type: Number,
+            ui: 'select',
+            options: [
+              { label: 'Light', value: 300 },
+              { label: 'Regular', value: 400 },
+              { label: 'Bold', value: 700 }
+            ],
+            placeholder: 'Font weight',
+            description: 'Set the font weight of the input.'
+          }
+        ]
+      },
+      {
+        label: 'Corner radius',
+        controls: [
+          {
+            model: 'cornerRadius',
+            type: Number,
+            unit: 'px',
+            description: 'The corner radius describes how rounded the corners should be.'
+          }
+        ]
       }
     ];
 
@@ -40,9 +87,13 @@ module Common.Drawing.Component.Library {
       super(model);
 
       var properties = this.getProperties();
-      properties.width = properties.width || 200;
-      properties.height = properties.height || 150;
-      properties.cornerRadius = properties.cornerRadius || 0;
+      properties.width = properties.width || 160;
+      properties.height = properties.height || 32;
+      properties.type = properties.type || 'primary';
+      properties.label = (typeof properties.label === 'undefined') ? 'Submit' : properties.label;
+      properties.cornerRadius = properties.cornerRadius || 5;
+      properties.fontSize = properties.fontSize || 14;
+      properties.fontWeight = properties.fontWeight || 400;
 
       // Perform the initial draw
       this.update();
@@ -84,43 +135,35 @@ module Common.Drawing.Component.Library {
       var bottomRight = new paper.Point(properties.x + properties.width/2, properties.y + properties.height/2);
       var bounds = new paper.Rectangle(topLeft, bottomRight);
 
-      // Draw the placeholder or the image
-      if (!properties.media) {
+      // Draw the shape
+      var shape = paper.Path.Rectangle(bounds, parseInt('' + properties.cornerRadius));
+      shape.strokeColor = foreColor;
+      shape.strokeWidth = 1.5;
 
-        let shape = paper.Path.Rectangle(bounds, parseInt('' + properties.cornerRadius));
-        shape.strokeColor = foreColor;
-        shape.strokeWidth = 1.5;
-        shape.fillColor = 'rgba(0,0,0,0)';
-        this.addChild(shape);
+      if (properties.type == 'primary') {
 
-        let crossOne = new paper.Path();
-        crossOne.add(bounds.topLeft);
-        crossOne.add(bounds.bottomRight);
-        crossOne.strokeColor = foreColor;
-        crossOne.strokeWidth = 1.5;
-        this.addChild(crossOne);
-
-        let crossTwo = new paper.Path();
-        crossTwo.add(bounds.topRight);
-        crossTwo.add(bounds.bottomLeft);
-        crossTwo.strokeColor = foreColor;
-        crossTwo.strokeWidth = 1.5;
-        this.addChild(crossTwo);
+        shape.fillColor = backColor;
       }
 
       else {
 
-        var raster = new paper.Raster((<Common.Data.IMedia>properties.media)._id);
-        raster.position = new paper.Point(bounds.center.x, bounds.center.y);
-        raster.scale(bounds.width / raster.width, bounds.height / raster.height);
-        this.addChild(raster);
-
-        let outline = paper.Path.Rectangle(bounds);
-        outline.strokeColor = foreColor;
-        outline.strokeWidth = (!this.active && !this.focussed && !this.hovered) ? 0 : 1.5;
-        outline.fillColor = 'rgba(0,0,0,0)';
-        this.addChild(outline);
+        shape.fillColor = 'rgba(0,0,0,0)';
       }
+
+      // Draw the label
+      var label = new paper.PointText({
+        point: new paper.Point(bounds.center.x, bounds.center.y + properties.fontSize/3),
+        content: properties.label,
+        fillColor: foreColor,
+        fontSize: properties.fontSize,
+        fontWeight: properties.fontWeight,
+        fontFamily: 'Myriad Pro',
+        justification: 'center'
+      });
+
+      // Group the parts as a component
+      this.addChild(shape);
+      this.addChild(label);
     }
 
 
@@ -163,6 +206,10 @@ module Common.Drawing.Component.Library {
 
       var topLeft = new DragHandle(this.bounds.topLeft, color);
       topLeft.cursor = 'nwse-resize';
+      topLeft.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
+
+        return [new SnapPoint(position, 'corner', 'corner')];
+      };
       topLeft.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.topLeft = position;
@@ -171,6 +218,10 @@ module Common.Drawing.Component.Library {
 
       var topCenter = new DragHandle(this.bounds.topCenter, color);
       topCenter.cursor = 'ns-resize';
+      topCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
+
+        return [new SnapPoint(position, 'center', 'edge')];
+      };
       topCenter.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.topCenter.y = position.y;
@@ -179,6 +230,10 @@ module Common.Drawing.Component.Library {
 
       var topRight = new DragHandle(this.bounds.topRight, color);
       topRight.cursor = 'nesw-resize';
+      topRight.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
+
+        return [new SnapPoint(position, 'corner', 'corner')];
+      };
       topRight.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.topRight = position;
@@ -187,6 +242,10 @@ module Common.Drawing.Component.Library {
 
       var rightCenter = new DragHandle(this.bounds.rightCenter, color);
       rightCenter.cursor = 'ew-resize';
+      rightCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
+
+        return [new SnapPoint(position, 'edge', 'center')];
+      };
       rightCenter.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.rightCenter.x = position.x;
@@ -195,6 +254,10 @@ module Common.Drawing.Component.Library {
 
       var bottomRight = new DragHandle(this.bounds.bottomRight, color);
       bottomRight.cursor = 'nwse-resize';
+      bottomRight.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
+
+        return [new SnapPoint(position, 'corner', 'corner')];
+      };
       bottomRight.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.bottomRight = position;
@@ -203,6 +266,10 @@ module Common.Drawing.Component.Library {
 
       var bottomCenter = new DragHandle(this.bounds.bottomCenter, color);
       bottomCenter.cursor = 'ns-resize';
+      bottomCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
+
+        return [new SnapPoint(position, 'center', 'edge')];
+      };
       bottomCenter.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.bottomCenter.y = position.y;
@@ -211,6 +278,10 @@ module Common.Drawing.Component.Library {
 
       var bottomLeft = new DragHandle(this.bounds.bottomLeft, color);
       bottomLeft.cursor = 'nesw-resize';
+      bottomLeft.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
+
+        return [new SnapPoint(position, 'corner', 'corner')];
+      };
       bottomLeft.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.bottomLeft = position;
@@ -219,6 +290,10 @@ module Common.Drawing.Component.Library {
 
       var leftCenter = new DragHandle(this.bounds.leftCenter, color);
       leftCenter.cursor = 'ew-resize';
+      leftCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
+
+        return [new SnapPoint(position, 'edge', 'center')];
+      };
       leftCenter.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.leftCenter.x = position.x;
@@ -242,9 +317,9 @@ module Common.Drawing.Component.Library {
      * Cast the model properties into the correct type
      */
 
-    getProperties(): Common.Data.IImageProperties {
+    getProperties(): Common.Data.IButtonProperties {
 
-      return <Common.Data.IImageProperties>this.model.properties;
+      return <Common.Data.IButtonProperties>this.model.properties;
     }
   }
 }

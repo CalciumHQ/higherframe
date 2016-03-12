@@ -1,52 +1,23 @@
 
-module Common.Drawing.Component.Library {
+module Common.Drawing.Library {
 
-  export class Rectangle extends Drawing.Component.Component {
+  export class Ellipse extends Drawing.Component {
 
     // Implement IDefinition members
-    id = Drawing.Component.Type.Rectangle;
-    static title = 'Rectangle';
+    id = Drawing.ComponentType.Ellipse;
+    static title = 'Ellipse';
     static category = 'Basic';
     tags = [
       'basic',
       'shape',
       'flowchart'
     ];
-    properties = [
-      {
-        label: 'Dimension',
-        controls: [
-          {
-            model: 'width',
-            placeholder: 'Width',
-            type: Number,
-            description: 'The width of the rectangle.'
-          },
-          {
-            model: 'height',
-            placeholder: 'Height',
-            type: Number,
-            description: 'The height of the rectangle.'
-          }
-        ]
-      },
-      {
-        label: 'Radius',
-        controls: [
-          {
-            model: 'cornerRadius',
-            type: Number,
-            description: 'The corner radius describes how rounded the corners should be.'
-          }
-        ]
-      }
-    ];
 
     model: Common.Data.Component;
 
 
     /**
-     * Create a new Rectangle component
+     * Create a new Ellipse component
      */
 
     constructor(model: Common.Data.IDrawingModel) {
@@ -56,7 +27,6 @@ module Common.Drawing.Component.Library {
       var properties = this.getProperties();
       properties.width = properties.width || 160;
       properties.height = properties.height || 120;
-      properties.cornerRadius = properties.cornerRadius || 0;
 
       // Perform the initial draw
       this.update();
@@ -98,7 +68,7 @@ module Common.Drawing.Component.Library {
       var bounds = new paper.Rectangle(topLeft, bottomRight);
 
       // Draw the shape
-      var shape = paper.Path.Rectangle(bounds, parseInt('' + properties.cornerRadius));
+      var shape = paper.Path.Ellipse(bounds);
       shape.strokeColor = foreColor;
       shape.strokeWidth = 1.5;
       shape.fillColor = 'rgba(0,0,0,0)';
@@ -312,9 +282,9 @@ module Common.Drawing.Component.Library {
      * Cast the model properties into the correct type
      */
 
-    getProperties(): Common.Data.IRectangleProperties {
+    getProperties(): Common.Data.IEllipseProperties {
 
-      return <Common.Data.IRectangleProperties>this.model.properties;
+      return <Common.Data.IEllipseProperties>this.model.properties;
     }
   }
 }
