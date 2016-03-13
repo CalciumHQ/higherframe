@@ -325,8 +325,8 @@ module Higherframe.Wireframe.Tools {
       var smartGuideResult = Higherframe.Drawing.SnapEngine.snap(
         this.canvas,
         [item],
-        dragHandle.getSnapPoints(dragHandle.position),
-        <Array<Common.Drawing.Item>>this.canvas.layerDrawing.children
+        <Array<Common.Drawing.Item>>this.canvas.layerDrawing.children,
+        dragHandle.getSnapPoints(dragHandle.position)
       );
 
       // Adjust handles according to smart guides
@@ -373,7 +373,6 @@ module Higherframe.Wireframe.Tools {
       var smartGuideResult = Higherframe.Drawing.SnapEngine.snap(
         this.canvas,
         this.canvas.selectedComponents,
-        null,
         <Array<Common.Drawing.Item>>this.canvas.layerDrawing.children
       );
 

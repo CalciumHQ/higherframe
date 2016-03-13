@@ -303,8 +303,8 @@ module Higherframe.Wireframe.Tools {
       var smartGuideResult = Higherframe.Drawing.SnapEngine.snap(
         this.canvas,
         [artboard],
-        dragHandle.getSnapPoints(dragHandle.position),
         <Array<Common.Drawing.Item>>this.canvas.layerArtboards.children,
+        dragHandle.getSnapPoints(dragHandle.position),
         { snapScoreThreshold: 2000 }
       );
 
@@ -340,8 +340,8 @@ module Higherframe.Wireframe.Tools {
       var smartGuideResult = Higherframe.Drawing.SnapEngine.snap(
         this.canvas,
         this.canvas.selectedArtboards,
-        null,
         <Array<Common.Drawing.Item>>this.canvas.layerArtboards.children,
+        null,
         { snapScoreThreshold: 500 }
       );
 

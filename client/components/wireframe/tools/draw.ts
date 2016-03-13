@@ -8,6 +8,7 @@ module Higherframe.Wireframe.Tools {
     private mousePosition: paper.Point;
     private dragRect: paper.Rectangle;
     private dragPreview: paper.Item;
+    private dragStart: paper.Point;
 
     private hitOptions = {
  			segments: true,
@@ -36,14 +37,27 @@ module Higherframe.Wireframe.Tools {
 
     private startDrag(event) {
 
+      let snapPoint = new Common.Drawing.SnapPoint(event.point, '', '');
+      let result = Higherframe.Drawing.SnapEngine.snap(
+        this.canvas,
+        [snapPoint],
+        <Array<Common.Drawing.Item>>this.canvas.layerDrawing.children
+      );
+
+      // Update ghost with snap
+      this.dragStart = event.point;
+      this.dragStart = result.x ? this.dragStart.add(result.x.getAdjustment()) : this.dragStart;
+      this.dragStart = result.y ? this.dragStart.add(result.y.getAdjustment()) : this.dragStart;
+
       // Create the ghost
-      this.delegate.createGhost(event.point, new paper.Size(1, 1));
+      this.delegate.createGhost(this.dragStart, new paper.Size(1, 1));
     }
 
     private resetDrag() {
 
       // Clear the drag rectangle
       this.dragRect = null;
+      this.dragStart = null;
 
       // Clear the drag preview
       if (this.dragPreview) {
@@ -54,6 +68,9 @@ module Higherframe.Wireframe.Tools {
 
       // Clear the ghost
       this.delegate.removeGhost();
+
+      // Clear smart guides
+      this.canvas.removeSmartGuides();
     }
 
     private createComponent(component: Common.Drawing.Component) {
@@ -120,19 +137,26 @@ module Higherframe.Wireframe.Tools {
       // Store the mouse position
       this.mousePosition = event.point;
 
+      if (event.modifiers.control || event.modifiers.command) {
+
+        this.mouseMovePlaceHandler(event);
+      }
+
+      else {
+
+        this.mouseMoveDrawHandler(event);
+      }
+    }
+
+    private mouseMovePlaceHandler(event) {
+
       // Update the ghost
       let ghost = this.delegate.updateGhostWithCenter(event.point);
-
-      if (!ghost) {
-
-        return;
-      }
 
       // Find a snap point
       var smartGuideResult = Higherframe.Drawing.SnapEngine.snap(
         this.canvas,
         [ghost],
-        null,
         <Array<Common.Drawing.Item>>this.canvas.layerDrawing.children
       );
 
@@ -141,6 +165,16 @@ module Higherframe.Wireframe.Tools {
       adjustedCenter = smartGuideResult.x ? adjustedCenter.add(smartGuideResult.x.getAdjustment()) : adjustedCenter;
       adjustedCenter = smartGuideResult.y ? adjustedCenter.add(smartGuideResult.y.getAdjustment()) : adjustedCenter;
       this.delegate.updateGhostWithCenter(adjustedCenter);
+    }
+
+    private mouseMoveDrawHandler(event) {
+
+      let snapPoint = new Common.Drawing.SnapPoint(event.point, '', '');
+      let result = Higherframe.Drawing.SnapEngine.snap(
+        this.canvas,
+        [snapPoint],
+        <Array<Common.Drawing.Item>>this.canvas.layerDrawing.children
+      );
     }
 
 
@@ -156,8 +190,24 @@ module Higherframe.Wireframe.Tools {
 
     private mouseDragDrawHandler(event) {
 
-      this.dragRect = new paper.Rectangle(event.downPoint, event.lastPoint);
+      this.dragRect = new paper.Rectangle(this.dragStart, event.lastPoint);
 
+      // Update the ghost
+      let ghost = this.delegate.updateGhost(this.dragRect.topLeft, this.dragRect.size);
+
+      // Find a snap point
+      var smartGuideResult = Higherframe.Drawing.SnapEngine.snap(
+        this.canvas,
+        [ghost],
+        <Array<Common.Drawing.Item>>this.canvas.layerDrawing.children
+      );
+
+      // Update ghost with snap
+      this.dragRect.size.width += smartGuideResult.x ? smartGuideResult.x.getAdjustment().x : 0;
+      this.dragRect.size.height += smartGuideResult.y ? smartGuideResult.y.getAdjustment().y : 0;
+      this.delegate.updateGhost(this.dragRect.topLeft, this.dragRect.size);
+
+      // Draw the drag preview
       if (this.dragPreview) {
 
         this.dragPreview.remove();
@@ -168,9 +218,6 @@ module Higherframe.Wireframe.Tools {
       this.dragPreview.strokeWidth = 1 / paper.view.zoom;
       this.dragPreview.strokeColor = this.canvas.theme.ComponentFocus;
       this.canvas.layerDrawing.activate();
-
-      // Update the ghost
-      this.delegate.updateGhost(this.dragRect.topLeft, this.dragRect.size);
     }
 
     private keyDownHandler(event) {
@@ -192,7 +239,6 @@ module Higherframe.Wireframe.Tools {
         var smartGuideResult = Higherframe.Drawing.SnapEngine.snap(
           this.canvas,
           [ghost],
-          null,
           <Array<Common.Drawing.Item>>this.canvas.layerDrawing.children
         );
 
