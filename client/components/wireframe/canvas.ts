@@ -124,7 +124,7 @@ module Higherframe.Wireframe {
 						// Ensure the artboard is on the artboards layer
 						this.layerArtboards.addChild(artboard);
 
-						artboard.update(this);
+						artboard.update();
 					});
 
 					// Select new artboards if requested
@@ -164,7 +164,7 @@ module Higherframe.Wireframe {
 							artboard.sync();
 
 			        // Update
-							artboard.update(this);
+							artboard.update();
 						}
 					});
 				});
@@ -349,7 +349,7 @@ module Higherframe.Wireframe {
 
 		onArtboardChanged(artboard: Higherframe.Drawing.Artboard) {
 
-			artboard.update(this);
+			artboard.update();
 			this.updateBoundingBoxes();
 			this.updateDragHandles(artboard);
 		}
@@ -409,7 +409,7 @@ module Higherframe.Wireframe {
 					this.onArtboardChanged(artboard);
 					newselectedArtboards.push(artboard);
 
-					artboard.update(this);
+					artboard.update();
 				}
 			});
 
@@ -965,117 +965,7 @@ module Higherframe.Wireframe {
 		 * Smart guides
 		 */
 
-		updateSmartGuides(item, sp?: Array<Common.Drawing.SnapPoint>): { x: Common.Drawing.SmartGuide, y: Common.Drawing.SmartGuide } {
-
-			this.removeSmartGuides();
-			return this.addSmartGuides(item, sp);
-		}
-
-		addSmartGuides(item, sp?: Array<Common.Drawing.SnapPoint>): { x: Common.Drawing.SmartGuide, y: Common.Drawing.SmartGuide } {
-
-			var smartGuideX: Common.Drawing.SmartGuide,
-				smartGuideY: Common.Drawing.SmartGuide;
-
-			var majorDeltaWeighting = 1,
-				minorDeltaWeighting = 0.1,
-				snapScoreThreshold = 200;
-
-			item.smartGuides = [];
-
-			var snapPoints = sp ? sp : item.getSnapPoints();
-
-			// TODO: Whittle down to elements in the nearby area
-
-			// Work through each element
-			this.layerDrawing.children.forEach((relation: Common.Drawing.Component) => {
-
-				// Don't compare target element with other selected elements
-				if (this.selectedComponents.indexOf(relation) !== -1) {
-
-					return;
-				}
-
-				var relationSnapPoints = (<any>relation).getSnapPoints();
-
-				// Look for alignment in snap points
-				snapPoints.forEach((snapPoint: Common.Drawing.SnapPoint) => {
-
-					relationSnapPoints.forEach((relationSnapPoint) => {
-
-						var xDelta = relationSnapPoint.point.x - snapPoint.point.x;
-						var yDelta = relationSnapPoint.point.y - snapPoint.point.y;
-
-						// If within the snap threshold
-						if (Math.abs(xDelta) <= 10 || Math.abs(yDelta) <= 10) {
-
-							// Which axis is the snap in?
-							var axis: Common.Drawing.SmartGuideAxis =
-								(Math.abs(xDelta) <= Math.abs(yDelta)) ?
-								Common.Drawing.SmartGuideAxis.X :
-								Common.Drawing.SmartGuideAxis.Y;
-
-							// Establish a score for this snap point
-							var score = 0;
-
-							if (axis == Common.Drawing.SmartGuideAxis.X) {
-
-								score += minorDeltaWeighting * (1/snapPoint.weight) * (1/relationSnapPoint.weight) * Math.abs(xDelta);
-								score += majorDeltaWeighting * (1/snapPoint.weight) * (1/relationSnapPoint.weight) * Math.abs(yDelta);
-
-								// Exclude snaps with a score too high
-								if (score > snapScoreThreshold) { return; }
-
-								// If a snap already exists in this axis with a
-								// smaller score, don't continue
-								if (smartGuideX && smartGuideX.score < score) { return; }
-							}
-
-							else if (axis == Common.Drawing.SmartGuideAxis.Y) {
-
-								score += minorDeltaWeighting * (1/snapPoint.weight) * (1/relationSnapPoint.weight) * Math.abs(yDelta);
-								score += majorDeltaWeighting * (1/snapPoint.weight) * (1/relationSnapPoint.weight) * Math.abs(xDelta);
-
-								// Exclude snaps with a score too high
-								if (score > snapScoreThreshold) { return; }
-
-								// If a snap already exists in this axis with a
-								// smaller score, don't continue
-								if (smartGuideY && smartGuideY.score < score) { return; }
-							}
-
-							// Create the new smart guide
-							var smartGuide = new Common.Drawing.SmartGuide();
-							smartGuide.origin = snapPoint;
-							smartGuide.relation = relationSnapPoint;
-							smartGuide.axis = axis;
-							smartGuide.score = score;
-							smartGuide.delta = {
-								x: xDelta,
-								y: yDelta
-							};
-
-							if (smartGuide.axis == Common.Drawing.SmartGuideAxis.X) {
-
-								smartGuideX = smartGuide;
-							}
-
-							else {
-
-								smartGuideY = smartGuide;
-							}
-						}
-					});
-				});
-			});
-
-			// Return the required adjustment on the item
-			return {
-				x: smartGuideX,
-				y: smartGuideY
-			};
-		}
-
-		drawGuide(smartGuide: Common.Drawing.SmartGuide) {
+		drawSmartGuide(smartGuide: Common.Drawing.SmartGuide) {
 
 			this.layerGuides.activate();
 
@@ -1230,7 +1120,7 @@ module Higherframe.Wireframe {
 
 			this.artboards.forEach((artboard) => {
 
-				artboard.update(this);
+				artboard.update();
 			});
 		}
 

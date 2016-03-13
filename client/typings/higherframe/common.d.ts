@@ -9279,27 +9279,6 @@ declare module Common.Data {
         color?: String;
     }
 }
-declare module Higherframe.Drawing {
-    class Artboard extends Common.Drawing.Item {
-        model: Common.Data.IArtboard;
-        name: string;
-        width: number;
-        height: number;
-        left: number;
-        top: number;
-        constructor(model: Common.Data.IArtboard);
-        private initFromModel();
-        commit(): void;
-        sync(): void;
-        update(canvas?: any): void;
-        /**
-         * Calculate the transform handles for the component
-         */
-        getTransformHandles(color: paper.Color): Array<Common.Drawing.IDragHandle>;
-        getBoundsRectangle(): paper.Rectangle;
-        private getArtboardRectangle();
-    }
-}
 declare module Common.Drawing {
     enum ComponentType {
         Generic = 0,

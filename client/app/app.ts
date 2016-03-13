@@ -33,7 +33,6 @@ angular.module('siteApp', [
     $mixpanelProvider.apiKey('@@mixpanel.key');
 
     // Register components
-    console.log(Common.Drawing.Library);
     ComponentLibraryProvider.register({
       id: Common.Drawing.ComponentType[Common.Drawing.ComponentType.Rectangle],
       title: Common.Drawing.Library.Rectangle.title,

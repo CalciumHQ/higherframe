@@ -97,6 +97,24 @@ module Higherframe.Drawing {
 			this.addChild(label);
     }
 
+
+    /**
+     * Calculate the snap points for the artboard
+     */
+
+    getSnapPoints(): Array<Common.Drawing.SnapPoint> {
+
+      let bounds = this.getBoundsRectangle();
+
+      return [
+        new Common.Drawing.SnapPoint(bounds.topLeft, 'corner', 'corner'),
+        new Common.Drawing.SnapPoint(bounds.topRight, 'corner', 'corner'),
+        new Common.Drawing.SnapPoint(bounds.bottomRight, 'corner', 'corner'),
+        new Common.Drawing.SnapPoint(bounds.bottomLeft, 'corner', 'corner')
+      ];
+    }
+
+
     /**
      * Calculate the transform handles for the component
      */

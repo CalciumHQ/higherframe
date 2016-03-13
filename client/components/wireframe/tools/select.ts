@@ -307,11 +307,6 @@ module Higherframe.Wireframe.Tools {
       // TODO: Currently supporting only one selected item
       var item = this.canvas.selectedComponents[0];
 
-      var bestSmartGuideResult: {
-        x?: Common.Drawing.SmartGuide,
-        y?: Common.Drawing.SmartGuide
-      } = {};
-
       this.canvas.selectedDragHandles.forEach((handle) => {
 
         // The new position
@@ -321,54 +316,32 @@ module Higherframe.Wireframe.Tools {
         handle.position = handle.onMove
           ? handle.onMove(position)
           : position;
-
-				// Find a snap point
-				var smartGuideResult = this.canvas.updateSmartGuides(
-          item,
-          handle.getSnapPoints(handle.position)
-        );
-
-        // Store if best smart guide match
-        if (smartGuideResult.x) {
-
-          if (
-            !bestSmartGuideResult.x ||
-            smartGuideResult.x.score < bestSmartGuideResult.x.score
-          ) {
-
-            bestSmartGuideResult.x = smartGuideResult.x;
-          }
-        }
-
-        if (smartGuideResult.y) {
-
-          if (
-            !bestSmartGuideResult.y ||
-            smartGuideResult.y.score < bestSmartGuideResult.y.score
-          ) {
-
-            bestSmartGuideResult.y = smartGuideResult.y;
-          }
-        }
       });
+
+      // TODO: Only supports one drag handle
+      let dragHandle = this.canvas.selectedDragHandles[0];
+
+      // Find a snap point
+      var smartGuideResult = Higherframe.Drawing.SnapEngine.snap(
+        this.canvas,
+        [item],
+        dragHandle.getSnapPoints(dragHandle.position),
+        <Array<Common.Drawing.Item>>this.canvas.layerDrawing.children
+      );
 
       // Adjust handles according to smart guides
       this.canvas.selectedDragHandles.forEach((handle) => {
 
         var position = handle.position;
 
-        position = bestSmartGuideResult.x ? position.add(bestSmartGuideResult.x.getAdjustment()) : position;
-        position = bestSmartGuideResult.y ? position.add(bestSmartGuideResult.y.getAdjustment()) : position;
+        position = smartGuideResult.x ? position.add(smartGuideResult.x.getAdjustment()) : position;
+        position = smartGuideResult.y ? position.add(smartGuideResult.y.getAdjustment()) : position;
 
         // Position the drag handle
         handle.position = handle.onMove
           ? handle.onMove(position)
           : position;
       });
-
-      // Draw smart guides
-      if (bestSmartGuideResult.x) { this.canvas.drawGuide(bestSmartGuideResult.x); }
-      if (bestSmartGuideResult.y) { this.canvas.drawGuide(bestSmartGuideResult.y); }
 
       this.canvas.updateBoundingBoxes();
     }
@@ -394,33 +367,15 @@ module Higherframe.Wireframe.Tools {
         component.model.properties.x = (<any>component).dragStartX + delta.x;
         component.model.properties.y = (<any>component).dragStartY + delta.y;
         component.update();
-
-        // Find a snap point
-        var smartGuideResult = this.canvas.updateSmartGuides(component);
-
-        // Store if best smart guide match
-        if (smartGuideResult.x) {
-
-          if (
-            !bestSmartGuideResult.x ||
-            smartGuideResult.x.score < bestSmartGuideResult.x.score
-          ) {
-
-            bestSmartGuideResult.x = smartGuideResult.x;
-          }
-        }
-
-        if (smartGuideResult.y) {
-
-          if (
-            !bestSmartGuideResult.y ||
-            smartGuideResult.y.score < bestSmartGuideResult.y.score
-          ) {
-
-            bestSmartGuideResult.y = smartGuideResult.y;
-          }
-        }
       });
+
+      // Find smart guides for the component being moved
+      var smartGuideResult = Higherframe.Drawing.SnapEngine.snap(
+        this.canvas,
+        this.canvas.selectedComponents,
+        null,
+        <Array<Common.Drawing.Item>>this.canvas.layerDrawing.children
+      );
 
       // Adjust items according to smart guides
       this.canvas.selectedComponents.forEach((component) => {
@@ -430,18 +385,14 @@ module Higherframe.Wireframe.Tools {
           component.model.properties.y
         );
 
-        position = bestSmartGuideResult.x ? position.add(bestSmartGuideResult.x.getAdjustment()) : position;
-        position = bestSmartGuideResult.y ? position.add(bestSmartGuideResult.y.getAdjustment()) : position;
+        position = smartGuideResult.x ? position.add(smartGuideResult.x.getAdjustment()) : position;
+        position = smartGuideResult.y ? position.add(smartGuideResult.y.getAdjustment()) : position;
 
         // Reposition the item
         component.model.properties.x = position.x;
         component.model.properties.y = position.y;
         component.update();
       });
-
-      // Draw smart guides
-      if (bestSmartGuideResult.x) { this.canvas.drawGuide(bestSmartGuideResult.x); }
-      if (bestSmartGuideResult.y) { this.canvas.drawGuide(bestSmartGuideResult.y); }
 
       this.canvas.updateBoundingBoxes();
     }

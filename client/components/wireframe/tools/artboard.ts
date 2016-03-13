@@ -110,6 +110,9 @@ module Higherframe.Wireframe.Tools {
 
       // Clear the selected drag handles
       this.canvas.selectedDragHandles = [];
+
+      // Clean up
+      this.canvas.removeSmartGuides();
     }
 
     private createArtboard(bounds: paper.Rectangle) {
@@ -279,10 +282,39 @@ module Higherframe.Wireframe.Tools {
 
       var delta = event.point.subtract(event.downPoint);
 
+      // TODO: Currently supporting only one selected artboart
+      var artboard = this.canvas.selectedArtboards[0];
+
       this.canvas.selectedDragHandles.forEach((handle) => {
 
         // The new position
         var position = (<any>handle).dragStart.add(delta);
+
+        // Position the drag handle
+        handle.position = handle.onMove
+          ? handle.onMove(position)
+          : position;
+      });
+
+      // TODO: Only supports one drag handle
+      let dragHandle = this.canvas.selectedDragHandles[0];
+
+      // Find a snap point
+      var smartGuideResult = Higherframe.Drawing.SnapEngine.snap(
+        this.canvas,
+        [artboard],
+        dragHandle.getSnapPoints(dragHandle.position),
+        <Array<Common.Drawing.Item>>this.canvas.layerArtboards.children,
+        { snapScoreThreshold: 2000 }
+      );
+
+      // Adjust handles according to smart guides
+      this.canvas.selectedDragHandles.forEach((handle) => {
+
+        var position = handle.position;
+
+        position = smartGuideResult.x ? position.add(smartGuideResult.x.getAdjustment()) : position;
+        position = smartGuideResult.y ? position.add(smartGuideResult.y.getAdjustment()) : position;
 
         // Position the drag handle
         handle.position = handle.onMove
@@ -297,14 +329,43 @@ module Higherframe.Wireframe.Tools {
 
       var delta = event.point.subtract(event.downPoint);
 
+      // Move the artboards
       this.canvas.selectedArtboards.forEach((artboard) => {
 
         artboard.left = (<any>artboard).dragStartLeft + delta.x;
         artboard.top = (<any>artboard).dragStartTop + delta.y;
-
-        artboard.update(this.canvas);
       });
 
+      // Find smart guides for the component being moved
+      var smartGuideResult = Higherframe.Drawing.SnapEngine.snap(
+        this.canvas,
+        this.canvas.selectedArtboards,
+        null,
+        <Array<Common.Drawing.Item>>this.canvas.layerArtboards.children,
+        { snapScoreThreshold: 500 }
+      );
+
+      // Adjust artboards according to smart guides
+      this.canvas.selectedArtboards.forEach((artboard) => {
+
+        var position = new paper.Point(
+          artboard.left,
+          artboard.top
+        );
+
+        position = smartGuideResult.x ? position.add(smartGuideResult.x.getAdjustment()) : position;
+        position = smartGuideResult.y ? position.add(smartGuideResult.y.getAdjustment()) : position;
+
+        // Reposition the item
+        artboard.left = position.x;
+        artboard.top = position.y;
+        artboard.update();
+      });
+
+      delta = smartGuideResult.x ? delta.add(smartGuideResult.x.getAdjustment()) : delta;
+      delta = smartGuideResult.y ? delta.add(smartGuideResult.y.getAdjustment()) : delta;
+
+      // Move the contained components
       this.dragComponents.forEach((component) => {
 
         component.model.properties.x = (<any>component).dragStartLeft + delta.x;
