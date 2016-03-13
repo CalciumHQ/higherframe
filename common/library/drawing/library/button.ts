@@ -213,6 +213,10 @@ module Common.Drawing.Library {
       topLeft.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.topLeft = position;
+
+        this.updateModel();
+        this.update();
+        
         return this.bounds.topLeft;
       };
 
@@ -225,6 +229,10 @@ module Common.Drawing.Library {
       topCenter.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.topCenter.y = position.y;
+
+        this.updateModel();
+        this.update();
+
         return this.bounds.topCenter;
       };
 
@@ -237,6 +245,10 @@ module Common.Drawing.Library {
       topRight.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.topRight = position;
+
+        this.updateModel();
+        this.update();
+
         return this.bounds.topRight;
       };
 
@@ -249,6 +261,10 @@ module Common.Drawing.Library {
       rightCenter.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.rightCenter.x = position.x;
+
+        this.updateModel();
+        this.update();
+
         return this.bounds.rightCenter;
       };
 
@@ -261,6 +277,10 @@ module Common.Drawing.Library {
       bottomRight.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.bottomRight = position;
+
+        this.updateModel();
+        this.update();
+
         return this.bounds.bottomRight;
       };
 
@@ -273,6 +293,10 @@ module Common.Drawing.Library {
       bottomCenter.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.bottomCenter.y = position.y;
+
+        this.updateModel();
+        this.update();
+
         return this.bounds.bottomCenter;
       };
 
@@ -285,6 +309,10 @@ module Common.Drawing.Library {
       bottomLeft.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.bottomLeft = position;
+
+        this.updateModel();
+        this.update();
+
         return this.bounds.bottomLeft;
       };
 
@@ -297,6 +325,10 @@ module Common.Drawing.Library {
       leftCenter.onMove = (position: paper.Point): paper.Point => {
 
         this.bounds.leftCenter.x = position.x;
+
+        this.updateModel();
+        this.update();
+
         return this.bounds.leftCenter;
       };
 
