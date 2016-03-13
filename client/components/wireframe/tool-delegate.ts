@@ -25,7 +25,7 @@ module Higherframe.Wireframe {
     public placeCursorFallback: string = 'default';
     public placeCursorFocus: string = '6 6';
 
-    public createGhost(topLeft: paper.Point, size?: paper.Size) {
+    public createGhost(topLeft: paper.Point, size?: paper.Size): Common.Drawing.Item {
 
       if (this.ghost) {
 
@@ -34,19 +34,21 @@ module Higherframe.Wireframe {
 
       this.ghost = this.create(topLeft, size);
       this.ghost.opacity = 0.3;
+
+      return this.ghost;
     }
 
-    public createGhostWithCenter(center: paper.Point, size?: paper.Size) {
+    public createGhostWithCenter(center: paper.Point, size?: paper.Size): Common.Drawing.Item {
 
       let topLeft = new paper.Point(
         center.x - (size ? size.width : this.defaultWidth)/2,
         center.y - (size ? size.height : this.defaultHeight)/2
       );
 
-      this.createGhost(topLeft, size);
+      return this.createGhost(topLeft, size);
     }
 
-    public updateGhost(topLeft: paper.Point, size?: paper.Size) {
+    public updateGhost(topLeft: paper.Point, size?: paper.Size): Common.Drawing.Item {
 
       if (!this.ghost) {
 
@@ -59,9 +61,10 @@ module Higherframe.Wireframe {
       );
 
       this.ghost.update();
+      return this.ghost;
     }
 
-    public updateGhostWithCenter(center: paper.Point, size?: paper.Size) {
+    public updateGhostWithCenter(center: paper.Point, size?: paper.Size): Common.Drawing.Item {
 
       if (!this.ghost) {
 
@@ -73,13 +76,23 @@ module Higherframe.Wireframe {
         center.y - (size ? size.height : this.defaultHeight)/2
       );
 
-      this.updateGhost(topLeft, size);
+      return this.updateGhost(topLeft, size);
     }
 
     public removeGhost() {
 
       this.ghost.remove();
       this.ghost = null;
+    }
+
+    public getGhostPosition(): paper.Point {
+
+      if (!this.ghost) {
+
+        return null;
+      }
+
+      return this.ghost.bounds.center;
     }
 
     abstract create(topLeft: paper.Point, size?: paper.Size): Common.Drawing.Component;

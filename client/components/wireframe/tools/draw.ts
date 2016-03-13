@@ -95,7 +95,7 @@ module Higherframe.Wireframe.Tools {
 
     private mouseUpHandlerPlace(event) {
 
-      let component = this.delegate.createWithCenter(event.point);
+      let component = this.delegate.createWithCenter(this.delegate.getGhostPosition());
       this.createComponent(component);
     }
 
@@ -121,7 +121,26 @@ module Higherframe.Wireframe.Tools {
       this.mousePosition = event.point;
 
       // Update the ghost
-      this.delegate.updateGhostWithCenter(event.point);
+      let ghost = this.delegate.updateGhostWithCenter(event.point);
+
+      if (!ghost) {
+
+        return;
+      }
+
+      // Find a snap point
+      var smartGuideResult = Higherframe.Drawing.SnapEngine.snap(
+        this.canvas,
+        [ghost],
+        null,
+        <Array<Common.Drawing.Item>>this.canvas.layerDrawing.children
+      );
+
+      // Update ghost with snap
+      let adjustedCenter = this.mousePosition;
+      adjustedCenter = smartGuideResult.x ? adjustedCenter.add(smartGuideResult.x.getAdjustment()) : adjustedCenter;
+      adjustedCenter = smartGuideResult.y ? adjustedCenter.add(smartGuideResult.y.getAdjustment()) : adjustedCenter;
+      this.delegate.updateGhostWithCenter(adjustedCenter);
     }
 
 
@@ -156,29 +175,50 @@ module Higherframe.Wireframe.Tools {
 
     private keyDownHandler(event) {
 
-      if (event.key == 'command') {
+      if (event.key == 'control' || event.key == 'meta') {
 
-        this.delegate.createGhostWithCenter(this.mousePosition);
+        // Set the cursor
         this.canvas.setImageCursor(
           this.delegate.placeCursor,
           this.delegate.placeCursorHidpi,
           this.delegate.placeCursorFallback,
           this.delegate.placeCursorFocus
         );
+
+        // Create the ghost
+        let ghost = this.delegate.createGhostWithCenter(this.mousePosition);
+
+        // Find a snap point
+        var smartGuideResult = Higherframe.Drawing.SnapEngine.snap(
+          this.canvas,
+          [ghost],
+          null,
+          <Array<Common.Drawing.Item>>this.canvas.layerDrawing.children
+        );
+
+        // Update ghost with snap
+        let adjustedCenter = this.mousePosition;
+        adjustedCenter = smartGuideResult.x ? adjustedCenter.add(smartGuideResult.x.getAdjustment()) : adjustedCenter;
+        adjustedCenter = smartGuideResult.y ? adjustedCenter.add(smartGuideResult.y.getAdjustment()) : adjustedCenter;
+        this.delegate.updateGhostWithCenter(adjustedCenter);
       }
     }
 
     private keyUpHandler(event) {
 
-      if (event.key == 'command') {
+      if (event.key == 'control' || event.key == 'meta') {
 
-        this.delegate.removeGhost();
+        // Set the cursor
         this.canvas.setImageCursor(
           this.delegate.drawCursor,
           this.delegate.drawCursorHidpi,
           this.delegate.drawCursorFallback,
           this.delegate.drawCursorFocus
         );
+
+        // Clean up
+        this.delegate.removeGhost();
+        this.canvas.removeSmartGuides();
       }
     }
 
