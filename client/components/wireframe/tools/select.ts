@@ -263,6 +263,12 @@ module Higherframe.Wireframe.Tools {
         }
       });
 
+      this.canvas.transformHandles.forEach((th) => {
+
+        th.hovered = false;
+        th.update();
+      });
+
       // Hit test for components and handles
       let handleHitResult = this.canvas.layerSelections.hitTest(event.point, this.hitOptions);
       let handle: Common.Drawing.DragHandle = handleHitResult
@@ -277,6 +283,9 @@ module Higherframe.Wireframe.Tools {
       // If a drag handle is hovered
       if (handle) {
 
+        handle.hovered = true;
+        handle.update();
+        
         this.canvas.setCursor(handle.cursor);
       }
 

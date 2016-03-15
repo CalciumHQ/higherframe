@@ -119,11 +119,11 @@ module Higherframe.Drawing {
      * Calculate the transform handles for the component
      */
 
-     getTransformHandles(color: paper.Color): Array<Common.Drawing.IDragHandle> {
+     getTransformHandles(color: paper.Color): Array<Common.Drawing.DragHandle> {
 
        let bounds = this.getArtboardRectangle();
 
-       var topLeft = new Common.Drawing.DragHandle(bounds.topLeft, color);
+       var topLeft = new Common.Drawing.DragHandle(bounds.topLeft);
        topLeft.cursor = 'nwse-resize';
        topLeft.getSnapPoints = (position: paper.Point): Array<Common.Drawing.SnapPoint> => {
 
@@ -143,7 +143,7 @@ module Higherframe.Drawing {
          return position;
        };
 
-       var topCenter = new Common.Drawing.DragHandle(bounds.topCenter, color);
+       var topCenter = new Common.Drawing.DragHandle(bounds.topCenter);
        topCenter.cursor = 'ns-resize';
        topCenter.getSnapPoints = (position: paper.Point): Array<Common.Drawing.SnapPoint> => {
 
@@ -161,7 +161,7 @@ module Higherframe.Drawing {
          return position;
        };
 
-       var topRight = new Common.Drawing.DragHandle(bounds.topRight, color);
+       var topRight = new Common.Drawing.DragHandle(bounds.topRight);
        topRight.cursor = 'nesw-resize';
        topRight.getSnapPoints = (position: paper.Point): Array<Common.Drawing.SnapPoint> => {
 
@@ -180,7 +180,7 @@ module Higherframe.Drawing {
          return position;
        };
 
-       var rightCenter = new Common.Drawing.DragHandle(bounds.rightCenter, color);
+       var rightCenter = new Common.Drawing.DragHandle(bounds.rightCenter);
        rightCenter.cursor = 'ew-resize';
        rightCenter.getSnapPoints = (position: paper.Point): Array<Common.Drawing.SnapPoint> => {
 
@@ -197,7 +197,7 @@ module Higherframe.Drawing {
          return position;
        };
 
-       var bottomRight = new Common.Drawing.DragHandle(bounds.bottomRight, color);
+       var bottomRight = new Common.Drawing.DragHandle(bounds.bottomRight);
        bottomRight.cursor = 'nwse-resize';
        bottomRight.getSnapPoints = (position: paper.Point): Array<Common.Drawing.SnapPoint> => {
 
@@ -215,7 +215,7 @@ module Higherframe.Drawing {
          return position;
        };
 
-       var bottomCenter = new Common.Drawing.DragHandle(bounds.bottomCenter, color);
+       var bottomCenter = new Common.Drawing.DragHandle(bounds.bottomCenter);
        bottomCenter.cursor = 'ns-resize';
        bottomCenter.getSnapPoints = (position: paper.Point): Array<Common.Drawing.SnapPoint> => {
 
@@ -232,7 +232,7 @@ module Higherframe.Drawing {
          return position;
        };
 
-       var bottomLeft = new Common.Drawing.DragHandle(bounds.bottomLeft, color);
+       var bottomLeft = new Common.Drawing.DragHandle(bounds.bottomLeft);
        bottomLeft.cursor = 'nesw-resize';
        bottomLeft.getSnapPoints = (position: paper.Point): Array<Common.Drawing.SnapPoint> => {
 
@@ -251,7 +251,7 @@ module Higherframe.Drawing {
          return position;
        };
 
-       var leftCenter = new Common.Drawing.DragHandle(bounds.leftCenter, color);
+       var leftCenter = new Common.Drawing.DragHandle(bounds.leftCenter);
        leftCenter.cursor = 'ew-resize';
        leftCenter.getSnapPoints = (position: paper.Point): Array<Common.Drawing.SnapPoint> => {
 

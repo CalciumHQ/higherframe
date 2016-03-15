@@ -9338,18 +9338,15 @@ declare module Common.Drawing {
     }
 }
 declare module Common.Drawing {
-    interface IDragHandle extends paper.Group {
-        position: paper.Point;
-        cursor?: string;
-        getSnapPoints?: (position: paper.Point) => Array<SnapPoint>;
-        onMove?: (position: paper.Point) => paper.Point;
-    }
-    class DragHandle extends paper.Group implements IDragHandle {
-        constructor(position: paper.Point, color: paper.Color);
+    class DragHandle extends paper.Group {
+        anchor: paper.Point;
+        hovered: boolean;
+        cursor: string;
+        constructor(anchor: paper.Point);
+        update(): void;
         /**
          * Derived class should implement
          */
-        cursor: string;
         getSnapPoints(position: paper.Point): Array<SnapPoint>;
         onMove(position: paper.Point): paper.Point;
     }
@@ -9377,12 +9374,14 @@ declare module Common.Drawing {
         active: Boolean;
         protected _focussed: Boolean;
         focussed: Boolean;
-        protected _dragHandles: paper.Group;
-        dragHandles: paper.Group;
+        protected _transformHandles: Array<Common.Drawing.DragHandle>;
+        transformHandles: Array<Common.Drawing.DragHandle>;
+        protected _dragHandles: Array<Common.Drawing.DragHandle>;
+        dragHandles: Array<Common.Drawing.DragHandle>;
         update(canvas?: any): void;
         getSnapPoints(): Array<SnapPoint>;
-        getTransformHandles(color: paper.Color): Array<IDragHandle>;
-        getDragHandles(color: paper.Color): Array<IDragHandle>;
+        getTransformHandles(color: paper.Color): Array<DragHandle>;
+        getDragHandles(color: paper.Color): Array<DragHandle>;
         getBoundsRectangle(): paper.Rectangle;
     }
 }
@@ -9423,7 +9422,7 @@ declare module Common.Drawing.Library {
         /**
          * Calculate the drag handles for the component
          */
-        getTransformHandles(color: paper.Color): Array<IDragHandle>;
+        getTransformHandles(): Array<DragHandle>;
     }
 }
 declare module Common.Drawing.Library {
@@ -9464,7 +9463,7 @@ declare module Common.Drawing.Library {
         /**
          * Calculate the transform handles for the component
          */
-        getTransformHandles(color: paper.Color): Array<IDragHandle>;
+        getTransformHandles(): Array<DragHandle>;
         /**
          * Cast the model properties into the correct type
          */
@@ -9539,7 +9538,7 @@ declare module Common.Drawing.Library {
         /**
          * Calculate the transform handles for the component
          */
-        getTransformHandles(color: paper.Color): Array<IDragHandle>;
+        getTransformHandles(color: paper.Color): Array<DragHandle>;
         /**
          * Cast the model properties into the correct type
          */
@@ -9640,7 +9639,7 @@ declare module Common.Drawing.Library {
         /**
          * Calculate the transform handles for the component
          */
-        getTransformHandles(color: paper.Color): Array<IDragHandle>;
+        getTransformHandles(color: paper.Color): Array<DragHandle>;
         /**
          * Cast the model properties into the correct type
          */
@@ -9727,7 +9726,7 @@ declare module Common.Drawing.Library {
         /**
          * Calculate the transform handles for the component
          */
-        getTransformHandles(color: paper.Color): Array<IDragHandle>;
+        getTransformHandles(color: paper.Color): Array<DragHandle>;
         /**
          * Cast the model properties into the correct type
          */
@@ -9789,7 +9788,7 @@ declare module Common.Drawing.Library {
         /**
          * Calculate the transform handles for the component
          */
-        getTransformHandles(color: paper.Color): Array<IDragHandle>;
+        getTransformHandles(color: paper.Color): Array<DragHandle>;
         /**
          * Cast the model properties into the correct type
          */
@@ -9831,7 +9830,7 @@ declare module Common.Drawing.Library {
         /**
          * Calculate the transform handles for the component
          */
-        getTransformHandles(color: paper.Color): Array<IDragHandle>;
+        getTransformHandles(color: paper.Color): Array<DragHandle>;
         /**
          * Cast the model properties into the correct type
          */
@@ -9885,7 +9884,7 @@ declare module Common.Drawing.Library {
         /**
          * Calculate the transform handles for the component
          */
-        getTransformHandles(color: paper.Color): Array<IDragHandle>;
+        getTransformHandles(color: paper.Color): Array<DragHandle>;
         /**
          * Cast the model properties into the correct type
          */
@@ -9934,7 +9933,7 @@ declare module Common.Drawing.Library {
         /**
          * Calculate the transform handles for the component
          */
-        getTransformHandles(color: paper.Color): Array<IDragHandle>;
+        getTransformHandles(color: paper.Color): Array<DragHandle>;
         /**
          * Cast the model properties into the correct type
          */
@@ -9999,7 +9998,7 @@ declare module Common.Drawing.Library {
         /**
          * Calculate the transform handles for the component
          */
-        getTransformHandles(color: paper.Color): Array<IDragHandle>;
+        getTransformHandles(color: paper.Color): Array<DragHandle>;
         /**
          * Calculate the snap points for the component
          */
@@ -10073,7 +10072,7 @@ declare module Common.Drawing.Library {
         /**
          * Calculate the transform handles for the component
          */
-        getTransformHandles(color: paper.Color): Array<IDragHandle>;
+        getTransformHandles(color: paper.Color): Array<DragHandle>;
         /**
          * Calculate the snap points for the component
          */
@@ -10130,6 +10129,8 @@ declare module Common.Drawing {
 }
 declare module Common.UI {
     interface ITheme {
+        Default: paper.Color;
+        Primary: paper.Color;
         ComponentDefault: paper.Color;
         ComponentHover: paper.Color;
         ComponentActive: paper.Color;
@@ -10152,6 +10153,8 @@ declare module Common.UI {
         ShadingDefault: paper.Color;
     }
     class DefaultTheme implements ITheme {
+        Default: paper.Color;
+        Primary: paper.Color;
         ComponentDefault: paper.Color;
         ComponentHover: paper.Color;
         ComponentActive: paper.Color;

@@ -100,7 +100,7 @@ module Common.Drawing.Library {
       // Draw the shape
       var shape = paper.Path.Rectangle(bounds, parseInt('' + properties.cornerRadius));
       shape.strokeColor = foreColor;
-      shape.strokeWidth = 1.5;
+      shape.strokeWidth = 1;
       shape.fillColor = 'rgba(0,0,0,0)';
 
       // Group the parts as a component
@@ -141,9 +141,9 @@ module Common.Drawing.Library {
      * Calculate the transform handles for the component
      */
 
-     getTransformHandles(color: paper.Color): Array<IDragHandle> {
+     getTransformHandles(color: paper.Color): Array<DragHandle> {
 
-       var topLeft = new DragHandle(this.bounds.topLeft, color);
+       var topLeft = new DragHandle(this.bounds.topLeft);
        topLeft.cursor = 'nwse-resize';
        topLeft.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 
@@ -163,7 +163,7 @@ module Common.Drawing.Library {
          return this.bounds.topLeft;
        };
 
-       var topCenter = new DragHandle(this.bounds.topCenter, color);
+       var topCenter = new DragHandle(this.bounds.topCenter);
        topCenter.cursor = 'ns-resize';
        topCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 
@@ -181,7 +181,7 @@ module Common.Drawing.Library {
          return this.bounds.topCenter;
        };
 
-       var topRight = new DragHandle(this.bounds.topRight, color);
+       var topRight = new DragHandle(this.bounds.topRight);
        topRight.cursor = 'nesw-resize';
        topRight.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 
@@ -201,7 +201,7 @@ module Common.Drawing.Library {
          return this.bounds.topRight;
        };
 
-       var rightCenter = new DragHandle(this.bounds.rightCenter, color);
+       var rightCenter = new DragHandle(this.bounds.rightCenter);
        rightCenter.cursor = 'ew-resize';
        rightCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 
@@ -219,7 +219,7 @@ module Common.Drawing.Library {
          return this.bounds.rightCenter;
        };
 
-       var bottomRight = new DragHandle(this.bounds.bottomRight, color);
+       var bottomRight = new DragHandle(this.bounds.bottomRight);
        bottomRight.cursor = 'nwse-resize';
        bottomRight.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 
@@ -239,7 +239,7 @@ module Common.Drawing.Library {
          return this.bounds.bottomRight;
        };
 
-       var bottomCenter = new DragHandle(this.bounds.bottomCenter, color);
+       var bottomCenter = new DragHandle(this.bounds.bottomCenter);
        bottomCenter.cursor = 'ns-resize';
        bottomCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 
@@ -257,7 +257,7 @@ module Common.Drawing.Library {
          return this.bounds.bottomCenter;
        };
 
-       var bottomLeft = new DragHandle(this.bounds.bottomLeft, color);
+       var bottomLeft = new DragHandle(this.bounds.bottomLeft);
        bottomLeft.cursor = 'nesw-resize';
        bottomLeft.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 
@@ -277,7 +277,7 @@ module Common.Drawing.Library {
          return this.bounds.bottomLeft;
        };
 
-       var leftCenter = new DragHandle(this.bounds.leftCenter, color);
+       var leftCenter = new DragHandle(this.bounds.leftCenter);
        leftCenter.cursor = 'ew-resize';
        leftCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 

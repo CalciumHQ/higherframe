@@ -128,7 +128,7 @@ module Common.Drawing.Library {
       // Draw the outer frame
       var outer = paper.Path.Rectangle(bounds);
       outer.strokeColor = foreColor;
-      outer.strokeWidth = 1.5;
+      outer.strokeWidth = 1;
       outer.fillColor = 'rgba(255,255,255,1)';
 
       // Draw the value
@@ -138,7 +138,7 @@ module Common.Drawing.Library {
         fillColor: properties.value ? foreColorDark : foreColorLight,
         fontSize: properties.fontSize,
         fontWeight: properties.fontWeight,
-        fontFamily: 'Myriad Pro'
+        fontFamily: 'Helvetica Neue',
       });
 
       // Group the parts as a component
@@ -163,9 +163,9 @@ module Common.Drawing.Library {
      * Calculate the transform handles for the component
      */
 
-    getTransformHandles(color: paper.Color): Array<IDragHandle> {
+    getTransformHandles(color: paper.Color): Array<DragHandle> {
 
-      var rightCenter = new DragHandle(this.bounds.rightCenter, color);
+      var rightCenter = new DragHandle(this.bounds.rightCenter);
       rightCenter.cursor = 'ew-resize';
       rightCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 
@@ -181,7 +181,7 @@ module Common.Drawing.Library {
         return this.bounds.rightCenter;
       };
 
-      var leftCenter = new DragHandle(this.bounds.leftCenter, color);
+      var leftCenter = new DragHandle(this.bounds.leftCenter);
       leftCenter.cursor = 'ew-resize';
       leftCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 

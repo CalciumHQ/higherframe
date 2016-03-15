@@ -51,6 +51,7 @@ module Higherframe.Wireframe {
 
 		components: Array<Common.Drawing.Component> = [];
 		artboards: Array<Higherframe.Drawing.Artboard> = [];
+		transformHandles: Array<Common.Drawing.DragHandle> = [];
 		boundingBoxes: Array<paper.Item> = [];
 		smartGuides: Array<paper.Item> = [];
 		collaboratorLabels: Array<paper.Item> = [];
@@ -61,6 +62,7 @@ module Higherframe.Wireframe {
 
 		constructor(
 			private $window: Higherframe.IWindow,
+			private $timeout: ng.ITimeoutService,
 			private CanvasRegistry: Higherframe.Wireframe.CanvasRegistry
 		) {
 
@@ -731,9 +733,7 @@ module Higherframe.Wireframe {
 
 			this.layerSelections.activate();
 			this.dragSelectionOverlay = paper.Path.Rectangle(this.dragSelectionRectangle);
-			this.dragSelectionOverlay.fillColor = theme.ComponentActive;
-			this.dragSelectionOverlay.strokeColor = theme.ComponentActiveDark;
-			this.dragSelectionOverlay.strokeWidth = 2;
+			this.dragSelectionOverlay.fillColor = theme.BoundsDefault;
 			this.dragSelectionOverlay.opacity = 0.3;
 			this.layerDrawing.activate();
 		};
@@ -816,21 +816,42 @@ module Higherframe.Wireframe {
 				this.addCollaboratorLabel(collaborator, boundingBox.bounds.topRight);
 			});
 
-			// Draw the bounding box for the current user's selection
-			this.drawBoundingBox(
-				(<Array<any>>this.selectedComponents).concat(this.selectedArtboards),
-				this.theme.BoundsDefault
-			);
+			// Drawing the current user's bounding box
+			let selection = (<Array<any>>this.selectedComponents).concat(this.selectedArtboards);
+
+			// Draw the bounding box for each item in the current user's selection
+			// If there is more than one item selected, we will apply the transform
+			// handles to the composite selection instead of the individual item
+			selection.forEach((item) => {
+
+				this.drawBoundingBox([item], this.theme.BoundsDefault, !(selection.length > 1));
+			});
+
+			// Draw the bounding box for the current user's composite selection
+			if (this.selectedComponents.length > 1) {
+
+				this.drawBoundingBox(
+					selection,
+					this.theme.BoundsDefault,
+					true
+				);
+			}
 		}
 
 		removeBoundingBoxes() {
 
-			angular.forEach(this.boundingBoxes, function (boundingBox) {
+			this.boundingBoxes.forEach((bb) => {
 
-				boundingBox.remove();
+				bb.remove();
+			});
+
+			this.transformHandles.forEach((th) => {
+
+				th.remove();
 			});
 
 			this.boundingBoxes.splice(0, this.boundingBoxes.length);
+			this.transformHandles.splice(0, this.transformHandles.length);
 		}
 
 		// Get a rectangle containing the given items
@@ -855,7 +876,7 @@ module Higherframe.Wireframe {
 				: null;
 		}
 
-		private drawBoundingBox(items: Array<Common.Drawing.Item>, color: paper.Color): paper.Group {
+		private drawBoundingBox(items: Array<Common.Drawing.Item>, color: paper.Color, handles: boolean = false): paper.Group {
 
 			var rect = this.getBounds(items);
 
@@ -874,35 +895,39 @@ module Higherframe.Wireframe {
 			box.strokeWidth = lineWidth;
 			boundingBox.addChild(box);
 
-			// A single component is selected
-			if (items.length == 1) {
+			// Add handles
+			if (handles) {
 
-				var component = <Common.Drawing.Component>items[0];
+				// A single component is selected
+				if (items.length == 1) {
 
-				// Add the transform handles
-				_.forEach(component.getTransformHandles(color), (transformHandle) => {
+					var component = <Common.Drawing.Component>items[0];
 
-					boundingBox.addChild(transformHandle);
-				});
-			}
+					// Add the transform handles
+					_.forEach(component.getTransformHandles(color), (transformHandle) => {
 
-			// Multiple components are selected
-			else {
-
-				function addHandle(center: paper.Point) {
-
-					var handle = new Common.Drawing.DragHandle(center, color);
-					boundingBox.addChild(handle);
+						this.transformHandles.push(transformHandle);
+					});
 				}
 
-				addHandle(rect.topLeft);
-				addHandle(rect.topCenter);
-				addHandle(rect.topRight);
-				addHandle(rect.rightCenter);
-				addHandle(rect.bottomRight);
-				addHandle(rect.bottomCenter);
-				addHandle(rect.bottomLeft);
-				addHandle(rect.leftCenter);
+				// Multiple components are selected
+				else {
+
+					let addHandle = (center: paper.Point) => {
+
+						var handle = new Common.Drawing.DragHandle(center);
+						this.transformHandles.push(handle);
+					}
+
+					addHandle(rect.topLeft);
+					addHandle(rect.topCenter);
+					addHandle(rect.topRight);
+					addHandle(rect.rightCenter);
+					addHandle(rect.bottomRight);
+					addHandle(rect.bottomCenter);
+					addHandle(rect.bottomLeft);
+					addHandle(rect.leftCenter);
+				}
 			}
 
 			this.boundingBoxes.push(boundingBox);
@@ -919,9 +944,9 @@ module Higherframe.Wireframe {
 		 * whether it is selected. The drag handles will
 		 * be added/removed/updated as appropriate.
 		 */
-		updateDragHandles(item) {
+		updateDragHandles(item: Common.Drawing.Item) {
 
-			var selected = (this.selectedComponents.indexOf(item) !== -1);
+			var selected = (this.selectedComponents.indexOf(<any>item) !== -1);
 
 			if (selected && !item.dragHandles) {
 
@@ -940,15 +965,15 @@ module Higherframe.Wireframe {
 			}
 		}
 
-		addDragHandles(item: Common.Drawing.Component) {
+		addDragHandles(item: Common.Drawing.Item) {
 
 			this.layerSelections.activate();
 
-			item.dragHandles = new paper.Group();
+			item.dragHandles = [];
 
 			angular.forEach(item.getDragHandles(this.theme.BoundsDefault), (dh) => {
 
-				item.dragHandles.addChild(dh);
+				item.dragHandles.push(dh);
 			});
 
 			this.layerDrawing.activate();
@@ -956,8 +981,8 @@ module Higherframe.Wireframe {
 
 		removeDragHandles(item) {
 
-			item.dragHandles.remove();
-			item.dragHandles = null;
+			item.dragHandles.forEach((dh) => dh.remove());
+			item.dragHandles = [];
 		}
 
 
@@ -1228,8 +1253,8 @@ module Higherframe.Wireframe {
 
 		static factory(): ng.IDirectiveFactory {
 
-			const directive = ($window: Higherframe.IWindow, CanvasRegistry: Higherframe.Wireframe.CanvasRegistry) => new Canvas($window, CanvasRegistry);
-			directive.$inject = ['$window', 'CanvasRegistry'];
+			const directive = ($window: Higherframe.IWindow, $timeout, CanvasRegistry: Higherframe.Wireframe.CanvasRegistry) => new Canvas($window, $timeout, CanvasRegistry);
+			directive.$inject = ['$window', '$timeout', 'CanvasRegistry'];
 			return directive;
 		}
 	}

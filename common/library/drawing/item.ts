@@ -15,8 +15,8 @@ module Common.Drawing {
     get focussed(): Boolean { return this._focussed; }
     set focussed(value) { this._focussed = value; this.update(); }
 
-    protected _dragHandles: paper.Group;
-    get dragHandles(): paper.Group { return this._dragHandles; }
+    protected _dragHandles: Array<Common.Drawing.DragHandle> = [];
+    get dragHandles(): Array<Common.Drawing.DragHandle> { return this._dragHandles; }
     set dragHandles(value) { this._dragHandles = value; }
 
     update(canvas?: any): void {
@@ -28,12 +28,12 @@ module Common.Drawing {
       return [];
     }
 
-    getTransformHandles(color: paper.Color): Array<IDragHandle> {
+    getTransformHandles(color: paper.Color): Array<DragHandle> {
 
       return [];
     }
 
-    getDragHandles(color: paper.Color): Array<IDragHandle> {
+    getDragHandles(color: paper.Color): Array<DragHandle> {
 
       return [];
     }

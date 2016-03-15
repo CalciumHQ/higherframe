@@ -3,6 +3,9 @@ module Common.UI {
 
   export interface ITheme {
 
+    Default: paper.Color;
+    Primary: paper.Color;
+
     ComponentDefault: paper.Color;
     ComponentHover: paper.Color;
     ComponentActive: paper.Color;
@@ -34,29 +37,32 @@ module Common.UI {
 
   export class DefaultTheme implements ITheme {
 
-    ComponentDefault = new paper.Color('#888');
-    ComponentHover = new paper.Color('#82cdec');
-    ComponentActive = new paper.Color('#0881a8');
-    ComponentFocus = new paper.Color('#82cdec');
+    Default = new paper.Color('#888');
+    Primary = new paper.Color('#82cdec');
+
+    ComponentDefault = this.Default;
+    ComponentHover = this.Primary;
+    ComponentActive = this.Default;
+    ComponentFocus = this.Default;
 
     ComponentDefaultLight = new paper.Color('#aaa');
     ComponentHoverLight = new paper.Color('#82cdec');
-    ComponentActiveLight = new paper.Color('#0881a8');
-    ComponentFocusLight = new paper.Color('#82cdec');
+    ComponentActiveLight = new paper.Color('#aaa');
+    ComponentFocusLight = new paper.Color('#aaa');
 
     ComponentDefaultDark = new paper.Color('#222');
     ComponentHoverDark = new paper.Color('#82cdec');
-    ComponentActiveDark = new paper.Color('#0881a8');
-    ComponentFocusDark = new paper.Color('#82cdec');
+    ComponentActiveDark = new paper.Color('#222');
+    ComponentFocusDark = new paper.Color('#222');
 
     BorderDefault = new paper.Color('#ddd');
     BorderHover = new paper.Color('#82cdec');
-    BorderActive = new paper.Color('#0881a8');
-    BorderFocus = new paper.Color('#82cdec');
+    BorderActive = new paper.Color('#ddd');
+    BorderFocus = new paper.Color('#ddd');
 
     DragHandleDefault = new paper.Color('#98e001');
 
-    BoundsDefault = new paper.Color('#42b2d6');
+    BoundsDefault = this.Primary;
 
     GuideDefault = new paper.Color('#ffc000');
 

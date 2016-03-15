@@ -139,7 +139,7 @@ module Common.Drawing.Library {
 
       line.addSegments([endSgm]);
       line.strokeColor = foreColor;
-      line.strokeWidth = 1.5;
+      line.strokeWidth = 1;
       this.addChild(line);
 
       // Draw the heads
@@ -196,14 +196,14 @@ module Common.Drawing.Library {
      * Calculate the drag handles for the component
      */
 
-    getTransformHandles(color: paper.Color): Array<IDragHandle> {
+    getTransformHandles(): Array<DragHandle> {
 
       var properties = <Common.Data.IArrowProperties>this.model.properties;
       var position = new paper.Point(properties.x, properties.y);
       var startPoint = position.add(new paper.Point(properties.start.x, properties.start.y));
       var endPoint = position.add(new paper.Point(properties.end.x, properties.end.y));
 
-      var start = new DragHandle(new paper.Point(startPoint), color);
+      var start = new DragHandle(new paper.Point(startPoint));
       start.cursor = 'nesw-resize';
       start.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 
@@ -217,7 +217,7 @@ module Common.Drawing.Library {
         return pos;
       };
 
-      var end = new DragHandle(new paper.Point(endPoint), color);
+      var end = new DragHandle(new paper.Point(endPoint));
       end.cursor = 'nesw-resize';
       end.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 

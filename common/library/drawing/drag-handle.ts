@@ -1,29 +1,46 @@
 
 module Common.Drawing {
 
-  export interface IDragHandle extends paper.Group {
-    position: paper.Point;
-    cursor?: string;
-    getSnapPoints?: (position: paper.Point) => Array<SnapPoint>;
-    onMove?: (position: paper.Point) => paper.Point;
-  }
+  export class DragHandle extends paper.Group {
 
-  export class DragHandle extends paper.Group implements IDragHandle {
+    public anchor: paper.Point;
+    public hovered: boolean = false;
+    public cursor: string;
 
-    constructor(position: paper.Point, color: paper.Color) {
+    constructor(anchor: paper.Point) {
 
       super();
+      this.anchor = anchor;
+
+      this.update();
+    }
+
+    update() {
+
+      let theme: Common.UI.ITheme = new Common.UI.DefaultTheme();
+
+      this.removeChildren();
 
       var lineWidth = 1/paper.view.zoom;
-      var handleSize = 3/paper.view.zoom;
-      var handle = paper.Path.Rectangle(
-        new paper.Point(position.x - handleSize, position.y - handleSize),
-        new paper.Point(position.x + handleSize, position.y + handleSize)
+      let handleSize = 4/paper.view.zoom;
+      let handleRect = new paper.Rectangle(
+        new paper.Point(this.anchor.x - handleSize, this.anchor.y - handleSize),
+        new paper.Point(this.anchor.x + handleSize, this.anchor.y + handleSize)
       );
+      let handle = paper.Path.Ellipse(handleRect);
 
-      handle.strokeColor = color;
+      handle.strokeColor = theme.ComponentHover;
       handle.strokeWidth = lineWidth;
-      handle.fillColor = 'white';
+
+      if (this.hovered) {
+
+        handle.fillColor = theme.ComponentHover;
+      }
+
+      else {
+
+        handle.fillColor = 'white';
+      }
 
       this.addChild(handle);
     }
@@ -32,8 +49,6 @@ module Common.Drawing {
     /**
      * Derived class should implement
      */
-
-    cursor: string;
 
     getSnapPoints(position: paper.Point): Array<SnapPoint> {
 

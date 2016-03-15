@@ -136,7 +136,7 @@ module Common.Drawing.Library {
       var bounds = new paper.Rectangle(topLeft, bottomRight);
       var box = paper.Path.Rectangle(bounds);
       box.strokeColor = foreColor;
-      box.strokeWidth = 1.5;
+      box.strokeWidth = 1;
       box.fillColor = 'rgba(255,255,255,1)';
       this.addChild(box);
 

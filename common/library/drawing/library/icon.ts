@@ -100,7 +100,7 @@ module Common.Drawing.Library {
 
         let shape = paper.Path.Rectangle(bounds);
         shape.strokeColor = foreColor;
-        shape.strokeWidth = 1.5;
+        shape.strokeWidth = 1;
         shape.fillColor = 'rgba(0,0,0,0)';
         this.addChild(shape);
 
@@ -108,14 +108,14 @@ module Common.Drawing.Library {
         crossOne.add(bounds.topLeft);
         crossOne.add(bounds.bottomRight);
         crossOne.strokeColor = foreColor;
-        crossOne.strokeWidth = 1.5;
+        crossOne.strokeWidth = 1;
         this.addChild(crossOne);
 
         let crossTwo = new paper.Path();
         crossTwo.add(bounds.topRight);
         crossTwo.add(bounds.bottomLeft);
         crossTwo.strokeColor = foreColor;
-        crossTwo.strokeWidth = 1.5;
+        crossTwo.strokeWidth = 1;
         this.addChild(crossTwo);
       }
 
