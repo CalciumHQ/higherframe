@@ -37,7 +37,7 @@ module Common.UI {
 
   export class DefaultTheme implements ITheme {
 
-    Default = new paper.Color('#888');
+    Default = new paper.Color('#666');
     Primary = new paper.Color('#82cdec');
 
     ComponentDefault = this.Default;

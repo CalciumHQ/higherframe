@@ -47,20 +47,24 @@ module Higherframe.Drawing {
       // Determine palette
       var theme: Common.UI.ITheme = new Common.UI.DefaultTheme();
       var foreColor = theme.ComponentDefault;
+      var borderColor = theme.BorderDefault;
 
       if (this.active) {
 
         foreColor = theme.ComponentActive;
+        borderColor = theme.ComponentActive;
       }
 
       else if (this.focussed) {
 
         foreColor = theme.ComponentFocus;
+        borderColor = theme.ComponentFocus;
       }
 
       else if (this.hovered) {
 
         foreColor = theme.ComponentHover;
+        borderColor = theme.ComponentHover;
       }
 
       // Remove old parts
@@ -72,16 +76,7 @@ module Higherframe.Drawing {
 				new paper.Point(this.left + this.width, this.top + this.height)
 			);
 			background.fillColor = 'white';
-
-      if (this.hovered || this.focussed) {
-
-        background.strokeColor = foreColor;
-			}
-
-			else {
-
-				background.strokeColor = 'rgba(0,0,0,0)';
-			}
+      background.strokeColor = borderColor;
 
 			background.strokeWidth = 1 / paper.view.zoom;
 			this.addChild(background);
