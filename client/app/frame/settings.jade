@@ -65,7 +65,7 @@
 				div.ui-property-value
 					p(ng-if="!FrameSettingsCtrl.users.length") You are not sharing this wireframe with anybody.
 					div.ui-tokens
-						div.ui-token(ng-repeat="user in FrameSettingsCtrl.users") 
+						div.ui-token(ng-repeat="user in FrameSettingsCtrl.users")
 							div.ui-token-container
 								span.b3.medium {{ user.name }}
 								a.ui-token-remove.b3.strong(ng-click="FrameSettingsCtrl.onRemoveUserClick(user)") x

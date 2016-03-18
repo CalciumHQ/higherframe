@@ -46,19 +46,19 @@ module Common.UI {
     ComponentFocus = this.Default;
 
     ComponentDefaultLight = new paper.Color('#aaa');
-    ComponentHoverLight = new paper.Color('#82cdec');
+    ComponentHoverLight = this.Primary;
     ComponentActiveLight = new paper.Color('#aaa');
     ComponentFocusLight = new paper.Color('#aaa');
 
     ComponentDefaultDark = new paper.Color('#222');
-    ComponentHoverDark = new paper.Color('#82cdec');
+    ComponentHoverDark = this.Primary;
     ComponentActiveDark = new paper.Color('#222');
     ComponentFocusDark = new paper.Color('#222');
 
-    BorderDefault = new paper.Color('#ddd');
-    BorderHover = new paper.Color('#82cdec');
-    BorderActive = new paper.Color('#ddd');
-    BorderFocus = new paper.Color('#ddd');
+    BorderDefault = new paper.Color('#ccc');
+    BorderHover = this.Primary;
+    BorderActive = new paper.Color('#ccc');
+    BorderFocus = new paper.Color('#ccc');
 
     DragHandleDefault = new paper.Color('#98e001');
 

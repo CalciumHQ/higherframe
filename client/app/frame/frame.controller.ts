@@ -213,6 +213,36 @@ class FrameCtrl {
       this.saveComponents(instances);
     });
 
+		$scope.$on('toolbar:selection:alignLeft', () => {
+
+			this.alignItemsLeft(this.selection);
+		});
+
+		$scope.$on('toolbar:selection:alignCenter', () => {
+
+			this.alignItemsCenter(this.selection);
+		});
+
+		$scope.$on('toolbar:selection:alignRight', () => {
+
+			this.alignItemsRight(this.selection);
+		});
+
+		$scope.$on('toolbar:selection:alignTop', () => {
+
+			this.alignItemsTop(this.selection);
+		});
+
+		$scope.$on('toolbar:selection:alignMiddle', () => {
+
+			this.alignItemsMiddle(this.selection);
+		});
+
+		$scope.$on('toolbar:selection:alignBottom', () => {
+
+			this.alignItemsBottom(this.selection);
+		});
+
 
 		/**
 		 * Tray notifications
@@ -794,7 +824,6 @@ class FrameCtrl {
 		this.$scope.$broadcast('controller:artboard:updated', { artboard: artboard });
 	};
 
-
   private addComponentsToView(components, options?) {
 
     if (!angular.isArray(components)) {
@@ -976,6 +1005,132 @@ class FrameCtrl {
 
 		let instances = this.addComponentsToView(components);
 		this.saveComponents(instances);
+	}
+
+	private alignItemsLeft(items: Array<Common.Drawing.Component>) {
+
+		if (!items.length) {
+
+			return;
+		}
+
+		// Get the left position of the first item
+		let left = this.selection[0].getBoundsRectangle().left;
+
+		// Update the other items
+		this.selection.forEach((item: Common.Drawing.Component) => {
+
+			let delta = left - item.getBoundsRectangle().left;
+			item.model.properties.x += delta;
+
+			this.saveComponents([item]);
+			this.updateComponentInView(item.model);
+		});
+	}
+
+	private alignItemsCenter(items: Array<Common.Drawing.Component>) {
+
+		if (!items.length) {
+
+			return;
+		}
+
+		// Get the center position of the first item
+		let center = this.selection[0].getBoundsRectangle().center.x;
+
+		// Update the other items
+		this.selection.forEach((item: Common.Drawing.Component) => {
+
+			let delta = center - item.getBoundsRectangle().center.x;
+			item.model.properties.x += delta;
+
+			this.saveComponents([item]);
+			this.updateComponentInView(item.model);
+		});
+	}
+
+	private alignItemsRight(items: Array<Common.Drawing.Component>) {
+
+		if (!items.length) {
+
+			return;
+		}
+
+		// Get the left position of the first item
+		let right = this.selection[0].getBoundsRectangle().right;
+
+		// Update the other items
+		this.selection.forEach((item: Common.Drawing.Component) => {
+
+			let delta = right - item.getBoundsRectangle().right;
+			item.model.properties.x += delta;
+
+			this.saveComponents([item]);
+			this.updateComponentInView(item.model);
+		});
+	}
+
+	private alignItemsTop(items: Array<Common.Drawing.Component>) {
+
+		if (!items.length) {
+
+			return;
+		}
+
+		// Get the left position of the first item
+		let top = this.selection[0].getBoundsRectangle().top;
+
+		// Update the other items
+		this.selection.forEach((item: Common.Drawing.Component) => {
+
+			let delta = top - item.getBoundsRectangle().top;
+			item.model.properties.y += delta;
+
+			this.saveComponents([item]);
+			this.updateComponentInView(item.model);
+		});
+	}
+
+	private alignItemsMiddle(items: Array<Common.Drawing.Component>) {
+
+		if (!items.length) {
+
+			return;
+		}
+
+		// Get the left position of the first item
+		let middle = this.selection[0].getBoundsRectangle().center.y;
+
+		// Update the other items
+		this.selection.forEach((item: Common.Drawing.Component) => {
+
+			let delta = middle - item.getBoundsRectangle().center.y;
+			item.model.properties.y += delta;
+
+			this.saveComponents([item]);
+			this.updateComponentInView(item.model);
+		});
+	}
+
+	private alignItemsBottom(items: Array<Common.Drawing.Component>) {
+
+		if (!items.length) {
+
+			return;
+		}
+
+		// Get the left position of the first item
+		let bottom = this.selection[0].getBoundsRectangle().bottom;
+
+		// Update the other items
+		this.selection.forEach((item: Common.Drawing.Component) => {
+
+			let delta = bottom - item.getBoundsRectangle().bottom;
+			item.model.properties.y += delta;
+
+			this.saveComponents([item]);
+			this.updateComponentInView(item.model);
+		});
 	}
 
 

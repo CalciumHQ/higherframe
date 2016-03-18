@@ -28,24 +28,6 @@
 							a(href="", ng-click="logout()") Log out
 
 		div.header-toolbar(ng-controller="ToolbarCtrl as ToolbarCtrl")
-			div#frame-edit-mode.header-toolbar-item(uib-dropdown, dropdown-append-to-body)
-				button.header-toolbar-button.header-toolbar-item(uib-dropdown-toggle)
-					span.h6.medium
-						span(ng-switch="FrameCtrl.editMode")
-							span(ng-switch-default) Draw
-							span(ng-switch-when="1") Artboards
-							span(ng-switch-when="2") Annotate
-						| &nbsp;	
-						span.chevron
-					
-				div.uib-dropdown-menu
-					li(ng-repeat="mode in FrameCtrl.toolbarConfig.editMode.options")
-						a(ng-click="FrameCtrl.onEditModeClick(mode.value)")
-							h5.medium {{ mode.title }}
-							p.h6 {{ mode.description }}
-				
-			div.header-toolbar-divider
-				
 			div(uib-dropdown, dropdown-append-to-body)
 				button.header-toolbar-button.header-toolbar-item(uib-dropdown-toggle)
 					span.h6.medium
@@ -76,23 +58,32 @@
 			button.header-toolbar-button.header-toolbar-item(ng-click="FrameCtrl.onToolbarPasteClick()", uib-tooltip-html="'Paste (' + ('ctrl' | symbol) + 'V)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", ng-disabled="!FrameCtrl.Clipboard.getItems().length")
 				span.header-toolbar-icon.font-awesome &#xf0ea;
 				
-			div.header-toolbar-group(ng-if="FrameCtrl.editMode == 0")
+			div.header-toolbar-group
 				div.header-toolbar-divider
 					
-				div#quick-add.header-toolbar-input-group.header-toolbar-item(uib-dropdown)
+				div#quick-add.header-toolbar-input-group.header-toolbar-item(uib-dropdown, ng-if="false")
 					span.header-toolbar-input-group-addon
 						span.font-awesome &#xf0e7;
 							
 					input.header-toolbar-input(ng-model="ToolbarCtrl.quickAdd.value", uib-typeahead="component.title for component in ToolbarCtrl.components | filter:{ title: $viewValue }", typeahead-on-select="ToolbarCtrl.onQuickAddSelect($item)", typeahead-append-to-body="true", focus-on="ToolbarCtrl.quickAdd.focus", placeholder="Quick add...")
 						
-				button.header-toolbar-button.header-toolbar-item(ng-model="FrameCtrl.alignment", uib-btn-radio="'Left'", uib-tooltip="Align items left", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
-					span.header-toolbar-icon.font-awesome &#xf036;
+				button.header-toolbar-button.header-toolbar-item(ng-click="ToolbarCtrl.onAlignLeftClick()", uib-tooltip="Align items left", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+					span.header-toolbar-icon.glyph 1
 					
-				button.header-toolbar-button.header-toolbar-item(ng-model="FrameCtrl.alignment", uib-btn-radio="'Center'", uib-tooltip="Align items center", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
-					span.header-toolbar-icon.font-awesome &#xf037;
+				button.header-toolbar-button.header-toolbar-item(ng-click="ToolbarCtrl.onAlignCenterClick()", uib-tooltip="Align items center", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+					span.header-toolbar-icon.glyph 2
 					
-				button.header-toolbar-button.header-toolbar-item(ng-model="FrameCtrl.alignment", uib-btn-radio="'Right'", uib-tooltip="Align items right", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
-					span.header-toolbar-icon.font-awesome &#xf038;
+				button.header-toolbar-button.header-toolbar-item(ng-click="ToolbarCtrl.onAlignRightClick()", uib-tooltip="Align items right", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+					span.header-toolbar-icon.glyph 3
+					
+				button.header-toolbar-button.header-toolbar-item(ng-click="ToolbarCtrl.onAlignTopClick()", uib-tooltip="Align items top", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+					span.header-toolbar-icon.glyph 4
+					
+				button.header-toolbar-button.header-toolbar-item(ng-click="ToolbarCtrl.onAlignMiddleClick()", uib-tooltip="Align items middle", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+					span.header-toolbar-icon.glyph 5
+					
+				button.header-toolbar-button.header-toolbar-item(ng-click="ToolbarCtrl.onAlignBottomClick()", uib-tooltip="Align items bottom", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+					span.header-toolbar-icon.glyph 6
 				
 			button#activity-toggle.header-toolbar-button.header-toolbar-item.header-toolbar-toggle.header-toolbar-right(ng-model="FrameCtrl.activityOpen", uib-btn-checkbox)
 				span.header-toolbar-icon.font-awesome &#xf0c0;
@@ -113,24 +104,7 @@
 					span.font-awesome &#xf1e0;
 					|  Share
 				
-		#frame-toolbar(ng-class="{ 'sidebar-open': FrameCtrl.sidebarMode }")
-			div#frame-edit-mode.toolbar-item(uib-dropdown)
-				button.btn.btn-default.btn-sm(uib-dropdown-toggle)
-					span(ng-switch="FrameCtrl.editMode")
-						span(ng-switch-default) Draw
-						span(ng-switch-when="1") Artboards
-						span(ng-switch-when="2") Annotate
-					| &nbsp;	
-					span.caret
-					
-				div.uib-dropdown-menu
-					li(ng-repeat="mode in FrameCtrl.toolbarConfig.editMode.options")
-						a(ng-click="FrameCtrl.onEditModeClick(mode.value)")
-							h5.medium {{ mode.title }}
-							p.h6 {{ mode.description }}
-			
-			div.divider
-					
+		#frame-toolbar
 			div.btn-group.toolbar-item
 				button.btn.btn-default.btn-sm(uib-tooltip-html="'Undo (' + ('ctrl' | symbol) + 'Z)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
 					span.font-awesome &#xf0e2;
@@ -181,7 +155,7 @@
 					
 			div.divider
 			
-			div.toolbar-group(ng-if="FrameCtrl.editMode == 0")
+			div.toolbar-group
 				div#quick-add.input-group.input-group-sm.toolbar-item(uib-dropdown)
 					span.input-group-addon
 						span.font-awesome &#xf0e7;
@@ -189,13 +163,13 @@
 					input.form-control.input-sm(ng-model="ToolbarCtrl.quickAdd.value", guib-typeahead="component.title for component in ToolbarCtrl.components | filter:{ title: $viewValue }", typeahead-on-select="ToolbarCtrl.onQuickAddSelect($item)", typeahead-append-to-body="true", ng-blur="ToolbarCtrl.onQuickAddBlur()", placeholder="Quick add...")
 						
 				div.btn-group.toolbar-item
-					button.btn.btn-default.btn-sm(ng-model="FrameCtrl.alignment", uib-btn-radio="'Left'", uib-tooltip="Align items left", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+					button.btn.btn-default.btn-sm(ng-click="ToolbarCtrl.onAlignLeftClick()", uib-tooltip="Align items left", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
 						span.font-awesome &#xf036;
 						
-					button.btn.btn-default.btn-sm(ng-model="FrameCtrl.alignment", uib-btn-radio="'Center'", uib-tooltip="Align items center", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+					button.btn.btn-default.btn-sm(ng-click="ToolbarCtrl.onAlignCenterClick()", uib-tooltip="Align items center", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
 						span.font-awesome &#xf037;
 						
-					button.btn.btn-default.btn-sm(ng-model="FrameCtrl.alignment", uib-btn-radio="'Right'", uib-tooltip="Align items right", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+					button.btn.btn-default.btn-sm(ng-click="ToolbarCtrl.onAlignRightClick()", uib-tooltip="Align items right", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
 						span.font-awesome &#xf038;
 					
 			div#collaborators.toolbar-item.right

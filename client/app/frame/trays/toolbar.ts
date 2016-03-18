@@ -96,6 +96,36 @@ module Higherframe.Controllers.Frame {
           this.generateImageWorking = false;
         });
     }
+
+    onAlignLeftClick() {
+
+      this.$scope.$emit('toolbar:selection:alignLeft');
+    }
+
+    onAlignCenterClick() {
+
+      this.$scope.$emit('toolbar:selection:alignCenter');
+    }
+
+    onAlignRightClick() {
+
+      this.$scope.$emit('toolbar:selection:alignRight');
+    }
+
+    onAlignTopClick() {
+
+      this.$scope.$emit('toolbar:selection:alignTop');
+    }
+
+    onAlignMiddleClick() {
+
+      this.$scope.$emit('toolbar:selection:alignMiddle');
+    }
+
+    onAlignBottomClick() {
+
+      this.$scope.$emit('toolbar:selection:alignBottom');
+    }
   }
 }
 
