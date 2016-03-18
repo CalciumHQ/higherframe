@@ -126,6 +126,16 @@ module Higherframe.Controllers.Frame {
 
       this.$scope.$emit('toolbar:selection:alignBottom');
     }
+
+    onDistributeHorizontallyClick() {
+
+      this.$scope.$emit('toolbar:selection:distributeHorizontally');
+    }
+
+    onDistributeVerticallyClick() {
+
+      this.$scope.$emit('toolbar:selection:distributeVertically');
+    }
   }
 }
 

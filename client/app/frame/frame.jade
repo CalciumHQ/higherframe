@@ -84,6 +84,12 @@
 					
 				button.header-toolbar-button.header-toolbar-item(ng-click="ToolbarCtrl.onAlignBottomClick()", uib-tooltip="Align items bottom", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
 					span.header-toolbar-icon.glyph 6
+					
+				button.header-toolbar-button.header-toolbar-item(ng-click="ToolbarCtrl.onDistributeHorizontallyClick()", uib-tooltip="Distribute horizontally", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+					span.header-toolbar-icon.glyph 7
+					
+				button.header-toolbar-button.header-toolbar-item(ng-click="ToolbarCtrl.onDistributeVerticallyClick()", uib-tooltip="Distribute vertically", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+					span.header-toolbar-icon.glyph 8
 				
 			button#activity-toggle.header-toolbar-button.header-toolbar-item.header-toolbar-toggle.header-toolbar-right(ng-model="FrameCtrl.activityOpen", uib-btn-checkbox)
 				span.header-toolbar-icon.font-awesome &#xf0c0;

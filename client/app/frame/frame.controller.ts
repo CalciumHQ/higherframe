@@ -243,6 +243,16 @@ class FrameCtrl {
 			this.alignItemsBottom(this.selection);
 		});
 
+		$scope.$on('toolbar:selection:distributeHorizontally', () => {
+
+			this.distributeItemsHorizontally(this.selection);
+		});
+
+		$scope.$on('toolbar:selection:distributeVertically', () => {
+
+			this.distributeItemsVertically(this.selection);
+		});
+
 
 		/**
 		 * Tray notifications
@@ -1127,6 +1137,58 @@ class FrameCtrl {
 
 			let delta = bottom - item.getBoundsRectangle().bottom;
 			item.model.properties.y += delta;
+
+			this.saveComponents([item]);
+			this.updateComponentInView(item.model);
+		});
+	}
+
+	private distributeItemsHorizontally(items: Array<Common.Drawing.Component>) {
+
+		if (!items.length) {
+
+			return;
+		}
+
+		// Sort items by center position
+		let sorted = _.sortBy(items, (item) => item.getBoundsRectangle().center.x);
+
+		// Get the center position of the left-most item and right-most items
+		// and calculate the distribution
+		let leftCenter = sorted[0].getBoundsRectangle().center.x,
+			rightCenter = sorted[sorted.length-1].getBoundsRectangle().center.x,
+			step = (rightCenter - leftCenter) / (sorted.length - 1);
+
+		// Update the other items
+		sorted.forEach((item: Common.Drawing.Component, i: number) => {
+
+			item.model.properties.x = leftCenter + (i * step);
+
+			this.saveComponents([item]);
+			this.updateComponentInView(item.model);
+		});
+	}
+
+	private distributeItemsVertically(items: Array<Common.Drawing.Component>) {
+
+		if (!items.length) {
+
+			return;
+		}
+
+		// Sort items by center position
+		let sorted = _.sortBy(items, (item) => item.getBoundsRectangle().center.y);
+
+		// Get the center position of the left-most item and right-most items
+		// and calculate the distribution
+		let topCenter = sorted[0].getBoundsRectangle().center.y,
+			bottomCenter = sorted[sorted.length-1].getBoundsRectangle().center.y,
+			step = (bottomCenter - topCenter) / (sorted.length - 1);
+
+		// Update the other items
+		sorted.forEach((item: Common.Drawing.Component, i: number) => {
+
+			item.model.properties.y = topCenter + (i * step);
 
 			this.saveComponents([item]);
 			this.updateComponentInView(item.model);
