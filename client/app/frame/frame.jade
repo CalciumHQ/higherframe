@@ -188,23 +188,8 @@
 				span.font-awesome &#xf0c0;
 				
 		// Properties
-		#properties-pane.tray(ng-controller="PropertiesCtrl as PropertiesCtrl", ng-show="PropertiesCtrl.open", ng-style="{ left: PropertiesCtrl.point.x, top: PropertiesCtrl.point.y }")
-			.tray-header(ui-draggable, ui-draggable-method="custom", ui-draggable-drag="PropertiesCtrl.onHeaderDrag($event)")
-				.tray-header-tabs
-					span.tray-header-tab(ng-class="{ active: PropertiesCtrl.tab == 'display' }", ng-click="PropertiesCtrl.tab = 'display'") Display
-					
-				.tray-header-buttons
-					div.tray-pin.tray-header-button(ng-click="PropertiesCtrl.onPinClick()", ng-class="{ active: PropertiesCtrl.pinned }")
-						span.glyph p
-						
-					div.tray-close.tray-header-button(ng-click="PropertiesCtrl.onCloseClick()")
-						span.glyph x
-						
-			.tray-content.form
-				div.tray-placeholder.text-center(ng-if="PropertiesCtrl.selection.length == 0")
-					p.h5.text-muted No component selected
-					
-				div#properties-pane-display(ng-show="PropertiesCtrl.selection.length == 1")
+		#properties-pane.tray.tray-divider-top(ng-controller="PropertiesCtrl as PropertiesCtrl", ng-show="PropertiesCtrl.open")
+			div#properties-pane-display(ng-show="PropertiesCtrl.selection.length == 1")
 
 		#frame-canvas-wrapper
 			#toolbox(ng-controller="ToolboxCtrl as ToolboxCtrl")

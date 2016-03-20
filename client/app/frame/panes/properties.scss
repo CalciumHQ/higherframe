@@ -1,61 +1,50 @@
 
 #properties-pane {
-  left: 100px;
-  top: 100px;
+  right: 0;
+  top: 0;
   width: 240px;
+  height: 100%;
 
-  .tray-header {
-    .tray-header-buttons {
-      .tray-pin {
-        line-height: 24px;
-
-        span {
-          display: block;
-          @include transition(transform 200ms);
-        }
-
-        &.active {
-          span {
-            @include transform(rotateZ(-22deg));
-          }
-        }
-      }
-
-      .tray-close {
-        font-size: 0.85em;
-      }
-    }
-  }
-
-  .form-group {
+  .tray-group {
     @include display-flex;
     margin-bottom: 0;
 
-    & + .form-group {
-      margin-top: 8px;
+    & + .tray-group {
+      margin-top: 18px;
     }
 
-    .form-label {
+    .tray-label {
       margin: 0;
       padding-top: 2px;
       color: $grey1;
     }
 
-    .form-controls {
+    .tray-controls {
       @include flex-grow(1);
-      margin-left: 16px;
       min-width: 0;
+
+      .tray-control {
+        width: 100%;
+
+        &.auto {
+          width: auto;
+        }
+      }
     }
 
-    .form-control-row {
+    .tray-label + .tray-controls {
+      margin-left: 16px;
+    }
+
+    .tray-control-row {
       @include display-flex;
 
-      & + .form-control-row {
-        margin-top: 6px;
+      & + .tray-control-row {
+        margin-top: 18px;
       }
 
-      input + input {
-        margin-left: 15px;
+      .tray-control + .tray-control {
+        margin-left: 26px;
       }
     }
 
@@ -63,37 +52,30 @@
       width: 100%;
     }
 
-    .form-control {
-      height: 21px;
+    .tray-control-styling {
+      height: 22px;
+      line-height: 22px;
       width: auto;
       min-width: 50px;
-      padding: 0 4px;
+      padding: 0;
       border: none;
-      border-bottom: 1px solid transparent;
+      border-bottom: 1px solid #4f514d;
       background: none;
       color: white;
-      line-height: $font-size-h6;
       font-size: $font-size-h6;
       @include transition(all 100ms);
       @include box-shadow(none);
 
-      &:hover {
-        background: rgba(black, 0.25);
-      }
-
       &:focus {
         outline: none;
-        @include box-shadow(none);
-        background: rgba(black, 0.25);
-        border-bottom: 1px solid $yellow;
+        border-bottom-color: $yellow;
       }
     }
 
     .ui-dropdown {
       &.open {
-        .form-control {
-          background: rgba(black, 0.25);
-          border-bottom: 1px solid $yellow;
+        .tray-control-styling {
+          border-bottom-color: $yellow;
         }
 
         .chevron {
@@ -101,11 +83,13 @@
         }
       }
 
-      .form-control {
+      .tray-control {
         line-height: 21px;
       }
 
       .chevron {
+        position: absolute;
+        right: 0;
         color: $grey1;
       }
     }
@@ -129,85 +113,30 @@
   }
 }
 
-$tray-padding-vertical: 13px;
-$tray-padding-horizontal: 15px;
-$tray-tab-padding: 7px;
+$tray-padding-vertical: 22px;
+$tray-padding-horizontal: 14px;
+
+.tray-divider-top {
+  border-top: 2px solid $grey-2;
+}
+
+.tray-divider-bottom {
+  border-bottom: 2px solid $grey-2;
+}
 
 .tray {
   position: absolute;
   z-index: 100;
-  border-radius: 3px;
   background: $grey-3;
-  @include box-shadow(1px 1.732px 10px 0px rgba(109, 109, 109, 0.7));
 
-  .tray-header {
-    @include display-flex;
-    height: 20px;
-    cursor: move;
-    background: rgba(black, 0.30);
-
-    .tray-header-tabs {
-      @include display-flex;
-      padding-left: $tray-padding-horizontal;
-      line-height: 22px;
-      font-size: 10px;
-      font-weight: 500;
-
-      .tray-header-tab {
-        padding: 0 $tray-tab-padding;
-        cursor: pointer;
-        color: $grey1;
-        @include transition(all 50ms);
-
-        &:first-child {
-          margin-left: -$tray-tab-padding;
-        }
-
-        &:hover {
-          color: $yellow;
-        }
-
-        &.active {
-          color: white;
-          background: #3c3e3a;
-        }
-      }
-    }
-
-    .tray-header-buttons {
-      @include display-flex;
-      margin-left: auto;
-
-      .tray-header-button {
-        padding: 0 4px;
-        line-height: 20px;
-        color: $grey2;
-        cursor: pointer;
-        @include transition(all 100ms);
-
-        &:hover {
-          background: rgba(white, 0.2);
-        }
-
-        &:active {
-          @include transition(all 30ms);
-          background: $yellow;
-          color: $grey-3
-        }
-
-        &.active {
-          color: $yellow;
-        }
-      }
-    }
+  .tray-area {
+    padding: 23px 14px 31px;
+    color: white;
   }
 
-  .tray-content {
-    padding: $tray-padding-vertical $tray-padding-horizontal;
-    color: white;
-
-    .tray-placeholder {
-
-    }
+  .tray-heading {
+    margin-top: 0;
+    margin-bottom: 13px;
+    color: #6a6d67;
   }
 }
