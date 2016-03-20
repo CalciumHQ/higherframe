@@ -13,4 +13,6 @@ router.put('/:id', controller.update);
 router.patch('/:id', controller.update);
 router.delete('/:id', controller.destroy);
 
+router.post('/:id/users', auth.isAuthenticated(), controller.addUser);
+
 module.exports = router;

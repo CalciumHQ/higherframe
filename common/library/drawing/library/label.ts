@@ -132,7 +132,7 @@ module Common.Drawing.Library {
           fillColor: foreColor,
           fontSize: properties.fontSize,
           fontWeight: properties.fontWeight,
-          fontFamily: 'Helvetica Neue',
+          fontFamily: 'Helvetica',
           leading: properties.lineHeight
         });
         this.addChild(text);
@@ -148,7 +148,7 @@ module Common.Drawing.Library {
           fillColor: foreColor,
           fontSize: properties.fontSize,
           fontWeight: properties.fontWeight,
-          fontFamily: 'Myriad Pro'
+          fontFamily: 'Helvetica',
         });
         this.addChild(this.textItem);
       }

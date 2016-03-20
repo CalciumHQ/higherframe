@@ -21,6 +21,11 @@ div#dashboard-frames.form-page.layout-partial
 				button.btn.btn-primary(ng-click="ProjectFramesCtrl.onNewFrameClick()")
 					span.font-awesome &#xf067; 
 					| Add wireframe
+					
+			div.listview-titlebar-item
+				button.btn.btn-primary(ng-click="ProjectFramesCtrl.onProjectShareClick()")
+					span.font-awesome &#xf067; 
+					| Share
 		
 	div.listview-placeholder.row(ng-if="!ProjectCtrl.project.frames.length")
 		h4 This project is empty

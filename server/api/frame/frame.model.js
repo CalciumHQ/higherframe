@@ -23,10 +23,6 @@ var FrameSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Project'
   },
-  users: [{
-    type: Schema.ObjectId,
-    ref: 'User'
-  }],
 	collaborators: [{
 		type: Schema.ObjectId,
 		ref: 'User'

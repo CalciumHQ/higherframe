@@ -75,6 +75,12 @@ module Higherframe.Controllers {
 
 			this.$http.delete('/api/frames/' + frame._id);
 		};
+
+    onProjectShareClick() {
+
+      var modal = new Higherframe.Modals.Project.Share(this.project, this.Auth, this.$mixpanel);
+      this.ModalManager.present(modal);
+    }
   }
 }
 

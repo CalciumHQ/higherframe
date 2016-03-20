@@ -16,7 +16,6 @@ var Component = require('./../component/component.model');
 var Artboard = require('./../artboard/artboard.model');
 var Activity = require('./../activity/activity.model');
 var User = require('./../user/user.model');
-var mandrill = require('mandrill-api/mandrill');
 var config = require('../../config/environment');
 var exporter = require('./../../components/frame/exporter');
 
@@ -43,8 +42,8 @@ exports.index = function(req, res) {
 exports.show = function(req, res) {
 
   var query = Frame
-		.findOne({ _id: req.params.id, users: req.user._id })
-		.populate('project components artboards users collaborators media');
+		.findOne({ _id: req.params.id })
+		.populate('project components artboards collaborators media');
 
   if (!req.query.hasOwnProperty('include_deleted')) {
 
@@ -79,7 +78,7 @@ exports.create = function(req, res) {
 
   if(!req.body.project) { return handleError(res, null); }
 
-  if (!_.find(req.body.users, function(user) { return req.user._id == req.user._id; })) {
+  if (!_.find(req.body.users, function(user) { return user._id == req.user._id; })) {
 
     req.body.users = req.body.users || [];
     req.body.users.push(req.user);
@@ -182,69 +181,6 @@ exports.destroy = function(req, res) {
         }
       )
     });
-  });
-};
-
-// Shares this frame with a user.
-exports.addUser = function(req, res) {
-
-  // Add to the frame
-  var query = Frame.findOneAndUpdate(
-    { _id: req.params.id },
-    { $addToSet: { users: { $each: req.body } }},
-    { safe: true, upsert: false }
-  );
-
-  if (!req.query.hasOwnProperty('include_deleted')) {
-
-    query.where({ status: 'active' });
-  }
-
-  query.exec(function (err, frame) {
-
-    if(err) { return handleError(res, err); }
-
-    Activity.create({
-      frame: frame._id,
-      user: req.user._id,
-      type: 'added-user',
-      data: { users: req.body }
-    });
-
-
-    /*
-     * Send the share email
-     */
-
-    var client = new mandrill.Mandrill(config.mandrill.clientSecret);
-
-    _.forEach(req.body, function(userId) {
-
-      User.findById(userId, function(err, user) {
-
-        var message = {
-          html: '<h1>You have been invited to collaborate on ' + frame.name + '.</h1><p><a href="' + config.domain + '/frame/' + frame._id + '">Go to the document</a></p>',
-          text: 'You have been invited to collaborate on ' + frame.name + '. Visit Higherframe to see this document.',
-          subject: 'You have been added to a wireframe',
-          from_email: 'support@higherfra.me',
-          from_name: 'Higherframe',
-          to: [
-            {
-              email: user.email,
-              name: user.name,
-              type: 'to'
-            }
-          ]
-        };
-
-        client.messages.send({
-          message: message,
-          async: true
-        });
-      });
-    });
-
-    return res.json(201, frame);
   });
 };
 

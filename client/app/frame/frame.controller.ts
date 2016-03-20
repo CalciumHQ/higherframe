@@ -869,15 +869,11 @@ class FrameCtrl {
     this.$scope.$broadcast('controller:component:selected', components);
 	};
 
-	private removeComponentFromView(component) {
+	private removeComponentFromView(model) {
 
-		// Find the component with this _id
-		angular.forEach(paper.project.activeLayer.children, function (item: Common.Drawing.Component) {
-
-			if (item.model._id == component._id) {
-
-				item.remove();
-			}
+		// Inform the view
+		this.$scope.$broadcast('controller:component:deleted', {
+			component: model
 		});
 	};
 
@@ -1224,12 +1220,6 @@ class FrameCtrl {
 
 		this.paste();
 	}
-
-	onToolbarShareClick() {
-
-    var modal = new Higherframe.Modals.Frame.Share(this.frame, this.Auth, this.$mixpanel);
-    this.ModalManager.present(modal);
-  }
 
   // Action bar
   onActionbarCloseClick() {

@@ -180,6 +180,33 @@ module Higherframe.Wireframe {
 					this.updateBoundingBoxes();
 				});
 
+				scope.$on('controller:component:deleted', (e, data) => {
+
+					if (!data.component) {
+
+						return;
+					}
+
+					// Find the component for this model
+					var index: number;
+					let component = _.find(
+						this.layerDrawing.children,
+						(item: Common.Drawing.Component, i: number) => {
+
+							if (item.model._id == data.component._id) {
+
+								index = i;
+								return true;
+							}
+						}
+					);
+
+					component.remove();
+					this.components.splice(index, 1);
+
+					this.updateBoundingBoxes();
+				});
+
 				scope.$on('component:added', (e, data) => {
 
 					// Insertion options

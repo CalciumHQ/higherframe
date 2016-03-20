@@ -139,7 +139,7 @@ module Common.Drawing.Library {
         fillColor: properties.value ? foreColorDark : foreColorLight,
         fontSize: properties.fontSize,
         fontWeight: properties.fontWeight,
-        fontFamily: 'Helvetica Neue'
+        fontFamily: 'Helvetica'
       });
 
       // Draw the caret
