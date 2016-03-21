@@ -1,4 +1,6 @@
 
+$tray-control-height: 22px;
+
 #properties-pane {
   right: 0;
   top: 0;
@@ -22,18 +24,19 @@
     .tray-controls {
       @include flex-grow(1);
       min-width: 0;
-
-      .tray-control {
-        width: 100%;
-
-        &.auto {
-          width: auto;
-        }
-      }
     }
 
     .tray-label + .tray-controls {
       margin-left: 16px;
+    }
+
+    .tray-control-icon {
+      color: #ced2ca;
+
+      &.glyph {
+        font-size: 14px;
+        height: 14px;
+      }
     }
 
     .tray-control-row {
@@ -43,20 +46,32 @@
         margin-top: 18px;
       }
 
-      .tray-control + .tray-control {
-        margin-left: 26px;
+      .tray-control-icon {
+        & + .tray-control {
+          margin-left: 12px;
+        }
+      }
+
+      .tray-control {
+        @include flex-grow(1);
+        @include flex-shrink(1);
+        min-width: 0;
+
+        & + .tray-control,
+        & + .tray-control-icon {
+          margin-left: 26px;
+        }
+
+        &.auto {
+          @include flex-grow(0);
+        }
       }
     }
 
-    .full {
-      width: 100%;
-    }
-
     .tray-control-styling {
-      height: 22px;
-      line-height: 22px;
+      height: $tray-control-height;
+      line-height: $tray-control-height;
       width: auto;
-      min-width: 50px;
       padding: 0;
       border: none;
       border-bottom: 1px solid #4f514d;
@@ -79,7 +94,13 @@
         }
 
         .chevron {
-          color: white;
+          color: $yellow;
+        }
+      }
+
+      &:hover {
+        .chevron {
+          color: $yellow;
         }
       }
 
@@ -91,6 +112,45 @@
         position: absolute;
         right: 0;
         color: $grey1;
+      }
+    }
+
+    rzslider {
+      margin-top: $tray-control-height/2 - 1px;
+      margin-bottom: 0;
+
+      .rz-bubble {
+        display: none;
+      }
+
+      .rz-pointer {
+        $original-size: 32px;
+        $new-size: 8px;
+
+        width: $new-size;
+        height: $new-size;
+        border-radius: $new-size/2;
+        background: white;
+        @include transform(translateY(($original-size - $new-size)/2));
+
+        &:after {
+          content: none;
+        }
+
+        &.rz-active {
+          outline: 0;
+          background: $yellow;
+        }
+      }
+
+      .rz-bar {
+        $original-size: 4px;
+        $new-size: 2px;
+
+        height: $new-size;
+        background: #4f514d;
+        border-radius: 0;
+        @include transform(translateY(($original-size - $new-size)/2));
       }
     }
 
@@ -110,6 +170,27 @@
         border-color: $grey-1;
       }
     }
+  }
+
+  #properties-type-font-family,
+  #properties-type-font-size {
+    @include flex-basis(70px);
+  }
+
+  #properties-type-font-weight,
+  #properties-type-line-height {
+    @include flex-basis(30px);
+  }
+
+  #properties-type-letter-spacing {
+    @include flex-shrink(0);
+    width: 40px;
+  }
+
+  #properties-appearance-opacity-input {
+    @include flex-shrink(0);
+    width: 36px;
+    margin-left: 14px;
   }
 }
 

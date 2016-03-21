@@ -9160,20 +9160,17 @@ declare module Common.Data {
     }
     interface ILabelProperties extends IComponentProperties {
         text: string;
-        fontSize: number;
+        fontFamily: string;
         fontWeight: number;
+        fontSize: number;
         lineHeight: number;
         justification: string;
         area: boolean;
     }
     interface IRectangleProperties extends IComponentProperties {
-        width: number;
-        height: number;
         cornerRadius: number;
     }
     interface IEllipseProperties extends IComponentProperties {
-        width: number;
-        height: number;
     }
     interface IArrowProperties extends IComponentProperties {
         start: Drawing.IPoint;
@@ -9182,25 +9179,20 @@ declare module Common.Data {
         type: string;
     }
     interface IMobileDeviceProperties extends IComponentProperties {
-        width: number;
-        height: number;
         showBar: boolean;
     }
     interface IMobileTitlebarProperties extends IComponentProperties {
-        width: number;
         title: string;
         leftIcon: string;
         rightIcon: string;
     }
     interface ITextInputProperties extends IComponentProperties {
-        width: number;
         placeholder: String;
         value: String;
         fontSize: number;
         fontWeight: number;
     }
     interface ISelectInputProperties extends IComponentProperties {
-        width: number;
         placeholder: String;
         value: String;
         fontSize: number;
@@ -9214,8 +9206,6 @@ declare module Common.Data {
     }
     interface IButtonProperties extends IComponentProperties {
         label: string;
-        width: number;
-        height: number;
         type: string;
         disabled: boolean;
         cornerRadius: number;
@@ -9224,20 +9214,14 @@ declare module Common.Data {
     }
     interface IImageProperties extends IComponentProperties {
         media: Object;
-        width: number;
-        height: number;
         cornerRadius: number;
     }
     interface IIconProperties extends IComponentProperties {
         icon: string;
-        width: number;
-        height: number;
         fontSize: number;
     }
     interface IBrowserProperties extends IComponentProperties {
         address: string;
-        width: number;
-        height: number;
     }
 }
 declare module Common.Data {
@@ -9374,8 +9358,6 @@ declare module Common.Drawing {
         active: Boolean;
         protected _focussed: Boolean;
         focussed: Boolean;
-        protected _transformHandles: Array<Common.Drawing.DragHandle>;
-        transformHandles: Array<Common.Drawing.DragHandle>;
         protected _dragHandles: Array<Common.Drawing.DragHandle>;
         dragHandles: Array<Common.Drawing.DragHandle>;
         update(canvas?: any): void;
@@ -9741,32 +9723,6 @@ declare module Common.Drawing.Library {
         tags: string[];
         propertiesController: string;
         propertiesTemplateUrl: string;
-        properties: ({
-            label: string;
-            controls: {
-                model: string;
-                type: StringConstructor;
-                description: string;
-            }[];
-        } | {
-            label: string;
-            controls: ({
-                model: string;
-                type: NumberConstructor;
-                unit: string;
-                description: string;
-            } | {
-                model: string;
-                type: NumberConstructor;
-                ui: string;
-                options: {
-                    label: string;
-                    value: number;
-                }[];
-                placeholder: string;
-                description: string;
-            })[];
-        })[];
         model: Common.Data.Component;
         textItem: paper.PointText;
         /**

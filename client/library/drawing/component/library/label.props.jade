@@ -1,30 +1,65 @@
-div.form-group
-  label.form-label.h6 Text
+div.tray-area.form
+  h6.tray-heading.h6.uppercase.medium.airy Label
   
-  div.form-controls
-    div.form-control-row
-      input.form-control.full(property-name="text", property-bindings, ng-model="PropsCtrl.properties.text", ng-model-options="{ updateOn: 'blur' }")
-
-div.form-group
-  label.form-label.h6(for="") Font
-  
-  div.form-controls
-    div.form-control-row
-      input.form-control.full(property-name="fontSize", property-bindings, ng-model="PropsCtrl.properties.fontSize", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
-      input.form-control.full(property-name="lineHeight", property-bindings, ng-model="PropsCtrl.properties.lineHeight", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
-                
-div.form-group
-  label.form-label.h6(for="") Position
-  
-  div.form-controls
-    div.form-control-row
-      input.form-control.full(property-name="x", property-bindings, ng-model="PropsCtrl.properties.x", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
-      input.form-control.full(property-name="y", property-bindings, ng-model="PropsCtrl.properties.y", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
-                        
-div.form-group
-  label.form-label.h6 Size
+  div.tray-group
+    label.tray-label.h6 Text
     
-  div.form-controls
-    div.form-control-row
-      input.form-control(property-name="width", property-bindings, ng-model="PropsCtrl.properties.width", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
-      input.form-control(property-name="height", property-bindings, ng-model="PropsCtrl.properties.height", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+    div.tray-controls
+      div.tray-control-row
+        input.tray-control.tray-control-styling(property-name="text", property-bindings, ng-model="PropsCtrl.properties.text", ng-model-options="{ updateOn: 'blur' }")
+
+div.tray-area.form.tray-divider-top
+  h6.tray-heading.h6.uppercase.medium.airy Dimensions
+                    
+  div.tray-group
+    div.tray-controls
+      div.tray-control-row
+        div.tray-control-icon.glyph t
+        input.tray-control.tray-control-styling(property-name="x", property-bindings, ng-model="PropsCtrl.properties.x", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+          
+        div.tray-control-icon.glyph l
+        input.tray-control.tray-control-styling(property-name="y", property-bindings, ng-model="PropsCtrl.properties.y", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+                          
+  div.tray-group
+    div.tray-controls
+      div.tray-control-row
+        div.tray-control-icon.glyph w
+        input.tray-control.tray-control-styling(property-name="width", property-bindings, ng-model="PropsCtrl.properties.width", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+          
+        div.tray-control-icon.glyph h
+        input.tray-control.tray-control-styling(property-name="height", property-bindings, ng-model="PropsCtrl.properties.height", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+
+div.tray-area.form.tray-divider-top
+  h6.tray-heading.h6.uppercase.medium.airy Type
+  
+  div.tray-group
+    div.tray-controls
+      div.tray-control-row
+        div#properties-type-font-family.ui-dropdown.tray-control(uib-dropdown, dropdown-append-to-body)
+          div.ui-dropdown-toggle.tray-control-styling(uib-dropdown-toggle)
+            | {{ PropsCtrl.fontFamilyOptions[PropsCtrl.properties.fontFamily] }}
+            span.chevron
+              
+          ul.uib-dropdown-menu
+            li(ng-repeat="(value, label) in PropsCtrl.fontFamilyOptions")
+              a(ng-click="PropsCtrl.onFontFamilySelect(value)") {{ label }}
+              
+        div#properties-type-font-weight.ui-dropdown.tray-control(uib-dropdown, dropdown-append-to-body)
+          div.ui-dropdown-toggle.tray-control-styling(uib-dropdown-toggle)
+            | {{ PropsCtrl.fontWeightOptions[PropsCtrl.properties.fontWeight] }}
+            span.chevron
+              
+          ul.uib-dropdown-menu
+            li(ng-repeat="(value, label) in PropsCtrl.fontWeightOptions")
+              a(ng-click="PropsCtrl.onFontWeightSelect(value)") {{ label }}
+  
+  div.tray-group
+    div.tray-controls
+      div.tray-control-row
+        input#properties-type-font-size.tray-control.tray-control-styling(property-name="fontSize", property-bindings, ng-model="PropsCtrl.properties.fontSize", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+        input#properties-type-line-height.tray-control.tray-control-styling(property-name="lineHeight", property-bindings, ng-model="PropsCtrl.properties.lineHeight", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+          
+  div.tray-group
+    div.tray-controls
+      div.tray-control-row
+        input#properties-type-letter-spacing.tray-control.tray-control-styling.auto(property-name="letterSpacing", property-bindings, ng-model="PropsCtrl.properties.letterSpacing", ng-model-options="{ updateOn: 'blur' }", property-type="Float")

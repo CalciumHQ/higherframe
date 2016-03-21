@@ -192,7 +192,7 @@
 			div#properties-pane-display(ng-show="PropertiesCtrl.selection.length == 1")
 
 		#frame-canvas-wrapper
-			#toolbox(ng-controller="ToolboxCtrl as ToolboxCtrl")
+			#toolbox.tray-divider-top(ng-controller="ToolboxCtrl as ToolboxCtrl")
 				div.toolbox-item(ng-repeat="item in ToolboxCtrl.items", ng-class="{ active: item.active }", ng-click="ToolboxCtrl.onItemClick(item)", title="{{ item.title }}")
 					svg-replace(ng-src="{{ item.icon }}")
 				

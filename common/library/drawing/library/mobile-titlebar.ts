@@ -123,6 +123,7 @@ module Common.Drawing.Library {
         point: new paper.Point(bounds.center.x, bounds.center.y + 4),
         content: properties.title,
         fillColor: foreColor,
+        fontFamily: 'Helvetica',
         fontSize: 14,
         fontWeight: 600,
         justification: 'center'

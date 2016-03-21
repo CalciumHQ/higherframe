@@ -17,41 +17,6 @@ module Common.Drawing.Library {
     ];
     propertiesController: string = 'LabelPropertiesController as PropsCtrl';
     propertiesTemplateUrl: string = '/library/drawing/component/library/label.props.html';
-    properties = [
-      {
-        label: 'Text',
-        controls: [
-          {
-            model: 'text',
-            type: String,
-            description: 'Set the text in the label.'
-          }
-        ]
-      },
-      {
-        label: 'Font',
-        controls: [
-          {
-            model: 'fontSize',
-            type: Number,
-            unit: 'px',
-            description: 'Set the font size of the input.'
-          },
-          {
-            model: 'fontWeight',
-            type: Number,
-            ui: 'select',
-            options: [
-              { label: 'Light', value: 300 },
-              { label: 'Regular', value: 400 },
-              { label: 'Bold', value: 700 }
-            ],
-            placeholder: 'Font weight',
-            description: 'Set the font weight of the input.'
-          }
-        ]
-      }
-    ];
 
     model: Common.Data.Component;
     textItem: paper.PointText;
@@ -67,8 +32,9 @@ module Common.Drawing.Library {
 
       var properties = this.getProperties();
       properties.text = properties.text || 'Label';
-      properties.fontSize = properties.fontSize || 14;
+      properties.fontFamily = properties.fontFamily || 'Helvetica Neue';
       properties.fontWeight = properties.fontWeight || 400;
+      properties.fontSize = properties.fontSize || 14;
       properties.lineHeight = properties.lineHeight || 20;
       properties.justification = properties.justification || 'left';
       properties.area = (properties.area == null) ? true : properties.area;
@@ -132,7 +98,7 @@ module Common.Drawing.Library {
           fillColor: foreColor,
           fontSize: properties.fontSize,
           fontWeight: properties.fontWeight,
-          fontFamily: 'Helvetica',
+          fontFamily: properties.fontFamily,
           leading: properties.lineHeight
         });
         this.addChild(text);

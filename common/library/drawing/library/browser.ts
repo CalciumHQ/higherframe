@@ -229,7 +229,7 @@ module Common.Drawing.Library {
         content: properties.address,
         fillColor: foreColor,
         fontSize: 14,
-        fontFamily: 'Myriad Pro'
+        fontFamily: 'Helvetica Neue'
       });
       this.addChild(url);
     }
