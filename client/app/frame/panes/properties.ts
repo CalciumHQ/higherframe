@@ -34,6 +34,11 @@ module Higherframe.Controllers.Frame {
 
       });
 
+      $scope.$on('properties:property:update', (event) => {
+
+        this.updateComponent();
+      });
+
       $scope.$on('properties:property:commit', (event, data) => {
 
         this.commitControl(data.name, data.value);
@@ -68,6 +73,11 @@ module Higherframe.Controllers.Frame {
 
         this.$scope.$broadcast('rzSliderForceRender');
       });
+    }
+
+    public updateComponent() {
+
+      this.selection[0].update();
     }
 
     public commitControl(name, value) {

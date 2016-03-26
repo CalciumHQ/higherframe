@@ -37,6 +37,7 @@ module Common.Drawing.Library {
       var properties = this.getProperties();
       properties.width = properties.width || 1024;
       properties.height = properties.height || 768;
+      properties.opacity = properties.opacity || 100;
 
       // Perform the initial draw
       this.update();
@@ -94,6 +95,12 @@ module Common.Drawing.Library {
         foreColor = theme.ComponentHover;
       }
 
+      // Apply opacity
+      if (this.focussed || (!this.active && !this.hovered)) {
+
+        foreColor.alpha = properties.opacity / 100;
+      }
+
       // Remove the old parts
       this.removeChildren();
 
@@ -105,7 +112,10 @@ module Common.Drawing.Library {
       var tabBarTopLeft = topLeft;
       var tabBarBottomRight = new paper.Point(bottomRight.x, topLeft.y + Browser.TAB_BAR_HEIGHT);
       var tabBar = paper.Path.Rectangle(new paper.Rectangle(tabBarTopLeft, tabBarBottomRight));
-      tabBar.fillColor = '#f4f4f4';
+
+      let tabBarFill = new paper.Color('#f4f4f4');
+      tabBarFill.alpha = properties.opacity / 100;
+      tabBar.fillColor = tabBarFill;
       this.addChild(tabBar);
 
       var by = (tabBarTopLeft.y + tabBarBottomRight.y) / 2;

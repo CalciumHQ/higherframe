@@ -46,5 +46,5 @@ div.tray-area.form.tray-divider-top.tray-divider-bottom
     div.tray-controls
       div.tray-control-row
         div.tray-control-icon.glyph 1
-        rzslider#properties-appearance-opacity-slider.tray-control(rz-slider-model="PropsCtrl.properties.opacity", rz-slider-options="{ floor: 0, ceil: 100 }")
+        rzslider#properties-appearance-opacity-slider.tray-control(rz-slider-model="PropsCtrl.properties.opacity", rz-slider-options="{ floor: 0, ceil: 100, onChange: PropsCtrl.onSliderChange, onEnd: PropsCtrl.onSliderEnd }")
         input#properties-appearance-opacity-input.tray-control.tray-control-styling.auto(property-name="opacity", property-bindings, ng-model="PropsCtrl.properties.opacity", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="%")

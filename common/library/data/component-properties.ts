@@ -6,7 +6,8 @@ module Common.Data {
     y: number,
     width?: number,
     height?: number,
-    index: number
+    index: number,
+    opacity: number
   }
 
   export interface ILabelProperties extends IComponentProperties {

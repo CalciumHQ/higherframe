@@ -9157,6 +9157,7 @@ declare module Common.Data {
         width?: number;
         height?: number;
         index: number;
+        opacity: number;
     }
     interface ILabelProperties extends IComponentProperties {
         text: string;
