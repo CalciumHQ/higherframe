@@ -7,6 +7,11 @@ div.tray-area.form
     div.tray-controls
       div.tray-control-row
         input.tray-control.tray-control-styling(property-name="text", property-bindings, ng-model="PropsCtrl.properties.text", ng-model-options="{ updateOn: 'blur' }")
+          
+      div.tray-control-row
+        label
+          input.tray-control(type="checkbox", ng-model="PropsCtrl.properties.area")
+          | Text box
 
 div.tray-area.form.tray-divider-top
   h6.tray-heading.h6.uppercase.medium.airy Dimensions

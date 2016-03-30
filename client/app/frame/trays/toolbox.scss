@@ -1,11 +1,13 @@
 
-#toolbox {
+.tray-bar {
   @include display-flex;
   @include flex-direction(column);
+  @include flex-shrink(0);
+  width: 42px;
   height: 100%;
   background: $grey-3;
 
-  .toolbox-item {
+  .tray-bar-item {
     padding: 9px;
     @include transition(all 100ms);
 

@@ -130,7 +130,8 @@ module Higherframe.Wireframe {
         y: center.y,
         width: width,
         height: height,
-        index: paper.project.activeLayer.children.length
+        index: paper.project.activeLayer.children.length,
+        opacity: 100
       };
     }
   }

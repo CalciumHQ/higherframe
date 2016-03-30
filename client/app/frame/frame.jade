@@ -67,32 +67,29 @@
 							
 					input.header-toolbar-input(ng-model="ToolbarCtrl.quickAdd.value", uib-typeahead="component.title for component in ToolbarCtrl.components | filter:{ title: $viewValue }", typeahead-on-select="ToolbarCtrl.onQuickAddSelect($item)", typeahead-append-to-body="true", focus-on="ToolbarCtrl.quickAdd.focus", placeholder="Quick add...")
 						
-				button.header-toolbar-button.header-toolbar-item(ng-click="ToolbarCtrl.onAlignLeftClick()", uib-tooltip="Align items left", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+				button.header-toolbar-button.header-toolbar-item(ng-click="ToolbarCtrl.onAlignLeftClick()", uib-tooltip="Align items left", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", ng-disabled="FrameCtrl.selection.length < 2")
 					span.header-toolbar-icon.glyph 1
 					
-				button.header-toolbar-button.header-toolbar-item(ng-click="ToolbarCtrl.onAlignCenterClick()", uib-tooltip="Align items center", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+				button.header-toolbar-button.header-toolbar-item(ng-click="ToolbarCtrl.onAlignCenterClick()", uib-tooltip="Align items center", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", ng-disabled="FrameCtrl.selection.length < 2")
 					span.header-toolbar-icon.glyph 2
 					
-				button.header-toolbar-button.header-toolbar-item(ng-click="ToolbarCtrl.onAlignRightClick()", uib-tooltip="Align items right", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+				button.header-toolbar-button.header-toolbar-item(ng-click="ToolbarCtrl.onAlignRightClick()", uib-tooltip="Align items right", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", ng-disabled="FrameCtrl.selection.length < 2")
 					span.header-toolbar-icon.glyph 3
 					
-				button.header-toolbar-button.header-toolbar-item(ng-click="ToolbarCtrl.onAlignTopClick()", uib-tooltip="Align items top", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+				button.header-toolbar-button.header-toolbar-item(ng-click="ToolbarCtrl.onAlignTopClick()", uib-tooltip="Align items top", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", ng-disabled="FrameCtrl.selection.length < 2")
 					span.header-toolbar-icon.glyph 4
 					
-				button.header-toolbar-button.header-toolbar-item(ng-click="ToolbarCtrl.onAlignMiddleClick()", uib-tooltip="Align items middle", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+				button.header-toolbar-button.header-toolbar-item(ng-click="ToolbarCtrl.onAlignMiddleClick()", uib-tooltip="Align items middle", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", ng-disabled="FrameCtrl.selection.length < 2")
 					span.header-toolbar-icon.glyph 5
 					
-				button.header-toolbar-button.header-toolbar-item(ng-click="ToolbarCtrl.onAlignBottomClick()", uib-tooltip="Align items bottom", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+				button.header-toolbar-button.header-toolbar-item(ng-click="ToolbarCtrl.onAlignBottomClick()", uib-tooltip="Align items bottom", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", ng-disabled="FrameCtrl.selection.length < 2")
 					span.header-toolbar-icon.glyph 6
 					
-				button.header-toolbar-button.header-toolbar-item(ng-click="ToolbarCtrl.onDistributeHorizontallyClick()", uib-tooltip="Distribute horizontally", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+				button.header-toolbar-button.header-toolbar-item(ng-click="ToolbarCtrl.onDistributeHorizontallyClick()", uib-tooltip="Distribute horizontally", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", ng-disabled="FrameCtrl.selection.length < 2")
 					span.header-toolbar-icon.glyph 7
 					
-				button.header-toolbar-button.header-toolbar-item(ng-click="ToolbarCtrl.onDistributeVerticallyClick()", uib-tooltip="Distribute vertically", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+				button.header-toolbar-button.header-toolbar-item(ng-click="ToolbarCtrl.onDistributeVerticallyClick()", uib-tooltip="Distribute vertically", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", ng-disabled="FrameCtrl.selection.length < 2")
 					span.header-toolbar-icon.glyph 8
-				
-			button#activity-toggle.header-toolbar-button.header-toolbar-item.header-toolbar-toggle.header-toolbar-right(ng-model="FrameCtrl.activityOpen", uib-btn-checkbox)
-				span.header-toolbar-icon.font-awesome &#xf0c0;
 					
 	div#frame
 		div#frame-titlebar
@@ -183,26 +180,32 @@
 				div.collaborator(ng-repeat="user in FrameCtrl.collaborators", uib-tooltip="{{ user.name }}", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
 					ui-placeholder.avatar(type="user", src="user.image", alt="{{ user.name }}")
 					div.indicator(ng-style="{ 'background': user.color }")
-						
-			button#activity-toggle.btn.btn-sm.btn-default.toolbar-item(ng-model="FrameCtrl.activityOpen", uib-btn-checkbox)
-				span.font-awesome &#xf0c0;
-				
-		// Properties
-		#properties-pane.tray.tray-divider-top(ng-controller="PropertiesCtrl as PropertiesCtrl", ng-show="PropertiesCtrl.open")
-			div#properties-pane-display(ng-show="PropertiesCtrl.selection.length == 1")
 
-		#frame-canvas-wrapper
-			#toolbox.tray-divider-top(ng-controller="ToolboxCtrl as ToolboxCtrl")
-				div.toolbox-item(ng-repeat="item in ToolboxCtrl.items", ng-class="{ active: item.active }", ng-click="ToolboxCtrl.onItemClick(item)", title="{{ item.title }}")
+		#frame-canvas-area
+			#toolbox.tray-bar.tray-divider-top(ng-controller="ToolboxCtrl as ToolboxCtrl")
+				div.tray-bar-item(ng-repeat="item in ToolboxCtrl.items", ng-class="{ active: item.active }", ng-click="ToolboxCtrl.onItemClick(item)", title="{{ item.title }}")
 					svg-replace(ng-src="{{ item.icon }}")
 				
-			canvas#canvas(wireframe, data="FrameCtrl.wireframe", resize, keepalive="true", oncontextmenu="return false", jqyoui-droppable)
+			div#frame-canvas-wrapper
+				canvas#canvas(wireframe, data="FrameCtrl.wireframe", resize, keepalive="true", oncontextmenu="return false", jqyoui-droppable)
 					
-			// Media library
-			img(ng-repeat="media in FrameCtrl.media", ng-src="{{ media.large }}", id="{{ media._id }}", style="display:none")
+				// Media library
+				img(ng-repeat="media in FrameCtrl.media", ng-src="{{ media.large }}", id="{{ media._id }}", style="display:none")
+				
+			#tray-selector.tray-bar.tray-divider-top
+				div.tray-bar-item(ng-class="{ active: FrameCtrl.sidebarOpen && FrameCtrl.sidebarMode == 'activity' }", ng-click="FrameCtrl.onSidebarModeClick('activity')")
+					svg-replace(ng-src="/assets/images/icon-activity.svg")
+						
+				div.tray-bar-item(ng-class="{ active: FrameCtrl.sidebarOpen && FrameCtrl.sidebarMode == 'properties' }", ng-click="FrameCtrl.onSidebarModeClick('properties')")
+					svg-replace(ng-src="/assets/images/icon-properties.svg")
 
-			#frame-sidebar(ng-class="{ 'frame-sidebar-collapse': !FrameCtrl.activityOpen }")
-				#activity-pane.frame-sidebar-pane(ng-controller="ActivityCtrl as ActivityCtrl")
+			#frame-sidebar.tray.tray-divider-top(ng-class="{ 'frame-sidebar-collapse': !FrameCtrl.sidebarOpen }")
+				// Properties
+				#properties-pane(ng-controller="PropertiesCtrl as PropertiesCtrl", ng-show="FrameCtrl.sidebarMode == 'properties'")
+					div#properties-pane-display(ng-show="PropertiesCtrl.selection.length == 1")
+						
+				// Activity
+				#activity-pane(ng-controller="ActivityCtrl as ActivityCtrl", ng-show="FrameCtrl.sidebarMode == 'activity'")
 					#activity-list.frame-sidebar-content(scroll-lock)
 						div.frame-sidebar-panel
 							div.activity-block(ng-repeat="activity in FrameCtrl.activities", ng-class="{ 'is-first': (activity | activityShowHeader:FrameCtrl.activities[$index-1]), 'is-sequence': (activity | activityCollapseItem:FrameCtrl.activities[$index-1]) }")

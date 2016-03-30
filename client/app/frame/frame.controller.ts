@@ -5,7 +5,8 @@ class FrameCtrl {
 	 * Constants
 	 */
 
-	private STORAGE_ACTIVITY_OPEN_KEY: string = 'frame.activity.open';
+	private SIDEBAR_OPEN_KEY: string = 'frame.sidebar.open';
+	private SIDEBAR_MODE_KEY: string = 'frame.sidebar.mode';
   private STORAGE_EDIT_MODE_KEY: string = 'frame.edit.mode';
   public ZOOM_LEVELS: Array<number> = [0.15, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 5.0];
 
@@ -30,9 +31,11 @@ class FrameCtrl {
   collaborators: Array<Object> = [];
 
   // UI variables
-	activityOpen: boolean = (typeof this.localStorageService.get(this.STORAGE_ACTIVITY_OPEN_KEY) !== 'undefined'
-		? this.localStorageService.get(this.STORAGE_ACTIVITY_OPEN_KEY)
-		: true);
+	sidebarOpen: boolean = (typeof this.localStorageService.get(this.SIDEBAR_OPEN_KEY) !== 'undefined'
+		? this.localStorageService.get(this.SIDEBAR_MODE_KEY)
+		: false);
+
+	sidebarMode: string = this.localStorageService.get(this.SIDEBAR_MODE_KEY) || 'properties';
 
   quickAdd = {
     open: false,
@@ -93,7 +96,7 @@ class FrameCtrl {
       $scope.$broadcast('controller:view:zoom', zoom);
     });
 
-		$scope.$watch(() => { return this.activityOpen; }, (open) => this.setActivityOpen.call(this, open));
+		$scope.$watch(() => { return this.sidebarMode; }, (mode) => this.setSidebarMode.call(this, mode));
 
     $scope.$watchCollection(() => { return this.collaborators }, (c) => {
 
@@ -202,7 +205,8 @@ class FrameCtrl {
       var properties = {
         x: paper.view.bounds.x + (params.x / paper.view.zoom) || paper.view.bounds.x + (paper.view.bounds.width/2),
         y: paper.view.bounds.y + (params.y / paper.view.zoom) || paper.view.bounds.y + (paper.view.bounds.height/2),
-        index: paper.project.activeLayer.children.length
+        index: paper.project.activeLayer.children.length,
+				opacity: 100
       };
 
       // Create the new model
@@ -789,10 +793,10 @@ class FrameCtrl {
 		this.$scope.$broadcast('controller:properties:open', { open: open, point: point });
 	}
 
-	private setActivityOpen(open: boolean) {
+	private setSidebarMode(mode: string) {
 
-		this.activityOpen = open;
-		this.localStorageService.set(this.STORAGE_ACTIVITY_OPEN_KEY, this.activityOpen);
+		this.sidebarMode = mode;
+		this.localStorageService.set(this.SIDEBAR_MODE_KEY, this.sidebarMode);
 	}
 
 	private addArtboardsToView(artboards, options?): Array<Higherframe.Drawing.Artboard> {
@@ -1221,6 +1225,25 @@ class FrameCtrl {
 		this.paste();
 	}
 
+	// Sidebar
+	onSidebarModeClick(mode: string) {
+
+		if (this.sidebarOpen && this.sidebarMode == mode) {
+
+			this.sidebarOpen = false;
+		}
+
+		else if (!this.sidebarOpen) {
+
+			this.sidebarOpen = true;
+		}
+
+		this.sidebarMode = mode;
+
+		this.localStorageService.set(this.SIDEBAR_OPEN_KEY, this.sidebarOpen);
+		this.localStorageService.set(this.SIDEBAR_MODE_KEY, this.sidebarMode);
+	}
+
   // Action bar
   onActionbarCloseClick() {
 
@@ -1261,7 +1284,8 @@ class FrameCtrl {
     var properties = {
       x: paper.view.bounds.x + (paper.view.bounds.width/2),
       y: paper.view.bounds.y + (paper.view.bounds.height/2),
-      index: paper.project.activeLayer.children.length
+      index: paper.project.activeLayer.children.length,
+			opacity: 100
     };
 
     // Create the new model

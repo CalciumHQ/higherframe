@@ -2,11 +2,6 @@
 $tray-control-height: 22px;
 
 #properties-pane {
-  right: 0;
-  top: 0;
-  width: 240px;
-  height: 100%;
-
   .tray-group {
     @include display-flex;
     margin-bottom: 0;
