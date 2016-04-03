@@ -5,10 +5,10 @@ div.tray-area.form
     div.tray-controls
       div.tray-control-row
         div.tray-control-icon.glyph t
-        input.tray-control.tray-control-styling.full(property-name="x", property-bindings, ng-model="PropsCtrl.properties.x", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+        input.tray-control.tray-control-styling.full(property-name="x", property-input-bindings, ng-model="PropsCtrl.properties.x", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
           
         div.tray-control-icon.glyph l
-        input.tray-control.tray-control-styling.full(property-name="y", property-bindings, ng-model="PropsCtrl.properties.y", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+        input.tray-control.tray-control-styling.full(property-name="y", property-input-bindings, ng-model="PropsCtrl.properties.y", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
       
   div.tray-group
     div.tray-controls
@@ -24,10 +24,10 @@ div.tray-area.form
         
       div.tray-control-row
         div.tray-control-icon.glyph w
-        input.tray-control.tray-control-styling(property-name="width", property-bindings, ng-model="PropsCtrl.properties.width", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+        input.tray-control.tray-control-styling(property-name="width", property-input-bindings, ng-model="PropsCtrl.properties.width", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
           
         div.tray-control-icon.glyph h
-        input.tray-control.tray-control-styling(property-name="height", property-bindings, ng-model="PropsCtrl.properties.height", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+        input.tray-control.tray-control-styling(property-name="height", property-input-bindings, ng-model="PropsCtrl.properties.height", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
 
 div.tray-area.form.tray-divider-top
   h6.tray-heading.h6.uppercase.medium.airy Browser
@@ -37,7 +37,7 @@ div.tray-area.form.tray-divider-top
     
     div.tray-controls
       div.tray-control-row
-        input.tray-control.tray-control-styling.full(property-name="address", property-bindings, ng-model="PropsCtrl.properties.address", ng-model-options="{ updateOn: 'blur' }")
+        input.tray-control.tray-control-styling.full(property-name="address", property-input-bindings, ng-model="PropsCtrl.properties.address", ng-model-options="{ updateOn: 'blur' }")
 
 div.tray-area.form.tray-divider-top.tray-divider-bottom
   h6.tray-heading.h6.uppercase.medium.airy Appearance
@@ -46,5 +46,5 @@ div.tray-area.form.tray-divider-top.tray-divider-bottom
     div.tray-controls
       div.tray-control-row
         div.tray-control-icon.glyph 1
-        rzslider#properties-appearance-opacity-slider.tray-control(rz-slider-model="PropsCtrl.properties.opacity", rz-slider-options="{ floor: 0, ceil: 100, onChange: PropsCtrl.onSliderChange, onEnd: PropsCtrl.onSliderEnd }")
-        input#properties-appearance-opacity-input.tray-control.tray-control-styling.auto(property-name="opacity", property-bindings, ng-model="PropsCtrl.properties.opacity", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="%")
+        ui-slider#properties-appearance-opacity-slider.tray-control(property-name="opacity", property-slider-bindings, ng-model="PropsCtrl.properties.opacity", slider-config="{ floor: 0, ceil: 100 }")
+        input#properties-appearance-opacity-input.tray-control.tray-control-styling.auto(property-name="opacity", property-input-bindings, ng-model="PropsCtrl.properties.opacity", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="%")

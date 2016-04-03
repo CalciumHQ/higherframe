@@ -3,13 +3,13 @@ div.form-group
   
   div.form-controls
     div.form-control-row
-      input.form-control.full(property-name="label", property-bindings, ng-model="PropsCtrl.properties.label", ng-model-options="{ updateOn: 'blur' }")
+      input.form-control.full(property-name="label", property-input-bindings, ng-model="PropsCtrl.properties.label", ng-model-options="{ updateOn: 'blur' }")
     
 div.form-group
   label.form-label.h6(for="") Value
   
   div.form-controls
-    input#checkbox-value(type="checkbox", property-name="value", property-bindings, ng-model="PropsCtrl.properties.value")
+    input#checkbox-value(type="checkbox", property-name="value", property-input-bindings, ng-model="PropsCtrl.properties.value")
     label.h6(for="checkbox-value") Checked
 
 div.form-group
@@ -17,5 +17,5 @@ div.form-group
   
   div.form-controls
     div.form-control-row
-      input.form-control.full(property-name="x", property-bindings, ng-model="PropsCtrl.properties.x", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
-      input.form-control.full(property-name="y", property-bindings, ng-model="PropsCtrl.properties.y", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+      input.form-control.full(property-name="x", property-input-bindings, ng-model="PropsCtrl.properties.x", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+      input.form-control.full(property-name="y", property-input-bindings, ng-model="PropsCtrl.properties.y", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")

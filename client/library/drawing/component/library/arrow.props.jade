@@ -3,7 +3,7 @@ div.form-group
   
   div.form-controls
     div.form-control-row
-      input(type="hidden", property-name="type", property-bindings, ng-model="PropsCtrl.properties.type")
+      input(type="hidden", property-name="type", property-input-bindings, ng-model="PropsCtrl.properties.type")
       div.ui-dropdown(uib-dropdown, dropdown-append-to-body)
         div.form-control.ui-dropdown-toggle(uib-dropdown-toggle)
           | {{ PropsCtrl.typeOptions[PropsCtrl.properties.type] }}
@@ -18,7 +18,7 @@ div.form-group
   
   div.form-controls
     div.form-control-row
-      input(type="hidden", property-name="direction", property-bindings, ng-model="PropsCtrl.properties.direction")
+      input(type="hidden", property-name="direction", property-input-bindings, ng-model="PropsCtrl.properties.direction")
       div.ui-dropdown(uib-dropdown, dropdown-append-to-body)
         div.form-control.ui-dropdown-toggle(uib-dropdown-toggle)
           | {{ PropsCtrl.directionOptions[PropsCtrl.properties.direction] }}
@@ -33,5 +33,5 @@ div.form-group
   
   div.form-controls
     div.form-control-row
-      input.form-control.full(property-name="x", property-bindings, ng-model="PropsCtrl.properties.x", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
-      input.form-control.full(property-name="y", property-bindings, ng-model="PropsCtrl.properties.y", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+      input.form-control.full(property-name="x", property-input-bindings, ng-model="PropsCtrl.properties.x", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+      input.form-control.full(property-name="y", property-input-bindings, ng-model="PropsCtrl.properties.y", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")

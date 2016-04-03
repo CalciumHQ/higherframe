@@ -36,9 +36,6 @@ module Higherframe.Drawing.Component.Library {
 
       this.$scope.$watch(() => this.properties.width, () => this.sizeChanged());
       this.$scope.$watch(() => this.properties.height, () => this.sizeChanged());
-
-      this.onSliderChange = this.sliderChangeHandler.bind(this);
-      this.onSliderEnd = this.sliderEndHandler.bind(this);
     }
 
     private sizeChanged() {
@@ -80,21 +77,6 @@ module Higherframe.Drawing.Component.Library {
           value: this.properties.height
         });
       }
-    }
-
-    private sliderChangeHandler(id, value) {
-
-      this.$rootScope.$broadcast('properties:property:update');
-    }
-
-    private sliderEndHandler(id, value) {
-
-      this.properties.opacity = value;
-
-      this.$rootScope.$broadcast('properties:property:commit', {
-        name: 'opacity',
-        value: this.properties.opacity
-      });
     }
   }
 }

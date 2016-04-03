@@ -1,6 +1,6 @@
 
 module Higherframe.UI {
-  export class PropertyBindings implements ng.IDirective {
+  export class PropertyInputBindings implements ng.IDirective {
 
     // Directive configuration
     link: (scope: ng.IScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes, ngModel: ng.INgModelController) => void;
@@ -11,7 +11,7 @@ module Higherframe.UI {
 
     constructor(private $timeout: ng.ITimeoutService, private $rootScope: ng.IRootScopeService) {
 
-      PropertyBindings.prototype.link = (scope: ng.IScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes, ngModel: ng.INgModelController) => {
+      PropertyInputBindings.prototype.link = (scope: ng.IScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes, ngModel: ng.INgModelController) => {
 
         var name = (<any>attrs).propertyName;
 
@@ -68,8 +68,59 @@ module Higherframe.UI {
 
     static factory(): ng.IDirectiveFactory {
 
-      const directive = ($timeout: ng.ITimeoutService, $rootScope: ng.IRootScopeService) => new PropertyBindings($timeout, $rootScope);
+      const directive = ($timeout: ng.ITimeoutService, $rootScope: ng.IRootScopeService) => new PropertyInputBindings($timeout, $rootScope);
       directive.$inject = ['$timeout', '$rootScope'];
+      return directive;
+    }
+  }
+
+  export class PropertySliderBindings implements ng.IDirective {
+
+    // Directive configuration
+    link: (scope: ng.IScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes, ngModel: ng.INgModelController) => void;
+    restrict = 'A';
+    require = 'ngModel';
+
+    constructor(private $timeout: ng.ITimeoutService, private $rootScope: ng.IRootScopeService, private $parse: ng.IParseService) {
+
+      PropertySliderBindings.prototype.link = (scope: ng.IScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes, ngModel: ng.INgModelController) => {
+
+        var name = (<any>attrs).propertyName;
+
+        element.on('dragchange', (event, value) => scope.$apply(() => {
+
+          sliderChangeHandler.bind(this)(value);
+        }));
+
+        element.on('dragend', (event, value) => scope.$apply(() => {
+
+          sliderEndHandler.bind(this)(value);
+        }));
+
+        function commit() {
+
+          $rootScope.$broadcast('properties:property:commit', {
+            name: name,
+            value: ngModel.$modelValue }
+          );
+        }
+
+        function sliderChangeHandler(value) {
+
+          this.$rootScope.$broadcast('properties:property:update');
+        };
+
+        function sliderEndHandler(value) {
+
+          commit();
+        };
+      };
+    }
+
+    static factory(): ng.IDirectiveFactory {
+
+      const directive = ($timeout: ng.ITimeoutService, $rootScope: ng.IRootScopeService, $parse: ng.IParseService) => new PropertySliderBindings($timeout, $rootScope, $parse);
+      directive.$inject = ['$timeout', '$rootScope', '$parse'];
       return directive;
     }
   }
@@ -77,4 +128,5 @@ module Higherframe.UI {
 
 angular
   .module('siteApp')
-  .directive('propertyBindings', Higherframe.UI.PropertyBindings.factory());
+  .directive('propertyInputBindings', Higherframe.UI.PropertyInputBindings.factory())
+  .directive('propertySliderBindings', Higherframe.UI.PropertySliderBindings.factory());

@@ -3,14 +3,14 @@ div.form-group
   
   div.form-controls
     div.form-control-row
-      input.form-control.full(property-name="x", property-bindings, ng-model="PropsCtrl.properties.x", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
-      input.form-control.full(property-name="y", property-bindings, ng-model="PropsCtrl.properties.y", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+      input.form-control.full(property-name="x", property-input-bindings, ng-model="PropsCtrl.properties.x", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+      input.form-control.full(property-name="y", property-input-bindings, ng-model="PropsCtrl.properties.y", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
 
 div.form-group
   label.form-label.h6 Options
   
   div.form-controls
-    input#show-status(type="checkbox", property-bindings, ng-model="PropsCtrl.properties.showBar")
+    input#show-status(type="checkbox", property-input-bindings, ng-model="PropsCtrl.properties.showBar")
     label.h6(for="show-status") Show status bar
     
 div.form-group
@@ -28,5 +28,5 @@ div.form-group
             a(ng-click="PropsCtrl.onSizeSelect(option)") {{ option.label }}
       
     div.form-control-row
-      input.form-control(property-name="width", property-bindings, ng-model="PropsCtrl.properties.width", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
-      input.form-control(property-name="height", property-bindings, ng-model="PropsCtrl.properties.height", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+      input.form-control(property-name="width", property-input-bindings, ng-model="PropsCtrl.properties.width", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+      input.form-control(property-name="height", property-input-bindings, ng-model="PropsCtrl.properties.height", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")

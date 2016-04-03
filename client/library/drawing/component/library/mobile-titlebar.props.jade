@@ -3,26 +3,26 @@ div.form-group
   
   div.form-controls
     div.form-control-row
-      input.form-control.full(property-name="title", property-bindings, ng-model="PropsCtrl.properties.title", ng-model-options="{ updateOn: 'blur' }")
+      input.form-control.full(property-name="title", property-input-bindings, ng-model="PropsCtrl.properties.title", ng-model-options="{ updateOn: 'blur' }")
 
 div.form-group
   label.form-label.h6 Left icon
   
   div.form-controls
     div.form-control-row(ng-if="true")
-      ui-icon.h6(property-name="leftIcon", property-bindings, ng-model="PropsCtrl.properties.leftIcon")
+      ui-icon.h6(property-name="leftIcon", property-input-bindings, ng-model="PropsCtrl.properties.leftIcon")
         
 div.form-group
   label.form-label.h6 Right icon
   
   div.form-controls
     div.form-control-row(ng-if="true")
-      ui-icon.h6(property-name="rightIcon", property-bindings, ng-model="PropsCtrl.properties.rightIcon")
+      ui-icon.h6(property-name="rightIcon", property-input-bindings, ng-model="PropsCtrl.properties.rightIcon")
   
 div.form-group
   label.form-label.h6(for="") Position
   
   div.form-controls
     div.form-control-row
-      input.form-control.full(property-name="x", property-bindings, ng-model="PropsCtrl.properties.x", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
-      input.form-control.full(property-name="y", property-bindings, ng-model="PropsCtrl.properties.y", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+      input.form-control.full(property-name="x", property-input-bindings, ng-model="PropsCtrl.properties.x", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+      input.form-control.full(property-name="y", property-input-bindings, ng-model="PropsCtrl.properties.y", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")

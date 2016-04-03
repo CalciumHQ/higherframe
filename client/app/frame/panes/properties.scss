@@ -110,45 +110,6 @@ $tray-control-height: 22px;
       }
     }
 
-    rzslider {
-      margin-top: $tray-control-height/2 - 1px;
-      margin-bottom: 0;
-
-      .rz-bubble {
-        display: none;
-      }
-
-      .rz-pointer {
-        $original-size: 32px;
-        $new-size: 8px;
-
-        width: $new-size;
-        height: $new-size;
-        border-radius: $new-size/2;
-        background: white;
-        @include transform(translateY(($original-size - $new-size)/2));
-
-        &:after {
-          content: none;
-        }
-
-        &.rz-active {
-          outline: 0;
-          background: $yellow;
-        }
-      }
-
-      .rz-bar {
-        $original-size: 4px;
-        $new-size: 2px;
-
-        height: $new-size;
-        background: #4f514d;
-        border-radius: 0;
-        @include transform(translateY(($original-size - $new-size)/2));
-      }
-    }
-
     input[type="checkbox"] {
       margin-right: 5px;
 

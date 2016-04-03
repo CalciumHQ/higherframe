@@ -1,0 +1,47 @@
+
+$uiSliderHandleSize: 8px;
+$uiSliderHandlePadding: 8px;
+$uiSliderTrackSize: 2px;
+
+.uiSlider {
+	position: relative;
+	display: block;
+	height: $uiSliderHandleSize;
+
+	.uiSliderTrack {
+		position: absolute;
+		left: 0;
+		top: ($uiSliderHandleSize - $uiSliderTrackSize) / 2;
+		width: 100%;
+		height: 2px;
+		background: #4f514d;
+	}
+
+	.uiSliderHandle {
+		position: absolute;
+		left: 0;
+		top: 0;
+		margin: -$uiSliderHandlePadding;
+		padding: $uiSliderHandlePadding;
+		z-index: 1;
+		cursor: pointer;
+		@include transform(translateX(-$uiSliderHandleSize/2));
+
+		&:after {
+			content: '';
+			display: block;
+			width: $uiSliderHandleSize;
+			height: $uiSliderHandleSize;
+			background: white;
+			border-radius: $uiSliderHandleSize/2;
+		}
+
+		&:focus {
+			outline: 0;
+
+			&:after {
+				background: $yellow;
+			}
+		}
+	}
+}
