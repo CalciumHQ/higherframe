@@ -27,10 +27,13 @@ module Common.Drawing.Library {
       super(model);
 
       var properties = this.getProperties();
+      var theme: Common.UI.ITheme = new Common.UI.DefaultTheme();
       properties.width = properties.width || 160;
       properties.height = properties.height || 120;
       properties.cornerRadius = properties.cornerRadius || 0;
       properties.opacity = (properties.opacity == null) ? 100 : properties.opacity;
+      properties.borderColor = (properties.borderColor == null) ? theme.ComponentDefault.toCSS(true) : properties.borderColor;
+      properties.borderWidth = (properties.borderWidth == null) ? 1 : properties.borderWidth;
 
       // Perform the initial draw
       this.update();
@@ -47,16 +50,11 @@ module Common.Drawing.Library {
 
       // Determine palette
       var theme: Common.UI.ITheme = new Common.UI.DefaultTheme();
-      var foreColor = this.collaborator ? new paper.Color(this.collaborator.color) : theme.ComponentDefault;
+      var foreColor = this.collaborator ? new paper.Color(this.collaborator.color) : new paper.Color(properties.borderColor);
 
       if (this.active) {
 
         foreColor = theme.ComponentActive;
-      }
-
-      else if (this.focussed) {
-
-        foreColor = theme.ComponentFocus;
       }
 
       else if (this.hovered) {
@@ -80,8 +78,19 @@ module Common.Drawing.Library {
       // Draw the shape
       var shape = paper.Path.Rectangle(bounds, parseInt('' + properties.cornerRadius));
       shape.strokeColor = foreColor;
-      shape.strokeWidth = 1;
-      shape.fillColor = 'rgba(0,0,0,0)';
+      shape.strokeWidth = properties.borderWidth;
+
+      if (properties.fillColor) {
+
+        var fillColor = new paper.Color(properties.fillColor);
+        fillColor.alpha = properties.opacity / 100;
+        shape.fillColor = fillColor;
+      }
+
+      else {
+
+        shape.fillColor = 'rgba(0,0,0,0)';
+      }
 
       // Group the parts as a component
       this.addChild(shape);

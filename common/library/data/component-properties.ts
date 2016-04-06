@@ -21,10 +21,16 @@ module Common.Data {
   }
 
   export interface IRectangleProperties extends IComponentProperties {
-    cornerRadius: number
+    cornerRadius: number,
+    fillColor: string,
+    borderColor: string,
+    borderWidth: number
   }
 
   export interface IEllipseProperties extends IComponentProperties {
+    fillColor: string,
+    borderColor: string,
+    borderWidth: number
   }
 
   export interface IArrowProperties extends IComponentProperties {

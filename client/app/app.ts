@@ -14,7 +14,7 @@ angular.module('siteApp', [
   'analytics.mixpanel',
   'monospaced.elastic',
   'siteApp.library',
-  'rzModule'
+  'minicolors'
 ])
   .config(function (
     $stateProvider,

@@ -30,6 +30,21 @@ div.tray-area.form.tray-divider-top.tray-divider-bottom
 				input#properties-appearance-opacity-input.tray-control.tray-control-styling.auto(property-name="cornerRadius", property-input-bindings, ng-model="PropsCtrl.properties.cornerRadius", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
 					
 			div.tray-control-row
+				div.tray-control-icon.glyph f
+				div#properties-appearance-fill-color-picker.tray-control.auto.ui-color-picker
+					input(minicolors="{ theme: 'bootstrap', animationSpeed: 0, change: PropsCtrl.onFillColorChange }", type="hidden", ng-model="PropsCtrl.properties.fillColor")
+						
+				input#properties-appearance-fill-color-input.tray-control.tray-control-styling.auto(property-name="fillColor", property-input-bindings, ng-model="PropsCtrl.properties.fillColor", ng-model-options="{ updateOn: 'blur' }")
+				
+			div.tray-control-row
+				div.tray-control-icon.glyph b
+				div#properties-appearance-border-color-picker.tray-control.auto.ui-color-picker
+					input(minicolors="{ theme: 'bootstrap', animationSpeed: 0, change: PropsCtrl.onBorderColorChange }", type="hidden", ng-model="PropsCtrl.properties.borderColor")
+						
+				input#properties-appearance-border-color-input.tray-control.tray-control-styling.auto(property-name="borderColor", property-input-bindings, ng-model="PropsCtrl.properties.borderColor", ng-model-options="{ updateOn: 'blur' }")
+				input#properties-appearance-border-width-input.tray-control.tray-control-styling.auto(property-name="borderWidth", property-input-bindings, ng-model="PropsCtrl.properties.borderWidth", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+					
+			div.tray-control-row
 				div.tray-control-icon.glyph o
 				ui-slider#properties-appearance-opacity-slider.tray-control(property-name="opacity", property-slider-bindings, ng-model="PropsCtrl.properties.opacity", slider-config="{ floor: 0, ceil: 100 }")
 				input#properties-appearance-opacity-input.tray-control.tray-control-styling.auto(property-name="opacity", property-input-bindings, ng-model="PropsCtrl.properties.opacity", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="%")
