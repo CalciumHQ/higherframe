@@ -38,6 +38,7 @@ module Common.Drawing.Library {
       properties.lineHeight = properties.lineHeight || 20;
       properties.justification = properties.justification || 'left';
       properties.area = (properties.area == null) ? true : properties.area;
+      properties.opacity = (properties.opacity == null) ? 100 : properties.opacity;
 
       // Perform the initial draw
       this.update();
@@ -75,6 +76,12 @@ module Common.Drawing.Library {
         foreColor = theme.ComponentHover;
         foreColorDark = theme.ComponentHoverDark;
         foreColorLight = theme.ComponentHoverLight;
+      }
+
+      // Apply opacity
+      if (this.focussed || (!this.active && !this.hovered)) {
+
+        foreColor.alpha = properties.opacity / 100;
       }
 
       // Remove the old parts

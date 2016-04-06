@@ -46,7 +46,7 @@ module Higherframe.UI {
 		initElement(element: ng.IAugmentedJQuery) {
 
 			this.element = element;
-			this.handleElement = element.find('.uiSliderHandle');
+			this.handleElement = element.find('.ui-slider-handle');
 		}
 
 		initModel(ngModel: ng.INgModelController) {

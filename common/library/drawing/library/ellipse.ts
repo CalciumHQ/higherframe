@@ -12,6 +12,8 @@ module Common.Drawing.Library {
       'shape',
       'flowchart'
     ];
+    propertiesController: string = 'EllipsePropertiesController as PropsCtrl';
+    propertiesTemplateUrl: string = '/library/drawing/component/library/ellipse.props.html';
 
     model: Common.Data.Component;
 
@@ -27,6 +29,7 @@ module Common.Drawing.Library {
       var properties = this.getProperties();
       properties.width = properties.width || 160;
       properties.height = properties.height || 120;
+      properties.opacity = (properties.opacity == null) ? 100 : properties.opacity;
 
       // Perform the initial draw
       this.update();
@@ -58,6 +61,12 @@ module Common.Drawing.Library {
       else if (this.hovered) {
 
         foreColor = theme.ComponentHover;
+      }
+
+      // Apply opacity
+      if (this.focussed || (!this.active && !this.hovered)) {
+
+        foreColor.alpha = properties.opacity / 100;
       }
 
       // Remove the old parts

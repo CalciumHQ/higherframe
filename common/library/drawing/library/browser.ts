@@ -37,7 +37,7 @@ module Common.Drawing.Library {
       var properties = this.getProperties();
       properties.width = properties.width || 1024;
       properties.height = properties.height || 768;
-      properties.opacity = properties.opacity || 100;
+      properties.opacity = (properties.opacity == null) ? 100 : properties.opacity;
 
       // Perform the initial draw
       this.update();

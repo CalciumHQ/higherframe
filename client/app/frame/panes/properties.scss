@@ -118,6 +118,10 @@ $tray-control-height: 22px;
       }
     }
 
+    .ui-slider {
+      margin-top: 6px;
+    }
+
     .ui-icon {
       margin: 0;
 
@@ -128,13 +132,11 @@ $tray-control-height: 22px;
     }
   }
 
-  #properties-type-font-family,
-  #properties-type-font-size {
+  #properties-type-font-family {
     @include flex-basis(70px);
   }
 
-  #properties-type-font-weight,
-  #properties-type-line-height {
+  #properties-type-font-weight {
     @include flex-basis(30px);
   }
 
@@ -143,6 +145,8 @@ $tray-control-height: 22px;
     width: 40px;
   }
 
+  #properties-type-font-size,
+  #properties-type-line-height,
   #properties-appearance-opacity-input {
     @include flex-shrink(0);
     width: 36px;

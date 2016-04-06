@@ -3,12 +3,12 @@ $uiSliderHandleSize: 8px;
 $uiSliderHandlePadding: 8px;
 $uiSliderTrackSize: 2px;
 
-.uiSlider {
+.ui-slider {
 	position: relative;
 	display: block;
 	height: $uiSliderHandleSize;
 
-	.uiSliderTrack {
+	.ui-slider-track {
 		position: absolute;
 		left: 0;
 		top: ($uiSliderHandleSize - $uiSliderTrackSize) / 2;
@@ -17,7 +17,7 @@ $uiSliderTrackSize: 2px;
 		background: #4f514d;
 	}
 
-	.uiSliderHandle {
+	.ui-slider-handle {
 		position: absolute;
 		left: 0;
 		top: 0;

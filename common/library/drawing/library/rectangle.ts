@@ -12,35 +12,8 @@ module Common.Drawing.Library {
       'shape',
       'flowchart'
     ];
-    properties = [
-      {
-        label: 'Dimension',
-        controls: [
-          {
-            model: 'width',
-            placeholder: 'Width',
-            type: Number,
-            description: 'The width of the rectangle.'
-          },
-          {
-            model: 'height',
-            placeholder: 'Height',
-            type: Number,
-            description: 'The height of the rectangle.'
-          }
-        ]
-      },
-      {
-        label: 'Radius',
-        controls: [
-          {
-            model: 'cornerRadius',
-            type: Number,
-            description: 'The corner radius describes how rounded the corners should be.'
-          }
-        ]
-      }
-    ];
+    propertiesController: string = 'RectanglePropertiesController as PropsCtrl';
+    propertiesTemplateUrl: string = '/library/drawing/component/library/rectangle.props.html';
 
     model: Common.Data.Component;
 
@@ -57,6 +30,7 @@ module Common.Drawing.Library {
       properties.width = properties.width || 160;
       properties.height = properties.height || 120;
       properties.cornerRadius = properties.cornerRadius || 0;
+      properties.opacity = (properties.opacity == null) ? 100 : properties.opacity;
 
       // Perform the initial draw
       this.update();
@@ -88,6 +62,12 @@ module Common.Drawing.Library {
       else if (this.hovered) {
 
         foreColor = theme.ComponentHover;
+      }
+
+      // Apply opacity
+      if (this.focussed || (!this.active && !this.hovered)) {
+
+        foreColor.alpha = properties.opacity / 100;
       }
 
       // Remove the old parts
