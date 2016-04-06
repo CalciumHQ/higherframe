@@ -31,6 +31,7 @@ module Common.Drawing.Library {
       super(model);
 
       var properties = this.getProperties();
+      var theme: Common.UI.ITheme = new Common.UI.DefaultTheme();
       properties.text = properties.text || 'Label';
       properties.fontFamily = properties.fontFamily || 'Helvetica Neue';
       properties.fontWeight = properties.fontWeight || 400;
@@ -39,6 +40,7 @@ module Common.Drawing.Library {
       properties.justification = properties.justification || 'left';
       properties.area = (properties.area == null) ? true : properties.area;
       properties.opacity = (properties.opacity == null) ? 100 : properties.opacity;
+      properties.fillColor = (properties.fillColor == null) ? theme.ComponentDefault.toCSS(true) : properties.fillColor;
 
       // Perform the initial draw
       this.update();
@@ -55,27 +57,16 @@ module Common.Drawing.Library {
 
       // Determine palette
       var theme: Common.UI.ITheme = new Common.UI.DefaultTheme();
-      var foreColor = this.collaborator ? new paper.Color(this.collaborator.color) : theme.ComponentDefault;
-      var foreColorDark = this.collaborator ? new paper.Color(this.collaborator.color) : theme.ComponentDefaultDark;
-      var foreColorLight = this.collaborator ? new paper.Color(this.collaborator.color) : theme.ComponentDefaultLight;
+      var foreColor = this.collaborator ? new paper.Color(this.collaborator.color) : new paper.Color(properties.fillColor);
 
       if (this.active) {
 
         foreColor = theme.ComponentActive;
       }
 
-      else if (this.focussed) {
-
-        foreColor = theme.ComponentFocus;
-        foreColorDark = theme.ComponentFocusDark;
-        foreColorLight = theme.ComponentFocusLight;
-      }
-
       else if (this.hovered) {
 
         foreColor = theme.ComponentHover;
-        foreColorDark = theme.ComponentHoverDark;
-        foreColorLight = theme.ComponentHoverLight;
       }
 
       // Apply opacity

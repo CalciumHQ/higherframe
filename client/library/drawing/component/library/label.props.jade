@@ -1,84 +1,91 @@
 div.tray-area.form
-  h6.tray-heading.h6.uppercase.medium.airy Label
-  
-  div.tray-group
-    label.tray-label.h6 Text
-    
-    div.tray-controls
-      div.tray-control-row
-        input.tray-control.tray-control-styling(property-name="text", property-input-bindings, ng-model="PropsCtrl.properties.text", ng-model-options="{ updateOn: 'blur' }")
-          
-      div.tray-control-row
-        label
-          input.tray-control(type="checkbox", ng-model="PropsCtrl.properties.area")
-          | Text box
+	h6.tray-heading.h6.uppercase.medium.airy Label
+	
+	div.tray-group
+		label.tray-label.h6 Text
+		
+		div.tray-controls
+			div.tray-control-row
+				input.tray-control.tray-control-styling(property-name="text", property-input-bindings, ng-model="PropsCtrl.properties.text", ng-model-options="{ updateOn: 'blur' }")
+					
+			div.tray-control-row
+				label
+					input.tray-control(type="checkbox", ng-model="PropsCtrl.properties.area")
+					| Text box
 
 div.tray-area.form.tray-divider-top
-  h6.tray-heading.h6.uppercase.medium.airy Dimensions
-                    
-  div.tray-group
-    div.tray-controls
-      div.tray-control-row
-        div.tray-control-icon.glyph t
-        input.tray-control.tray-control-styling(property-name="x", property-input-bindings, ng-model="PropsCtrl.properties.x", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
-          
-        div.tray-control-icon.glyph l
-        input.tray-control.tray-control-styling(property-name="y", property-input-bindings, ng-model="PropsCtrl.properties.y", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
-                          
-  div.tray-group
-    div.tray-controls
-      div.tray-control-row
-        div.tray-control-icon.glyph w
-        input.tray-control.tray-control-styling(property-name="width", property-input-bindings, ng-model="PropsCtrl.properties.width", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
-          
-        div.tray-control-icon.glyph h
-        input.tray-control.tray-control-styling(property-name="height", property-input-bindings, ng-model="PropsCtrl.properties.height", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+	h6.tray-heading.h6.uppercase.medium.airy Dimensions
+										
+	div.tray-group
+		div.tray-controls
+			div.tray-control-row
+				div.tray-control-icon.glyph t
+				input.tray-control.tray-control-styling(property-name="x", property-input-bindings, ng-model="PropsCtrl.properties.x", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+					
+				div.tray-control-icon.glyph l
+				input.tray-control.tray-control-styling(property-name="y", property-input-bindings, ng-model="PropsCtrl.properties.y", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+													
+	div.tray-group
+		div.tray-controls
+			div.tray-control-row
+				div.tray-control-icon.glyph w
+				input.tray-control.tray-control-styling(property-name="width", property-input-bindings, ng-model="PropsCtrl.properties.width", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+					
+				div.tray-control-icon.glyph h
+				input.tray-control.tray-control-styling(property-name="height", property-input-bindings, ng-model="PropsCtrl.properties.height", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
 
 div.tray-area.form.tray-divider-top
-  h6.tray-heading.h6.uppercase.medium.airy Type
-  
-  div.tray-group
-    div.tray-controls
-      div.tray-control-row
-        div#properties-type-font-family.ui-dropdown.tray-control(uib-dropdown, dropdown-append-to-body)
-          div.ui-dropdown-toggle.tray-control-styling(uib-dropdown-toggle)
-            | {{ PropsCtrl.fontFamilyOptions[PropsCtrl.properties.fontFamily] }}
-            span.chevron
-              
-          ul.uib-dropdown-menu
-            li(ng-repeat="(value, label) in PropsCtrl.fontFamilyOptions")
-              a(ng-click="PropsCtrl.onFontFamilySelect(value)") {{ label }}
-              
-        div#properties-type-font-weight.ui-dropdown.tray-control(uib-dropdown, dropdown-append-to-body)
-          div.ui-dropdown-toggle.tray-control-styling(uib-dropdown-toggle)
-            | {{ PropsCtrl.fontWeightOptions[PropsCtrl.properties.fontWeight] }}
-            span.chevron
-              
-          ul.uib-dropdown-menu
-            li(ng-repeat="(value, label) in PropsCtrl.fontWeightOptions")
-              a(ng-click="PropsCtrl.onFontWeightSelect(value)") {{ label }}
-  
-  div.tray-group
-    div.tray-controls
-      div.tray-control-row
-        ui-slider#properties-type-font-size-slider.tray-control(property-name="fontSize", property-slider-bindings, ng-model="PropsCtrl.properties.fontSize", slider-config="{ floor: 0, ceil: 128 }")
-        input#properties-type-font-size.tray-control.tray-control-styling.auto(property-name="fontSize", property-input-bindings, ng-model="PropsCtrl.properties.fontSize", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
-          
-      div.tray-control-row
-        ui-slider#properties-type-line-height-slider.tray-control(property-name="lineHeight", property-slider-bindings, ng-model="PropsCtrl.properties.lineHeight", slider-config="{ floor: 0, ceil: 128 }")
-        input#properties-type-line-height.tray-control.tray-control-styling.auto(property-name="lineHeight", property-input-bindings, ng-model="PropsCtrl.properties.lineHeight", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
-          
-  div.tray-group
-    div.tray-controls
-      div.tray-control-row
-        input#properties-type-letter-spacing.tray-control.tray-control-styling.auto(property-name="letterSpacing", property-input-bindings, ng-model="PropsCtrl.properties.letterSpacing", ng-model-options="{ updateOn: 'blur' }", property-type="Float")
+	h6.tray-heading.h6.uppercase.medium.airy Type
+	
+	div.tray-group
+		div.tray-controls
+			div.tray-control-row
+				div#properties-type-font-family.ui-dropdown.tray-control(uib-dropdown, dropdown-append-to-body)
+					div.ui-dropdown-toggle.tray-control-styling(uib-dropdown-toggle)
+						| {{ PropsCtrl.fontFamilyOptions[PropsCtrl.properties.fontFamily] }}
+						span.chevron
+							
+					ul.uib-dropdown-menu
+						li(ng-repeat="(value, label) in PropsCtrl.fontFamilyOptions")
+							a(ng-click="PropsCtrl.onFontFamilySelect(value)") {{ label }}
+							
+				div#properties-type-font-weight.ui-dropdown.tray-control(uib-dropdown, dropdown-append-to-body)
+					div.ui-dropdown-toggle.tray-control-styling(uib-dropdown-toggle)
+						| {{ PropsCtrl.fontWeightOptions[PropsCtrl.properties.fontWeight] }}
+						span.chevron
+							
+					ul.uib-dropdown-menu
+						li(ng-repeat="(value, label) in PropsCtrl.fontWeightOptions")
+							a(ng-click="PropsCtrl.onFontWeightSelect(value)") {{ label }}
+	
+	div.tray-group
+		div.tray-controls
+			div.tray-control-row
+				ui-slider#properties-type-font-size-slider.tray-control(property-name="fontSize", property-slider-bindings, ng-model="PropsCtrl.properties.fontSize", slider-config="{ floor: 0, ceil: 128 }")
+				input#properties-type-font-size.tray-control.tray-control-styling.auto(property-name="fontSize", property-input-bindings, ng-model="PropsCtrl.properties.fontSize", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+					
+			div.tray-control-row
+				ui-slider#properties-type-line-height-slider.tray-control(property-name="lineHeight", property-slider-bindings, ng-model="PropsCtrl.properties.lineHeight", slider-config="{ floor: 0, ceil: 128 }")
+				input#properties-type-line-height.tray-control.tray-control-styling.auto(property-name="lineHeight", property-input-bindings, ng-model="PropsCtrl.properties.lineHeight", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+					
+	div.tray-group
+		div.tray-controls
+			div.tray-control-row
+				input#properties-type-letter-spacing.tray-control.tray-control-styling.auto(property-name="letterSpacing", property-input-bindings, ng-model="PropsCtrl.properties.letterSpacing", ng-model-options="{ updateOn: 'blur' }", property-type="Float")
 
 div.tray-area.form.tray-divider-top.tray-divider-bottom
-  h6.tray-heading.h6.uppercase.medium.airy Appearance
-  
-  div.tray-group
-    div.tray-controls
-      div.tray-control-row
-        div.tray-control-icon.glyph o
-        ui-slider#properties-appearance-opacity-slider.tray-control(property-name="opacity", property-slider-bindings, ng-model="PropsCtrl.properties.opacity", slider-config="{ floor: 0, ceil: 100 }")
-        input#properties-appearance-opacity-input.tray-control.tray-control-styling.auto(property-name="opacity", property-input-bindings, ng-model="PropsCtrl.properties.opacity", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="%")
+	h6.tray-heading.h6.uppercase.medium.airy Appearance
+	
+	div.tray-group
+		div.tray-controls
+			div.tray-control-row
+				div.tray-control-icon.glyph f
+				div#properties-appearance-fill-color-picker.tray-control.auto.ui-color-picker
+					input(minicolors="{ theme: 'bootstrap', animationSpeed: 0, change: PropsCtrl.onFillColorChange }", type="hidden", ng-model="PropsCtrl.properties.fillColor")
+						
+				input#properties-appearance-fill-color-input.tray-control.tray-control-styling.auto(property-name="fillColor", property-input-bindings, ng-model="PropsCtrl.properties.fillColor", ng-model-options="{ updateOn: 'blur' }")
+					
+			div.tray-control-row
+				div.tray-control-icon.glyph o
+				ui-slider#properties-appearance-opacity-slider.tray-control(property-name="opacity", property-slider-bindings, ng-model="PropsCtrl.properties.opacity", slider-config="{ floor: 0, ceil: 100 }")
+				input#properties-appearance-opacity-input.tray-control.tray-control-styling.auto(property-name="opacity", property-input-bindings, ng-model="PropsCtrl.properties.opacity", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="%")

@@ -17,7 +17,8 @@ module Common.Data {
     fontSize: number,
     lineHeight: number,
     justification: string,
-    area: boolean
+    area: boolean,
+    fillColor: string
   }
 
   export interface IRectangleProperties extends IComponentProperties {

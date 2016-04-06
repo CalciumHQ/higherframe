@@ -4,6 +4,7 @@ module Higherframe.Drawing.Component.Library {
   export class LabelPropertiesController implements Higherframe.UI.Component.PropertiesController {
 
     properties: Common.Data.ILabelProperties;
+    onFillColorChange: Function;
 
     private fontFamilyOptions = {
       'Helvetica Neue': 'Helvetica Neue',
@@ -22,6 +23,7 @@ module Higherframe.Drawing.Component.Library {
     constructor(private $scope: Higherframe.UI.Component.IPropertiesScope, private $rootScope: ng.IRootScopeService) {
 
       this.properties = <Common.Data.ILabelProperties>this.$scope.properties;
+      this.onFillColorChange = this.onFillColorChangeHandler.bind(this);
     }
 
     private onFontFamilySelect(value) {
@@ -42,6 +44,11 @@ module Higherframe.Drawing.Component.Library {
         name: 'fontWeight',
         value: this.properties.fontWeight
       });
+    }
+
+    onFillColorChangeHandler(color) {
+
+      this.$rootScope.$broadcast('properties:property:update');
     }
   }
 }
