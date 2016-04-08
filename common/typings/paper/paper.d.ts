@@ -3535,7 +3535,7 @@ declare module paper {
          * Returns the color as a CSS string.
          * @param hex - whether to return the color in hexadecial representation or as a CSS RGB / RGBA string.
          */
-        toCss(hex: boolean): string;
+        toCSS(hex: boolean): string;
 
         /**
          * Transform the gradient color by the specified matrix.

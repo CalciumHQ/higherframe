@@ -87,13 +87,18 @@ module Common.Drawing.Library {
       super(model);
 
       var properties = this.getProperties();
+      var theme: Common.UI.ITheme = new Common.UI.DefaultTheme();
       properties.width = properties.width || 160;
       properties.height = properties.height || 32;
-      properties.type = properties.type || 'primary';
       properties.label = (typeof properties.label === 'undefined') ? 'Submit' : properties.label;
-      properties.cornerRadius = properties.cornerRadius || 5;
+      properties.fontFamily = properties.fontFamily || 'Helvetica Neue';
       properties.fontSize = properties.fontSize || 14;
       properties.fontWeight = properties.fontWeight || 400;
+      properties.cornerRadius = properties.cornerRadius || 5;
+      properties.opacity = (properties.opacity == null) ? 100 : properties.opacity;
+      properties.fillColor = (properties.borderColor == null) ? theme.ShadingDefault.toCSS(true) : properties.fillColor;
+      properties.borderColor = (properties.borderColor == null) ? theme.ComponentDefault.toCSS(true) : properties.borderColor;
+      properties.borderWidth = (properties.borderWidth == null) ? 1 : properties.borderWidth;
 
       // Perform the initial draw
       this.update();
@@ -118,14 +123,15 @@ module Common.Drawing.Library {
         foreColor = theme.ComponentActive;
       }
 
-      else if (this.focussed) {
-
-        foreColor = theme.ComponentFocus;
-      }
-
       else if (this.hovered) {
 
         foreColor = theme.ComponentHover;
+      }
+
+      // Apply opacity
+      if (this.focussed || (!this.active && !this.hovered)) {
+
+        foreColor.alpha = properties.opacity / 100;
       }
 
       // Remove the old parts
@@ -138,11 +144,13 @@ module Common.Drawing.Library {
       // Draw the shape
       var shape = paper.Path.Rectangle(bounds, parseInt('' + properties.cornerRadius));
       shape.strokeColor = foreColor;
-      shape.strokeWidth = 1;
+      shape.strokeWidth = properties.borderWidth;
 
-      if (properties.type == 'primary') {
+      if (properties.fillColor) {
 
-        shape.fillColor = backColor;
+        var fillColor = new paper.Color(properties.fillColor);
+        fillColor.alpha = properties.opacity / 100;
+        shape.fillColor = fillColor;
       }
 
       else {
@@ -157,7 +165,7 @@ module Common.Drawing.Library {
         fillColor: foreColor,
         fontSize: properties.fontSize,
         fontWeight: properties.fontWeight,
-        fontFamily: 'Myriad Pro',
+        fontFamily: properties.fontFamily,
         justification: 'center'
       });
 

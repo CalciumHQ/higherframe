@@ -74,11 +74,14 @@ module Common.Data {
 
   export interface IButtonProperties extends IComponentProperties {
     label: string,
-    type: string,
     disabled: boolean,
-    cornerRadius: number,
+    fontFamily: string,
+    fontWeight: number,
     fontSize: number,
-    fontWeight: number
+    cornerRadius: number,
+    fillColor: string,
+    borderColor: string,
+    borderWidth: number
   }
 
   export interface IImageProperties extends IComponentProperties {

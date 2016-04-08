@@ -3535,7 +3535,7 @@ declare module paper {
          * Returns the color as a CSS string.
          * @param hex - whether to return the color in hexadecial representation or as a CSS RGB / RGBA string.
          */
-        toCss(hex: boolean): string;
+        toCSS(hex: boolean): string;
 
         /**
          * Transform the gradient color by the specified matrix.
@@ -9167,11 +9167,18 @@ declare module Common.Data {
         lineHeight: number;
         justification: string;
         area: boolean;
+        fillColor: string;
     }
     interface IRectangleProperties extends IComponentProperties {
         cornerRadius: number;
+        fillColor: string;
+        borderColor: string;
+        borderWidth: number;
     }
     interface IEllipseProperties extends IComponentProperties {
+        fillColor: string;
+        borderColor: string;
+        borderWidth: number;
     }
     interface IArrowProperties extends IComponentProperties {
         start: Drawing.IPoint;
@@ -9207,11 +9214,14 @@ declare module Common.Data {
     }
     interface IButtonProperties extends IComponentProperties {
         label: string;
-        type: string;
         disabled: boolean;
-        cornerRadius: number;
-        fontSize: number;
+        fontFamily: string;
         fontWeight: number;
+        fontSize: number;
+        cornerRadius: number;
+        fillColor: string;
+        borderColor: string;
+        borderWidth: number;
     }
     interface IImageProperties extends IComponentProperties {
         media: Object;
@@ -9602,6 +9612,8 @@ declare module Common.Drawing.Library {
         static title: string;
         static category: string;
         tags: string[];
+        propertiesController: string;
+        propertiesTemplateUrl: string;
         model: Common.Data.Component;
         /**
          * Create a new Ellipse component
@@ -9854,22 +9866,8 @@ declare module Common.Drawing.Library {
         static title: string;
         static category: string;
         tags: string[];
-        properties: ({
-            label: string;
-            controls: {
-                model: string;
-                placeholder: string;
-                type: NumberConstructor;
-                description: string;
-            }[];
-        } | {
-            label: string;
-            controls: {
-                model: string;
-                type: NumberConstructor;
-                description: string;
-            }[];
-        })[];
+        propertiesController: string;
+        propertiesTemplateUrl: string;
         model: Common.Data.Component;
         /**
          * Create a new Rectangle component
