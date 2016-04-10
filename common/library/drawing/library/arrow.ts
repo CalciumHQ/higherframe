@@ -33,10 +33,14 @@ module Common.Drawing.Library {
       super(model);
 
       var properties = <Common.Data.IArrowProperties>(model.properties);
+      var theme: Common.UI.ITheme = new Common.UI.DefaultTheme();
       properties.start = properties.start || new paper.Point(-100, 0);
       properties.end = properties.end || new paper.Point(100, 0);
       properties.direction = properties.direction || 'right';
       properties.type = properties.type || 'straight';
+      properties.opacity = (properties.opacity == null) ? 100 : properties.opacity;
+      properties.borderColor = (properties.borderColor == null) ? theme.ComponentDefault.toCSS(true) : properties.borderColor;
+      properties.borderWidth = (properties.borderWidth == null) ? 1 : properties.borderWidth;
 
       // Perform the initial draw
       this.update();
@@ -73,18 +77,15 @@ module Common.Drawing.Library {
 
     update() {
 
+      var properties = <Common.Data.IArrowProperties>this.model.properties;
+
       // Determine palette
       var theme: Common.UI.ITheme = new Common.UI.DefaultTheme();
-      var foreColor = this.collaborator ? new paper.Color(this.collaborator.color) : theme.ComponentDefault;
+      var foreColor = this.collaborator ? new paper.Color(this.collaborator.color) : new paper.Color(properties.borderColor);
 
       if (this.active) {
 
         foreColor = theme.ComponentActive;
-      }
-
-      else if (this.focussed) {
-
-        foreColor = theme.ComponentFocus;
       }
 
       else if (this.hovered) {
@@ -92,7 +93,11 @@ module Common.Drawing.Library {
         foreColor = theme.ComponentHover;
       }
 
-      var properties = <Common.Data.IArrowProperties>this.model.properties;
+      // Apply opacity
+      if ((this.focussed && !this.hovered) || (!this.active && !this.hovered)) {
+
+        foreColor.alpha = properties.opacity / 100;
+      }
 
       // Remove the old parts
       this.removeChildren();
@@ -139,7 +144,7 @@ module Common.Drawing.Library {
 
       line.addSegments([endSgm]);
       line.strokeColor = foreColor;
-      line.strokeWidth = 1;
+      line.strokeWidth = properties.borderWidth;
       this.addChild(line);
 
       // Draw the heads

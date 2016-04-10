@@ -1,37 +1,80 @@
-div.form-group
-  label.form-label.h6(for="") Line
-  
-  div.form-controls
-    div.form-control-row
-      input(type="hidden", property-name="type", property-input-bindings, ng-model="PropsCtrl.properties.type")
-      div.ui-dropdown(uib-dropdown, dropdown-append-to-body)
-        div.form-control.ui-dropdown-toggle(uib-dropdown-toggle)
-          | {{ PropsCtrl.typeOptions[PropsCtrl.properties.type] }}
-          span.chevron
-            
-        ul.uib-dropdown-menu
-          li(ng-repeat="(value, label) in PropsCtrl.typeOptions")
-            a(ng-click="PropsCtrl.properties.type = value") {{ label }}
+div.tray-area.form
+	h6.tray-heading.h6.uppercase.medium.airy Dimensions
+
+	div.tray-group
+		div.tray-controls
+			div.tray-control-row
+				div.tray-control-icon.glyph t
+				input.tray-control.tray-control-styling.full(property-name="x", property-input-bindings, ng-model="PropsCtrl.properties.x", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+					
+				div.tray-control-icon.glyph l
+				input.tray-control.tray-control-styling.full(property-name="y", property-input-bindings, ng-model="PropsCtrl.properties.y", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+			
+	div.tray-group
+		div.tray-controls
+			div.tray-control-row
+				div.tray-control-icon.glyph w
+				input.tray-control.tray-control-styling(property-name="width", property-input-bindings, ng-model="PropsCtrl.properties.width", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+					
+				div.tray-control-icon.glyph h
+				input.tray-control.tray-control-styling(property-name="height", property-input-bindings, ng-model="PropsCtrl.properties.height", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+
+div.tray-area.form.tray-divider-top
+	h6.tray-heading.h6.uppercase.medium.airy Arrow
+	
+	div.tray-group
+		div.tray-label.h6 Direction
+		div.tray-controls
+			div.tray-control-row
+				div.ui-dropdown.tray-control.full(uib-dropdown, dropdown-append-to-body)
+					div.ui-dropdown-toggle.tray-control-styling(uib-dropdown-toggle)
+						| {{ PropsCtrl.directionOptions[PropsCtrl.properties.direction] }}
+						span.chevron
+							
+					ul.uib-dropdown-menu
+						li(ng-repeat="(value, label) in PropsCtrl.directionOptions")
+							a(ng-click="PropsCtrl.properties.direction = value") {{ label }}
+			
+				input(type="hidden", property-name="direction", property-input-bindings, ng-model="PropsCtrl.properties.direction")
+							
+	div.tray-group
+		div.tray-label.h6 Shape
+		div.tray-controls
+			div.tray-control-row
+				div.ui-dropdown.tray-control(uib-dropdown, dropdown-append-to-body)
+					div.ui-dropdown-toggle.tray-control-styling.full(uib-dropdown-toggle)
+						| {{ PropsCtrl.typeOptions[PropsCtrl.properties.type] }}
+						span.chevron
+							
+					ul.uib-dropdown-menu
+						li(ng-repeat="(value, label) in PropsCtrl.typeOptions")
+							a(ng-click="PropsCtrl.properties.type = value") {{ label }}
+					
+					input(type="hidden", property-name="type", property-input-bindings, ng-model="PropsCtrl.properties.type")
+		
+div.tray-area.form.tray-divider-top.tray-divider-bottom
+	h6.tray-heading.h6.uppercase.medium.airy Appearance
+	
+	div.tray-group
+		div.tray-controls
+			div.tray-control-row
+				div.tray-control-icon.glyph b
+				div#properties-appearance-border-color-picker.tray-control.auto.ui-color-picker
+					input(minicolors="{ theme: 'bootstrap', animationSpeed: 0, change: PropsCtrl.onBorderColorChange }", type="hidden", ng-model="PropsCtrl.properties.borderColor")
+						
+				input#properties-appearance-border-color-input.tray-control.tray-control-styling.auto(property-name="borderColor", property-input-bindings, ng-model="PropsCtrl.properties.borderColor", ng-model-options="{ updateOn: 'blur' }")
+				input#properties-appearance-border-width-input.tray-control.tray-control-styling.auto(property-name="borderWidth", property-input-bindings, ng-model="PropsCtrl.properties.borderWidth", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+					
+			div.tray-control-row
+				div.tray-control-icon.glyph o
+				ui-slider#properties-appearance-opacity-slider.tray-control(property-name="opacity", property-slider-bindings, ng-model="PropsCtrl.properties.opacity", slider-config="{ floor: 0, ceil: 100 }")
+				input#properties-appearance-opacity-input.tray-control.tray-control-styling.auto(property-name="opacity", property-input-bindings, ng-model="PropsCtrl.properties.opacity", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="%")
+
+
 
 div.form-group
-  label.form-label.h6 Arrow
-  
-  div.form-controls
-    div.form-control-row
-      input(type="hidden", property-name="direction", property-input-bindings, ng-model="PropsCtrl.properties.direction")
-      div.ui-dropdown(uib-dropdown, dropdown-append-to-body)
-        div.form-control.ui-dropdown-toggle(uib-dropdown-toggle)
-          | {{ PropsCtrl.directionOptions[PropsCtrl.properties.direction] }}
-          span.chevron
-            
-        ul.uib-dropdown-menu
-          li(ng-repeat="(value, label) in PropsCtrl.directionOptions")
-            a(ng-click="PropsCtrl.properties.direction = value") {{ label }}
-
-div.form-group
-  label.form-label.h6(for="") Position
-  
-  div.form-controls
-    div.form-control-row
-      input.form-control.full(property-name="x", property-input-bindings, ng-model="PropsCtrl.properties.x", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
-      input.form-control.full(property-name="y", property-input-bindings, ng-model="PropsCtrl.properties.y", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+	label.form-label.h6(for="") Line
+	
+	div.form-controls
+		div.form-control-row
+			i

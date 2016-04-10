@@ -4,6 +4,7 @@ module Higherframe.Drawing.Component.Library {
   export class ArrowPropertiesController implements Higherframe.UI.Component.PropertiesController {
 
     properties: Common.Data.IArrowProperties;
+    onBorderColorChange: Function;
 
     typeOptions = {
       straight: 'Straight',
@@ -18,9 +19,15 @@ module Higherframe.Drawing.Component.Library {
       both: 'Both'
     };
 
-    constructor(private $scope: Higherframe.UI.Component.IPropertiesScope) {
+    constructor(private $scope: Higherframe.UI.Component.IPropertiesScope, private $rootScope: ng.IRootScopeService) {
 
       this.properties = <Common.Data.IArrowProperties>this.$scope.properties;
+      this.onBorderColorChange = this.onBorderColorChangeHandler.bind(this);
+    }
+
+    onBorderColorChangeHandler(color) {
+
+      this.$rootScope.$broadcast('properties:property:update');
     }
   }
 }

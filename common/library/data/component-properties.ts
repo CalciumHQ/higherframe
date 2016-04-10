@@ -38,7 +38,9 @@ module Common.Data {
     start: Drawing.IPoint,
     end: Drawing.IPoint,
     direction: string,
-    type: string
+    type: string,
+    borderColor: string,
+    borderWidth: number
   }
 
   export interface IMobileDeviceProperties extends IComponentProperties {

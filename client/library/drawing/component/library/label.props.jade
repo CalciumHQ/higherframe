@@ -67,11 +67,6 @@ div.tray-area.form.tray-divider-top
 			div.tray-control-row
 				ui-slider#properties-type-line-height-slider.tray-control(property-name="lineHeight", property-slider-bindings, ng-model="PropsCtrl.properties.lineHeight", slider-config="{ floor: 0, ceil: 128 }")
 				input#properties-type-line-height.tray-control.tray-control-styling.auto(property-name="lineHeight", property-input-bindings, ng-model="PropsCtrl.properties.lineHeight", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
-					
-	div.tray-group
-		div.tray-controls
-			div.tray-control-row
-				input#properties-type-letter-spacing.tray-control.tray-control-styling.auto(property-name="letterSpacing", property-input-bindings, ng-model="PropsCtrl.properties.letterSpacing", ng-model-options="{ updateOn: 'blur' }", property-type="Float")
 
 div.tray-area.form.tray-divider-top.tray-divider-bottom
 	h6.tray-heading.h6.uppercase.medium.airy Appearance

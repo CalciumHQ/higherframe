@@ -9185,6 +9185,8 @@ declare module Common.Data {
         end: Drawing.IPoint;
         direction: string;
         type: string;
+        borderColor: string;
+        borderWidth: number;
     }
     interface IMobileDeviceProperties extends IComponentProperties {
         showBar: boolean;
@@ -9546,43 +9548,6 @@ declare module Common.Drawing.Library {
         tags: string[];
         propertiesController: string;
         propertiesTemplateUrl: string;
-        properties: ({
-            label: string;
-            controls: {
-                model: string;
-                type: StringConstructor;
-                description: string;
-            }[];
-        } | {
-            label: string;
-            controls: {
-                model: string;
-                type: BooleanConstructor;
-                ui: string;
-                options: {
-                    label: string;
-                    value: boolean;
-                }[];
-                description: string;
-            }[];
-        } | {
-            label: string;
-            controls: ({
-                model: string;
-                type: NumberConstructor;
-                description: string;
-            } | {
-                model: string;
-                type: NumberConstructor;
-                ui: string;
-                options: {
-                    label: string;
-                    value: number;
-                }[];
-                placeholder: string;
-                description: string;
-            })[];
-        })[];
         model: Common.Data.Component;
         /**
          * Create a new Select component
@@ -9692,15 +9657,8 @@ declare module Common.Drawing.Library {
         static title: string;
         static category: string;
         tags: string[];
-        properties: {
-            label: string;
-            controls: {
-                model: string;
-                type: StringConstructor;
-                ui: string;
-                description: string;
-            }[];
-        }[];
+        propertiesController: string;
+        propertiesTemplateUrl: string;
         model: Common.Data.Component;
         /**
          * Create a new Button component
@@ -9903,40 +9861,6 @@ declare module Common.Drawing.Library {
         tags: string[];
         propertiesController: string;
         propertiesTemplateUrl: string;
-        properties: ({
-            label: string;
-            controls: {
-                model: string;
-                type: StringConstructor;
-                description: string;
-            }[];
-        } | {
-            label: string;
-            controls: {
-                model: string;
-                type: StringConstructor;
-                placeholder: string;
-                description: string;
-            }[];
-        } | {
-            label: string;
-            controls: ({
-                model: string;
-                type: NumberConstructor;
-                unit: string;
-                description: string;
-            } | {
-                model: string;
-                type: NumberConstructor;
-                ui: string;
-                options: {
-                    label: string;
-                    value: number;
-                }[];
-                placeholder: string;
-                description: string;
-            })[];
-        })[];
         model: Common.Data.Component;
         /**
          * Create a new Select component
@@ -9976,41 +9900,6 @@ declare module Common.Drawing.Library {
         tags: string[];
         propertiesController: string;
         propertiesTemplateUrl: string;
-        properties: ({
-            label: string;
-            controls: {
-                model: string;
-                type: StringConstructor;
-                description: string;
-            }[];
-        } | {
-            label: string;
-            controls: {
-                model: string;
-                type: StringConstructor;
-                placeholder: string;
-                description: string;
-            }[];
-        } | {
-            label: string;
-            controls: ({
-                model: string;
-                type: NumberConstructor;
-                placeholder: string;
-                unit: string;
-                description: string;
-            } | {
-                model: string;
-                type: NumberConstructor;
-                ui: string;
-                options: {
-                    label: string;
-                    value: number;
-                }[];
-                placeholder: string;
-                description: string;
-            })[];
-        })[];
         model: Common.Data.Component;
         /**
          * Create a new Text Input component
