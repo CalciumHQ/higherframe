@@ -8,6 +8,12 @@ module Higherframe.Wireframe.Tools {
     // Record the starting position of a drag operation
     private dragStart: paper.Point;
 
+    // Record the aspect ratio at the start of a drag operation
+    private aspect: number;
+
+    // Record the last paper mouse position
+    private point: paper.Point;
+
     // Record the last client mouse position in a drag operation
     private clientDragPrevious: paper.Point;
 
@@ -31,6 +37,7 @@ module Higherframe.Wireframe.Tools {
       this.onMouseDown = this.mouseDownHandler;
       this.onMouseUp = this.mouseUpHandler;
       this.onKeyDown = this.keyDownHandler;
+      this.onKeyUp = this.keyUpHandler;
     }
 
 
@@ -48,6 +55,13 @@ module Higherframe.Wireframe.Tools {
         event.event.screenX,
         event.event.screenY
       );
+
+      // Store the starting aspect ratio of the selection
+      if (this.canvas.selectedComponents.length) {
+
+        let bounds = this.canvas.getBounds(this.canvas.selectedComponents);
+        this.aspect = bounds.width / bounds.height;
+      }
 
       // Annotate the dragged elements with their starting position
       this.canvas.selectedComponents.forEach((component) => {
@@ -232,6 +246,8 @@ module Higherframe.Wireframe.Tools {
         this.mouseMoveHighlightHandler(event);
       }
 
+      // Save the position for miscellaneous use
+      this.point = event.point;
     }
 
     private mouseMovePanHandler(event) {
@@ -285,7 +301,7 @@ module Higherframe.Wireframe.Tools {
 
         handle.hovered = true;
         handle.update();
-        
+
         this.canvas.setCursor(handle.cursor);
       }
 
@@ -316,6 +332,18 @@ module Higherframe.Wireframe.Tools {
       // TODO: Currently supporting only one selected item
       var item = this.canvas.selectedComponents[0];
 
+      // TODO: Only supports one drag handle
+      let dragHandle = this.canvas.selectedDragHandles[0];
+
+      // Constrain aspect ratio if the shift key is held
+      if (
+        dragHandle.axis == Common.Drawing.DragHandleAxis.Both &&
+        event.modifiers.shift
+      ) {
+
+        delta = new paper.Point(delta.x, delta.x / this.aspect);
+      }
+
       this.canvas.selectedDragHandles.forEach((handle) => {
 
         // The new position
@@ -326,9 +354,6 @@ module Higherframe.Wireframe.Tools {
           ? handle.onMove(position)
           : position;
       });
-
-      // TODO: Only supports one drag handle
-      let dragHandle = this.canvas.selectedDragHandles[0];
 
       // Find a snap point
       var smartGuideResult = Higherframe.Drawing.SnapEngine.snap(
@@ -521,17 +546,52 @@ module Higherframe.Wireframe.Tools {
 
 					break;
 
-					// Paste on the 'v' key
-					case 'v':
+				// Paste on the 'v' key
+				case 'v':
 
-						if (event.modifiers.command || event.modifiers.control) {
+					if (event.modifiers.command || event.modifiers.control) {
 
-							event.event.preventDefault();
-							this.canvas.scope.$emit('component:pasted');
-						}
+						event.event.preventDefault();
+						this.canvas.scope.$emit('component:pasted');
+					}
 
-						break;
+					break;
+
+        // Trigger a mouse move event when shift is pressed, to perform a redraw
+        // This is required because shift constrains dimensions, and we want
+        // immediate feedback on this operation
+        case 'shift':
+
+          this.mouseMoveHandler({
+            point: this.point,
+            modifiers: event.modifiers
+          });
+
+          break;
 			}
+    }
+
+
+    /**
+     * Key up handler
+     */
+
+    private keyUpHandler(event) {
+
+      switch (event.key) {
+
+				// Trigger a mouse move event when shift is released, to perform a redraw
+        // This is required because shift constrains dimensions, and we want
+        // immediate feedback on this operation
+        case 'shift':
+
+          this.mouseMoveHandler({
+            point: this.point,
+            modifiers: event.modifiers
+          });
+
+          break;
+      }
     }
 
     public onDeactivated() {

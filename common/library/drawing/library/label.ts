@@ -184,6 +184,7 @@ module Common.Drawing.Library {
 
       var topCenter = new DragHandle(this.bounds.topCenter);
       topCenter.cursor = 'ns-resize';
+      topCenter.axis = DragHandleAxis.Y;
       topCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 
         return [new SnapPoint(position, 'center', 'edge')];
@@ -222,6 +223,7 @@ module Common.Drawing.Library {
 
       var rightCenter = new DragHandle(this.bounds.rightCenter);
       rightCenter.cursor = 'ew-resize';
+      rightCenter.axis = DragHandleAxis.X;
       rightCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 
         return [new SnapPoint(position, 'edge', 'center')];
@@ -260,6 +262,7 @@ module Common.Drawing.Library {
 
       var bottomCenter = new DragHandle(this.bounds.bottomCenter);
       bottomCenter.cursor = 'ns-resize';
+      bottomCenter.axis = DragHandleAxis.Y;
       bottomCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 
         return [new SnapPoint(position, 'center', 'edge')];
@@ -298,6 +301,7 @@ module Common.Drawing.Library {
 
       var leftCenter = new DragHandle(this.bounds.leftCenter);
       leftCenter.cursor = 'ew-resize';
+      leftCenter.axis = DragHandleAxis.X;
       leftCenter.getSnapPoints = (position: paper.Point): Array<SnapPoint> => {
 
         return [new SnapPoint(position, 'edge', 'center')];

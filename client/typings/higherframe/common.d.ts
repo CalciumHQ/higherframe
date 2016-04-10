@@ -9335,10 +9335,16 @@ declare module Common.Drawing {
     }
 }
 declare module Common.Drawing {
+    enum DragHandleAxis {
+        X = 0,
+        Y = 1,
+        Both = 2,
+    }
     class DragHandle extends paper.Group {
         anchor: paper.Point;
         hovered: boolean;
         cursor: string;
+        axis: DragHandleAxis;
         constructor(anchor: paper.Point);
         update(): void;
         /**

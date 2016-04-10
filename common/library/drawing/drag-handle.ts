@@ -1,11 +1,18 @@
 
 module Common.Drawing {
 
+  export enum DragHandleAxis {
+    X,
+    Y,
+    Both
+  }
+
   export class DragHandle extends paper.Group {
 
     public anchor: paper.Point;
     public hovered: boolean = false;
     public cursor: string;
+    public axis: DragHandleAxis = DragHandleAxis.Both;
 
     constructor(anchor: paper.Point) {
 
