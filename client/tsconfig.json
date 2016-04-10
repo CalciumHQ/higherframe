@@ -87,6 +87,7 @@
         "./library/drawing/component/library/button.props.ts",
         "./library/drawing/component/library/checkbox.props.ts",
         "./library/drawing/component/library/ellipse.props.ts",
+        "./library/drawing/component/library/image.props.ts",
         "./library/drawing/component/library/label.props.ts",
         "./library/drawing/component/library/mobile-device.props.ts",
         "./library/drawing/component/library/mobile-titlebar.props.ts",

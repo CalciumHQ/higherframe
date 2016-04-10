@@ -14,19 +14,8 @@ module Common.Drawing.Library {
       'image',
       'picture'
     ];
-    properties = [
-      {
-        label: 'Image',
-        controls: [
-          {
-            model: 'media',
-            type: String,
-            ui: 'file',
-            description: 'The image to be displayed.'
-          }
-        ],
-      }
-    ];
+    propertiesController: string = 'ImagePropertiesController as PropsCtrl';
+    propertiesTemplateUrl: string = '/library/drawing/component/library/image.props.html';
 
     model: Common.Data.Component;
 
@@ -42,6 +31,7 @@ module Common.Drawing.Library {
       var properties = this.getProperties();
       properties.width = properties.width || 200;
       properties.height = properties.height || 150;
+      properties.opacity = (properties.opacity == null) ? 100 : properties.opacity;
       properties.cornerRadius = properties.cornerRadius || 0;
 
       // Perform the initial draw
@@ -67,14 +57,15 @@ module Common.Drawing.Library {
         foreColor = theme.ComponentActive;
       }
 
-      else if (this.focussed) {
-
-        foreColor = theme.ComponentFocus;
-      }
-
       else if (this.hovered) {
 
         foreColor = theme.ComponentHover;
+      }
+
+      // Apply opacity
+      if (this.focussed || (!this.active && !this.hovered)) {
+
+        foreColor.alpha = properties.opacity / 100;
       }
 
       // Remove the old parts
@@ -133,8 +124,6 @@ module Common.Drawing.Library {
       var properties = this.getProperties();
       properties.x = this.bounds.center.x;
       properties.y = this.bounds.center.y;
-      properties.width = this.bounds.width;
-      properties.height = this.bounds.height;
     }
 
 
@@ -165,7 +154,15 @@ module Common.Drawing.Library {
       topLeft.cursor = 'nwse-resize';
       topLeft.onMove = (position: paper.Point): paper.Point => {
 
+        var properties = this.getProperties();
+
         this.bounds.topLeft = position;
+        properties.x = this.bounds.center.x;
+        properties.y = this.bounds.center.y;
+        properties.width = this.bounds.width;
+        properties.height = this.bounds.height;
+        this.update();
+
         return this.bounds.topLeft;
       };
 
@@ -173,7 +170,13 @@ module Common.Drawing.Library {
       topCenter.cursor = 'ns-resize';
       topCenter.onMove = (position: paper.Point): paper.Point => {
 
-        this.bounds.topCenter.y = position.y;
+        var properties = this.getProperties();
+
+        this.bounds.topCenter = position;
+        properties.y = this.bounds.center.y;
+        properties.height = this.bounds.height;
+        this.update();
+
         return this.bounds.topCenter;
       };
 
@@ -181,7 +184,15 @@ module Common.Drawing.Library {
       topRight.cursor = 'nesw-resize';
       topRight.onMove = (position: paper.Point): paper.Point => {
 
+        var properties = this.getProperties();
+
         this.bounds.topRight = position;
+        properties.x = this.bounds.center.x;
+        properties.y = this.bounds.center.y;
+        properties.width = this.bounds.width;
+        properties.height = this.bounds.height;
+        this.update();
+
         return this.bounds.topRight;
       };
 
@@ -189,7 +200,13 @@ module Common.Drawing.Library {
       rightCenter.cursor = 'ew-resize';
       rightCenter.onMove = (position: paper.Point): paper.Point => {
 
-        this.bounds.rightCenter.x = position.x;
+        var properties = this.getProperties();
+
+        this.bounds.rightCenter = position;
+        properties.x = this.bounds.center.x;
+        properties.width = this.bounds.width;
+        this.update();
+
         return this.bounds.rightCenter;
       };
 
@@ -197,7 +214,15 @@ module Common.Drawing.Library {
       bottomRight.cursor = 'nwse-resize';
       bottomRight.onMove = (position: paper.Point): paper.Point => {
 
+        var properties = this.getProperties();
+
         this.bounds.bottomRight = position;
+        properties.x = this.bounds.center.x;
+        properties.y = this.bounds.center.y;
+        properties.width = this.bounds.width;
+        properties.height = this.bounds.height;
+        this.update();
+
         return this.bounds.bottomRight;
       };
 
@@ -205,7 +230,13 @@ module Common.Drawing.Library {
       bottomCenter.cursor = 'ns-resize';
       bottomCenter.onMove = (position: paper.Point): paper.Point => {
 
-        this.bounds.bottomCenter.y = position.y;
+        var properties = this.getProperties();
+
+        this.bounds.bottomCenter = position;
+        properties.y = this.bounds.center.y;
+        properties.height = this.bounds.height;
+        this.update();
+
         return this.bounds.bottomCenter;
       };
 
@@ -213,7 +244,15 @@ module Common.Drawing.Library {
       bottomLeft.cursor = 'nesw-resize';
       bottomLeft.onMove = (position: paper.Point): paper.Point => {
 
+        var properties = this.getProperties();
+
         this.bounds.bottomLeft = position;
+        properties.x = this.bounds.center.x;
+        properties.y = this.bounds.center.y;
+        properties.width = this.bounds.width;
+        properties.height = this.bounds.height;
+        this.update();
+
         return this.bounds.bottomLeft;
       };
 
@@ -221,7 +260,13 @@ module Common.Drawing.Library {
       leftCenter.cursor = 'ew-resize';
       leftCenter.onMove = (position: paper.Point): paper.Point => {
 
-        this.bounds.leftCenter.x = position.x;
+        var properties = this.getProperties();
+
+        this.bounds.leftCenter = position;
+        properties.x = this.bounds.center.x;
+        properties.width = this.bounds.width;
+        this.update();
+
         return this.bounds.leftCenter;
       };
 
