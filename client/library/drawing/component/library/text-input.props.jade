@@ -1,29 +1,41 @@
-div.form-group
-  label.form-label.h6 Value
-  
-  div.form-controls
-    div.form-control-row
-      input.form-control.full(property-name="value", property-input-bindings, ng-model="PropsCtrl.properties.value", ng-model-options="{ updateOn: 'blur' }")
+div.tray-area.form
+	h6.tray-heading.h6.uppercase.medium.airy Dimensions
 
-div.form-group
-  label.form-label.h6 Placeholder
-  
-  div.form-controls
-    div.form-control-row
-      input.form-control.full(property-name="placeholder", property-input-bindings, ng-model="PropsCtrl.properties.placeholder", ng-model-options="{ updateOn: 'blur' }")
+	div.tray-group
+		div.tray-controls
+			div.tray-control-row
+				div.tray-control-icon.glyph t
+				input.tray-control.tray-control-styling.full(property-name="x", property-input-bindings, ng-model="PropsCtrl.properties.x", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+					
+				div.tray-control-icon.glyph l
+				input.tray-control.tray-control-styling.full(property-name="y", property-input-bindings, ng-model="PropsCtrl.properties.y", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+			
+	div.tray-group
+		div.tray-controls
+			div.tray-control-row
+				div.tray-control-icon.glyph w
+				input.tray-control.tray-control-styling(property-name="width", property-input-bindings, ng-model="PropsCtrl.properties.width", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+					
+				div.tray-control-icon.glyph h
+				input.tray-control.tray-control-styling(property-name="height", property-input-bindings, ng-model="PropsCtrl.properties.height", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
 
-div.form-group
-  label.form-label.h6(for="") Position
-  
-  div.form-controls
-    div.form-control-row
-      input.form-control.full(property-name="x", property-input-bindings, ng-model="PropsCtrl.properties.x", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
-      input.form-control.full(property-name="y", property-input-bindings, ng-model="PropsCtrl.properties.y", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
-                        
-div.form-group
-  label.form-label.h6 Size
-    
-  div.form-controls
-    div.form-control-row
-      input.form-control(property-name="width", property-input-bindings, ng-model="PropsCtrl.properties.width", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
-      input.form-control(property-name="height", property-input-bindings, ng-model="PropsCtrl.properties.height", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="px")
+div.tray-area.form.tray-divider-top.tray-divider-bottom
+	h6.tray-heading.h6.uppercase.medium.airy Input
+	
+	div.tray-group
+		div.tray-controls
+			div.tray-control-row
+				input.tray-control.tray-control-styling(property-name="value", property-input-bindings, ng-model="PropsCtrl.properties.value", ng-model-options="{ updateOn: 'blur' }")
+					
+			div.tray-control-row
+				input.tray-control.tray-control-styling(property-name="placeholder", property-input-bindings, ng-model="PropsCtrl.properties.placeholder", ng-model-options="{ updateOn: 'blur' }")
+				
+div.tray-area.form.tray-divider-top.tray-divider-bottom
+	h6.tray-heading.h6.uppercase.medium.airy Appearance
+	
+	div.tray-group
+		div.tray-controls
+			div.tray-control-row
+				div.tray-control-icon.glyph o
+				ui-slider#properties-appearance-opacity-slider.tray-control(property-name="opacity", property-slider-bindings, ng-model="PropsCtrl.properties.opacity", slider-config="{ floor: 0, ceil: 100 }")
+				input#properties-appearance-opacity-input.tray-control.tray-control-styling.auto(property-name="opacity", property-input-bindings, ng-model="PropsCtrl.properties.opacity", ng-model-options="{ updateOn: 'blur' }", property-type="Float", property-suffix="%")

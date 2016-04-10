@@ -14,53 +14,6 @@ module Common.Drawing.Library {
     ];
     propertiesController: string = 'TextInputPropertiesController as PropsCtrl';
     propertiesTemplateUrl: string = '/library/drawing/component/library/text-input.props.html';
-    properties = [
-      {
-        label: 'Placeholder',
-        controls: [
-          {
-            model: 'placeholder',
-            type: String,
-            description: 'Set the placeholder of the input.'
-          }
-        ]
-      },
-      {
-        label: 'Value',
-        controls: [
-          {
-            model: 'value',
-            type: String,
-            placeholder: 'Control value',
-            description: 'Set the value of the input.'
-          }
-        ]
-      },
-      {
-        label: 'Font',
-        controls: [
-          {
-            model: 'fontSize',
-            type: Number,
-            placeholder: 'Font size',
-            unit: 'px',
-            description: 'Set the font size of the input.'
-          },
-          {
-            model: 'fontWeight',
-            type: Number,
-            ui: 'select',
-            options: [
-              { label: 'Light', value: 300 },
-              { label: 'Regular', value: 400 },
-              { label: 'Bold', value: 700 }
-            ],
-            placeholder: 'Font weight',
-            description: 'Set the font weight of the input.'
-          }
-        ]
-      }
-    ];
 
     model: Common.Data.Component;
 
@@ -78,6 +31,7 @@ module Common.Drawing.Library {
       properties.placeholder = properties.placeholder || 'Text input';
       properties.fontSize = properties.fontSize || 14;
       properties.fontWeight = properties.fontWeight || 400;
+      properties.opacity = (properties.opacity == null) ? 100 : properties.opacity;
 
       // Perform the initial draw
       this.update();
@@ -104,18 +58,19 @@ module Common.Drawing.Library {
         foreColor = theme.ComponentActive;
       }
 
-      else if (this.focussed) {
-
-        foreColor = theme.ComponentFocus;
-        foreColorDark = theme.ComponentFocusDark;
-        foreColorLight = theme.ComponentFocusLight;
-      }
-
       else if (this.hovered) {
 
         foreColor = theme.ComponentHover;
         foreColorDark = theme.ComponentHoverDark;
         foreColorLight = theme.ComponentHoverLight;
+      }
+
+      // Apply opacity
+      if (this.focussed || (!this.active && !this.hovered)) {
+
+        foreColor.alpha = properties.opacity / 100;
+        foreColorDark.alpha = properties.opacity / 100;
+        foreColorLight.alpha = properties.opacity / 100;
       }
 
       // Remove the old parts
