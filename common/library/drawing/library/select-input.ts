@@ -68,7 +68,7 @@ module Common.Drawing.Library {
       }
 
       // Apply opacity
-      if (this.focussed || (!this.active && !this.hovered)) {
+      if ((this.focussed && !this.hovered) || (!this.active && !this.hovered)) {
 
         foreColor.alpha = properties.opacity / 100;
         foreColorDark.alpha = properties.opacity / 100;

@@ -33,6 +33,7 @@ module Common.Drawing.Library {
       properties.width = properties.width || 232;
       properties.height = properties.height || 464;
       properties.showBar = (typeof properties.showBar === 'undefined') ? true : properties.showBar;
+      properties.opacity = (properties.opacity == null) ? 100 : properties.opacity;
 
       // Perform the initial draw
       this.update();
@@ -93,14 +94,15 @@ module Common.Drawing.Library {
         foreColor = theme.ComponentActive;
       }
 
-      else if (this.focussed) {
-
-        foreColor = theme.ComponentFocus;
-      }
-
       else if (this.hovered) {
 
         foreColor = theme.ComponentHover;
+      }
+
+      // Apply opacity
+      if ((this.focussed && !this.hovered) || (!this.active && !this.hovered)) {
+
+        foreColor.alpha = properties.opacity / 100;
       }
 
       // Remove the old parts

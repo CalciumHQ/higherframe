@@ -15,61 +15,6 @@ module Common.Drawing.Library {
     ];
     propertiesController: string = 'CheckboxPropertiesController as PropsCtrl';
     propertiesTemplateUrl: string = '/library/drawing/component/library/checkbox.props.html';
-    properties = [
-      {
-        label: 'Label',
-        controls: [
-          {
-            model: 'label',
-            type: String,
-            description: 'Set the label on the checkbox.'
-          }
-        ]
-      },
-      {
-        label: 'Checked',
-        controls: [
-          {
-            model: 'value',
-            type: Boolean,
-            ui: 'select',
-            options: [
-              {
-                label: 'Checked',
-                value: true
-              },
-              {
-                label: 'Unchecked',
-                value: false
-              }
-            ],
-            description: 'Set the value of the input.'
-          }
-        ]
-      },
-      {
-        label: 'Font size',
-        controls: [
-          {
-            model: 'fontSize',
-            type: Number,
-            description: 'Set the font size of the input.'
-          },
-          {
-            model: 'fontWeight',
-            type: Number,
-            ui: 'select',
-            options: [
-              { label: 'Light', value: 300 },
-              { label: 'Regular', value: 400 },
-              { label: 'Bold', value: 700 }
-            ],
-            placeholder: 'Font weight',
-            description: 'Set the font weight of the input.'
-          }
-        ]
-      }
-    ];
 
     model: Common.Data.Component;
 
@@ -85,6 +30,7 @@ module Common.Drawing.Library {
       var properties = this.getProperties();
       properties.label = properties.label || 'Label';
       properties.value = properties.value ? true : false;
+      properties.opacity = (properties.opacity == null) ? 100 : properties.opacity;
       properties.fontSize = properties.fontSize || 14;
       properties.fontWeight = properties.fontWeight || 400;
 
@@ -113,18 +59,18 @@ module Common.Drawing.Library {
         foreColor = theme.ComponentActive;
       }
 
-      else if (this.focussed) {
-
-        foreColor = theme.ComponentFocus;
-        foreColorDark = theme.ComponentFocusDark;
-        foreColorLight = theme.ComponentFocusLight;
-      }
-
       else if (this.hovered) {
 
         foreColor = theme.ComponentHover;
         foreColorDark = theme.ComponentHoverDark;
         foreColorLight = theme.ComponentHoverLight;
+      }
+
+      // Apply opacity
+      if ((this.focussed && !this.hovered) || (!this.active && !this.hovered)) {
+
+        foreColor.alpha = properties.opacity / 100;
+        foreColorDark.alpha = properties.opacity / 100;
       }
 
       // Remove the old parts
@@ -159,7 +105,7 @@ module Common.Drawing.Library {
         fillColor: foreColorDark,
         fontSize: properties.fontSize,
         fontWeight: properties.fontWeight,
-        fontFamily: 'Myriad Pro'
+        fontFamily: 'Helvetica Neue'
       });
       this.addChild(value);
     }
