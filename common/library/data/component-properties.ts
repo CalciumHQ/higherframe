@@ -31,17 +31,25 @@ module Common.Data {
         if (this.hasProperty(key)) {
 
           this.local[key] = value;
+          this.remote[key] = value;
         }
       });
     }
 
     protected hasProperty(name) {
 
-      let descriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this), name);
+      // We use property reflection to see if this properties object has a given
+      // property. However, reflection doesn't check the prototype chain. We
+      // must specify which prototypes to check, either the direct ancestor
+      // (for specific component properties) or one ancestor removed (for general
+      // component properties defined on ComponentProperties).
+      var prototype = Object.getPrototypeOf(this);
+      var descriptor = Object.getOwnPropertyDescriptor(prototype, name);
 
       if (!descriptor) {
 
-        return false;
+        prototype = Object.getPrototypeOf(prototype);
+        descriptor = Object.getOwnPropertyDescriptor(prototype, name);
       }
 
       return !!descriptor.get;

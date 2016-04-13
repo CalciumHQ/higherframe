@@ -63,7 +63,15 @@ module Common.Data {
 
     static deserialize(data: any): Component {
 
-      let properties = new ComponentProperties(data.properties);
+      let propConstructorName = data.type + 'Properties';
+      let propConstructor = Common.Data[propConstructorName];
+
+      if (!propConstructor) {
+
+        throw `There isn't a component properties object named "${propConstructorName}".`;
+      }
+
+      let properties = new propConstructor(data.properties);
       let component = new Component(data.type, properties);
 
       if (data._id) {

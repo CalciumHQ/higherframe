@@ -314,6 +314,11 @@ class FrameCtrl implements Higherframe.Utilities.History.IHistoryItemDelegate {
 
     $scope.$on('view:component:moved', (e, components) => {
 
+			if (!components || !components.length) {
+
+				return;
+			}
+
 			// Store positions for history
 			let oldPositions = [];
 			let newPositions = [];
@@ -1284,6 +1289,8 @@ class FrameCtrl implements Higherframe.Utilities.History.IHistoryItemDelegate {
 				oldValues,
 				value
 			);
+
+			console.log(item);
 
 			item.delegate = this;
 			this.HistoryManager.add(this.frame._id, item);
