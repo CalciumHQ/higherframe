@@ -43,7 +43,11 @@ exports.show = function(req, res) {
 
   var query = Frame
 		.findOne({ _id: req.params.id })
-		.populate('project components artboards collaborators media');
+		.populate('project artboards collaborators media')
+    .populate({
+      path: 'components',
+      match: { status: 'active' }
+    });
 
   if (!req.query.hasOwnProperty('include_deleted')) {
 
@@ -224,27 +228,11 @@ exports.deleteComponent = function(req, res) {
     if(err) { return handleError(res, err); }
 		if(!Component) { return res.send(404); }
 
-		Component.remove(function (err) {
+    Component.status = 'deleted';
+		Component.save(function (err) {
 
 			if(err) { return handleError(res, err); }
-
-			// Remove from the frame
-			var query = Frame.findOneAndUpdate(
-			  { _id: req.params.frameId },
-			  { $pull: { components: req.params.componentId }},
-			  {}
-      );
-
-      if (!req.query.hasOwnProperty('include_deleted')) {
-
-        query.where({ status: 'active' });
-      }
-
-      query.exec(function (err, Frame) {
-
-				if(err) { return handleError(res, err); }
-				return res.json(204);
-			});
+      return res.json(204);
 		});
   });
 };

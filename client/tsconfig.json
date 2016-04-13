@@ -119,6 +119,7 @@
         "./library/utilities/history/delegate.ts",
         "./library/utilities/history/item.ts",
         "./library/utilities/history/items/change-component-property.ts",
+        "./library/utilities/history/items/delete-component.ts",
         "./library/utilities/history/items/move-component.ts",
         "./library/utilities/history/manager.ts",
         "./typings/higherframe/common.d.ts",

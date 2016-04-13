@@ -353,10 +353,8 @@ class FrameCtrl implements Higherframe.Utilities.History.IHistoryItemDelegate {
 
   	$scope.$on('componentsDeleted', (e, components) => {
 
-  		components.forEach((component) => {
-
-  			this.deleteComponent(component);
-  		});
+  		let models = components.map((component) => component.model);
+			this.deleteComponents(models, true);
 
       // Update selection
       this.selection = this.selection.filter((c) => {
@@ -477,7 +475,7 @@ class FrameCtrl implements Higherframe.Utilities.History.IHistoryItemDelegate {
 
 			else if (event == 'deleted') {
 
-				that.removeComponentFromView(component);
+				that.removeComponentsFromView([component]);
 			}
 		});
 
@@ -673,6 +671,16 @@ class FrameCtrl implements Higherframe.Utilities.History.IHistoryItemDelegate {
 				this.onComponentPropertyChange([component], propertyItem.property, propertyItem.oldValues[i], false);
 			});
 		}
+
+		else if (item instanceof Higherframe.Utilities.History.Items.DeleteComponentHistoryItem) {
+
+			let deleteItem: Higherframe.Utilities.History.Items.DeleteComponentHistoryItem = item;
+			this.addComponentsToView(item.components);
+			item.components.forEach((component) => {
+
+				this.$http.patch(`/api/components/${component._id}?include_deleted`, { status: 'active' });
+			});
+		}
 	}
 
 	onRedo(item: Higherframe.Utilities.History.Item) {
@@ -692,6 +700,13 @@ class FrameCtrl implements Higherframe.Utilities.History.IHistoryItemDelegate {
 				component.model.properties[propertyItem.property] = propertyItem.newValue;
 				this.onComponentPropertyChange([component], propertyItem.property, propertyItem.newValue, false);
 			});
+		}
+
+		else if (item instanceof Higherframe.Utilities.History.Items.DeleteComponentHistoryItem) {
+
+			let deleteItem: Higherframe.Utilities.History.Items.DeleteComponentHistoryItem = item;
+			this.deleteComponents(item.components, false);
+			this.removeComponentsFromView(item.components)
 		}
 	}
 
@@ -842,15 +857,19 @@ class FrameCtrl implements Higherframe.Utilities.History.IHistoryItemDelegate {
 		});
 	};
 
-	private deleteComponent(component) {
+	private deleteComponents(components: Array<Common.Data.Component>, history: boolean) {
 
-		if (component.model._id) {
+		components.forEach((component) => {
 
-			this.$http
-        .delete('/api/frames/' + this.$stateParams.id + '/components/' + component.model._id)
-        .success(function (data) {
+			this.$http.delete(`/api/frames/${this.$stateParams.id}/components/${component._id}`);
+		});
 
-        });
+		// Write to history
+		if (history) {
+
+			let item = new Higherframe.Utilities.History.Items.DeleteComponentHistoryItem(components);
+			item.delegate = this;
+			this.HistoryManager.add(this.frame._id, item);
 		}
 	};
 
@@ -944,11 +963,14 @@ class FrameCtrl implements Higherframe.Utilities.History.IHistoryItemDelegate {
     this.$scope.$broadcast('controller:component:selected', components);
 	};
 
-	private removeComponentFromView(model) {
+	private removeComponentsFromView(components: Array<Common.Data.Component>) {
 
 		// Inform the view
-		this.$scope.$broadcast('controller:component:deleted', {
-			component: model
+		components.forEach((component) => {
+
+			this.$scope.$broadcast('controller:component:deleted', {
+				component: component
+			});
 		});
 	};
 
@@ -1290,8 +1312,6 @@ class FrameCtrl implements Higherframe.Utilities.History.IHistoryItemDelegate {
 				value
 			);
 
-			console.log(item);
-
 			item.delegate = this;
 			this.HistoryManager.add(this.frame._id, item);
 		}
@@ -1329,10 +1349,9 @@ class FrameCtrl implements Higherframe.Utilities.History.IHistoryItemDelegate {
 
 		this.copy(this.selection);
 
-		this.selection.forEach((component) => {
-
-			this.deleteComponent(component);
-		});
+		// Get data models for selected items
+		let models = this.selection.map((component) => component.model);
+		this.deleteComponents(models, false);
 	}
 
 	onToolbarPasteClick() {

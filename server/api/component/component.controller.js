@@ -16,7 +16,14 @@ var Frame = require('./../frame/frame.model');
 // Get list of Components
 exports.index = function(req, res) {
 
-  Component.find(function (err, Components) {
+  var query = Component.find();
+
+  if (!req.query.hasOwnProperty('include_deleted')) {
+
+    query.where({ status: 'active' });
+  }
+
+  query.exec(function (err, Components) {
 
     if(err) { return handleError(res, err); }
     return res.json(200, Components);
@@ -26,15 +33,21 @@ exports.index = function(req, res) {
 // Get a single Component
 exports.show = function(req, res) {
 
-  Component
+  var query =  Component
     .findById(req.params.id)
-    .populate('media')
-    .exec(function (err, Component) {
+    .populate('media');
 
-      if(err) { return handleError(res, err); }
-      if(!Component) { return res.send(404); }
-      return res.json(Component);
-    });
+  if (!req.query.hasOwnProperty('include_deleted')) {
+
+    query.where({ status: 'active' });
+  }
+
+  query.exec(function (err, Component) {
+
+    if(err) { return handleError(res, err); }
+    if(!Component) { return res.send(404); }
+    return res.json(Component);
+  });
 };
 
 // Creates a new Component in the DB.
@@ -51,7 +64,14 @@ exports.create = function(req, res) {
 exports.update = function(req, res) {
 
   if(req.body._id) { delete req.body._id; }
-  Component.findById(req.params.id, function (err, component) {
+  var query = Component.findById(req.params.id)
+
+  if (!req.query.hasOwnProperty('include_deleted')) {
+
+    query.where({ status: 'active' });
+  }
+
+  query.exec(function (err, component) {
 
     if (err) { return handleError(res, err); }
     if(!component) { return res.send(404); }
@@ -97,12 +117,20 @@ exports.update = function(req, res) {
 // Deletes a Component from the DB.
 exports.destroy = function(req, res) {
 
-  Component.findById(req.params.id, function (err, Component) {
+  var query = Component.findById(req.params.id)
+
+  if (!req.query.hasOwnProperty('include_deleted')) {
+
+    query.where({ status: 'active' });
+  }
+
+  query.exec(function (err, component) {
 
     if(err) { return handleError(res, err); }
-    if(!Component) { return res.send(404); }
+    if(!component) { return res.send(404); }
 
-    Component.remove(function(err) {
+    component.status = 'deleted';
+    component.save(function(err) {
 
       if(err) { return handleError(res, err); }
       return res.send(204);
