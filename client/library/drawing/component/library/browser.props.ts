@@ -3,7 +3,7 @@ module Higherframe.Drawing.Component.Library {
 
   export class BrowserPropertiesController implements Higherframe.UI.Component.PropertiesController {
 
-    properties: Common.Data.IBrowserProperties;
+    properties: Common.Data.BrowserProperties;
     size: string;
 
     onSliderChange: Function;
@@ -32,7 +32,7 @@ module Higherframe.Drawing.Component.Library {
 
     constructor(private $scope: Higherframe.UI.Component.IPropertiesScope, private $rootScope: ng.IRootScopeService) {
 
-      this.properties = <Common.Data.IBrowserProperties>this.$scope.properties;
+      this.properties = <Common.Data.BrowserProperties>this.$scope.properties;
 
       this.$scope.$watch(() => this.properties.width, () => this.sizeChanged());
       this.$scope.$watch(() => this.properties.height, () => this.sizeChanged());

@@ -62,7 +62,7 @@ module Common.Drawing.Library {
      * Create a new Mobile Titlebar component
      */
 
-    constructor(model: Common.Data.IDrawingModel) {
+    constructor(model: Common.Data.Component) {
 
       super(model);
 
@@ -253,9 +253,9 @@ module Common.Drawing.Library {
      * Cast the model properties into the correct type
      */
 
-    getProperties(): Common.Data.IMobileTitlebarProperties {
+    getProperties(): Common.Data.MobileTitlebarProperties {
 
-      return <Common.Data.IMobileTitlebarProperties>this.model.properties;
+      return <Common.Data.MobileTitlebarProperties>this.model.properties;
     }
   }
 }

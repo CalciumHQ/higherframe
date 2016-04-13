@@ -9151,15 +9151,23 @@ declare module Common.Data {
     function ArtboardResource($resource: ng.resource.IResourceService): IArtboardResource;
 }
 declare module Common.Data {
-    interface IComponentProperties {
+    class ComponentProperties {
+        protected local: any;
+        protected remote: any;
         x: number;
         y: number;
-        width?: number;
-        height?: number;
+        width: number;
+        height: number;
         index: number;
         opacity: number;
+        constructor(data: any);
+        protected hasProperty(name: any): boolean;
+        getLocal(): any;
+        getRemote(): any;
+        commit(): void;
+        reset(): void;
     }
-    interface ILabelProperties extends IComponentProperties {
+    class LabelProperties extends ComponentProperties {
         text: string;
         fontFamily: string;
         fontWeight: number;
@@ -9169,18 +9177,18 @@ declare module Common.Data {
         area: boolean;
         fillColor: string;
     }
-    interface IRectangleProperties extends IComponentProperties {
+    class RectangleProperties extends ComponentProperties {
         cornerRadius: number;
         fillColor: string;
         borderColor: string;
         borderWidth: number;
     }
-    interface IEllipseProperties extends IComponentProperties {
+    class EllipseProperties extends ComponentProperties {
         fillColor: string;
         borderColor: string;
         borderWidth: number;
     }
-    interface IArrowProperties extends IComponentProperties {
+    class ArrowProperties extends ComponentProperties {
         start: Drawing.IPoint;
         end: Drawing.IPoint;
         direction: string;
@@ -9188,33 +9196,33 @@ declare module Common.Data {
         borderColor: string;
         borderWidth: number;
     }
-    interface IMobileDeviceProperties extends IComponentProperties {
+    class MobileDeviceProperties extends ComponentProperties {
         showBar: boolean;
     }
-    interface IMobileTitlebarProperties extends IComponentProperties {
+    class MobileTitlebarProperties extends ComponentProperties {
         title: string;
         leftIcon: string;
         rightIcon: string;
     }
-    interface ITextInputProperties extends IComponentProperties {
+    class TextInputProperties extends ComponentProperties {
         placeholder: String;
         value: String;
         fontSize: number;
         fontWeight: number;
     }
-    interface ISelectInputProperties extends IComponentProperties {
+    class SelectInputProperties extends ComponentProperties {
         placeholder: String;
         value: String;
         fontSize: number;
         fontWeight: number;
     }
-    interface ICheckboxProperties extends IComponentProperties {
+    class CheckboxProperties extends ComponentProperties {
         label: String;
         value: Boolean;
         fontSize: number;
         fontWeight: number;
     }
-    interface IButtonProperties extends IComponentProperties {
+    class ButtonProperties extends ComponentProperties {
         label: string;
         disabled: boolean;
         fontFamily: string;
@@ -9225,35 +9233,32 @@ declare module Common.Data {
         borderColor: string;
         borderWidth: number;
     }
-    interface IImageProperties extends IComponentProperties {
+    class ImageProperties extends ComponentProperties {
         media: Object;
         cornerRadius: number;
     }
-    interface IIconProperties extends IComponentProperties {
+    class IconProperties extends ComponentProperties {
         icon: string;
         fontSize: number;
     }
-    interface IBrowserProperties extends IComponentProperties {
+    class BrowserProperties extends ComponentProperties {
         address: string;
     }
 }
 declare module Common.Data {
-    class Component implements IDrawingModel {
+    class Component {
         _id: String;
         type: String;
         lastModifiedBy: String;
-        properties: IComponentProperties;
-        constructor(type: String, properties: IComponentProperties);
+        properties: ComponentProperties;
+        constructor(type: String, properties: ComponentProperties);
+        save(frameId: string): void;
+        update(): void;
+        private serialize();
         /**
          * Create an instance from a POJO representation
          */
         static deserialize(data: any): Component;
-    }
-}
-declare module Common.Data {
-    interface IDrawingModel {
-        _id: String;
-        properties: IComponentProperties;
     }
 }
 declare module Common.Data {
@@ -9312,7 +9317,7 @@ declare module Common.Drawing {
         title: String;
         category: String;
         tags: Array<String>;
-        model: Common.Data.IDrawingModel;
+        model: Common.Data.Component;
         _collaborator: Common.Data.IUser;
         collaborator: Common.Data.IUser;
         _properties: Array<Object>;
@@ -9326,9 +9331,7 @@ declare module Common.Drawing {
         /**
          * Constructor
          */
-        constructor(model: Common.Data.IDrawingModel);
-        serialize(): Common.Data.IDrawingModel;
-        deserialize(): void;
+        constructor(model: Common.Data.Component);
         updateModel(): void;
         setProperty(name: string, value: any): void;
         onMove(IComponentMoveEvent: any): void;
@@ -9402,7 +9405,7 @@ declare module Common.Drawing.Library {
         /**
          * Create a new Arrow component
          */
-        constructor(model: Common.Data.IDrawingModel);
+        constructor(model: Common.Data.Component);
         /**
          * Perform any necessary transformation on the component when saving
          */
@@ -9443,7 +9446,7 @@ declare module Common.Drawing.Library {
         /**
          * Create a new mobile device component
          */
-        constructor(model: Common.Data.IDrawingModel);
+        constructor(model: Common.Data.Component);
         /**
          * Utility functions for finding points in the components
          */
@@ -9468,7 +9471,7 @@ declare module Common.Drawing.Library {
         /**
          * Cast the model properties into the correct type
          */
-        getProperties(): Common.Data.IBrowserProperties;
+        getProperties(): Common.Data.BrowserProperties;
     }
 }
 declare module Common.Drawing.Library {
@@ -9523,7 +9526,7 @@ declare module Common.Drawing.Library {
         /**
          * Create a new Button component
          */
-        constructor(model: Common.Data.IDrawingModel);
+        constructor(model: Common.Data.Component);
         /**
          * Redraw the component
          */
@@ -9543,7 +9546,7 @@ declare module Common.Drawing.Library {
         /**
          * Cast the model properties into the correct type
          */
-        getProperties(): Common.Data.IButtonProperties;
+        getProperties(): Common.Data.ButtonProperties;
     }
 }
 declare module Common.Drawing.Library {
@@ -9558,7 +9561,7 @@ declare module Common.Drawing.Library {
         /**
          * Create a new Select component
          */
-        constructor(model: Common.Data.IDrawingModel);
+        constructor(model: Common.Data.Component);
         /**
          * Redraw the component
          */
@@ -9574,7 +9577,7 @@ declare module Common.Drawing.Library {
         /**
          * Cast the model properties into the correct type
          */
-        getProperties(): Common.Data.ICheckboxProperties;
+        getProperties(): Common.Data.CheckboxProperties;
     }
 }
 declare module Common.Drawing.Library {
@@ -9589,7 +9592,7 @@ declare module Common.Drawing.Library {
         /**
          * Create a new Ellipse component
          */
-        constructor(model: Common.Data.IDrawingModel);
+        constructor(model: Common.Data.Component);
         /**
          * Redraw the component
          */
@@ -9609,7 +9612,7 @@ declare module Common.Drawing.Library {
         /**
          * Cast the model properties into the correct type
          */
-        getProperties(): Common.Data.IEllipseProperties;
+        getProperties(): Common.Data.EllipseProperties;
     }
 }
 declare module Common.Drawing.Library {
@@ -9638,7 +9641,7 @@ declare module Common.Drawing.Library {
         /**
          * Create a new Icon component
          */
-        constructor(model: Common.Data.IDrawingModel);
+        constructor(model: Common.Data.Component);
         /**
          * Redraw the component
          */
@@ -9654,7 +9657,7 @@ declare module Common.Drawing.Library {
         /**
          * Cast the model properties into the correct type
          */
-        getProperties(): Common.Data.IIconProperties;
+        getProperties(): Common.Data.IconProperties;
     }
 }
 declare module Common.Drawing.Library {
@@ -9669,7 +9672,7 @@ declare module Common.Drawing.Library {
         /**
          * Create a new Button component
          */
-        constructor(model: Common.Data.IDrawingModel);
+        constructor(model: Common.Data.Component);
         /**
          * Redraw the component
          */
@@ -9689,7 +9692,7 @@ declare module Common.Drawing.Library {
         /**
          * Cast the model properties into the correct type
          */
-        getProperties(): Common.Data.IImageProperties;
+        getProperties(): Common.Data.ImageProperties;
     }
 }
 declare module Common.Drawing.Library {
@@ -9705,7 +9708,7 @@ declare module Common.Drawing.Library {
         /**
          * Create a new Label component
          */
-        constructor(model: Common.Data.IDrawingModel);
+        constructor(model: Common.Data.Component);
         /**
          * Redraw the component
          */
@@ -9725,7 +9728,7 @@ declare module Common.Drawing.Library {
         /**
          * Cast the model properties into the correct type
          */
-        getProperties(): Common.Data.ILabelProperties;
+        getProperties(): Common.Data.LabelProperties;
     }
 }
 declare module Common.Drawing.Library {
@@ -9741,7 +9744,7 @@ declare module Common.Drawing.Library {
         /**
          * Create a new mobile device component
          */
-        constructor(model: Common.Data.IDrawingModel);
+        constructor(model: Common.Data.Component);
         /**
          * Utility functions for finding points in the components
          */
@@ -9767,7 +9770,7 @@ declare module Common.Drawing.Library {
         /**
          * Cast the model properties into the correct type
          */
-        getProperties(): Common.Data.IMobileDeviceProperties;
+        getProperties(): Common.Data.MobileDeviceProperties;
     }
 }
 declare module Common.Drawing.Library {
@@ -9801,7 +9804,7 @@ declare module Common.Drawing.Library {
         /**
          * Create a new Mobile Titlebar component
          */
-        constructor(model: Common.Data.IDrawingModel);
+        constructor(model: Common.Data.Component);
         /**
          * Redraw the component
          */
@@ -9821,7 +9824,7 @@ declare module Common.Drawing.Library {
         /**
          * Cast the model properties into the correct type
          */
-        getProperties(): Common.Data.IMobileTitlebarProperties;
+        getProperties(): Common.Data.MobileTitlebarProperties;
     }
 }
 declare module Common.Drawing.Library {
@@ -9836,7 +9839,7 @@ declare module Common.Drawing.Library {
         /**
          * Create a new Rectangle component
          */
-        constructor(model: Common.Data.IDrawingModel);
+        constructor(model: Common.Data.Component);
         /**
          * Redraw the component
          */
@@ -9856,7 +9859,7 @@ declare module Common.Drawing.Library {
         /**
          * Cast the model properties into the correct type
          */
-        getProperties(): Common.Data.IRectangleProperties;
+        getProperties(): Common.Data.RectangleProperties;
     }
 }
 declare module Common.Drawing.Library {
@@ -9871,7 +9874,7 @@ declare module Common.Drawing.Library {
         /**
          * Create a new Select component
          */
-        constructor(model: Common.Data.IDrawingModel);
+        constructor(model: Common.Data.Component);
         /**
          * Redraw the component
          */
@@ -9891,7 +9894,7 @@ declare module Common.Drawing.Library {
         /**
          * Cast the model properties into the correct type
          */
-        getProperties(): Common.Data.ISelectInputProperties;
+        getProperties(): Common.Data.SelectInputProperties;
         /**
          * Calculate the height of the component
          */
@@ -9910,7 +9913,7 @@ declare module Common.Drawing.Library {
         /**
          * Create a new Text Input component
          */
-        constructor(model: Common.Data.IDrawingModel);
+        constructor(model: Common.Data.Component);
         /**
          * Redraw the component
          */
@@ -9930,7 +9933,7 @@ declare module Common.Drawing.Library {
         /**
          * Cast the model properties into the correct type
          */
-        getProperties(): Common.Data.ITextInputProperties;
+        getProperties(): Common.Data.TextInputProperties;
         /**
          * Calculate the height of the component
          */

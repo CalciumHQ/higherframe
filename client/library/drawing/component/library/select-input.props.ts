@@ -3,11 +3,11 @@ module Higherframe.Drawing.Component.Library {
 
   export class SelectInputPropertiesController implements Higherframe.UI.Component.PropertiesController {
 
-    properties: Common.Data.ISelectInputProperties;
+    properties: Common.Data.SelectInputProperties;
 
     constructor(private $scope: Higherframe.UI.Component.IPropertiesScope) {
 
-      this.properties = <Common.Data.ISelectInputProperties>this.$scope.properties;
+      this.properties = <Common.Data.SelectInputProperties>this.$scope.properties;
     }
   }
 }

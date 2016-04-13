@@ -1,5 +1,5 @@
 
-class FrameCtrl {
+class FrameCtrl implements Higherframe.Utilities.History.IHistoryItemDelegate {
 
 	/**
 	 * Constants
@@ -45,6 +45,8 @@ class FrameCtrl {
     index: 0
   };
 
+	undoHistory: Array<any>;
+	redoHistory: Array<any>;
 
   /**
    * Constructor
@@ -68,6 +70,7 @@ class FrameCtrl {
     private ModalManager: Higherframe.UI.Modal.Manager,
 		private Artboard: Common.Data.IArtboardResource,
     private Activity: Higherframe.Data.IActivityResource,
+		private HistoryManager: Higherframe.Utilities.History.Manager,
     Clipboard: Higherframe.Utilities.Clipboard,
 		ComponentLibrary: Higherframe.Drawing.Component.Library.IService,
     private $mixpanel
@@ -77,6 +80,9 @@ class FrameCtrl {
 
 		this.frame = frame;
 		this.Clipboard = Clipboard;
+
+		this.undoHistory = this.HistoryManager.getUndoHistory(this.frame._id);
+		this.redoHistory = this.HistoryManager.getRedoHistory(this.frame._id);
 
     // Fetch the activities for this frame
     this.activities = Activity.query({ frameId: frame._id });
@@ -202,12 +208,12 @@ class FrameCtrl {
     $scope.$on('toolbar:component:added', (e, params) => {
 
       // Center new component in view
-      var properties = {
+      let properties = new Common.Data.ComponentProperties({
         x: paper.view.bounds.x + (params.x / paper.view.zoom) || paper.view.bounds.x + (paper.view.bounds.width/2),
         y: paper.view.bounds.y + (params.y / paper.view.zoom) || paper.view.bounds.y + (paper.view.bounds.height/2),
         index: paper.project.activeLayer.children.length,
 				opacity: 100
-      };
+      });
 
       // Create the new model
       var component = new Common.Data.Component(params.id, properties);
@@ -262,11 +268,10 @@ class FrameCtrl {
 		 * Tray notifications
 		 */
 
-    $scope.$on('properties:component:updated', (e, params) => {
+    $scope.$on('properties:component:updated', (e, data) => {
 
-      this.saveComponents([params.component]);
-      this.$scope.$broadcast('controller:component:updated', { component: params.component });
-    });
+			this.onComponentPropertyChange([data.component], data.name, data.value, true);
+		});
 
 		$scope.$on('properties:media:added', (e, params) => {
 
@@ -307,19 +312,38 @@ class FrameCtrl {
 			this.deleteArtboards(artboards);
 		});
 
-    $scope.$on('componentsMoved', function (e, components) {
+    $scope.$on('view:component:moved', (e, components) => {
 
-  		angular.forEach(components, function (component) {
+			// Store positions for history
+			let oldPositions = [];
+			let newPositions = [];
+
+			// Update component positions
+  		angular.forEach(components, (component) => {
 
   			component.updateModel();
+
+				let remote = component.model.properties.getRemote();
+				let local = component.model.properties.getLocal();
+				oldPositions.push(new paper.Point(remote.x, remote.y));
+				newPositions.push(new paper.Point(local.x, local.y));
   		});
 
-      that.saveComponents(components);
+      this.saveComponents(components);
+
+			// Save the history entry
+			let historyItem = new Higherframe.Utilities.History.Items.MoveComponentHistoryItem(
+				components,
+				oldPositions,
+				newPositions
+			);
+			historyItem.delegate = this;
+			this.HistoryManager.add(this.frame._id, historyItem);
     });
 
-  	$scope.$on('componentsIndexModified', function (e, components) {
+  	$scope.$on('componentsIndexModified', (e, components) => {
 
-  		that.saveComponents(components);
+  		this.saveComponents(components);
     });
 
   	$scope.$on('componentsDeleted', (e, components) => {
@@ -622,6 +646,51 @@ class FrameCtrl {
   }
 
 
+	/**
+	 * IHistoryItemDelegate methods
+	 */
+
+	onUndo(item: Higherframe.Utilities.History.Item) {
+
+		if (item instanceof Higherframe.Utilities.History.Items.MoveComponentHistoryItem) {
+
+			let moveItem: Higherframe.Utilities.History.Items.MoveComponentHistoryItem = item;
+			this.moveComponents(item.components, item.oldPositions);
+		}
+
+		else if (item instanceof Higherframe.Utilities.History.Items.ChangeComponentPropertyHistoryItem) {
+
+			let propertyItem: Higherframe.Utilities.History.Items.ChangeComponentPropertyHistoryItem = item;
+
+			propertyItem.components.forEach((component, i) => {
+
+				component.model.properties[propertyItem.property] = propertyItem.oldValues[i];
+				this.onComponentPropertyChange([component], propertyItem.property, propertyItem.oldValues[i], false);
+			});
+		}
+	}
+
+	onRedo(item: Higherframe.Utilities.History.Item) {
+
+		if (item instanceof Higherframe.Utilities.History.Items.MoveComponentHistoryItem) {
+
+			let moveItem: Higherframe.Utilities.History.Items.MoveComponentHistoryItem = item;
+			this.moveComponents(item.components, item.newPositions);
+		}
+
+		else if (item instanceof Higherframe.Utilities.History.Items.ChangeComponentPropertyHistoryItem) {
+
+			let propertyItem: Higherframe.Utilities.History.Items.ChangeComponentPropertyHistoryItem = item;
+
+			propertyItem.components.forEach((component, i) => {
+
+				component.model.properties[propertyItem.property] = propertyItem.newValue;
+				this.onComponentPropertyChange([component], propertyItem.property, propertyItem.newValue, false);
+			});
+		}
+	}
+
+
   /*
    * Serialization
    */
@@ -639,7 +708,11 @@ class FrameCtrl {
         }
       );
 
-      document.components.forEach((component) => {
+      document.components.forEach((data, i) => {
+
+				// Currently component is raw JSON
+				// Wrap in class
+				let component = Common.Data.Component.deserialize(data);
 
 				// Store reference
 				this.components.push(component);
@@ -686,6 +759,18 @@ class FrameCtrl {
 	 * Data methods
 	 */
 
+	public moveComponents(components: Array<Common.Drawing.Component>, positions: Array<paper.Point>) {
+
+		components.forEach((component, i) => {
+
+			component.model.properties.x = positions[i].x;
+			component.model.properties.y = positions[i].y;
+			this.updateComponentInView(component.model);
+		});
+
+		this.saveComponents(components);
+	}
+
 	public createArtboards(datas: Array<Common.Data.IArtboard>) {
 
 		var models = datas.map((data) => {
@@ -720,45 +805,26 @@ class FrameCtrl {
 
 	private saveComponents(components: any) {
 
-    var that = this;
-
     if (!angular.isArray(components)) {
 
       components = [components];
     }
 
     // Save components and set _id when saved
-    angular.forEach(components, function (component: Common.Drawing.Component) {
+    components.forEach((component: Common.Drawing.Component) => {
 
-      // We will first serialize the data in the component's model.
-      // If an _id key is found on the model, we know this component has already
-      // been saved to the database, so we will update.
-      // If no _id is found, we know it is a new component and do a post. When
-      // the post is completed, we will assign the returned _id to the original
-      // component model, since the serialized version is a throwaway copy.
-      var serialized = <Common.Data.Component>component.serialize();
-
-      serialized.lastModifiedBy = that.Session.getSessionId();
+			component.model.lastModifiedBy = this.Session.getSessionId();
 
 			// Update
-			if (serialized._id) {
+			if (component.model._id) {
 
-				that.$http
-	        .patch('/api/components/' + serialized._id, serialized)
-	        .success(function (data) {
-
-	        });
+				component.model.update();
 			}
 
 			// Create
 			else {
 
-				that.$http
-	        .post('/api/frames/' + that.$stateParams.id + '/components', serialized)
-	        .success(function (data: any) {
-
-						component.model._id = data._id;
-	        });
+				component.model.save(this.$stateParams.id);
 			}
     });
 	};
@@ -884,7 +950,7 @@ class FrameCtrl {
 	private updateComponentInView(component) {
 
 		// Find the component with this _id
-		angular.forEach(paper.project.activeLayer.children, function (item: Common.Drawing.Component) {
+		paper.project.activeLayer.children.forEach((item: Common.Drawing.Component) => {
 
 			if (item.model._id == component._id) {
 
@@ -1196,13 +1262,55 @@ class FrameCtrl {
 	}
 
 
-  /*
-   * Event handlers
+	/**
+	 * Application event handlers
+	 */
+
+	private onComponentPropertyChange(components: Array<Common.Drawing.Component>, name: string, value: any, history?: boolean) {
+
+		// Write to history
+		if (history) {
+
+			// Compile list of old values
+			let oldValues: Array<any> = [];
+			components.forEach((component) => {
+
+				oldValues.push(component.model.properties.getRemote()[name]);
+			});
+
+			let item = new Higherframe.Utilities.History.Items.ChangeComponentPropertyHistoryItem(
+				components,
+				name,
+				oldValues,
+				value
+			);
+
+			item.delegate = this;
+			this.HistoryManager.add(this.frame._id, item);
+		}
+
+		this.saveComponents(components);
+		this.$scope.$broadcast('controller:component:updated', { component: components[0] });
+	}
+
+
+  /**
+   * UI event handlers
    */
 
 	onToolbarZoomLevelClick(zoom: number) {
 
 		this.setZoom(zoom);
+	}
+
+	onToolbarUndoClick() {
+
+		this.HistoryManager.undo(this.frame._id);
+	}
+
+	onToolbarRedoClick() {
+
+		this.HistoryManager.redo(this.frame._id);
 	}
 
 	onToolbarCopyClick() {
@@ -1281,12 +1389,12 @@ class FrameCtrl {
   onActionbarQuickAddComponentClick(definition) {
 
     // Center new component in view
-    var properties = {
+    let properties = new Common.Data.ComponentProperties({
       x: paper.view.bounds.x + (paper.view.bounds.width/2),
       y: paper.view.bounds.y + (paper.view.bounds.height/2),
       index: paper.project.activeLayer.children.length,
 			opacity: 100
-    };
+    });
 
     // Create the new model
     var component = new Common.Data.Component(definition.id, properties);
@@ -1295,35 +1403,6 @@ class FrameCtrl {
     var instances = this.addComponentsToView(component, null);
     this.saveComponents(instances);
   }
-
-  onComponentPropertyChange(key, value, component, property) {
-
-    // Parse into the correct data type
-    switch (property.type) {
-
-      case Number:
-        value = Number(value);
-        break;
-    }
-
-    component.model.properties[property.model] = value;
-
-    // Validation
-
-
-    // Set default
-
-
-    // Inform the view
-    this.$scope.$broadcast('component:propertyChange', {
-      component: component,
-      key: key,
-      value: value
-    });
-
-    // Save the component
-    this.saveComponents(component);
-  };
 }
 
 angular

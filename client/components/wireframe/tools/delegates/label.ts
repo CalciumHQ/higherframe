@@ -15,7 +15,7 @@ module Higherframe.Wireframe.Tools.Delegates {
 
     create(topLeft: paper.Point, size?: paper.Size): Common.Drawing.Library.Label {
 
-      var properties = <Common.Data.ILabelProperties>this.getProperties(topLeft, size);
+      var properties = <Common.Data.LabelProperties>this.getProperties(topLeft, size);
 
       if (!size) {
 

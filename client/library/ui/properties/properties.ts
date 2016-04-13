@@ -2,7 +2,7 @@
 module Higherframe.UI.Component {
 
   export interface IPropertiesScope extends ng.IScope {
-    properties: Common.Data.IComponentProperties
+    properties: Common.Data.ComponentProperties
   }
 
   export class PropertiesController {

@@ -3,11 +3,11 @@ module Higherframe.Drawing.Component.Library {
 
   export class ImagePropertiesController implements Higherframe.UI.Component.PropertiesController {
 
-    properties: Common.Data.IImageProperties;
+    properties: Common.Data.ImageProperties;
 
     constructor(private $scope: Higherframe.UI.Component.IPropertiesScope, private $rootScope: ng.IRootScopeService) {
 
-      this.properties = <Common.Data.IImageProperties>this.$scope.properties;
+      this.properties = <Common.Data.ImageProperties>this.$scope.properties;
     }
   }
 }

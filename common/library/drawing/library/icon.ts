@@ -46,7 +46,7 @@ module Common.Drawing.Library {
      * Create a new Icon component
      */
 
-    constructor(model: Common.Data.IDrawingModel) {
+    constructor(model: Common.Data.Component) {
 
       super(model);
 
@@ -170,9 +170,9 @@ module Common.Drawing.Library {
      * Cast the model properties into the correct type
      */
 
-    getProperties(): Common.Data.IIconProperties {
+    getProperties(): Common.Data.IconProperties {
 
-      return <Common.Data.IIconProperties>this.model.properties;
+      return <Common.Data.IconProperties>this.model.properties;
     }
   }
 }

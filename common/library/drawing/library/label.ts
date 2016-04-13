@@ -26,7 +26,7 @@ module Common.Drawing.Library {
      * Create a new Label component
      */
 
-    constructor(model: Common.Data.IDrawingModel) {
+    constructor(model: Common.Data.Component) {
 
       super(model);
 
@@ -335,9 +335,9 @@ module Common.Drawing.Library {
      * Cast the model properties into the correct type
      */
 
-    getProperties(): Common.Data.ILabelProperties {
+    getProperties(): Common.Data.LabelProperties {
 
-      return <Common.Data.ILabelProperties>this.model.properties;
+      return <Common.Data.LabelProperties>this.model.properties;
     }
   }
 }

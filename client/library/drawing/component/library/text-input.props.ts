@@ -3,11 +3,11 @@ module Higherframe.Drawing.Component.Library {
 
   export class TextInputPropertiesController implements Higherframe.UI.Component.PropertiesController {
 
-    properties: Common.Data.ITextInputProperties;
+    properties: Common.Data.TextInputProperties;
 
     constructor(private $scope: Higherframe.UI.Component.IPropertiesScope) {
 
-      this.properties = <Common.Data.ITextInputProperties>this.$scope.properties;
+      this.properties = <Common.Data.TextInputProperties>this.$scope.properties;
     }
   }
 }

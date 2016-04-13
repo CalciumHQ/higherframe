@@ -22,7 +22,7 @@ module Common.Drawing.Library {
      * Create a new Text Input component
      */
 
-    constructor(model: Common.Data.IDrawingModel) {
+    constructor(model: Common.Data.Component) {
 
       super(model);
 
@@ -180,9 +180,9 @@ module Common.Drawing.Library {
      * Cast the model properties into the correct type
      */
 
-    getProperties(): Common.Data.ITextInputProperties {
+    getProperties(): Common.Data.TextInputProperties {
 
-      return <Common.Data.ITextInputProperties>this.model.properties;
+      return <Common.Data.TextInputProperties>this.model.properties;
     }
 
 

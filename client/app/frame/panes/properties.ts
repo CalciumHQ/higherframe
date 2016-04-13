@@ -83,7 +83,11 @@ module Higherframe.Controllers.Frame {
     public commitControl(name, value) {
 
       this.selection[0].model.properties[name] = value;
-      this.$rootScope.$broadcast('properties:component:updated', { component: this.selection[0] });
+      this.$rootScope.$broadcast('properties:component:updated', {
+        component: this.selection[0],
+        name: name,
+        value: value
+      });
     }
 
     public onMediaPropertyControlChange(control, data) {

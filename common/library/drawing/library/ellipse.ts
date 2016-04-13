@@ -22,7 +22,7 @@ module Common.Drawing.Library {
      * Create a new Ellipse component
      */
 
-    constructor(model: Common.Data.IDrawingModel) {
+    constructor(model: Common.Data.Component) {
 
       super(model);
 
@@ -304,9 +304,9 @@ module Common.Drawing.Library {
      * Cast the model properties into the correct type
      */
 
-    getProperties(): Common.Data.IEllipseProperties {
+    getProperties(): Common.Data.EllipseProperties {
 
-      return <Common.Data.IEllipseProperties>this.model.properties;
+      return <Common.Data.EllipseProperties>this.model.properties;
     }
   }
 }

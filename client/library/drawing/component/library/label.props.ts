@@ -3,7 +3,7 @@ module Higherframe.Drawing.Component.Library {
 
   export class LabelPropertiesController implements Higherframe.UI.Component.PropertiesController {
 
-    properties: Common.Data.ILabelProperties;
+    properties: Common.Data.LabelProperties;
     onFillColorChange: Function;
 
     private fontFamilyOptions = {
@@ -22,7 +22,7 @@ module Higherframe.Drawing.Component.Library {
 
     constructor(private $scope: Higherframe.UI.Component.IPropertiesScope, private $rootScope: ng.IRootScopeService) {
 
-      this.properties = <Common.Data.ILabelProperties>this.$scope.properties;
+      this.properties = <Common.Data.LabelProperties>this.$scope.properties;
       this.onFillColorChange = this.onFillColorChangeHandler.bind(this);
     }
 

@@ -3,7 +3,7 @@ module Higherframe.Drawing.Component.Library {
 
   export class ArrowPropertiesController implements Higherframe.UI.Component.PropertiesController {
 
-    properties: Common.Data.IArrowProperties;
+    properties: Common.Data.ArrowProperties;
     onBorderColorChange: Function;
 
     typeOptions = {
@@ -21,7 +21,7 @@ module Higherframe.Drawing.Component.Library {
 
     constructor(private $scope: Higherframe.UI.Component.IPropertiesScope, private $rootScope: ng.IRootScopeService) {
 
-      this.properties = <Common.Data.IArrowProperties>this.$scope.properties;
+      this.properties = <Common.Data.ArrowProperties>this.$scope.properties;
       this.onBorderColorChange = this.onBorderColorChangeHandler.bind(this);
     }
 

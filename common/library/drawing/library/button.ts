@@ -82,7 +82,7 @@ module Common.Drawing.Library {
      * Create a new Button component
      */
 
-    constructor(model: Common.Data.IDrawingModel) {
+    constructor(model: Common.Data.Component) {
 
       super(model);
 
@@ -361,9 +361,9 @@ module Common.Drawing.Library {
      * Cast the model properties into the correct type
      */
 
-    getProperties(): Common.Data.IButtonProperties {
+    getProperties(): Common.Data.ButtonProperties {
 
-      return <Common.Data.IButtonProperties>this.model.properties;
+      return <Common.Data.ButtonProperties>this.model.properties;
     }
   }
 }

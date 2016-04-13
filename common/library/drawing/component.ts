@@ -23,7 +23,7 @@ module Common.Drawing {
     title: String = 'Generic Component';
     category: String = '';
     tags: Array<String> = [];
-    model: Common.Data.IDrawingModel;
+    model: Common.Data.Component;
 
     _collaborator: Common.Data.IUser;
     get collaborator(): Common.Data.IUser { return this._collaborator; }
@@ -51,21 +51,12 @@ module Common.Drawing {
      * Constructor
      */
 
-    constructor(model: Common.Data.IDrawingModel) {
+    constructor(model: Common.Data.Component) {
 
       super();
 
       // Bind to the model
       this.model = model;
-    }
-
-    serialize(): Common.Data.IDrawingModel {
-
-      return this.model;
-    }
-
-    deserialize(): void {
-
     }
 
     updateModel(): void {

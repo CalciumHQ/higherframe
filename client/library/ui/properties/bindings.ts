@@ -81,7 +81,11 @@ module Higherframe.UI {
     restrict = 'A';
     require = 'ngModel';
 
-    constructor(private $timeout: ng.ITimeoutService, private $rootScope: ng.IRootScopeService, private $parse: ng.IParseService) {
+    constructor(
+      private $timeout: ng.ITimeoutService,
+      private $rootScope: ng.IRootScopeService,
+      private $parse: ng.IParseService
+    ) {
 
       PropertySliderBindings.prototype.link = (scope: ng.IScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes, ngModel: ng.INgModelController) => {
 

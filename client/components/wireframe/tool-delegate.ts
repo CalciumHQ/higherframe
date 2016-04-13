@@ -112,7 +112,7 @@ module Higherframe.Wireframe {
       return this.create(topLeft, size);
     }
 
-    protected getProperties(topleft: paper.Point, size?: paper.Size): Common.Data.IComponentProperties {
+    protected getProperties(topleft: paper.Point, size?: paper.Size): Common.Data.ComponentProperties {
 
       // Get dimensions
       let width = size ? size.width : this.defaultWidth;
@@ -125,14 +125,14 @@ module Higherframe.Wireframe {
       };
 
       // Create the new model
-      return {
+      return new Common.Data.ComponentProperties({
         x: center.x,
         y: center.y,
         width: width,
         height: height,
         index: paper.project.activeLayer.children.length,
         opacity: 100
-      };
+      });
     }
   }
 }

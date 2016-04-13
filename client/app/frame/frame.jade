@@ -43,10 +43,10 @@
 				
 			div.header-toolbar-divider
 				
-			button.header-toolbar-button.header-toolbar-item(uib-tooltip-html="'Undo (' + ('ctrl' | symbol) + 'Z)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800")
+			button.header-toolbar-button.header-toolbar-item(ng-click="FrameCtrl.onToolbarUndoClick()", uib-tooltip-html="'Undo (' + ('ctrl' | symbol) + 'Z)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", ng-disabled="!FrameCtrl.undoHistory.length")
 				span.header-toolbar-icon.font-awesome &#xf0e2;
 				
-			button.header-toolbar-button.header-toolbar-item(uib-tooltip-html="'Redo (' + ('shift' | symbol) + ('ctrl' | symbol) + 'Z)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", disabled)
+			button.header-toolbar-button.header-toolbar-item(ng-click="FrameCtrl.onToolbarRedoClick()", uib-tooltip-html="'Redo (' + ('shift' | symbol) + ('ctrl' | symbol) + 'Z)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", , ng-disabled="!FrameCtrl.redoHistory.length")
 				span.header-toolbar-icon.font-awesome.fa-flip &#xf0e2;
 				
 			button.header-toolbar-button.header-toolbar-item(ng-click="FrameCtrl.onToolbarCopyClick()", uib-tooltip-html="'Copy (' + ('ctrl' | symbol) + 'C)'", tooltip-placement="bottom", tooltip-append-to-body="true", tooltip-popup-delay="800", ng-disabled="!FrameCtrl.selection.length")

@@ -545,12 +545,12 @@ module Higherframe.Wireframe {
 			this.scope.$emit('view:artboard:updated', artboards);
 		}
 
-		moveItems(items: Array<Common.Drawing.Component>) {
+		moveComponents(items: Array<Common.Drawing.Component>) {
 
-			this.scope.$emit('componentsMoved', items);
+			this.scope.$emit('view:component:moved', items);
 		}
 
-		nudge(items: Array<Common.Drawing.Component>, x, y) {
+		nudgeComponents(items: Array<Common.Drawing.Component>, x, y) {
 
 			angular.forEach(items, (item) => {
 
@@ -560,7 +560,7 @@ module Higherframe.Wireframe {
 				this.updateDragHandles(item);
 			});
 
-			this.scope.$emit('componentsMoved', items);
+			this.scope.$emit('view:component:moved', items);
 		}
 
 		moveForward(items: Array<Common.Drawing.Component>) {

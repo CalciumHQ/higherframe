@@ -25,7 +25,7 @@ module Common.Drawing.Library {
      * Create a new mobile device component
      */
 
-    constructor(model: Common.Data.IDrawingModel) {
+    constructor(model: Common.Data.Component) {
 
       super(model);
 
@@ -468,9 +468,9 @@ module Common.Drawing.Library {
      * Cast the model properties into the correct type
      */
 
-    getProperties(): Common.Data.IMobileDeviceProperties {
+    getProperties(): Common.Data.MobileDeviceProperties {
 
-      return <Common.Data.IMobileDeviceProperties>this.model.properties;
+      return <Common.Data.MobileDeviceProperties>this.model.properties;
     }
   }
 }

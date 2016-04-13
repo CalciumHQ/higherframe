@@ -3,7 +3,7 @@ module Higherframe.Drawing.Component.Library {
 
   export class ButtonPropertiesController implements Higherframe.UI.Component.PropertiesController {
 
-    properties: Common.Data.IButtonProperties;
+    properties: Common.Data.ButtonProperties;
     onFillColorChange: Function;
     onBorderColorChange: Function;
 
@@ -23,7 +23,7 @@ module Higherframe.Drawing.Component.Library {
 
     constructor(private $scope: Higherframe.UI.Component.IPropertiesScope, private $rootScope: ng.IRootScopeService) {
 
-      this.properties = <Common.Data.IButtonProperties>this.$scope.properties;
+      this.properties = <Common.Data.ButtonProperties>this.$scope.properties;
       this.onFillColorChange = this.onFillColorChangeHandler.bind(this);
       this.onBorderColorChange = this.onBorderColorChangeHandler.bind(this);
     }

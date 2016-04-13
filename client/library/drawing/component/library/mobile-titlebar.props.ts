@@ -3,11 +3,11 @@ module Higherframe.Drawing.Component.Library {
 
   export class MobileTitlebarPropertiesController implements Higherframe.UI.Component.PropertiesController {
 
-    properties: Common.Data.IMobileTitlebarProperties;
+    properties: Common.Data.MobileTitlebarProperties;
 
     constructor(private $scope: Higherframe.UI.Component.IPropertiesScope) {
 
-      this.properties = <Common.Data.IMobileTitlebarProperties>this.$scope.properties;
+      this.properties = <Common.Data.MobileTitlebarProperties>this.$scope.properties;
     }
   }
 }

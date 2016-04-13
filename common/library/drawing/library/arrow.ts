@@ -28,11 +28,11 @@ module Common.Drawing.Library {
      * Create a new Arrow component
      */
 
-    constructor(model: Common.Data.IDrawingModel) {
+    constructor(model: Common.Data.Component) {
 
       super(model);
 
-      var properties = <Common.Data.IArrowProperties>(model.properties);
+      var properties = <Common.Data.ArrowProperties>(model.properties);
       var theme: Common.UI.ITheme = new Common.UI.DefaultTheme();
       properties.start = properties.start || new paper.Point(-100, 0);
       properties.end = properties.end || new paper.Point(100, 0);
@@ -56,7 +56,7 @@ module Common.Drawing.Library {
       var model = angular.copy(this.model);
 
       // Transform paper.Points into relevant data
-      var properties = <Common.Data.IArrowProperties>model.properties;
+      var properties = <Common.Data.ArrowProperties>model.properties;
       properties.start = {
         x: properties.start.x,
         y: properties.start.y
@@ -77,7 +77,7 @@ module Common.Drawing.Library {
 
     update() {
 
-      var properties = <Common.Data.IArrowProperties>this.model.properties;
+      var properties = <Common.Data.ArrowProperties>this.model.properties;
 
       // Determine palette
       var theme: Common.UI.ITheme = new Common.UI.DefaultTheme();
@@ -187,7 +187,7 @@ module Common.Drawing.Library {
 
     getSnapPoints(): Array<SnapPoint> {
 
-      var properties = <Common.Data.IArrowProperties>this.model.properties;
+      var properties = <Common.Data.ArrowProperties>this.model.properties;
       var position = new paper.Point(properties.x, properties.y);
 
       return [
@@ -203,7 +203,7 @@ module Common.Drawing.Library {
 
     getTransformHandles(): Array<DragHandle> {
 
-      var properties = <Common.Data.IArrowProperties>this.model.properties;
+      var properties = <Common.Data.ArrowProperties>this.model.properties;
       var position = new paper.Point(properties.x, properties.y);
       var startPoint = position.add(new paper.Point(properties.start.x, properties.start.y));
       var endPoint = position.add(new paper.Point(properties.end.x, properties.end.y));

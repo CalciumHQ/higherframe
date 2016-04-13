@@ -103,7 +103,7 @@ module Higherframe.Wireframe.Tools {
 
       // Commit the changes
       this.canvas.commitArtboards(this.canvas.selectedArtboards);
-      this.canvas.moveItems(this.dragComponents);
+      this.canvas.moveComponents(this.dragComponents);
 
       // Clear the dragged component list
       this.dragComponents = [];

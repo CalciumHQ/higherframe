@@ -24,11 +24,11 @@ module Common.Drawing.Library {
      * Create a new Select component
      */
 
-    constructor(model: Common.Data.IDrawingModel) {
+    constructor(model: Common.Data.Component) {
 
       super(model);
 
-      var properties = <Common.Data.ISelectInputProperties>this.model.properties;
+      var properties = <Common.Data.SelectInputProperties>this.model.properties;
       properties.width = properties.width || 160;
       properties.placeholder = properties.placeholder || 'Select option';
       properties.fontSize = properties.fontSize || 14;
@@ -46,7 +46,7 @@ module Common.Drawing.Library {
 
     update() {
 
-      var properties = <Common.Data.ISelectInputProperties>this.model.properties;
+      var properties = <Common.Data.SelectInputProperties>this.model.properties;
       var HEIGHT = this.getHeight();
 
       // Determine palette
@@ -192,9 +192,9 @@ module Common.Drawing.Library {
      * Cast the model properties into the correct type
      */
 
-    getProperties(): Common.Data.ISelectInputProperties {
+    getProperties(): Common.Data.SelectInputProperties {
 
-      return <Common.Data.ISelectInputProperties>this.model.properties;
+      return <Common.Data.SelectInputProperties>this.model.properties;
     }
 
 

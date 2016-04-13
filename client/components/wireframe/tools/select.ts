@@ -101,7 +101,7 @@ module Higherframe.Wireframe.Tools {
       this.canvas.selectedDragHandles = [];
 
       // Indicate the components have moved
-      this.canvas.moveItems(this.canvas.selectedComponents);
+      this.canvas.moveComponents(this.canvas.selectedComponents);
 
       // Mark the drag as started
       this.dragging = false;
@@ -457,7 +457,7 @@ module Higherframe.Wireframe.Tools {
 					var amount = event.modifiers.shift ? -10 : -1;
 					if (this.canvas.selectedComponents.length) {
 
-						this.canvas.nudge(this.canvas.selectedComponents, amount, 0);
+						this.canvas.nudgeComponents(this.canvas.selectedComponents, amount, 0);
 					}
 
 					break;
@@ -468,7 +468,7 @@ module Higherframe.Wireframe.Tools {
 					var amount = event.modifiers.shift ? 10 : 1;
 					if (this.canvas.selectedComponents.length) {
 
-						this.canvas.nudge(this.canvas.selectedComponents, amount, 0);
+						this.canvas.nudgeComponents(this.canvas.selectedComponents, amount, 0);
 					}
 
 					break;
@@ -479,7 +479,7 @@ module Higherframe.Wireframe.Tools {
 					var amount = event.modifiers.shift ? -10 : -1;
 					if (this.canvas.selectedComponents.length) {
 
-						this.canvas.nudge(this.canvas.selectedComponents, 0, amount);
+						this.canvas.nudgeComponents(this.canvas.selectedComponents, 0, amount);
 					}
 
 					break;
@@ -490,7 +490,7 @@ module Higherframe.Wireframe.Tools {
 					var amount = event.modifiers.shift ? 10 : 1;
 					if (this.canvas.selectedComponents) {
 
-						this.canvas.nudge(this.canvas.selectedComponents, 0, amount);
+						this.canvas.nudgeComponents(this.canvas.selectedComponents, 0, amount);
 					}
 
 					break;
