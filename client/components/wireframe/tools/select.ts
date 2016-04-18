@@ -36,6 +36,7 @@ module Higherframe.Wireframe.Tools {
       this.onMouseMove = this.mouseMoveHandler;
       this.onMouseDown = this.mouseDownHandler;
       this.onMouseUp = this.mouseUpHandler;
+      this.onMouseDrag = this.mouseDragHandler;
       this.onKeyDown = this.keyDownHandler;
       this.onKeyUp = this.keyUpHandler;
     }
@@ -101,7 +102,10 @@ module Higherframe.Wireframe.Tools {
       this.canvas.selectedDragHandles = [];
 
       // Indicate the components have moved
-      this.canvas.moveComponents(this.canvas.selectedComponents);
+      if (this.canvas.selectedComponents) {
+      
+        this.canvas.moveComponents(this.canvas.selectedComponents); 
+      }
 
       // Mark the drag as started
       this.dragging = false;
@@ -158,12 +162,6 @@ module Higherframe.Wireframe.Tools {
         }
       }
 
-      // Start a drag
-      this.startDrag(event);
-
-      // Start a drag selection
-      this.mouseDownSelectHandler(event);
-
       // Update components
       this.canvas.updateBoundingBoxes();
 
@@ -201,7 +199,11 @@ module Higherframe.Wireframe.Tools {
         component.active = false;
       });
 
-      this.resetDrag();
+      if (this.dragging) {
+
+        this.resetDrag();        
+      }
+
       this.canvas.endDragSelection();
     }
 
@@ -212,61 +214,12 @@ module Higherframe.Wireframe.Tools {
 
     private mouseMoveHandler(event) {
 
-      // Dragging
-      if (this.dragging) {
-
-        // Pan when space bar is held
-  			if (event.modifiers.space) {
-
-  				this.mouseMovePanHandler(event);
-  			}
-
-        // Dragging a drag handle
-        else if (this.canvas.selectedDragHandles.length) {
-
-          this.mouseMoveHandleDragHandler(event);
-        }
-
-        // Dragging a component
-        else if (this.canvas.selectedComponents.length) {
-
-          this.mouseMoveDragHandler(event);
-        }
-
-        // Drawing a select box
-        else {
-
-          this.mouseMoveSelectHandler(event);
-        }
-      }
-
-      // Not dragging
-      else {
-
-        this.mouseMoveHighlightHandler(event);
-      }
+      this.mouseMoveHighlightHandler(event);
 
       // Save the position for miscellaneous use
       this.point = event.point;
     }
-
-    private mouseMovePanHandler(event) {
-
-      // Can't use event.delta since the canvas moves
-      // and odd behaviour occurs. Use browser events
-      // instead
-      var clientPosition = new paper.Point(
-        event.event.screenX,
-        event.event.screenY
-      );
-
-      var delta = clientPosition.subtract(this.clientDragPrevious);
-      this.clientDragPrevious = clientPosition;
-
-      // Move the canvas
-      this.canvas.changeCenter(delta.x, delta.y);
-    }
-
+    
     private mouseMoveHighlightHandler(event) {
 
       // Clear old component hovered states
@@ -319,13 +272,67 @@ module Higherframe.Wireframe.Tools {
         this.canvas.setCursor('default');
       }
     }
+    
+    
+    /**
+     * Mouse drag handlers
+     */
+    
+    private mouseDragHandler(event) {
+      
+      if (!this.dragging) {
+        
+        this.startDrag(event);
+      }
+      
+      // Pan when space bar is held
+      if (event.modifiers.space) {
 
-    private mouseMoveSelectHandler(event) {
+        this.mouseDragPanHandler(event);
+      }
+
+      // Dragging a drag handle
+      else if (this.canvas.selectedDragHandles.length) {
+
+        this.mouseDragHandleHandler(event);
+      }
+
+      // Dragging a component
+      else if (this.canvas.selectedComponents.length) {
+
+        this.mouseDragComponentHandler(event);
+      }
+
+      // Drawing a select box
+      else {
+
+        this.mouseDragSelectHandler(event);
+      }
+    }
+
+    private mouseDragPanHandler(event) {
+
+      // Can't use event.delta since the canvas moves
+      // and odd behaviour occurs. Use browser events
+      // instead
+      var clientPosition = new paper.Point(
+        event.event.screenX,
+        event.event.screenY
+      );
+
+      var delta = clientPosition.subtract(this.clientDragPrevious);
+      this.clientDragPrevious = clientPosition;
+
+      // Move the canvas
+      this.canvas.changeCenter(delta.x, delta.y);
+    }
+
+    private mouseDragSelectHandler(event) {
 
       this.canvas.updateDragSelection(event.downPoint, event.point);
     }
 
-    private mouseMoveHandleDragHandler(event) {
+    private mouseDragHandleHandler(event) {
 
       var delta = event.point.subtract(this.dragStart);
 
@@ -380,7 +387,7 @@ module Higherframe.Wireframe.Tools {
       this.canvas.updateBoundingBoxes();
     }
 
-    private mouseMoveDragHandler(event) {
+    private mouseDragComponentHandler(event) {
 
       var delta = event.point.subtract(this.dragStart);
 
