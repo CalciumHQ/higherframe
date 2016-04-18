@@ -324,7 +324,7 @@ class FrameCtrl implements Higherframe.Utilities.History.IHistoryItemDelegate {
 			let newPositions = [];
 
 			// Update component positions
-  		angular.forEach(components, (component) => {
+  		components.forEach((component) => {
 
   			component.updateModel();
 
@@ -341,6 +341,46 @@ class FrameCtrl implements Higherframe.Utilities.History.IHistoryItemDelegate {
 				components,
 				oldPositions,
 				newPositions
+			);
+			historyItem.delegate = this;
+			this.HistoryManager.add(this.frame._id, historyItem);
+    });
+		
+		$scope.$on('view:component:resized', (e, components) => {
+
+			if (!components || !components.length) {
+
+				return;
+			}
+
+			// Store positions for history
+			let oldPositions = [];
+			let newPositions = [];
+			let oldSizes = [];
+			let newSizes = [];
+
+			// Update component positions and sizes
+  		components.forEach((component) => {
+
+  			component.updateModel();
+
+				let remote = component.model.properties.getRemote();
+				let local = component.model.properties.getLocal();
+				oldPositions.push(new paper.Point(remote.x, remote.y));
+				newPositions.push(new paper.Point(local.x, local.y));
+				oldSizes.push(new paper.Size(remote.width, remote.height));
+				newSizes.push(new paper.Size(local.width, local.height));
+  		});
+
+      this.saveComponents(components);
+
+			// Save the history entry
+			let historyItem = new Higherframe.Utilities.History.Items.ResizeComponentHistoryItem(
+				components,
+				oldPositions,
+				newPositions,
+				oldSizes,
+				newSizes
 			);
 			historyItem.delegate = this;
 			this.HistoryManager.add(this.frame._id, historyItem);
@@ -653,12 +693,18 @@ class FrameCtrl implements Higherframe.Utilities.History.IHistoryItemDelegate {
 	 * IHistoryItemDelegate methods
 	 */
 
-	onUndo(item: Higherframe.Utilities.History.Item) {
+	public onUndo(item: Higherframe.Utilities.History.Item) {
 
 		if (item instanceof Higherframe.Utilities.History.Items.MoveComponentHistoryItem) {
 
 			let moveItem: Higherframe.Utilities.History.Items.MoveComponentHistoryItem = item;
 			this.moveComponents(item.components, item.oldPositions);
+		}
+		
+		else if (item instanceof Higherframe.Utilities.History.Items.ResizeComponentHistoryItem) {
+
+			let resizeItem: Higherframe.Utilities.History.Items.ResizeComponentHistoryItem = item;
+			this.resizeComponents(item.components, item.oldSizes, item.oldPositions);
 		}
 
 		else if (item instanceof Higherframe.Utilities.History.Items.ChangeComponentPropertyHistoryItem) {
@@ -683,12 +729,18 @@ class FrameCtrl implements Higherframe.Utilities.History.IHistoryItemDelegate {
 		}
 	}
 
-	onRedo(item: Higherframe.Utilities.History.Item) {
+	public onRedo(item: Higherframe.Utilities.History.Item) {
 
 		if (item instanceof Higherframe.Utilities.History.Items.MoveComponentHistoryItem) {
 
 			let moveItem: Higherframe.Utilities.History.Items.MoveComponentHistoryItem = item;
 			this.moveComponents(item.components, item.newPositions);
+		}
+		
+		else if (item instanceof Higherframe.Utilities.History.Items.ResizeComponentHistoryItem) {
+
+			let resizeItem: Higherframe.Utilities.History.Items.ResizeComponentHistoryItem = item;
+			this.resizeComponents(item.components, item.newSizes, item.newPositions);
 		}
 
 		else if (item instanceof Higherframe.Utilities.History.Items.ChangeComponentPropertyHistoryItem) {
@@ -783,6 +835,20 @@ class FrameCtrl implements Higherframe.Utilities.History.IHistoryItemDelegate {
 
 		components.forEach((component, i) => {
 
+			component.model.properties.x = positions[i].x;
+			component.model.properties.y = positions[i].y;
+			this.updateComponentInView(component.model);
+		});
+
+		this.saveComponents(components);
+	}
+	
+	public resizeComponents(components: Array<Common.Drawing.Component>, sizes: Array<paper.Size>, positions: Array<paper.Point>) {
+
+		components.forEach((component, i) => {
+
+			component.model.properties.width = sizes[i].width;
+			component.model.properties.height = sizes[i].height;
 			component.model.properties.x = positions[i].x;
 			component.model.properties.y = positions[i].y;
 			this.updateComponentInView(component.model);

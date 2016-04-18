@@ -1,9 +1,17 @@
 
 module Higherframe.Wireframe.Tools {
 
+  export enum DragType {
+    Select,
+    DragHandle,
+    Component,
+    Pan
+  }
+  
   export class Select extends Higherframe.Wireframe.Tool {
 
     private dragging: boolean = false;
+    private dragType: DragType;
 
     // Record the starting position of a drag operation
     private dragStart: paper.Point;
@@ -46,7 +54,7 @@ module Higherframe.Wireframe.Tools {
      * Manipulation functions
      */
 
-    private startDrag(event) {
+    private startDrag(type: DragType, event) {
 
       // Store the start point of the drag
       this.dragStart = event.downPoint;
@@ -79,6 +87,7 @@ module Higherframe.Wireframe.Tools {
 
       // Mark the drag as started
       this.dragging = true;
+      this.dragType = type;
     }
 
     private resetDrag() {
@@ -99,16 +108,21 @@ module Higherframe.Wireframe.Tools {
       });
 
       // Clear the selected drag handles
-      this.canvas.selectedDragHandles = [];
+      if (this.dragType == DragType.DragHandle) {
+        
+        this.canvas.selectedDragHandles = [];
+        this.canvas.resizeComponents(this.canvas.selectedComponents);
+      }
 
       // Indicate the components have moved
-      if (this.canvas.selectedComponents) {
+      if (this.dragType == DragType.Component) {
       
         this.canvas.moveComponents(this.canvas.selectedComponents); 
       }
 
       // Mark the drag as started
       this.dragging = false;
+      this.dragType = null;
 
       // Clean up
       this.canvas.removeSmartGuides();
@@ -282,31 +296,33 @@ module Higherframe.Wireframe.Tools {
       
       if (!this.dragging) {
         
-        this.startDrag(event);
+        var type: DragType;
+        
+        if (event.modifiers.space) { type = DragType.Pan; }
+        else if (this.canvas.selectedDragHandles.length) { type = DragType.DragHandle; }
+        else if (this.canvas.selectedComponents.length) { type = DragType.Component; }
+        else { type = DragType.Select; }
+        
+        this.startDrag(type, event);
       }
       
-      // Pan when space bar is held
-      if (event.modifiers.space) {
-
-        this.mouseDragPanHandler(event);
-      }
-
-      // Dragging a drag handle
-      else if (this.canvas.selectedDragHandles.length) {
-
-        this.mouseDragHandleHandler(event);
-      }
-
-      // Dragging a component
-      else if (this.canvas.selectedComponents.length) {
-
-        this.mouseDragComponentHandler(event);
-      }
-
-      // Drawing a select box
-      else {
-
-        this.mouseDragSelectHandler(event);
+      switch(this.dragType) {
+        
+        case DragType.Pan:
+          this.mouseDragPanHandler(event);
+          break;
+          
+        case DragType.DragHandle:
+          this.mouseDragHandleHandler(event);
+          break;
+          
+        case DragType.Component:
+          this.mouseDragComponentHandler(event);
+          break;
+          
+        case DragType.Select:
+          this.mouseDragSelectHandler(event);
+          break;
       }
     }
 

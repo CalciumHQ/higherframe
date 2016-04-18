@@ -545,12 +545,17 @@ module Higherframe.Wireframe {
 			this.scope.$emit('view:artboard:updated', artboards);
 		}
 
-		moveComponents(items: Array<Common.Drawing.Component>) {
+		public moveComponents(items: Array<Common.Drawing.Component>) {
 
 			this.scope.$emit('view:component:moved', items);
 		}
+		
+		public resizeComponents(items: Array<Common.Drawing.Component>) {
 
-		nudgeComponents(items: Array<Common.Drawing.Component>, x, y) {
+			this.scope.$emit('view:component:resized', items);
+		}
+
+		public nudgeComponents(items: Array<Common.Drawing.Component>, x, y) {
 
 			angular.forEach(items, (item) => {
 
@@ -563,7 +568,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('view:component:moved', items);
 		}
 
-		moveForward(items: Array<Common.Drawing.Component>) {
+		public moveForward(items: Array<Common.Drawing.Component>) {
 
 			angular.forEach(items, (item) => {
 
@@ -584,7 +589,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('componentsIndexModified', items);
 		}
 
-		moveToFront(items: Array<Common.Drawing.Component>) {
+		public moveToFront(items: Array<Common.Drawing.Component>) {
 
 			angular.forEach(items, (item) => {
 
@@ -594,7 +599,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('componentsIndexModified', items);
 		}
 
-		moveBackward(items: Array<Common.Drawing.Component>) {
+		public moveBackward(items: Array<Common.Drawing.Component>) {
 
 			angular.forEach(items, (item) => {
 
@@ -615,7 +620,7 @@ module Higherframe.Wireframe {
 			this.scope.$emit('componentsIndexModified', items);
 		}
 
-		moveToBack(items: Array<Common.Drawing.Component>) {
+		public moveToBack(items: Array<Common.Drawing.Component>) {
 
 			angular.forEach(items, (item) => {
 
