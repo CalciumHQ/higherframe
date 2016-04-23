@@ -188,6 +188,14 @@ class FrameCtrl implements Higherframe.Utilities.History.IHistoryItemDelegate {
 		$scope.$on('toolbox:component:added', (e, component) => {
 
 			this.saveComponents(component);
+			
+			// Write to history
+			if (history) {
+
+				let item = new Higherframe.Utilities.History.Items.AddComponentHistoryItem([component.model]);
+				item.delegate = this;
+				this.HistoryManager.add(this.frame._id, item);
+			}
 		});
 
 
@@ -727,6 +735,13 @@ class FrameCtrl implements Higherframe.Utilities.History.IHistoryItemDelegate {
 				this.$http.patch(`/api/components/${component._id}?include_deleted`, { status: 'active' });
 			});
 		}
+		
+		else if (item instanceof Higherframe.Utilities.History.Items.AddComponentHistoryItem) {
+
+			let addItem: Higherframe.Utilities.History.Items.AddComponentHistoryItem = item;
+			this.deleteComponents(item.components, false);
+			this.removeComponentsFromView(item.components);
+		}
 	}
 
 	public onRedo(item: Higherframe.Utilities.History.Item) {
@@ -740,7 +755,7 @@ class FrameCtrl implements Higherframe.Utilities.History.IHistoryItemDelegate {
 		else if (item instanceof Higherframe.Utilities.History.Items.ResizeComponentHistoryItem) {
 
 			let resizeItem: Higherframe.Utilities.History.Items.ResizeComponentHistoryItem = item;
-			this.resizeComponents(item.components, item.newSizes, item.newPositions);
+			this.resizeComponents(resizeItem.components, resizeItem.newSizes, resizeItem.newPositions);
 		}
 
 		else if (item instanceof Higherframe.Utilities.History.Items.ChangeComponentPropertyHistoryItem) {
@@ -759,6 +774,16 @@ class FrameCtrl implements Higherframe.Utilities.History.IHistoryItemDelegate {
 			let deleteItem: Higherframe.Utilities.History.Items.DeleteComponentHistoryItem = item;
 			this.deleteComponents(item.components, false);
 			this.removeComponentsFromView(item.components)
+		}
+		
+		else if (item instanceof Higherframe.Utilities.History.Items.AddComponentHistoryItem) {
+
+			let addItem: Higherframe.Utilities.History.Items.AddComponentHistoryItem = item;
+			this.addComponentsToView(item.components);
+			item.components.forEach((component) => {
+
+				this.$http.patch(`/api/components/${component._id}?include_deleted`, { status: 'active' });
+			});
 		}
 	}
 
